@@ -6,10 +6,8 @@ import '../css/conveyor.css';
 import { MotionPatterns } from './motion/patterns.js';
 import { StopwatchViz } from '../vizzes/stopwatch/index.js';
 import { PlanetViz } from '../vizzes/planet/index.js';
-import { CommunityViz } from '../vizzes/community/index.js';
 import { RankingViz } from '../vizzes/ranking/index.js';
 import { EmotionViz } from '../vizzes/emotion/index.js';
-import { IngredientsViz } from '../vizzes/ingredients/index.js';
 import { RecordPlayerViz } from '../vizzes/record-player/index.js';
 import { ConveyorViz } from '../vizzes/conveyor/index.js';
 import { initMicroInteractions } from './micro-interactions.js';
@@ -23,7 +21,7 @@ const SCENE_MAP = {
     '#section-spillover': 'city',
     '#section-fade': 'forest',
     '#section-takeaway': 'air',
-    '#section-ingredients': 'lab'
+    '#section-conveyor': 'lab'
 };
 
 // Scene names for keyboard shortcuts
@@ -133,7 +131,6 @@ class TikTokTidesApp {
             'section-spillover': { bg: 'bg-city', name: 'Spillover' },
             'section-fade': { bg: 'bg-forest', name: 'Fade/Revival' },
             'section-takeaway': { bg: 'bg-neutral', name: 'The Formula' },
-            'section-ingredients': { bg: 'bg-lab', name: 'Recipe Builder' },
             'section-conveyor': { bg: 'bg-lab', name: 'Conveyor Belt' }
         };
 
@@ -207,10 +204,8 @@ class TikTokTidesApp {
         // Register visualization controllers
         this.vizControllers.stopwatch = new StopwatchViz();
         this.vizControllers.planets = new PlanetViz();
-        this.vizControllers.community = new CommunityViz();
         this.vizControllers.ranking = new RankingViz();
         this.vizControllers.emotion = new EmotionViz();
-        this.vizControllers.ingredients = new IngredientsViz();
         this.vizControllers.recordPlayer = new RecordPlayerViz();
         this.vizControllers.conveyor = new ConveyorViz();
 
@@ -277,15 +272,6 @@ class TikTokTidesApp {
     }
 
     setupVizEvents(key, viz) {
-        // Community: Audio preview on hover
-        if (key === 'community') {
-            viz.on('onHoverAudio', (data) => {
-                if (!this.audioMuted) {
-                    this.previewAudio(data.soundId, 2000); // 2 second preview
-                }
-            });
-        }
-
         // Ranking: Leaf reveal
         if (key === 'ranking') {
             viz.on('onLeafReveal', (data) => {
@@ -297,13 +283,6 @@ class TikTokTidesApp {
         if (key === 'emotion') {
             viz.on('bubbleClick', (data) => {
                 this.openEmotionDrawer(data);
-            });
-        }
-
-        // Ingredients: Quiz events
-        if (key === 'ingredients') {
-            viz.on('quizOpened', (data) => {
-                this.announce(`Testing ${data.ingredient} impact`);
             });
         }
     }
@@ -475,7 +454,7 @@ class TikTokTidesApp {
             8: '30% of trends see revival',
             9: 'Positive emotions drive shares',
             10: 'Anger surprisingly viral',
-            11: 'Key ingredients identified',
+            11: 'Key factors identified',
             12: 'Your recipe ready to test'
         };
 
@@ -492,10 +471,9 @@ class TikTokTidesApp {
                 href === 'section-surge' ? 'section-surge' :
                     href === 'section-spillover' ? 'section-spillover' :
                         href === 'section-fade' ? 'section-fade' :
-                            href === 'section-takeaway' ? 'section-takeaway' :
-                                href === 'section-ingredients' ? 'section-ingredients' :
-                                    href === 'section-conveyor' ? 'section-conveyor' :
-                                        href;
+                        href === 'section-takeaway' ? 'section-takeaway' :
+                            href === 'section-conveyor' ? 'section-conveyor' :
+                                href;
             link.setAttribute('aria-current', mappedSection === sectionId ? 'true' : 'false');
         });
     }
@@ -544,18 +522,19 @@ class TikTokTidesApp {
     setupKeyboardNav() {
         // Global keyboard shortcuts
         document.addEventListener('keydown', (e) => {
-            // Number keys 1-7 jump to sections
-            if (e.key >= '1' && e.key <= '7') {
-                const sections = [
-                    'section-ignite',
-                    'section-surge',
-                    'section-spillover',
-                    'section-fade',
-                    'section-takeaway',
-                    'section-ingredients',
-                    'section-conveyor'
-                ];
-                const sectionId = sections[parseInt(e.key) - 1];
+            // Number keys jump to sections in order
+            const sections = [
+                'section-ignite',
+                'section-surge',
+                'section-spillover',
+                'section-fade',
+                'section-takeaway',
+                'section-conveyor'
+            ];
+
+            const index = parseInt(e.key, 10) - 1;
+            if (!Number.isNaN(index) && sections[index]) {
+                const sectionId = sections[index];
                 const target = document.getElementById(sectionId);
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -758,13 +737,6 @@ class TikTokTidesApp {
         const drawer = document.querySelector('.detail-drawer');
         if (drawer) {
             drawer.setAttribute('aria-hidden', 'true');
-        }
-
-        // Close quiz modal
-        const modal = document.querySelector('.quiz-modal');
-        if (modal) {
-            modal.classList.remove('active');
-            modal.setAttribute('aria-hidden', 'true');
         }
 
         // Close detail panel

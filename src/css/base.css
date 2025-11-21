@@ -190,8 +190,8 @@ h3 { font-size: var(--font-size-h3); }
   margin-top: calc(-1 * var(--space-8));
 }
 
-/* Ensure ingredients section is tall enough to trigger lab scene */
-#section-ingredients {
+/* Ensure conveyor section is tall enough to trigger lab scene */
+#section-conveyor {
   min-height: 135vh;
   padding-bottom: 0 !important; /* NO gap before footer */
   margin-bottom: 0 !important;
@@ -361,8 +361,7 @@ body[data-scene="air"]::before {
       rgba(30, 35, 45, 0.35) 100%);
 }
 
-/* Lab - Atmospheric base (SVG handles equipment)
-   Metaphor: The formula - recipe ingredients analysis */
+/* Lab - Atmospheric base (SVG handles equipment) */
 body[data-scene="lab"]::before {
   background:
     /* Subtle molecular orbital rings - elegant and scientific */
@@ -612,13 +611,6 @@ body[data-scene="air"] .scene--bubbles {
   margin: 0 auto;
 }
 
-.layout-network-audio {
-  display: grid;
-  grid-template-columns: 200px 1fr 300px;
-  gap: var(--space-6);
-  align-items: start;
-}
-
 .layout-canopy {
   position: relative;
   min-height: 100vh;
@@ -628,13 +620,6 @@ body[data-scene="air"] .scene--bubbles {
   display: grid;
   grid-template-columns: 250px 1fr;
   gap: var(--space-7);
-}
-
-.layout-ingredient-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-5);
-  padding: var(--space-6);
 }
 
 /* Legacy layout names for compatibility */
@@ -689,22 +674,6 @@ body[data-scene="air"] .scene--bubbles {
   backdrop-filter: blur(8px);
   border-top: 1px solid rgba(255, 255, 255, 0.07);
   z-index: 10;
-}
-
-.layout-audio-tray {
-  display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 24px;
-  align-items: start;
-}
-
-.audio-tray {
-  display: grid;
-  gap: 12px;
-  position: sticky;
-  top: 120px;
-  max-height: calc(100vh - 160px);
-  overflow-y: auto;
 }
 
 .layout-kpi-rail {
@@ -888,23 +857,6 @@ body[data-scene="air"] .scene--bubbles {
   margin-top: var(--space-3);
 }
 
-/* Audio Tray */
-.audio-tray {
-  position: sticky;
-  top: 120px;
-  height: fit-content;
-  background: var(--glass-subtle-background);
-  border-radius: 8px;
-  border: var(--glass-subtle-border);
-  padding: var(--space-4);
-  backdrop-filter: blur(var(--glass-subtle-blur));
-}
-
-.audio-tray h3 {
-  font-size: var(--font-size-label);
-  margin-bottom: var(--space-3);
-}
-
 /* Legend Panel */
 .legend-panel {
   background: var(--glass-subtle-background);
@@ -963,59 +915,6 @@ body[data-scene="air"] .scene--bubbles {
 
 .drawer-close:hover {
   color: var(--color-text-primary);
-}
-
-/* Quiz Modal */
-.quiz-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--duration-macro) var(--easing-standard);
-  z-index: 2000;
-}
-
-.quiz-modal:not([aria-hidden="true"]) {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.modal-content {
-  background: var(--glass-frosted-background);
-  backdrop-filter: blur(var(--glass-frosted-blur));
-  border: var(--glass-frosted-border);
-  border-radius: 12px;
-  padding: var(--space-6);
-  max-width: 600px;
-  width: 90%;
-}
-
-.modal-close {
-  margin-top: var(--space-4);
-  padding: var(--space-3) var(--space-5);
-  background: var(--color-accent-cyan);
-  color: var(--color-background-primary);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: var(--font-weight-semibold);
-  transition: transform var(--duration-micro) var(--easing-standard);
-}
-
-.modal-close:hover {
-  transform: scale(1.05);
-}
-
-/* Card Grid */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--space-5);
-  margin-top: var(--space-6);
 }
 
 /* Footer - merged with lab bench appearance */
@@ -1112,113 +1011,6 @@ body[data-scene="air"] .scene--bubbles {
   50% { opacity: 0.1; }
 }
 
-/* Ingredient Cards */
-.ingredient-card {
-  background: var(--glass-subtle-background);
-  border-radius: 12px;
-  padding: var(--space-5);
-  border: var(--glass-subtle-border);
-  backdrop-filter: blur(var(--glass-subtle-blur));
-  cursor: pointer;
-  transition: all var(--duration-micro) var(--easing-standard);
-  position: relative;
-  overflow: hidden;
-}
-
-.ingredient-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent, var(--color-accent-cyan), transparent);
-  transform: translateX(-100%);
-  transition: transform var(--duration-macro);
-  opacity: 0.1;
-}
-
-.ingredient-card:hover::before {
-  transform: translateX(100%);
-}
-
-.ingredient-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--color-accent-cyan);
-  box-shadow: 0 10px 30px rgba(0, 255, 224, 0.2);
-}
-
-.ingredient-icon {
-  width: 48px;
-  height: 48px;
-  margin-bottom: var(--space-3);
-  color: var(--color-accent-cyan);
-}
-
-.ingredient-name {
-  font-size: var(--font-size-h3);
-  font-weight: var(--font-weight-semibold);
-  margin-bottom: var(--space-2);
-  color: var(--color-text-primary);
-}
-
-.ingredient-metrics {
-  display: flex;
-  gap: var(--space-4);
-  margin-top: var(--space-3);
-}
-
-.metric-item {
-  flex: 1;
-}
-
-.metric-value {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-bold);
-  font-family: var(--font-family-mono);
-  color: var(--color-accent-magenta);
-}
-
-.metric-label {
-  font-size: var(--font-size-caption);
-  color: var(--color-text-disabled);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Enhanced Quiz Modal */
-.quiz-comparison {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-6);
-  margin-top: var(--space-6);
-}
-
-.comparison-side {
-  text-align: center;
-  padding: var(--space-5);
-  background: var(--glass-subtle-background);
-  border-radius: 12px;
-  border: 2px solid transparent;
-  transition: all var(--duration-micro);
-}
-
-.comparison-side.with {
-  border-color: var(--color-accent-cyan);
-}
-
-.comparison-side.without {
-  border-color: var(--color-accent-magenta);
-}
-
-.comparison-side h3 {
-  font-size: var(--font-size-h2);
-  margin-bottom: var(--space-4);
-}
-
-.comparison-stats {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
 .stat-row {
   display: flex;
   justify-content: space-between;
@@ -1245,8 +1037,7 @@ body[data-scene="air"] .scene--bubbles {
 /* Tooltips */
 .viz-tooltip,
 .planet-tooltip,
-.emotion-tooltip,
-.ingredient-tooltip {
+.emotion-tooltip {
   position: absolute;
   background: var(--glass-frosted-background);
   backdrop-filter: blur(var(--glass-frosted-blur));
@@ -1284,41 +1075,9 @@ body[data-scene="air"] .scene--bubbles {
   }
 }
 
-/* B) Community - Audio tray effects */
-.audio-item {
-  cursor: pointer;
-  padding: var(--space-2);
-  border-radius: 4px;
-  transition: background 200ms ease-out;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-}
+/* B) Ranking - Leaf hint styles handled inline in JS */
 
-.audio-item:hover {
-  background: rgba(0, 255, 224, 0.1);
-}
-
-.audio-item.playing {
-  background: rgba(0, 255, 224, 0.15);
-  animation: audio-pulse 2s ease-in-out;
-}
-
-@keyframes audio-pulse {
-  0%, 100% { background: rgba(0, 255, 224, 0.15); }
-  50% { background: rgba(0, 255, 224, 0.25); }
-}
-
-/* Network edge emphasis when sound is active */
-#viz-community.sound-active circle,
-#viz-community.sound-active line {
-  stroke-width: 2.5;
-  transition: stroke-width 200ms ease-out;
-}
-
-/* C) Ranking - Leaf hint styles handled inline in JS */
-
-/* D) Emotion - Bubble breathe (handled via JS transform) */
+/* C) Emotion - Bubble breathe (handled via JS transform) */
 .bubble,
 circle[data-type="bubble"] {
   transition: transform 150ms ease-out, stroke 150ms ease-out;
@@ -1573,301 +1332,6 @@ circle[data-type="bubble"] {
   color: var(--color-background-primary);
   border-color: transparent;
   box-shadow: 0 4px 12px rgba(0, 255, 224, 0.3);
-}
-
-/* Ingredients Grid */
-.ingredients-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-4);
-  padding: var(--space-4);
-  width: 100%;
-}
-
-.ingredient-card {
-  background: var(--color-background-secondary);
-  border: 1px solid var(--color-border-interactive);
-  border-radius: 12px;
-  padding: var(--space-4);
-  cursor: pointer;
-  transition: all var(--duration-micro) var(--easing-standard);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.ingredient-card:hover,
-.ingredient-card:focus {
-  background: var(--color-background-elevated);
-  border-color: var(--color-accent-cyan);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 255, 224, 0.2);
-  outline: none;
-}
-
-.ingredient-card.highlighted {
-  border-color: var(--color-accent-magenta);
-  box-shadow: 0 0 20px rgba(255, 0, 224, 0.3);
-}
-
-.card-icon {
-  font-size: 2.5rem;
-  text-align: center;
-  margin-bottom: var(--space-2);
-}
-
-.card-title {
-  font-size: var(--font-size-h4);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  text-align: center;
-  margin-bottom: var(--space-1);
-}
-
-.card-description {
-  font-size: var(--font-size-caption);
-  color: var(--color-text-secondary);
-  text-align: center;
-  flex-grow: 1;
-}
-
-.card-action {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-1);
-  padding: var(--space-2) var(--space-3);
-  background: var(--color-background-primary);
-  border: 1px solid var(--color-border-interactive);
-  border-radius: 6px;
-  color: var(--color-accent-cyan);
-  cursor: pointer;
-  transition: all var(--duration-micro) var(--easing-standard);
-  font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-semibold);
-}
-
-.card-action:hover {
-  background: var(--color-accent-cyan);
-  color: var(--color-background-primary);
-  border-color: var(--color-accent-cyan);
-}
-
-/* Quiz Modal */
-.quiz-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(10, 10, 15, 0.95);
-  backdrop-filter: blur(10px);
-  z-index: 9999;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-4);
-}
-
-.quiz-modal.active {
-  display: flex;
-}
-
-.quiz-content {
-  background: var(--color-background-secondary);
-  border: 1px solid var(--color-border-interactive);
-  border-radius: 16px;
-  padding: var(--space-6);
-  max-width: 900px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-}
-
-.quiz-close {
-  position: absolute;
-  top: var(--space-3);
-  right: var(--space-3);
-  background: transparent;
-  border: none;
-  color: var(--color-text-secondary);
-  font-size: 2rem;
-  cursor: pointer;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: all var(--duration-micro) var(--easing-standard);
-}
-
-.quiz-close:hover {
-  background: var(--color-background-primary);
-  color: var(--color-text-primary);
-}
-
-.quiz-ingredient-info {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  margin-bottom: var(--space-4);
-}
-
-.quiz-icon {
-  font-size: 3rem;
-}
-
-.quiz-ingredient-name {
-  font-size: var(--font-size-h3);
-  color: var(--color-text-primary);
-}
-
-.quiz-comparison {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-4);
-  margin: var(--space-4) 0;
-}
-
-.comparison-with,
-.comparison-without {
-  background: var(--color-background-primary);
-  padding: var(--space-4);
-  border-radius: 12px;
-  border: 1px solid var(--color-border-primary);
-}
-
-.comparison-with.winner {
-  border-color: var(--color-accent-cyan);
-  box-shadow: 0 0 20px rgba(0, 255, 224, 0.3);
-}
-
-.metric-row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  margin-bottom: var(--space-3);
-}
-
-.metric-label {
-  min-width: 60px;
-  font-size: var(--font-size-caption);
-  color: var(--color-text-secondary);
-}
-
-.metric-bar {
-  flex-grow: 1;
-  height: 24px;
-  background: var(--color-background-secondary);
-  border-radius: 12px;
-  position: relative;
-  overflow: hidden;
-}
-
-.bar-fill {
-  height: 100%;
-  border-radius: 12px;
-  transition: width var(--duration-macro) var(--easing-standard);
-}
-
-.with-fill {
-  background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-magenta));
-}
-
-.without-fill {
-  background: var(--color-border-interactive);
-}
-
-.metric-value {
-  margin-left: var(--space-2);
-  font-family: var(--font-family-mono);
-  font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-}
-
-.quiz-examples {
-  margin-top: var(--space-4);
-  padding: var(--space-3);
-  background: var(--color-background-primary);
-  border-radius: 8px;
-}
-
-.example-list {
-  list-style: none;
-  padding: 0;
-  margin: var(--space-2) 0 0 0;
-}
-
-.example-list li {
-  padding: var(--space-2) 0;
-  border-bottom: 1px solid var(--color-border-primary);
-  color: var(--color-text-secondary);
-}
-
-.example-list li:last-child {
-  border-bottom: none;
-}
-
-.quiz-actions {
-  display: flex;
-  gap: var(--space-3);
-  justify-content: center;
-  margin-top: var(--space-4);
-}
-
-.btn-primary,
-.btn-secondary {
-  padding: var(--space-2) var(--space-4);
-  border-radius: 8px;
-  font-weight: var(--font-weight-semibold);
-  cursor: pointer;
-  transition: all var(--duration-micro) var(--easing-standard);
-  border: none;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-magenta));
-  color: var(--color-background-primary);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 255, 224, 0.4);
-}
-
-.btn-secondary {
-  background: var(--color-background-primary);
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border-interactive);
-}
-
-.btn-secondary:hover {
-  background: var(--color-background-elevated);
-  border-color: var(--color-accent-cyan);
-}
-
-.quiz-prompt {
-  background: linear-gradient(135deg, rgba(0, 255, 224, 0.1), rgba(255, 0, 224, 0.1));
-  padding: var(--space-3);
-  border-radius: 8px;
-  text-align: center;
-  margin-bottom: var(--space-4);
-  border: 1px solid var(--color-accent-cyan);
-  transition: opacity var(--duration-macro) var(--easing-standard);
-}
-
-@media (max-width: 768px) {
-  .ingredients-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .quiz-comparison {
-    grid-template-columns: 1fr;
-  }
-
-  .quiz-content {
-    padding: var(--space-4);
-  }
 }
 
 /* ════════════════════════════════════════════════════════════════════════

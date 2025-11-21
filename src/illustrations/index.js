@@ -10,7 +10,7 @@ const mounts = {
   forest: { hostId: 'section-fade',        factory: createForestIllustration },
   city:   { hostId: 'section-spillover',   factory: createCityIllustration },
   // air removed
-  lab:    { hostId: 'section-ingredients', factory: createLabIllustration }
+  lab:    { hostId: 'section-conveyor', factory: createLabIllustration }
 };
 
 let current = { scene: null, node: null };
@@ -34,7 +34,7 @@ export function installIllustrations() {
 
 function ensureIllustrationHosts() {
   console.log('[Illustrations] Ensuring illustration hosts (sections)...');
-  ['section-fade','section-spillover','section-takeaway','section-ingredients'].forEach(id=>{
+  ['section-fade','section-spillover','section-takeaway','section-conveyor'].forEach(id=>{
     const host = document.getElementById(id);
     if (!host) {
       console.warn(`[Illustrations] Section #${id} not found!`);
