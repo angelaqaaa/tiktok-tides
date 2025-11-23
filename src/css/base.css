@@ -879,6 +879,53 @@ body[data-scene="air"] .scene--bubbles {
   gap: var(--space-2) var(--space-3);
 }
 
+/* Emotion Sort Toggle Button (Jon's feature for column layout) */
+.emotion-sort-toggle {
+  width: auto;
+  max-width: 200px;
+  align-items: center;
+  margin: 1rem auto;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 107, 0.1),
+    rgba(255, 179, 71, 0.1)
+  );
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 0.5rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: block;
+}
+
+.emotion-sort-toggle:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 107, 0.2),
+    rgba(255, 179, 71, 0.2)
+  );
+  border-color: rgba(255, 107, 107, 0.5);
+  transform: translateY(-1px);
+}
+
+.emotion-sort-toggle:active {
+  transform: translateY(0);
+}
+
+.emotion-sort-toggle[aria-pressed="true"] {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 107, 0.3),
+    rgba(255, 179, 71, 0.3)
+  );
+  border-color: rgba(255, 107, 107, 0.6);
+  font-weight: 600;
+}
+
 /* Detail Drawer */
 .detail-drawer {
   position: fixed;
