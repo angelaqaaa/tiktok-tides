@@ -7,10 +7,10 @@ import { createLabIllustration, installLabParallax }    from './lab.js';
 const NS = 'http://www.w3.org/2000/svg';
 
 const mounts = {
-  forest: { hostId: 'section-fade',        factory: createForestIllustration },
-  city:   { hostId: 'section-spillover',   factory: createCityIllustration },
+  forest: { hostId: 'scene-category',   factory: createForestIllustration },
+  city:   { hostId: 'scene-top-sounds', factory: createCityIllustration },
   // air removed
-  lab:    { hostId: 'section-conveyor', factory: createLabIllustration }
+  lab:    { hostId: 'scene-quiz',       factory: createLabIllustration }
 };
 
 let current = { scene: null, node: null };
@@ -34,7 +34,7 @@ export function installIllustrations() {
 
 function ensureIllustrationHosts() {
   console.log('[Illustrations] Ensuring illustration hosts (sections)...');
-  ['section-fade','section-spillover','section-takeaway','section-conveyor'].forEach(id=>{
+  ['scene-category','scene-top-sounds','scene-quiz'].forEach(id=>{
     const host = document.getElementById(id);
     if (!host) {
       console.warn(`[Illustrations] Section #${id} not found!`);

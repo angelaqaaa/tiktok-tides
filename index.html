@@ -1,235 +1,634 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="TikTok Tides - The lifecycle of viral trends">
-    <title>TikTok Tides | Where trends are born, surge, and transform culture</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="TikTok Tides - Decoding viral short videos through data">
+  <title>TikTok Tides | Decoding viral short videos</title>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
-      rel="stylesheet">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet">
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="/src/css/tokens.css">
-    <link rel="stylesheet" href="/src/css/base.css">
-    <link rel="stylesheet" href="/src/css/stopwatch.css">
-  </head>
+  <!-- Styles -->
+  <link rel="stylesheet" href="/src/css/tokens.css">
+  <link rel="stylesheet" href="/src/css/base.css">
+  <link rel="stylesheet" href="/src/css/stopwatch.css">
+  <link rel="stylesheet" href="/src/css/record-player.css">
+  <link rel="stylesheet" href="/src/css/conveyor.css">
+</head>
 
-  <body data-scene="cosmos">
-    <!-- Progress Bar -->
-    <div class="progress-bar" aria-hidden="true"></div>
+<body data-scene="cosmos">
 
-    <!-- Navigation -->
-    <nav class="nav-header" role="navigation" aria-label="Main navigation">
-      <div class="nav-container">
+  <!-- Progress Bar -->
+  <div class="progress-bar" aria-hidden="true"></div>
+
+  <!-- Fixed Top Navigation -->
+  <nav class="nav-header" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <div class="nav-brand">
         <h1 class="nav-title">TikTok Tides</h1>
-        <ul class="nav-links" role="list">
-          <li><a href="#section-ignite" aria-current="false">Duration</a></li>
-          <li><a href="#section-surge" aria-current="false">Artists</a></li>
-          <li><a href="#section-spillover" aria-current="false">Sound</a></li>
-          <li><a href="#section-fade" aria-current="false">Community</a></li>
-          <li><a href="#section-takeaway" aria-current="false">Language</a></li>
-          <li><a href="#section-conveyor" aria-current="false">Conveyor</a></li> -->
-        </ul>
+        <p class="nav-subtitle">Decoding viral short videos</p>
       </div>
-    </nav>
+      <ul class="nav-links" role="list">
+        <li><a href="#scene-landing" aria-current="false">Story</a></li>
+        <li><a href="#scene-sound-universe" aria-current="false">Visual Journey</a></li>
+        <li><a href="#scene-quiz" aria-current="false">Quiz</a></li>
+        <li><a href="#scene-summary" aria-current="false">About</a></li>
+      </ul>
+      <button class="journey-map-toggle" aria-label="Show journey map" data-journey-toggle>
+        <!-- Icon will be added via CSS or inline SVG -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="5" r="2"/>
+          <circle cx="12" cy="12" r="2"/>
+          <circle cx="12" cy="19" r="2"/>
+          <line x1="12" y1="7" x2="12" y2="10"/>
+          <line x1="12" y1="14" x2="12" y2="17"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
 
-    <!-- Skip Link -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+  <!-- Journey Map Overlay (initially hidden) -->
+  <aside class="journey-map" aria-hidden="true" role="dialog" aria-labelledby="journey-map-title">
+    <div class="journey-map-content">
+      <div class="journey-map-header">
+        <h2 id="journey-map-title">Your Journey</h2>
+        <button class="journey-map-close" aria-label="Close journey map">×</button>
+      </div>
+      <nav class="journey-nodes" aria-label="Scene navigation">
+        <button class="journey-node" data-scene="landing" data-target="#scene-landing">
+          <svg class="node-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- Compass icon -->
+            <circle cx="12" cy="12" r="10"/>
+            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+          </svg>
+          <span class="node-label">Welcome</span>
+          <span class="node-check" aria-hidden="true">✓</span>
+        </button>
 
-    <!-- Landing/Hero Section -->
-    <section id="section-landing" class="section hero-section bg-cosmos" role="region" aria-labelledby="hero-title">
+        <button class="journey-node" data-scene="sound" data-target="#scene-sound-universe">
+          <svg class="node-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- Music note icon -->
+            <path d="M9 18V5l12-2v13"/>
+            <circle cx="6" cy="18" r="3"/>
+            <circle cx="18" cy="16" r="3"/>
+          </svg>
+          <span class="node-label">Sound</span>
+          <span class="node-check" aria-hidden="true">✓</span>
+        </button>
+
+        <button class="journey-node" data-scene="duration" data-target="#scene-duration">
+          <svg class="node-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- Clock icon -->
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span class="node-label">Duration</span>
+          <span class="node-check" aria-hidden="true">✓</span>
+        </button>
+
+        <button class="journey-node" data-scene="category" data-target="#scene-category">
+          <svg class="node-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- Pyramid/Triangle icon -->
+            <path d="M12 2 L2 22 L22 22 Z"/>
+          </svg>
+          <span class="node-label">Category</span>
+          <span class="node-check" aria-hidden="true">✓</span>
+        </button>
+
+        <button class="journey-node" data-scene="emotion" data-target="#scene-emotion">
+          <svg class="node-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- Chat bubble icon -->
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span class="node-label">Emotion</span>
+          <span class="node-check" aria-hidden="true">✓</span>
+        </button>
+
+        <button class="journey-node" data-scene="quiz" data-target="#scene-quiz">
+          <svg class="node-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- Flask icon -->
+            <path d="M9 3h6v7l4 8a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2l4-8V3z"/>
+          </svg>
+          <span class="node-label">Quiz</span>
+          <span class="node-check" aria-hidden="true">✓</span>
+        </button>
+
+        <button class="journey-node" data-scene="summary" data-target="#scene-summary">
+          <svg class="node-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- Book icon -->
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          <span class="node-label">Summary</span>
+          <span class="node-check" aria-hidden="true">✓</span>
+        </button>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <main id="main-content">
+
+    <!-- ========================================
+         SCENE 0: LANDING - Welcome to the Viral Lab
+         ======================================== -->
+    <section id="scene-landing" class="section scene-section bg-cosmos" data-scene-id="landing" role="region"
+      aria-labelledby="landing-title">
       <div class="scene-layer scene--stars" aria-hidden="true"></div>
       <div class="starfield" aria-hidden="true"></div>
-      <div class="hero-content">
-        <h2 id="hero-title" class="hero-title gradient-text">TikTok Tides</h2>
-        <p class="hero-subtitle">Where trends are born, surge, and transform culture</p>
-        <div class="scroll-cue" aria-hidden="true">
-          <span>Dive into the data</span>
-          <svg width="24" height="24" viewBox="0 0 24 24">
-            <path d="M12 4 L12 20 M6 14 L12 20 L18 14" stroke="currentColor" stroke-width="2" fill="none" />
-          </svg>
+
+      <div class="scene-container layout-two-column">
+        <div class="scene-content">
+          <h2 id="landing-title" class="scene-title gradient-text">TikTok Tides: decoding viral short videos</h2>
+          <div class="scene-text">
+            <p class="lead">
+              What makes a video go viral on TikTok? Using real data from thousands of videos,
+              this interactive story explores the ingredients of virality: sound, duration,
+              category, and the emotional language that pushes trends forward.
+            </p>
+            <p>
+              Your journey will take you through four key ingredients, each backed by data
+              visualizations. At the end, you'll test what you've learned by building your
+              own viral recipe.
+            </p>
+          </div>
+          <button class="cta-button" data-scroll-to="#scene-sound-universe">
+            <span>Start the journey</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+
+          <p class="scene-note">Use the journey map or scroll to move between ingredients.</p>
+        </div>
+
+        <div class="scene-visual">
+          <!-- Stylized phone frame illustration -->
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <!-- Simple abstract animation or static illustration -->
+              <div class="feed-animation" aria-hidden="true">
+                <div class="feed-card"></div>
+                <div class="feed-card"></div>
+                <div class="feed-card"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <main id="main-content">
-      <!-- Section 1: Ignite (Stopwatch) - Centered full-width -->
-      <section id="section-ignite" class="section scroll-section bg-dawn" role="region" aria-labelledby="ignite-title">
-        <!-- Time-themed legend panel -->
-        <div class="section-intro">
-          <h2 id="ignite-title">Seconds to Success</h2>
-          <p class="lead"> Time is ticking… and so is engagement.
-            Hover around the stopwatch to see how long videos survive before users swipe away, and which durations break
-            through with big engagement.</p>
-        </div>
-        <section class="legend-panel" aria-label="Visualization legend">
-          <p class="legend-subtitle">How tiktok reel duration influence views</p>
+    <!-- ========================================
+         SCENE 1A: INGREDIENT 1 - Sound Universe (Planet)
+         ======================================== -->
+    <section id="scene-sound-universe" class="section scene-section bg-orbit" data-scene-id="sound-universe"
+      role="region" aria-labelledby="sound-universe-title">
+      <div class="scene-layer scene--orbits" aria-hidden="true"></div>
 
-          <div class="legend-chips">
-            <div class="chip">
-              <span class="chip-icon">🕒</span>
-              <span><strong>Angle</strong> (swept arc) = <em>Video duration (sec)</em></span>
-            </div>
-            <div class="chip">
-              <span class="chip-icon">🟢</span>
-              <span><strong>Radius</strong> = <em>Average playCount</em> (bigger = more plays)</span>
-            </div>
-            <div class="chip">
-              <span class="chip-icon">🎨</span>
-              <span><strong>Color</strong> = Distinct duration groups</span>
-            </div>
-          </div>
-        </section>
-
-        <div id="chart" aria-label="Stopwatch-style radial visualization"></div>
-      </section>
-
-      <!-- Section 2: Surge (Planets) - Fullbleed with annotation rail -->
-      <section id="section-surge" class="section scroll-section bg-cosmos-deep" role="region"
-        aria-labelledby="surge-title">
-        <div class="section-container layout-fullbleed">
-          <div class="section-intro">
-            <h2 id="surge-title">Solar System of Sound</h2>
-            <p class="lead">Step into a musical universe where artists become planets, and see
-              what keeps their audios in TikTok’s gravitational pull.</p>
+      <div class="scene-container layout-two-column">
+        <div class="scene-content">
+          <!-- Section Header Component -->
+          <div class="section-header">
+            <span class="section-label">Ingredient 1</span>
+            <h2 id="sound-universe-title" class="section-question">What kind of sound do viral videos use?</h2>
           </div>
 
-          <!-- Legend -->
-          <div class="legend">
-            <div class="legend-item">
-              <strong>Planet Size:</strong> Number of viral songs
-            </div>
-            <div class="legend-item">
-              <strong>Distance from Sun:</strong> Average energy
-            </div>
+          <div class="section-explanation">
+            <p>
+              Explore a musical universe where songs become planets. Each planet represents
+              an artist, positioned by their sound's energy and colored by danceability.
+            </p>
           </div>
 
-          <!-- Color Gradient Legend -->
-          <div class="color-legend">
-            <div class="color-legend-title">
-              <strong>Planet Color:</strong> Average Danceability
-            </div>
-            <div class="color-gradient-container">
-              <div class="color-gradient-bar"></div>
-              <div class="color-gradient-labels">
-                <span>0.0<br><small>Low</small></span>
-                <span>0.2</span>
-                <span>0.4</span>
-                <span>0.6</span>
-                <span>0.8</span>
-                <span>1.0<br><small>High</small></span>
-              </div>
-            </div>
+          <!-- Legend Component -->
+          <div class="legend-panel" role="complementary" aria-label="Visualization legend">
+            <h3 class="legend-title">Reading the chart</h3>
+            <ul class="legend-items" role="list">
+              <li class="legend-item">
+                <span class="legend-marker legend-marker--size"></span>
+                <span class="legend-label"><strong>Planet size:</strong> Number of viral songs</span>
+              </li>
+              <li class="legend-item">
+                <span class="legend-marker legend-marker--distance"></span>
+                <span class="legend-label"><strong>Distance from sun:</strong> Energy level</span>
+              </li>
+              <li class="legend-item">
+                <span class="legend-marker legend-marker--color"></span>
+                <span class="legend-label"><strong>Color:</strong> Danceability (blue = low, red = high)</span>
+              </li>
+            </ul>
           </div>
 
-          <div id="viz-planets" class="viz-container viz-fullbleed" data-viz="planets"></div>
-
-          <div class="annotation-rail">
-            <div class="year-selector">
-              <button class="year-btn active" data-year="2019">2019</button>
-              <button class="year-btn" data-year="2020">2020</button>
-              <button class="year-btn" data-year="2021">2021</button>
-              <button class="year-btn" data-year="2022">2022</button>
-            </div>
-            <p class="annotation" aria-live="polite">Top artists spawn [PLACEHOLDER_REMIX_COUNT] variations</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Section 3: Record Player Section -->
-      <section id="section-spillover" class="section scroll-section bg-city" role="region"
-        aria-labelledby="spillover-title">
-        <section class="record-player-section" aria-label="Viral Vinyl: TikTok's most viral sounds">
-          <div class="record-player-header">
-            <h2 class="record-player-title">Viral Vinyl</h2>
-            <p class="record-player-description">Hear the sounds that shaped TikTok’s For You Page. Hover over the
-              record’s rings to sample each trending sound — the farther out the ring, the louder the hype.</p>
-            <button type="button" class="record-player-start-btn" data-player-start>Start exploring</button>
-          </div>
-          <div class="record-player-layout" data-player-layout>
-            <div class="record-player-wrapper" data-player-locked>
-              <div class="record-player-base">
-                <div class="record-disc-area">
-                  <div class="record-indicator-line record-indicator-line--max" aria-hidden="true">higher popularity
-                  </div>
-                  <svg class="record-disc" viewBox="0 0 700 700" role="img"
-                    aria-labelledby="record-disc-title record-disc-desc">
-                    <title id="record-disc-title">Record player visualization of top TikTok songs</title>
-                    <desc id="record-disc-desc">Concentric rings represent songs ordered by popularity from outermost
-                      most popular to innermost least popular.</desc>
-                    <g class="record-rings" data-record-rings></g>
-                  </svg>
-                  <div class="record-center-cap" aria-hidden="true">
-                    <span class="record-center-year">2019–2025</span>
+          <!-- Guided Steps Component -->
+          <div class="guided-steps" role="complementary" aria-label="Guided exploration">
+            <h3 class="steps-title">Explore the data</h3>
+            <ol class="steps-list" role="list">
+              <li class="step-item">
+                <span class="step-number">1</span>
+                <div class="step-content">
+                  <p class="step-instruction">See which songs are most danceable</p>
+                  <button class="step-button" data-viz-action="planet-highlight-danceability">
+                    Highlight high danceability
+                  </button>
+                </div>
+              </li>
+              <li class="step-item">
+                <span class="step-number">2</span>
+                <div class="step-content">
+                  <p class="step-instruction">Compare trends across years</p>
+                  <div class="year-selector">
+                    <button class="year-btn active" data-year="2019" data-viz-action="planet-year">2019</button>
+                    <button class="year-btn" data-year="2020" data-viz-action="planet-year">2020</button>
+                    <button class="year-btn" data-year="2021" data-viz-action="planet-year">2021</button>
+                    <button class="year-btn" data-year="2022" data-viz-action="planet-year">2022</button>
                   </div>
                 </div>
-                <div class="tonearm" data-tonearm>
-                  <div class="tonearm-hinge">
-                    <div class="tonearm-arm" data-tonearm-arm>
-                      <div class="tonearm-back">
-                        <div class="tonearm-head"></div>
+              </li>
+              <li class="step-item">
+                <span class="step-number">3</span>
+                <div class="step-content">
+                  <p class="step-instruction">Find artists who stay viral year after year</p>
+                  <button class="step-button" data-viz-action="planet-highlight-repeat">
+                    Show repeated artists
+                  </button>
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <!-- Insight Callout (initially hidden) -->
+          <aside class="insight-callout" aria-hidden="true" role="complementary" aria-labelledby="insight-sound-1">
+            <h3 id="insight-sound-1" class="insight-title">What we learned</h3>
+            <p class="insight-text">
+              Most viral sounds cluster in a region with mid-to-high energy and high danceability.
+              Extreme low energy or very low danceability tracks are rare among top sounds.
+            </p>
+          </aside>
+        </div>
+
+        <div class="scene-visual">
+          <div id="viz-planets" class="viz-container" data-viz="planets" aria-label="Solar system visualization of viral songs"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SCENE 1B: INGREDIENT 1 - Top Sounds (Record Player)
+         ======================================== -->
+    <section id="scene-top-sounds" class="section scene-section bg-orbit" data-scene-id="top-sounds" role="region"
+      aria-labelledby="top-sounds-title">
+
+      <div class="scene-container layout-two-column">
+        <div class="scene-content">
+          <div class="section-transition">
+            <p>
+              The sound universe shows the overall landscape. Now let's zoom in on the very
+              top sounds that dominated TikTok's For You Page.
+            </p>
+          </div>
+
+          <h3 id="top-sounds-title" class="section-subquestion">
+            How concentrated is attention on a handful of sounds?
+          </h3>
+
+          <!-- Guided Steps -->
+          <div class="guided-steps" role="complementary" aria-label="Guided exploration">
+            <h3 class="steps-title">Explore the records</h3>
+            <ol class="steps-list" role="list">
+              <li class="step-item">
+                <span class="step-number">1</span>
+                <div class="step-content">
+                  <p class="step-instruction">Rotate through the top viral sounds</p>
+                  <button class="step-button" data-viz-action="record-rotate">
+                    Play next sound
+                  </button>
+                </div>
+              </li>
+              <li class="step-item">
+                <span class="step-number">2</span>
+                <div class="step-content">
+                  <p class="step-instruction">See the dominance of the top three</p>
+                  <button class="step-button" data-viz-action="record-highlight-top3">
+                    Highlight top 3
+                  </button>
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <!-- Insight Callout -->
+          <aside class="insight-callout" aria-hidden="true" role="complementary" aria-labelledby="insight-sound-2">
+            <h3 id="insight-sound-2" class="insight-title">What we learned</h3>
+            <p class="insight-text">
+              Only a handful of sounds dominate the platform, with the top one or two songs
+              far ahead of the rest. Choosing the right audio can dramatically increase your
+              chances of riding an existing wave.
+            </p>
+          </aside>
+        </div>
+
+        <div class="scene-visual">
+          <div class="record-player-container">
+            <section class="record-player-section" aria-label="Viral Vinyl: TikTok's most viral sounds">
+              <div class="record-player-layout" data-player-layout>
+                <div class="record-player-wrapper">
+                  <div class="record-player-base">
+                    <div class="record-disc-area">
+                      <div class="record-indicator-line record-indicator-line--max" aria-hidden="true">
+                        higher popularity
+                      </div>
+                      <svg class="record-disc" viewBox="0 0 700 700" role="img"
+                        aria-labelledby="record-disc-title record-disc-desc">
+                        <title id="record-disc-title">Record player visualization of top TikTok songs</title>
+                        <desc id="record-disc-desc">
+                          Concentric rings represent songs ordered by popularity from outermost
+                          most popular to innermost least popular.
+                        </desc>
+                        <g class="record-rings" data-record-rings></g>
+                      </svg>
+                      <div class="record-center-cap" aria-hidden="true">
+                        <span class="record-center-year">2019–2025</span>
+                      </div>
+                    </div>
+                    <div class="tonearm" data-tonearm>
+                      <div class="tonearm-hinge">
+                        <div class="tonearm-arm" data-tonearm-arm>
+                          <div class="tonearm-back">
+                            <div class="tonearm-head"></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
+                  <div class="record-player-notes" aria-hidden="true">
+                    <span class="note note--cyan">♪</span>
+                    <span class="note note--magenta">♫</span>
+                    <span class="note note--black">♬</span>
+                  </div>
                 </div>
               </div>
-              <div class="record-player-notes" aria-hidden="true">
-                <span class="note note--cyan">♪</span>
-                <span class="note note--magenta">♫</span>
-                <span class="note note--black">♬</span>
-                <span class="note note--black">♬</span>
-                <span class="note note--black">♬</span>
-                <span class="note note--black">♬</span>
-
-              </div>
-            </div>
+            </section>
           </div>
-        </section>
-      </section>
+        </div>
+      </div>
+    </section>
 
-      <!-- Section 4: Fade/Revival (Ranking) - Full canopy + right KPI rail -->
-      <section id="section-fade" class="section scroll-section bg-forest" role="region" aria-labelledby="fade-title">
-        <div class="scene-layer scene--canopy" aria-hidden="true"></div>
-        <div class="section-container layout-canopy">
-          <div class="canopy-silhouette" aria-hidden="true"></div>
+    <!-- ========================================
+         SCENE 2: INGREDIENT 2 - Duration (Stopwatch)
+         ======================================== -->
+    <section id="scene-duration" class="section scene-section bg-dawn" data-scene-id="duration" role="region"
+      aria-labelledby="duration-title">
 
-          <div class="section-intro">
-            <h2 id="fade-title">Who's at the Top of the Pyramid?</h2>
-            <p class="lead">From bottom-tier to star performer: which TikTok communities climb their way to viral fame?
-              ✨
-              <br>
-              Start at the bottom (no shade 👀) and work your way up to see who <i>really</i> earned their spot on the
-              pyramid
-              this week.
+      <div class="scene-container layout-two-column">
+        <div class="scene-content">
+          <!-- Section Header -->
+          <div class="section-header">
+            <span class="section-label">Ingredient 2</span>
+            <h2 id="duration-title" class="section-question">How long should your video be to maximize views?</h2>
+          </div>
+
+          <div class="section-explanation">
+            <p>
+              Each arc on the stopwatch corresponds to videos of a certain duration.
+              The radius shows average play count—bigger arcs mean more views.
             </p>
           </div>
-          <div id="viz-ranking" class="viz-container viz-fullbleed" data-viz="ranking"></div>
+
+          <!-- Legend -->
+          <div class="legend-panel" role="complementary" aria-label="Visualization legend">
+            <h3 class="legend-title">Reading the stopwatch</h3>
+            <ul class="legend-items" role="list">
+              <li class="legend-item">
+                <span class="legend-marker legend-marker--arc"></span>
+                <span class="legend-label"><strong>Arc position:</strong> Video duration (seconds)</span>
+              </li>
+              <li class="legend-item">
+                <span class="legend-marker legend-marker--radius"></span>
+                <span class="legend-label"><strong>Arc length (radius):</strong> Average play count</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Guided Steps -->
+          <div class="guided-steps" role="complementary" aria-label="Guided exploration">
+            <h3 class="steps-title">Explore duration bands</h3>
+            <ol class="steps-list" role="list">
+              <li class="step-item">
+                <span class="step-number">1</span>
+                <div class="step-content">
+                  <p class="step-instruction">See how very short clips perform</p>
+                  <button class="step-button" data-viz-action="stopwatch-short">
+                    Show short clips (&lt;15s)
+                  </button>
+                </div>
+              </li>
+              <li class="step-item">
+                <span class="step-number">2</span>
+                <div class="step-content">
+                  <p class="step-instruction">Explore the sweet spot</p>
+                  <button class="step-button" data-viz-action="stopwatch-mid">
+                    Show mid-length clips (15-30s)
+                  </button>
+                </div>
+              </li>
+              <li class="step-item">
+                <span class="step-number">3</span>
+                <div class="step-content">
+                  <p class="step-instruction">Check longer videos</p>
+                  <button class="step-button" data-viz-action="stopwatch-long">
+                    Show long clips (&gt;30s)
+                  </button>
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <!-- Insight Callout -->
+          <aside class="insight-callout" aria-hidden="true" role="complementary" aria-labelledby="insight-duration">
+            <h3 id="insight-duration" class="insight-title">What we learned</h3>
+            <p class="insight-text">
+              In this sample, videos in a mid-length window (15-30 seconds) reach much higher
+              average views than extremely short or very long clips. Viewers seem to prefer
+              content with enough time for a moment or story.
+            </p>
+          </aside>
         </div>
-      </section>
 
-      <!-- Section 5: Takeaway (Emotion) - Bubble cloud + left legend + right drawer -->
-      <section id="section-takeaway" class="section scroll-section bg-neutral" role="region"
-        aria-labelledby="takeaway-title">
-        <div class="scene-layer scene--bubbles" aria-hidden="true"></div>
-        <div class="section-container layout-bubble-legend-drawer">
-          <div class="section-intro">
-            <h2 id="takeaway-title">Emotion in Motion</h2>
-            <p class="lead">Dive into the emotional language that pushes trends forward. Colours represent the emotional
-              tone, helping you spot which vibes spark the most popularity.</p>
+        <div class="scene-visual">
+          <div id="chart" class="viz-container" aria-label="Stopwatch-style radial visualization"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SCENE 3: INGREDIENT 3 - Category (Ranking)
+         ======================================== -->
+    <section id="scene-category" class="section scene-section bg-forest" data-scene-id="category" role="region"
+      aria-labelledby="category-title">
+      <div class="scene-layer scene--canopy" aria-hidden="true"></div>
+
+      <div class="scene-container layout-two-column">
+        <div class="scene-content">
+          <!-- Section Header -->
+          <div class="section-header">
+            <span class="section-label">Ingredient 3</span>
+            <h2 id="category-title" class="section-question">
+              Which content categories dominate the top of the view pyramid?
+            </h2>
           </div>
 
+          <div class="section-explanation">
+            <p>
+              Categories are ranked by total views and arranged in a pyramid.
+              Click any category to see which creators carry the most views within it.
+            </p>
+          </div>
+
+          <!-- Legend -->
+          <div class="legend-panel" role="complementary" aria-label="Visualization legend">
+            <h3 class="legend-title">Reading the pyramid</h3>
+            <ul class="legend-items" role="list">
+              <li class="legend-item">
+                <span class="legend-marker legend-marker--rank"></span>
+                <span class="legend-label"><strong>Position:</strong> Higher = more total views</span>
+              </li>
+              <li class="legend-item">
+                <span class="legend-marker legend-marker--tile"></span>
+                <span class="legend-label"><strong>Tile size:</strong> Relative view count</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Guided Steps -->
+          <div class="guided-steps" role="complementary" aria-label="Guided exploration">
+            <h3 class="steps-title">Explore categories</h3>
+            <ol class="steps-list" role="list">
+              <li class="step-item">
+                <span class="step-number">1</span>
+                <div class="step-content">
+                  <p class="step-instruction">Reveal categories from base to peak</p>
+                  <button class="step-button" data-viz-action="ranking-reveal">
+                    Reveal pyramid layers
+                  </button>
+                </div>
+              </li>
+              <li class="step-item">
+                <span class="step-number">2</span>
+                <div class="step-content">
+                  <p class="step-instruction">Dive into a category to see top creators</p>
+                  <button class="step-button" data-viz-action="ranking-dive">
+                    Click any category tile
+                  </button>
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <!-- Insight Callout -->
+          <aside class="insight-callout" aria-hidden="true" role="complementary" aria-labelledby="insight-category">
+            <h3 id="insight-category" class="insight-title">What we learned</h3>
+            <p class="insight-text">
+              A small group of content categories consistently stays at the top of the pyramid.
+              Within each category, a handful of creators carry most of the views while many
+              others sit in the long tail.
+            </p>
+          </aside>
+        </div>
+
+        <div class="scene-visual">
+          <div id="viz-ranking" class="viz-container" data-viz="ranking" aria-label="Pyramid visualization of content categories"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SCENE 4: INGREDIENT 4 - Emotion
+         ======================================== -->
+    <section id="scene-emotion" class="section scene-section bg-air" data-scene-id="emotion" role="region"
+      aria-labelledby="emotion-title">
+      <div class="scene-layer scene--bubbles" aria-hidden="true"></div>
+
+      <div class="scene-container layout-two-column">
+        <div class="scene-content">
+          <!-- Section Header -->
+          <div class="section-header">
+            <span class="section-label">Ingredient 4</span>
+            <h2 id="emotion-title" class="section-question">
+              What kind of language and emotion do viral captions use?
+            </h2>
+          </div>
+
+          <div class="section-explanation">
+            <p>
+              Captions have been analyzed for emotional tone. Each bubble represents a word
+              or phrase, colored by emotion category and sized by frequency.
+            </p>
+          </div>
+
+          <!-- Legend -->
           <div class="legend-panel" role="complementary" aria-label="Emotion categories">
-            <h3>Emotion Categories</h3>
-            <ul class="emotion-legend" role="list"></ul>
+            <h3 class="legend-title">Emotion categories</h3>
+            <ul class="emotion-legend" role="list">
+              <!-- Will be populated by viz or via JS -->
+            </ul>
           </div>
 
-          <div id="viz-emotion" class="viz-container" data-viz="emotion"></div>
+          <!-- Guided Steps -->
+          <div class="guided-steps" role="complementary" aria-label="Guided exploration">
+            <h3 class="steps-title">Explore emotions</h3>
+            <ol class="steps-list" role="list">
+              <li class="step-item">
+                <span class="step-number">1</span>
+                <div class="step-content">
+                  <p class="step-instruction">See all emotion clusters</p>
+                  <button class="step-button" data-viz-action="emotion-show-all">
+                    Show emotion groups
+                  </button>
+                </div>
+              </li>
+              <li class="step-item">
+                <span class="step-number">2</span>
+                <div class="step-content">
+                  <p class="step-instruction">Focus on hype and positive language</p>
+                  <button class="step-button" data-viz-action="emotion-highlight-positive">
+                    Highlight positive/hype
+                  </button>
+                </div>
+              </li>
+              <li class="step-item">
+                <span class="step-number">3</span>
+                <div class="step-content">
+                  <p class="step-instruction">Read example captions</p>
+                  <button class="step-button" data-viz-action="emotion-sample">
+                    Sample captions (click a bubble)
+                  </button>
+                </div>
+              </li>
+            </ol>
+          </div>
 
+          <!-- Insight Callout -->
+          <aside class="insight-callout" aria-hidden="true" role="complementary" aria-labelledby="insight-emotion">
+            <h3 id="insight-emotion" class="insight-title">What we learned</h3>
+            <p class="insight-text">
+              Viral captions in this dataset lean heavily on hype-oriented and positive language.
+              Words related to trends, challenges, and excitement are much more frequent than
+              neutral or negative terms.
+            </p>
+          </aside>
+        </div>
+
+        <div class="scene-visual">
+          <div id="viz-emotion" class="viz-container" data-viz="emotion" aria-label="Emotional language visualization"></div>
+
+          <!-- Detail Drawer (initially hidden) -->
           <div class="detail-drawer" aria-hidden="true" role="dialog" aria-labelledby="drawer-title">
             <button class="drawer-close" aria-label="Close details">×</button>
             <h3 id="drawer-title">Emotion Details</h3>
@@ -239,70 +638,156 @@
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Section 6: Conveyor Belt - Interactive guessing game -->
-      <section id="section-conveyor" class="section scroll-section bg-lab" role="region"
-        aria-labelledby="conveyor-title">
-        <div class="section-container">
-          <div class="section-intro">
-            <h2 id="conveyor-title">The Road to Virality</h2>
-            <p class="lead">Make your way down the road to For You Page fame. Each wall tests what you’ve learned about
-              emotions, sounds, timing, and trends. Are you ready to be TikTok famous?</p>
+    <!-- ========================================
+         SCENE 5: FINAL LAB - Quiz (Conveyor)
+         ======================================== -->
+    <section id="scene-quiz" class="section scene-section bg-lab" data-scene-id="quiz" role="region"
+      aria-labelledby="quiz-title">
+
+      <div class="scene-container">
+        <!-- Section Header -->
+        <div class="section-intro">
+          <span class="section-label">Final Lab</span>
+          <h2 id="quiz-title" class="section-question">Build your viral recipe</h2>
+          <p class="lead">
+            You've explored the data behind viral TikTok videos. Now it's time to test what you've learned.
+            Guess the ingredients that make videos go viral by answering each question on the conveyor belt.
+          </p>
+        </div>
+
+        <!-- Conveyor Visualization Container (mounts itself) -->
+        <div id="viz-conveyor" class="viz-container" data-viz="conveyor"></div>
+
+        <!-- Insight Callout (shown after completing quiz) -->
+        <aside class="insight-callout" aria-hidden="true" role="complementary" aria-labelledby="insight-quiz">
+          <h3 id="insight-quiz" class="insight-title">What we learned</h3>
+          <p class="insight-text">
+            The data shows clear patterns: viral videos tend to use high-energy danceable sounds,
+            mid-length durations (15-30 seconds), focus on top categories, and use hype-oriented
+            positive language. These are tendencies, not guarantees—but they give you a strong
+            foundation for understanding what works on the platform.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ========================================
+         SCENE 6: SUMMARY AND REFERENCES
+         ======================================== -->
+    <section id="scene-summary" class="section scene-section bg-cosmos" data-scene-id="summary" role="region"
+      aria-labelledby="summary-title">
+
+      <div class="scene-container layout-single-column">
+        <div class="summary-content">
+          <h2 id="summary-title" class="section-title">Summary and References</h2>
+
+          <!-- What We Found -->
+          <div class="summary-block">
+            <h3>What we found</h3>
+            <ul class="summary-list" role="list">
+              <li>
+                <strong>Sound:</strong> Viral tracks cluster in mid-to-high energy with high danceability.
+                A handful of sounds dominate the platform.
+              </li>
+              <li>
+                <strong>Duration:</strong> Mid-length videos (15-30 seconds) achieve the highest average views
+                in this dataset.
+              </li>
+              <li>
+                <strong>Category:</strong> A small set of categories dominate views, with a handful of creators
+                carrying most attention within each.
+              </li>
+              <li>
+                <strong>Emotion:</strong> Hype-oriented, positive language appears much more frequently in
+                high-performing captions.
+              </li>
+            </ul>
           </div>
 
-          <div id="viz-conveyor" class="viz-container" data-viz="conveyor"></div>
+          <!-- What This Does Not Tell You -->
+          <div class="summary-block">
+            <h3>What this does not tell you</h3>
+            <ul class="summary-list" role="list">
+              <li>This data covers a specific time period and may not reflect current trends.</li>
+              <li>We focused on views as the primary metric, not engagement depth or longevity.</li>
+              <li>Demographic and geographic factors were not included in this analysis.</li>
+              <li>Virality depends on many factors beyond these four ingredients, including timing,
+                creator reputation, and algorithmic luck.</li>
+            </ul>
+          </div>
+
+          <!-- How to Read This -->
+          <div class="summary-block">
+            <h3>How to read this</h3>
+            <p>
+              The patterns shown here represent <strong>tendencies, not guarantees</strong>.
+              These are insights from data, not a recipe that works every time.
+              Use them as guidelines to inform your creative decisions, not as rigid rules.
+            </p>
+          </div>
+
+          <!-- Inspiration and References -->
+          <div class="summary-block">
+            <h3>Inspiration and references</h3>
+            <ul class="summary-list" role="list">
+              <li>
+                <a href="https://pudding.cool" target="_blank" rel="noopener noreferrer">
+                  The Pudding
+                </a> — Scrollytelling inspiration and visual storytelling patterns
+              </li>
+              <li>
+                <a href="https://github.com/russellsamora/scrollama" target="_blank" rel="noopener noreferrer">
+                  Scrollama
+                </a> — Scroll-based interaction library
+              </li>
+              <li>
+                <a href="https://heroicons.com" target="_blank" rel="noopener noreferrer">
+                  Heroicons
+                </a> — SVG icon set
+              </li>
+              <li>
+                <a href="https://github.com/bluprint" target="_blank" rel="noopener noreferrer">
+                  Bluprint Graphics Kit
+                </a> — Newsroom-style component patterns
+              </li>
+              <li>D3.js v7 — Data visualization library</li>
+              <li>Dataset sources: TikTok public data samples, YouTube Shorts trends (2025)</li>
+            </ul>
+          </div>
+
+          <!-- Team Credits -->
+          <div class="summary-block">
+            <h3>Created by</h3>
+            <p>
+              Team TrendTokers for CSC316 Data Visualization (Fall 2025)
+            </p>
+          </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-    </main>
+  </main>
 
-    <!-- Footer -->
-    <footer class="site-footer">
-      <p>Created by Team TrendTokers for CSC316</p>
-      <a href="https://github.com/hellokathylee/tiktok-tides">View on GitHub</a>
-    </footer>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>Created by Team TrendTokers for CSC316</p>
+    <a href="https://github.com/hellokathylee/tiktok-tides" target="_blank" rel="noopener noreferrer">
+      View on GitHub
+    </a>
+  </footer>
 
-    <!-- Live Region for Screen Readers -->
-    <div role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+  <!-- Live Region for Screen Readers -->
+  <div role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
 
-    <!-- D3.js -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!-- D3.js -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
 
-    <!-- Main App -->
-    <script type="module" src="/src/js/main.js"></script>
+  <!-- Main App -->
+  <script type="module" src="/src/js/main.js"></script>
 
-    <!-- Inline SVG Noise Filter -->
-    <!-- Grain overlay disabled for better visibility
-    <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
-      <filter id="noise" x="0" y="0" width="100%" height="100%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch" />
-        <feColorMatrix type="matrix" values="0 0 0 0 0
-                0 0 0 0 0
-                0 0 0 0 0
-                0 0 0 0.12 0" />
-      </filter>
-    </svg>
-    <div class="grain-overlay" aria-hidden="true"></div>
-    <style>
-      .grain-overlay {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 9999;
-        background: #000;
-        filter: url(#noise);
-        mix-blend-mode: overlay;
-        opacity: .06;
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .grain-overlay {
-          display: none;
-        }
-      }
-    </style>
-    -->
-  </body>
+</body>
 
 </html>
