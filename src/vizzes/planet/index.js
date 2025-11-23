@@ -306,15 +306,19 @@ export class PlanetViz extends EventEmitter {
       .attr('r', 0)
       .attr('fill', d => this.danceabilityToColor(d.avgDanceability))
       .attr('stroke', '#fff')
-      .attr('stroke-width', 2)
+      .attr('stroke-width', 2);
+
+    // Merge enter and update selections, then set up event handlers
+    const allPlanets = planetsEnter.merge(planets)
       .on('mouseenter', function(event, d) {
-        d3.select(this).attr('data-original-r', sizeScale(d.songCount));
+        const currentRadius = sizeScale(d.songCount);
+        d3.select(this).attr('data-original-r', currentRadius);
         
         d3.select(this)
           .transition()
           .duration(200)
           .attr('stroke-width', 4)
-          .attr('r', sizeScale(d.songCount) * 1.2);
+          .attr('r', currentRadius * 1.2);
         
         tooltip
           .style('display', 'block')
@@ -337,13 +341,13 @@ export class PlanetViz extends EventEmitter {
           .style('top', (event.pageY - 15) + 'px');
       })
       .on('mouseleave', function(event, d) {
-        const originalR = d3.select(this).attr('data-original-r') || sizeScale(d.songCount);
+        const currentRadius = sizeScale(d.songCount);
         
         d3.select(this)
           .transition()
           .duration(200)
           .attr('stroke-width', 2)
-          .attr('r', originalR);
+          .attr('r', currentRadius);
         
         tooltip
           .transition()
@@ -354,7 +358,8 @@ export class PlanetViz extends EventEmitter {
           });
       });
 
-    planetsEnter.merge(planets)
+    // Apply transitions after event handlers are set
+    allPlanets
       .transition()
       .duration(1000)
       .attr('cx', d => d.x)

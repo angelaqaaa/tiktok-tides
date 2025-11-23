@@ -207,7 +207,7 @@
             </p>
           </div>
 
-          <!-- Legend Component -->
+          <!-- Legend Component (Enhanced with teammate's improvements) -->
           <div class="legend-panel" role="complementary" aria-label="Visualization legend">
             <h3 class="legend-title">Reading the chart</h3>
             <ul class="legend-items" role="list">
@@ -215,15 +215,43 @@
                 <span class="legend-marker legend-marker--size"></span>
                 <span class="legend-label"><strong>Planet size:</strong> Number of viral songs</span>
               </li>
-              <li class="legend-item">
+              <li class="legend-item legend-hoverable">
                 <span class="legend-marker legend-marker--distance"></span>
-                <span class="legend-label"><strong>Distance from sun:</strong> Energy level</span>
+                <span class="legend-label">
+                  <strong>Distance from sun:</strong> Energy (perceived intensity & activity)
+                  <div style="font-size: 0.85rem; color: #aaa; margin-top: 4px; font-style: italic;">
+                    Close orbits = calm vibes · Wider orbits = intense, active tracks
+                  </div>
+                </span>
+                <div class="legend-tooltip">
+                  <strong>Technical Definition:</strong><br>
+                  Energy measures the perceptual intensity and activity of a track. High-energy songs typically feature loudness, speed, fast tempo, and noisy characteristics. Death metal scores high (≈1.0), while soft ballads score low (≈0.0). Based on dynamic range, perceived loudness, timbre, onset rate, and general entropy.
+                </div>
               </li>
-              <li class="legend-item">
+              <li class="legend-item legend-hoverable">
                 <span class="legend-marker legend-marker--color"></span>
-                <span class="legend-label"><strong>Color:</strong> Danceability (blue = low, red = high)</span>
+                <span class="legend-label">
+                  <strong>Color:</strong> Danceability (suitability for dancing)
+                </span>
+                <div class="legend-tooltip">
+                  <strong>Technical Definition:</strong><br>
+                  Danceability describes how suitable a track is for dancing based on musical elements including tempo, rhythm stability, beat strength, and overall regularity. Values range from 0.0 (least danceable) to 1.0 (most danceable). Calculated from tempo consistency, beat prominence, and rhythmic patterns.
+                </div>
               </li>
             </ul>
+
+            <!-- Color Gradient Scale -->
+            <div class="color-gradient-container">
+              <div class="color-gradient-bar"></div>
+              <div class="color-gradient-labels">
+                <span>0.0<br><small>Low</small></span>
+                <span>0.2</span>
+                <span>0.4</span>
+                <span>0.6</span>
+                <span>0.8</span>
+                <span>1.0<br><small>High</small></span>
+              </div>
+            </div>
           </div>
 
           <!-- Guided Steps Component -->
