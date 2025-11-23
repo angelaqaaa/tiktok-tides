@@ -137,6 +137,87 @@ export class RankingViz extends EventEmitter {
       .attr('role', 'img')
       .attr('aria-label', 'Category visualization showing ranking and interaction');
 
+    // --- info button ---
+    const infoBtn = d3.select(this.container)
+      .append('div')
+      .attr('class', 'viz-info-button')
+      .style('position', 'absolute')
+      .style('top', '10px')
+      .style('left', '10px')
+      .style('padding', '8px 16px')
+      .style('background', '#2c2c2cff')
+      .style('border', '1px solid #ccc')
+      .style('border-radius', '10px')
+      .style('cursor', 'pointer')
+      .style('font-weight', 'bold')
+      .style('color', 'white')
+      .style('z-index', 2000)
+      .html(`
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+      <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="none"/>
+      <line x1="12" y1="10" x2="12" y2="16" stroke="white" stroke-width="2" />
+      <circle cx="12" cy="7" r="1.5" fill="white"/>
+    </svg>
+  `);
+
+    let infoTooltipOpen = false;
+
+    const infoTooltip = d3.select(this.container)
+      .append('div')
+      .attr('class', 'viz-info-tooltip')
+      .style('position', 'absolute')
+      .style('top', '55px')
+      .style('left', '10px')
+      .style('padding', '15px')
+      .style('background', 'black')
+      .style('border-radius', '12px')
+      .style('box-shadow', '0 4px 12px rgba(0,0,0,0.15)')
+      .style('width', '260px')
+      .style('opacity', 0)
+      .style('pointer-events', 'none')
+      .style('transition', 'opacity 0.25s ease')
+      .html(`
+    <div style="font-size: 15px; font-weight: 600; margin-bottom: 6px;">
+      About this visualization
+    </div>
+    <div style="font-size: 13px; line-height: 1.4;">
+      This ranking layout is inspired by the viral 
+      <b>Pyramid Ranking Trend</b> on TikTok.
+    </div>
+    <div style="margin-top: 10px;">
+      <a href="https://www.tiktok.com/discover/pyramid-ranking-trend" 
+         target="_blank" 
+         style="color: #0077ff; font-size: 13px; text-decoration: underline;">
+         View the original trend on TikTok →
+      </a>
+    </div>
+  `);
+
+    infoBtn.on('click', () => {
+      infoTooltipOpen = !infoTooltipOpen;
+
+      infoTooltip
+        .style('opacity', infoTooltipOpen ? 1 : 0)
+        .style('pointer-events', infoTooltipOpen ? 'auto' : 'none');
+    });
+
+    // --- Reset Button ---
+    const resetBtn = d3.select(this.container)
+      .append('div')
+      .attr('class', 'viz-reset-button')
+      .style('position', 'absolute')
+      .style('top', '10px')
+      .style('right', '10px')
+      .style('padding', '8px 16px')
+      .style('background', '#2c2c2cff')
+      .style('border', '1px solid #ccc')
+      .style('border-radius', '10px')
+      .style('cursor', 'pointer')
+      .style('font-weight', 'bold')
+      .style('z-index', 2000)
+      .text('Reset')
+      .on('click', () => this.animatedReset());
+
     const centerGroup = this.svg.append('g')
       .attr(
         'transform',
@@ -191,7 +272,7 @@ export class RankingViz extends EventEmitter {
       .append('g')
       .attr('class', 'page')
       .attr('transform', d => `translate(${columnXPositions(d.row)[d.column]}, ${d.y})`)
-      .style('cursor', 'pointer');
+      .style('cursor', d => d.coverFallen ? 'pointer' : 'default');
 
     // --- categories page ---
     const gifMap = {
@@ -243,6 +324,26 @@ export class RankingViz extends EventEmitter {
           // .style("text-shadow", "0 2px 5px rgba(0,0,0,0.5)")
           .text(d.category);
       });
+
+    const glow = defss.append("filter") // category glow
+      .attr("id", "hoverGlow")
+      .attr("width", "300%")
+      .attr("height", "300%")
+      .attr("x", "-100%")
+      .attr("y", "-100%");
+
+    glow.append("feGaussianBlur")
+      .attr("stdDeviation", 6)
+      .attr("result", "blur1");
+
+    glow.append("feGaussianBlur")
+      .attr("stdDeviation", 14)
+      .attr("result", "blur2");
+
+    const merge = glow.append("feMerge");
+    merge.append("feMergeNode").attr("in", "blur1");
+    merge.append("feMergeNode").attr("in", "blur2");
+    merge.append("feMergeNode").attr("in", "SourceGraphic");
 
     // --- cover page ---
     const defs = this.svg.append('defs');
@@ -336,6 +437,22 @@ export class RankingViz extends EventEmitter {
     pages.on('mouseenter', function (event, d) {
       if (isAudioPlaying) return;
 
+      const bg = d3.select(this).select('.page-bg'); // category glow
+
+      bg
+        .style('filter', 'url(#hoverGlow)')
+        .transition()
+        .duration(350)
+        .style('opacity', 1)
+        .transition()
+        .duration(300)
+        .style('filter', 'url(#hoverGlow) brightness(1.2)');
+
+      bg.select('rect:last-of-type')
+        .transition()
+        .duration(300)
+        .style('fill', 'rgba(0,0,0,0.2)');
+
       const cover = d3.select(this).select('.cover-group');
 
       d3.select(this).select('rect')
@@ -396,6 +513,8 @@ export class RankingViz extends EventEmitter {
                   scale(${randomBounce}, 0.6)
               `);
           d.coverFallen = true;
+          d3.select(this).style('cursor', 'pointer');
+
         }, delayTime);
 
         fallAudio.play().catch(error => {
@@ -422,6 +541,19 @@ export class RankingViz extends EventEmitter {
     });
 
     pages.on('mouseleave', function (event, d) { // reset hover effects
+      const bg = d3.select(this).select('.page-bg'); // category glow
+
+      bg
+        .transition()
+        .duration(300)
+        .style('filter', 'none')
+        .style('opacity', 1);  // reset
+
+      bg.select('rect:last-of-type')
+        .transition()
+        .duration(250)
+        .style('fill', 'rgba(0,0,0,0.20)');
+
       d3.select(this).select('rect') // page brightness
         .transition()
         .duration(300)
@@ -575,5 +707,60 @@ export class RankingViz extends EventEmitter {
     });
 
     console.log('[Ranking] Starting pyramid layer reveal animation');
+  }
+
+  async animatedReset() {
+    const pages = d3.select(this.container).selectAll('g.page');
+
+    const duration = 600;
+
+    pages.each(function () {
+      const page = d3.select(this);
+      const cover = page.select('.cover-group');
+
+      // original position
+      const ox = +page.attr('data-ox');
+      const oy = +page.attr('data-oy');
+
+      cover
+        .transition()
+        .duration(duration)
+        .ease(d3.easeCubicOut)
+        .attr('transform', `translate(0,0) rotate(0) scale(1)`);
+
+      const bg = page.select('.page-bg');
+
+      bg.transition()
+        .duration(duration)
+        .style('filter', 'none')
+        .style('opacity', 1);
+    });
+
+    await new Promise(resolve => setTimeout(resolve, duration + 50));
+
+    this.resetVizHard();
+  }
+
+
+  resetVizHard() {
+    // kill popup
+    if (this.popup) {
+      this.popup.remove();
+      this.popup = null;
+    }
+    d3.select(this.container).select('.overlay').remove();
+
+    // stop audio
+    if (this.currentAudio) {
+      this.currentAudio.pause();
+      this.currentAudio.currentTime = 0;
+    }
+
+    // clear viz
+    this.container.innerHTML = '';
+    this.state.currentStep = 0;
+
+    // rebuild everything
+    this.render();
   }
 }
