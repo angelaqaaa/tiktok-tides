@@ -38,7 +38,8 @@ export class StopwatchViz extends EventEmitter {
       btnY: 0,
       crownY: 0,
       R: 0,
-      margin: 42
+      margin: 42,
+      arcThickness: 8 // default; will be overwritten in render()
     };
 
     // tooltip ref
@@ -83,7 +84,7 @@ export class StopwatchViz extends EventEmitter {
         d => +d['videoMeta/duration']
       ).filter(d => Number.isFinite(d[0]) && Number.isFinite(d[1]));
 
-      // Sort by duration ascending (needed for animation order)
+      // Sort by duration ascending for consistent angle mapping
       grouped.sort((a, b) => d3.ascending(a[0], b[0]));
 
       this.data = grouped; // [[durationSec, meanPlayCount], ...]
@@ -98,7 +99,7 @@ export class StopwatchViz extends EventEmitter {
     if (this.mounted) return;
     this.render();
     this.mounted = true;
-    this.emit(VIZ_EVENTS.ENTER_COMPLETE);
+       this.emit(VIZ_EVENTS.ENTER_COMPLETE);
   }
 
   unmount() {
@@ -187,7 +188,11 @@ export class StopwatchViz extends EventEmitter {
       .append('svg')
       .attr('viewBox', `0 0 ${width} ${height}`)
       .attr('role', 'img')
-      .attr('aria-label', 'Stopwatch visualization showing video duration impact on engagement');
+      .attr(
+        'aria-label',
+        'Stopwatch visualization showing how video duration relates to engagement. ' +
+        'The animation only plays when the top button is pressed.'
+      );
 
     // Centering group
     this.g = this.svg.append('g')
@@ -200,9 +205,17 @@ export class StopwatchViz extends EventEmitter {
     const sectorMaxRadius = R * 0.78;
     const sectorMinRadius = Math.max(12, R * 0.12);
 
+    // Perimeter arc thickness & store it
+    const arcThickness = Math.max(6, (sectorMaxRadius - sectorMinRadius) * 0.05);
+
     // Save geom
     Object.assign(this._geom, {
-      width, height, R, ringOuter, ringInner
+      width,
+      height,
+      R,
+      ringOuter,
+      ringInner,
+      arcThickness
     });
 
     // Stopwatch chrome
@@ -223,9 +236,9 @@ export class StopwatchViz extends EventEmitter {
       .attr('class', 'stopwatch-button clickable')
       .attr('tabindex', 0) // keyboard access
       .attr('role', 'button')
-      .attr('aria-label', 'Replay animation');
+      .attr('aria-label', 'Play or replay the animation');
 
-    this.buttonRect.append('title').text('Replay animation');
+    this.buttonRect.append('title').text('Click to play or replay the animation');
 
     const crownW = R * 0.08, crownH = R * 0.12, crownR = 5;
     const crownY = -ringOuter - crownH / 2 + 2;
@@ -254,8 +267,22 @@ export class StopwatchViz extends EventEmitter {
         .attr('class', isMajor ? 'tick-major' : 'tick-minor');
     }
 
-    // Tooltip (one per mount)
-    this.tooltip = d3.select('body').append('div').attr('class', 'tooltip').style('opacity', 0);
+    // Tooltip (single shared instance) – force it above everything
+    if (!this.tooltip) {
+      this.tooltip = d3.select('body')
+        .append('div')
+        .attr('class', 'tooltip')
+        .style('opacity', 0)
+        .style('position', 'fixed')
+        .style('pointer-events', 'none')
+        .style('z-index', 9999);
+    } else {
+      this.tooltip
+        .style('opacity', 0)
+        .style('position', 'fixed')
+        .style('pointer-events', 'none')
+        .style('z-index', 9999);
+    }
 
     // Scales
     this.angleScale = d3.scaleLinear().domain([0, 60]).range([0, 2 * Math.PI]);
@@ -273,20 +300,31 @@ export class StopwatchViz extends EventEmitter {
     // Sectors
     const sectorsG = this.g.append('g').attr('aria-label', 'sectors');
 
+    // Create ring-shaped arcs (only perimeter/arc, not full wedge from center)
     const arcFor = outerR => d3.arc()
-      .innerRadius(0)
+      .innerRadius(outerR - arcThickness)
       .outerRadius(outerR)
-      .cornerRadius(6)
+      .cornerRadius(arcThickness / 2)
       .startAngle(0); // start at 12 o'clock
 
     this.paths = sectorsG.selectAll('path.sector')
-      .data(this.data) // ascending by duration
+      .data(this.data) // data is ascending by duration
       .join('path')
       .attr('class', 'sector')
       .attr('fill', d => color(d[0]))
-      .style('opacity', 0.55);
+      .attr('stroke', 'none')
+      .style('opacity', 0.75)
+      // Z-order: longest durations at the bottom, shortest on top
+      .sort((a, b) => d3.descending(a[0], b[0])); // larger duration first in DOM (drawn underneath)
 
-    // Tooltips & hover
+    // Draw sectors in their final static state (no auto animation)
+    this.paths.attr('d', d => {
+      const outerR = this.rScale(d[1]);
+      const end = this.angleScale(d[0]); // duration -> sweep angle
+      return arcFor(outerR).endAngle(end)(d);
+    });
+
+    // Tooltips & hover (only custom HTML tooltip, no SVG <title> on arcs)
     this.paths
       .on('pointerenter', (event, d) => {
         const [duration, avgPC] = d;
@@ -296,21 +334,19 @@ export class StopwatchViz extends EventEmitter {
             `<strong>Duration:</strong> ${duration}s<br>` +
             `<strong>Avg playCount:</strong> ${d3.format(',.2f')(avgPC)}`
           )
-          .style('left', `${event.pageX}px`)
-          .style('top', `${event.pageY - 18}px`);
-        d3.select(event.currentTarget).transition().duration(120).style('opacity', 0.85);
+          .style('left', `${event.clientX}px`)
+          .style('top', `${event.clientY - 18}px`);
+        d3.select(event.currentTarget).transition().duration(120).style('opacity', 1);
       })
       .on('pointermove', (event) => {
         this.tooltip
-          .style('left', `${event.pageX}px`)
-          .style('top', `${event.pageY - 18}px`);
+          .style('left', `${event.clientX}px`)
+          .style('top', `${event.clientY - 18}px`);
       })
       .on('pointerleave', (event) => {
         this.tooltip.style('opacity', 0);
-        d3.select(event.currentTarget).transition().duration(120).style('opacity', 0.55);
-      })
-      .append('title')
-      .text(d => `Duration: ${d[0]}s\nAvg playCount: ${d3.format(',.2f')(d[1])}`);
+        d3.select(event.currentTarget).transition().duration(120).style('opacity', 0.75);
+      });
 
     // Center dot
     this.g.append('circle').attr('r', 4.5).attr('class', 'center-dot');
@@ -333,10 +369,7 @@ export class StopwatchViz extends EventEmitter {
         if (e.key === 'Enter' || e.key === ' ') { this._pressAnimation(); this.runAnimation(true); }
       });
 
-    // Initial animation (unless reduced motion)
-    if (!this.options.reducedMotion) {
-      this.runAnimation(false);
-    }
+    // NOTE: No initial auto animation. Animation only runs on button interaction.
   }
 
   // --- Animations ------------------------------------------------------------
@@ -346,13 +379,23 @@ export class StopwatchViz extends EventEmitter {
     const sweepDuration = 300; // ms per sector
     const sweepGap = 40;       // ms between sectors
 
-    const arcFor = outerR => d3.arc().innerRadius(0).outerRadius(outerR).cornerRadius(6).startAngle(0);
+    const { arcThickness } = this._geom;
 
-    // Reset & animate in order (shortest duration first)
+    // Use same ring-shaped arcs for animation as in render()
+    const arcFor = outerR => d3.arc()
+      .innerRadius(outerR - arcThickness)
+      .outerRadius(outerR)
+      .cornerRadius(arcThickness / 2)
+      .startAngle(0);
+
+    // Reset & animate in order of current selection:
+    // due to .sort(descending) in render(), index 0 = longest duration,
+    // so the longest durations animate first and are visually underneath.
     this.paths.interrupt();
     this.paths.attr('d', d => arcFor(this.rScale(d[1])).endAngle(0)(d));
+
     this.paths.transition()
-      .delay((d, i) => i * (sweepDuration + sweepGap))
+      .delay((d, i) => i * (sweepDuration + sweepGap)) // selection is already longest -> shortest
       .duration(sweepDuration)
       .ease(d3.easeCubicOut)
       .attrTween('d', d => {
@@ -361,6 +404,14 @@ export class StopwatchViz extends EventEmitter {
         const interp = d3.interpolateNumber(0, end);
         const arc = arcFor(outerR);
         return t => arc.endAngle(interp(t))(d);
+      })
+      // Ensure arcs that start their animation later end up on top:
+      // each path moves to the front when its animation starts,
+      // so the last-animated arcs are the final topmost layer.
+      .on('start', function () {
+        if (this.parentNode) {
+          this.parentNode.appendChild(this);
+        }
       });
 
     if (fromUser) this.emit(VIZ_EVENTS.INTERACTION); // optional signal
@@ -391,7 +442,7 @@ export class StopwatchViz extends EventEmitter {
       .duration(180)
       .style('opacity', d => {
         const duration = d[0];
-        return duration >= min && duration <= max ? 0.9 : 0.25;
+        return duration >= min && duration <= max ? 1 : 0.25;
       })
       .attr('stroke', d => {
         const duration = d[0];
@@ -399,7 +450,7 @@ export class StopwatchViz extends EventEmitter {
       })
       .attr('stroke-width', d => {
         const duration = d[0];
-        return duration >= min && duration <= max ? 2 : 0;
+        return duration >= min && duration <= max ? 2.5 : 0;
       });
   }
 

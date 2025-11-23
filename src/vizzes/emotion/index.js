@@ -18,6 +18,7 @@ export class EmotionViz extends EventEmitter {
       highlights: [],
       animationPaused: false,
       interactionMode: "explore",
+      sortedView: false, // <-- new
     };
 
     this.options = {
@@ -26,6 +27,11 @@ export class EmotionViz extends EventEmitter {
     };
     this.mounted = false;
     this.svg = null;
+
+    // track layout size for sorted view
+    this.layoutWidth = null;
+    this.layoutHeight = null;
+    this.layoutMargin = 40;
 
     // separate layer for hover connection lines
     this.linkLayer = null;
@@ -39,9 +45,13 @@ export class EmotionViz extends EventEmitter {
     // Active emotion filters (multi-select)
     this.activeEmotions = null;
 
+    // timer for floating animation
+    this.bubbleTimer = null;
+
     // --- Manual fallback lexicon so we always get non-neutral scores ----
     this.manualLexicon = {
       "+3": new Set([
+        // strong positive / excitement / hype
         "amazing",
         "awesome",
         "love",
@@ -50,6 +60,72 @@ export class EmotionViz extends EventEmitter {
         "incredible",
         "best",
         "beautiful",
+
+        // general hype slang
+        "lit",
+        "fire",
+        "epic",
+        "legendary",
+        "iconic",
+        "unreal",
+        "insane",
+        "crazy",
+        "banger",
+        "slay",
+        "slayed",
+        "goat",
+        "hype",
+        "hyping",
+        "pumped",
+        "stoked",
+        "mindblowing",
+        "mindblown",
+        "nextlevel",
+        "wild",
+        "shook",
+        "insanely",
+        "ridiculous",
+        "electric",
+        "explosive",
+        "booming",
+        "massive",
+        "jawdropping",
+        "superhit",
+        "smash",
+        "smashhit",
+        "killer",
+
+        // TikTok / virality specific
+        "viral",
+        "viralvideo",
+        "viraltiktok",
+        "tiktokviral",
+        "trend",
+        "trends",
+        "trending",
+        "trendingvideo",
+        "newtrend",
+        "fyp",
+        "foryou",
+        "foryoupage",
+        "xyzbca",
+        "blowthisup",
+        "blowup",
+        "blowingup",
+        "dancetrend",
+        "dancetrends",
+        "dancechallenge",
+        "tiktokdance",
+        "newdance",
+        "dancers",
+
+        // action / call-to-hype
+        "exploding",
+        "breaking",
+        "offthecharts",
+        "insanelygood",
+        "goingcrazy",
+        "goingwild",
       ]),
       "+2": new Set([
         "good",
@@ -509,10 +585,10 @@ export class EmotionViz extends EventEmitter {
       const emotionColors = {
         anger: "#dc2626", // red
         sadness: "#2563eb", // blue
-        disappointment: "#7c3aed", // purple
+        disappointment: "#FF004F", // purple
         neutral: "#6b7280", // gray
         hope: "#22c55e", // green
-        joy: "#a3e635", // lime
+        joy: "#00f7efda", // lime
         excitement: "#f97316", // orange
       };
       const emotionCategories = new Set();
@@ -631,6 +707,13 @@ export class EmotionViz extends EventEmitter {
 
   unmount() {
     if (!this.mounted) return;
+
+    // stop floating animation
+    if (this.bubbleTimer) {
+      this.bubbleTimer.stop();
+      this.bubbleTimer = null;
+    }
+
     this.container.innerHTML = "";
     this.mounted = false;
     this.emit(VIZ_EVENTS.EXIT_COMPLETE);
@@ -641,6 +724,11 @@ export class EmotionViz extends EventEmitter {
     this.data = null;
     this.state = null;
     this.events.clear();
+
+    if (this.bubbleTimer) {
+      this.bubbleTimer.stop();
+      this.bubbleTimer = null;
+    }
   }
 
   update(step, payload = {}) {
@@ -663,6 +751,9 @@ export class EmotionViz extends EventEmitter {
     this.options.height = height;
     if (this.mounted) {
       this.render();
+      if (this.state.sortedView) {
+        this.applySortedLayout();
+      }
       this.applyEmotionFilter();
     }
     this.emit(VIZ_EVENTS.RESIZE);
@@ -690,11 +781,21 @@ export class EmotionViz extends EventEmitter {
     // Clear container
     this.container.innerHTML = "";
 
+    // also clear any existing timer
+    if (this.bubbleTimer) {
+      this.bubbleTimer.stop();
+      this.bubbleTimer = null;
+    }
+
     // Dimensions
     const bbox = this.container.getBoundingClientRect();
     const width = this.options.width || bbox.width || 800;
     const height = this.options.height || bbox.height || 600;
     const margin = 40;
+
+    this.layoutWidth = width;
+    this.layoutHeight = height;
+    this.layoutMargin = margin;
 
     // Create SVG
     this.svg = d3
@@ -749,6 +850,9 @@ export class EmotionViz extends EventEmitter {
       t.y = y;
       t.anchorX = x;
       t.anchorY = y;
+      t.offsetX = 0;
+      t.offsetY = 0;
+      t.isHovered = false;
     });
 
     // --- Light force layout: stay near embedding positions + avoid overlap -
@@ -817,13 +921,21 @@ export class EmotionViz extends EventEmitter {
       .append("path")
       .attr("class", "bubble-tail")
       .attr("d", (d) => {
-        const tailWidth = 12;
-        const tailHeight = 9;
+        // Bigger tail
+        const tailWidth = 18;
+        const tailHeight = 14;
 
-        const y = d.boxHeight / 2 - 1;
+        // Move tail up into the rect a bit more
+        const tailOffset = 3;
+        const y = d.boxHeight / 2 - tailOffset;
 
-        const baseLeft = d.boxWidth / 2 - tailWidth - 12;
-        const baseRight = baseLeft + tailWidth;
+        // How far inside from the right edge of the bubble
+        const tailInsetFromRight = 8;
+
+        // Position the base of the tail near the bottom-right of the bubble
+        const baseRight = d.boxWidth / 2 - tailInsetFromRight;
+        const baseLeft = baseRight - tailWidth;
+
         const tipX = (baseLeft + baseRight) / 2;
         const tipY = y + tailHeight;
 
@@ -859,8 +971,206 @@ export class EmotionViz extends EventEmitter {
         .attr("opacity", 1);
     }
 
+    // Start gentle floating animation
+    this.startFloatingAnimation(bubbles);
+
     // Apply current emotion visibility filter
     this.applyEmotionFilter();
+
+    // If sort is on, arrange into columns
+    if (this.state.sortedView) {
+      this.applySortedLayout();
+    }
+  }
+
+  /**
+   * Gentle floating animation: each bubble drifts slightly around its anchor.
+   */
+  startFloatingAnimation(bubbles) {
+    if (this.options.reducedMotion || !this.svg) return;
+
+    // Initialize per-bubble motion parameters
+    bubbles.each((d) => {
+      d.baseX = d.x;
+      d.baseY = d.y;
+      d.phaseX = Math.random() * Math.PI * 2;
+      d.phaseY = Math.random() * Math.PI * 2;
+      d.ampX = 3 + Math.random() * 4; // 3–7 px
+      d.ampY = 2 + Math.random() * 3; // 2–5 px
+      d.speedX = 0.0006 + Math.random() * 0.0005; // radians per ms
+      d.speedY = 0.0007 + Math.random() * 0.0005;
+      d.offsetX = 0;
+      d.offsetY = 0;
+    });
+
+    const self = this;
+
+    if (this.bubbleTimer) {
+      this.bubbleTimer.stop();
+    }
+
+    this.bubbleTimer = d3.timer((elapsed) => {
+      if (!self.svg) {
+        self.bubbleTimer.stop();
+        self.bubbleTimer = null;
+        return;
+      }
+
+      self.svg
+        .selectAll(".word-bubble")
+        .each(function (d) {
+          // Skip bubbles under hover animation
+          if (d.isHovered) return;
+
+          const dx =
+            Math.sin(d.phaseX + elapsed * d.speedX) * d.ampX;
+          const dy =
+            Math.cos(d.phaseY + elapsed * d.speedY) * d.ampY;
+
+          d.offsetX = dx;
+          d.offsetY = dy;
+
+          d3.select(this).attr(
+            "transform",
+            `translate(${d.x + dx}, ${d.y + dy})`
+          );
+        });
+    });
+  }
+
+  /**
+   * Arrange visible emotions into neat columns for comparison.
+   */
+  applySortedLayout() {
+    if (!this.svg || !this.data) return;
+
+    const active =
+      this.activeEmotions || new Set(this.data.emotionCategories);
+    const allCategories = this.data.emotionCategories;
+    const categories = allCategories.filter((em) => active.has(em));
+
+    if (!categories.length) return;
+
+    const width =
+      this.layoutWidth ||
+      this.options.width ||
+      this.container.getBoundingClientRect().width ||
+      800;
+    const margin = this.layoutMargin ?? 40;
+    const innerWidth = Math.max(10, width - margin * 2);
+
+    const colWidth = innerWidth / categories.length;
+    const topPadding = 50;
+    const rowGap = 6;
+
+    // group tokens by emotion (only active ones)
+    const tokensByEmotion = new Map();
+    this.data.tokens.forEach((t) => {
+      if (!active.has(t.emotion)) return;
+      if (!tokensByEmotion.has(t.emotion)) {
+        tokensByEmotion.set(t.emotion, []);
+      }
+      tokensByEmotion.get(t.emotion).push(t);
+    });
+
+    // sort each column's tokens by frequency (then alphabetically)
+    categories.forEach((emotion) => {
+      const arr = tokensByEmotion.get(emotion) || [];
+      arr.sort(
+        (a, b) => b.count - a.count || a.word.localeCompare(b.word)
+      );
+    });
+
+    // position tokens
+    categories.forEach((emotion, colIndex) => {
+      const arr = tokensByEmotion.get(emotion) || [];
+      let y = topPadding;
+      const colCenterX = margin + colWidth * (colIndex + 0.5);
+
+      arr.forEach((t) => {
+        t.x = colCenterX;
+        // center rect at y line
+        t.y = y + t.boxHeight / 2;
+        y += t.boxHeight + rowGap;
+      });
+    });
+
+    // stop current float timer so we can restart from new positions
+    if (this.bubbleTimer) {
+      this.bubbleTimer.stop();
+      this.bubbleTimer = null;
+    }
+
+    const bubbles = this.svg.selectAll(".word-bubble");
+
+    if (!this.options.reducedMotion) {
+      bubbles
+        .transition()
+        .duration(600)
+        .attr("transform", (d) => `translate(${d.x}, ${d.y})`);
+    } else {
+      bubbles.attr("transform", (d) => `translate(${d.x}, ${d.y})`);
+    }
+
+    // Column labels
+    let labelLayer = this.svg.select(".emotion-column-labels");
+    if (labelLayer.empty()) {
+      labelLayer = this.svg
+        .append("g")
+        .attr("class", "emotion-column-labels");
+    }
+
+    const labels = labelLayer
+      .selectAll("text.column-label")
+      .data(categories, (d) => d);
+
+    labels
+      .join(
+        (enter) =>
+          enter
+            .append("text")
+            .attr("class", "column-label")
+            .attr("text-anchor", "middle")
+            .attr("y", 20)
+            .style("font-size", "12px")
+            .style("font-weight", "600")
+            .style("fill", "var(--color-text-primary, #e5e7eb)")
+            .text((d) => d),
+        (update) => update,
+        (exit) => exit.remove()
+      )
+      .attr(
+        "x",
+        (d, i) => margin + colWidth * (i + 0.5)
+      );
+
+    // restart floating animation with new anchors
+    this.startFloatingAnimation(bubbles);
+  }
+
+  /**
+   * Public helper to enable/disable sorted view.
+   */
+  setSortedView(enabled) {
+    const sorted = !!enabled;
+    if (!this.state) return;
+    if (this.state.sortedView === sorted) return;
+
+    this.state.sortedView = sorted;
+
+    if (!this.svg || !this.data) return;
+
+    if (sorted) {
+      this.applySortedLayout();
+    } else {
+      // re-render original cloud layout
+      this.render();
+      this.applyEmotionFilter();
+    }
+  }
+
+  toggleSortedView() {
+    this.setSortedView(!this.state.sortedView);
   }
 
   /**
@@ -1014,9 +1324,35 @@ export class EmotionViz extends EventEmitter {
           }
 
           viz.applyEmotionFilter();
+          if (viz.state.sortedView) {
+            viz.applySortedLayout();
+          }
         });
       }
     });
+
+    // Optional sort toggle control (checkbox or button)
+    const sortToggle = document.querySelector(".emotion-sort-toggle");
+    if (sortToggle) {
+      // checkbox style
+      if (
+        sortToggle.tagName === "INPUT" &&
+        sortToggle.type === "checkbox"
+      ) {
+        sortToggle.addEventListener("change", (e) => {
+          viz.setSortedView(e.target.checked);
+        });
+      } else {
+        // button / div style, using aria-pressed
+        sortToggle.addEventListener("click", (e) => {
+          const el = e.currentTarget;
+          const current = el.getAttribute("aria-pressed") === "true";
+          const next = !current;
+          el.setAttribute("aria-pressed", String(next));
+          viz.setSortedView(next);
+        });
+      }
+    }
   }
 
   applyEmotionFilter() {
@@ -1037,16 +1373,24 @@ export class EmotionViz extends EventEmitter {
       .on("mouseenter", (event, d) => {
         const g = d3.select(event.currentTarget);
 
+        d.isHovered = true;
+
+        const dx = d.offsetX || 0;
+        const dy = d.offsetY || 0;
+
         // enlarge slightly
         if (!this.options.reducedMotion) {
           g.raise()
             .transition()
             .duration(160)
-            .attr("transform", `translate(${d.x}, ${d.y}) scale(1.08)`);
+            .attr(
+              "transform",
+              `translate(${d.x + dx}, ${d.y + dy}) scale(1.08)`
+            );
         } else {
           g.raise().attr(
             "transform",
-            `translate(${d.x}, ${d.y}) scale(1.08)`
+            `translate(${d.x + dx}, ${d.y + dy}) scale(1.08)`
           );
         }
 
@@ -1059,13 +1403,26 @@ export class EmotionViz extends EventEmitter {
       .on("mouseleave", (event, d) => {
         const g = d3.select(event.currentTarget);
 
-        // return to original size
+        const dx = d.offsetX || 0;
+        const dy = d.offsetY || 0;
+
+        // return to original size, then resume float
         if (!this.options.reducedMotion) {
           g.transition()
             .duration(160)
-            .attr("transform", `translate(${d.x}, ${d.y}) scale(1)`);
+            .attr(
+              "transform",
+              `translate(${d.x + dx}, ${d.y + dy}) scale(1)`
+            )
+            .on("end", () => {
+              d.isHovered = false;
+            });
         } else {
-          g.attr("transform", `translate(${d.x}, ${d.y}) scale(1)`);
+          g.attr(
+            "transform",
+            `translate(${d.x + dx}, ${d.y + dy}) scale(1)`
+          );
+          d.isHovered = false;
         }
 
         // remove hover connections
