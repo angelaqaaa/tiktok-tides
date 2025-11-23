@@ -810,33 +810,49 @@ body[data-scene="air"] .scene--bubbles {
 }
 
 /* Year Selector */
+/* Year selector - Prominent filter pill styling */
 .year-selector {
   display: inline-flex;
-  gap: var(--space-1);
-  padding: var(--space-1);
-  background: var(--glass-subtle-background);
-  border-radius: 8px;
-  border: var(--glass-subtle-border);
+  gap: var(--space-2);
+  padding: 4px;
+  background: rgba(10, 15, 20, 0.7);
+  border-radius: 16px;
+  border: 1.5px solid rgba(45, 204, 211, 0.25);
+  max-width: fit-content;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .year-btn {
-  padding: var(--space-2) var(--space-4);
-  background: transparent;
-  border: none;
-  color: var(--color-text-secondary);
+  padding: 8px 20px;
+  background: linear-gradient(135deg, rgba(45, 204, 211, 0.15), rgba(45, 204, 211, 0.08));
+  border: 1.5px solid rgba(45, 204, 211, 0.4);
+  color: rgba(45, 204, 211, 0.9);
   cursor: pointer;
-  transition: all var(--duration-micro) var(--easing-standard);
-  border-radius: 6px;
+  transition: all 0.2s var(--easing-standard);
+  border-radius: 14px;
   font-family: var(--font-family-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  position: relative;
 }
 
 .year-btn:hover {
+  background: linear-gradient(135deg, rgba(45, 204, 211, 0.25), rgba(45, 204, 211, 0.15));
+  border-color: rgba(45, 204, 211, 0.6);
   color: var(--color-accent-cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(45, 204, 211, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .year-btn.active {
-  background: var(--color-accent-cyan);
-  color: var(--color-background-primary);
+  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-magenta));
+  color: #000;
+  border-color: var(--color-accent-cyan);
+  box-shadow: 0 0 20px rgba(45, 204, 211, 0.6), 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  font-weight: 700;
+  transform: scale(1.05);
 }
 
 /* Annotation Rail */
@@ -864,6 +880,7 @@ body[data-scene="air"] .scene--bubbles {
   border: var(--glass-subtle-border);
   padding: var(--space-4);
   backdrop-filter: blur(var(--glass-subtle-blur));
+  max-width: 510px;
 }
 
 .legend-panel h3 {
@@ -879,51 +896,99 @@ body[data-scene="air"] .scene--bubbles {
   gap: var(--space-2) var(--space-3);
 }
 
-/* Emotion Sort Toggle Button (Jon's feature for column layout) */
-.emotion-sort-toggle {
-  width: auto;
-  max-width: 200px;
-  align-items: center;
-  margin: 1rem auto;
-  padding: 0.75rem 1rem;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 107, 107, 0.1),
-    rgba(255, 179, 71, 0.1)
-  );
-  border: 1px solid rgba(255, 107, 107, 0.3);
-  border-radius: 0.5rem;
-  font-family: inherit;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #ffffff;
-  cursor: pointer;
-  transition: all 0.2s ease;
+/* ============================================================================
+   EXPLORE MODE VARIANT - Not used in story mode
+   ============================================================================
+
+   These styles are from Anushka's Planet legend enhancements. They create
+   a large, prominent "explore mode" legend style with oversized typography.
+
+   NOT ACTIVE in current story mode - all scenes use compact legends.
+   Preserved here for potential future explore mode page.
+
+   To activate: add class="explore-mode" to #scene-sound-universe
+
+#scene-sound-universe.explore-mode .legend-item {
+  background: rgba(10, 10, 15, 0.9);
+  padding: 22px 26px;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--color-border-interactive);
+  color: var(--color-text-primary);
+  pointer-events: auto;
+  line-height: 1.6;
+}
+
+#scene-sound-universe.explore-mode .legend-item strong {
   display: block;
+  color: var(--color-accent-cyan);
+  margin-bottom: 6px;
+  font-size: 1.3rem;
 }
 
-.emotion-sort-toggle:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 107, 107, 0.2),
-    rgba(255, 179, 71, 0.2)
-  );
-  border-color: rgba(255, 107, 107, 0.5);
-  transform: translateY(-1px);
+#scene-sound-universe.explore-mode .color-gradient-bar {
+  width: 50px;
+  height: 400px;
 }
 
-.emotion-sort-toggle:active {
-  transform: translateY(0);
+#scene-sound-universe.explore-mode .color-gradient-labels {
+  height: 400px;
+  font-size: 1.15rem;
 }
 
-.emotion-sort-toggle[aria-pressed="true"] {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 107, 107, 0.3),
-    rgba(255, 179, 71, 0.3)
-  );
-  border-color: rgba(255, 107, 107, 0.6);
+@media (max-width: 1400px) {
+  #scene-sound-universe.explore-mode .legend-item {
+    font-size: 0.8rem;
+    padding: 12px 16px;
+  }
+
+  #scene-sound-universe.explore-mode .color-gradient-bar {
+    width: 40px;
+    height: 300px;
+  }
+
+  #scene-sound-universe.explore-mode .color-gradient-labels {
+    height: 300px;
+    font-size: 0.9rem;
+  }
+}
+
+   End of explore mode variant
+   ============================================================================ */
+
+/* Filter Button - Shared pill styling for layout/view controls (year, emotion sort) */
+.filter-button {
+  padding: 8px 20px;
+  background: linear-gradient(135deg, rgba(241, 32, 74, 0.15), rgba(241, 32, 74, 0.08));
+  border: 1.5px solid rgba(241, 32, 74, 0.4);
+  color: rgba(241, 32, 74, 0.9);
+  cursor: pointer;
+  transition: all 0.2s var(--easing-standard);
+  border-radius: 14px;
+  font-family: var(--font-family-sans);
+  font-size: 0.875rem;
   font-weight: 600;
+  letter-spacing: 0.025em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.filter-button:hover {
+  background: linear-gradient(135deg, rgba(241, 32, 74, 0.25), rgba(241, 32, 74, 0.15));
+  border-color: rgba(241, 32, 74, 0.65);
+  color: var(--color-accent-magenta);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(241, 32, 74, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Emotion sort toggle pressed state */
+.emotion-sort-toggle[aria-pressed="true"] {
+  background: linear-gradient(135deg, var(--color-accent-magenta), var(--color-accent-cyan));
+  color: #000;
+  border-color: var(--color-accent-magenta);
+  box-shadow: 0 0 20px rgba(241, 32, 74, 0.6), 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  font-weight: 700;
+  transform: scale(1.05);
 }
 
 /* Detail Drawer */
@@ -1172,24 +1237,8 @@ circle[data-type="bubble"] {
   pointer-events: none;
 }
 
-.legend-item {
-  background: rgba(10, 10, 15, 0.9);
-  padding: 22px 26px;
-  border-radius: 8px;
-  font-size: 1.25rem;
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--color-border-interactive);
-  color: var(--color-text-primary);
-  pointer-events: auto;
-  line-height: 1.6;
-}
-
-.legend-item strong {
-  display: block;
-  color: var(--color-accent-cyan);
-  margin-bottom: 6px;
-  font-size: 1.3rem;
-}
+/* Planet legend uses standard compact legend styling (same as other scenes)
+   Teammate's content enhancements (gradient, tooltips) preserved below */
 
 /* Legend tooltips */
 .legend-hoverable,
@@ -1271,95 +1320,53 @@ circle[data-type="bubble"] {
   font-size: 1.3rem;
 }
 
+/* Compact horizontal danceability gradient for Planet scene */
 .color-gradient-container {
   display: flex;
-  gap: 16px;
-  align-items: center;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  max-width: 500px;
 }
 
 .color-gradient-bar {
-  width: 50px;
-  height: 400px;
+  width: 100%;
+  height: 12px;
   border-radius: 6px;
   background: linear-gradient(
-    to bottom,
-    #FF00FF 0%,      /* Magenta - 1.0 */
-    #8B00FF 10%,     /* Purple - 0.9 */
-    #0000FF 25%,     /* Blue - 0.75 */
-    #00FFFF 40%,     /* Cyan - 0.6 */
-    #00FF00 55%,     /* Green - 0.45 */
-    #FFFF00 70%,     /* Yellow - 0.3 */
-    #FF7F00 85%,     /* Orange - 0.15 */
-    #FF0000 100%     /* Red - 0.0 */
+    to right,
+    #FF0000 0%,      /* Red - 0.0 */
+    #FF7F00 15%,     /* Orange - 0.15 */
+    #FFFF00 30%,     /* Yellow - 0.3 */
+    #00FF00 45%,     /* Green - 0.45 */
+    #00FFFF 60%,     /* Cyan - 0.6 */
+    #0000FF 75%,     /* Blue - 0.75 */
+    #8B00FF 90%,     /* Purple - 0.9 */
+    #FF00FF 100%     /* Magenta - 1.0 */
   );
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .color-gradient-labels {
   display: flex;
-  flex-direction: column-reverse;
   justify-content: space-between;
-  height: 400px;
-  font-size: 1.15rem;
+  font-size: 0.75rem;
   padding: 0;
 }
 
 .color-gradient-labels span {
-  text-align: left;
-  color: var(--color-text-primary);
+  color: var(--color-text-secondary);
+  line-height: 1.2;
 }
 
 .color-gradient-labels small {
-  display: block;
-  font-size: 1rem;
-  color: var(--color-text-secondary);
+  font-size: 0.7rem;
+  color: var(--color-text-disabled);
   font-style: italic;
-  margin-top: 2px;
+  margin-left: 3px;
 }
 
-/* Make sure the section container is positioned relative for absolute positioning */
-#section-surge .section-container {
-  position: relative;
-}
-
-/* Responsive: adjust for medium screens */
-@media (max-width: 1400px) {
-  .legend {
-    left: 100px;
-    max-width: 200px;
-  }
-
-  .legend-item {
-    font-size: 0.8rem;
-    padding: 12px 16px;
-  }
-
-  .color-legend {
-    right: 40px;
-    width: 240px;
-    padding: 20px;
-  }
-
-  .color-gradient-bar {
-    width: 40px;
-    height: 300px;
-  }
-
-  .color-gradient-labels {
-    height: 300px;
-    font-size: 0.9rem;
-  }
-
-  .annotation-rail {
-    bottom: var(--space-4);
-  }
-
-  .year-btn {
-    padding: 10px 24px;
-    font-size: 0.95rem;
-  }
-}
+/* Horizontal gradient is already compact - no responsive adjustments needed */
 
 /* Responsive: stack legends on tablets */
 @media (max-width: 1024px) {
@@ -1581,53 +1588,7 @@ circle[data-type="bubble"] {
 }
 
 /* Year selector buttons in annotation rail */
-.year-selector {
-  display: flex;
-  gap: 14px;
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
-}
-
-.year-btn {
-  font-weight: var(--font-weight-semibold);
-  padding: 16px 36px;
-  background: var(--color-background-secondary);
-  color: var(--color-text-primary);
-  border: 2px solid var(--color-border-interactive);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all var(--duration-micro) var(--easing-standard);
-  font-size: 1.2rem;
-  position: relative;
-  animation: pulse-border 3s ease-in-out infinite;
-}
-
-@keyframes pulse-border {
-  0%, 100% {
-    border-color: var(--color-border-interactive);
-    box-shadow: 0 0 0 rgba(0, 255, 224, 0);
-  }
-  50% {
-    border-color: var(--color-accent-cyan);
-    box-shadow: 0 0 15px rgba(0, 255, 224, 0.6);
-  }
-}
-
-.year-btn:hover {
-  background: var(--color-background-elevated);
-  border-color: var(--color-accent-cyan);
-  transform: translateY(-1px);
-  animation: none;
-  box-shadow: 0 0 20px rgba(0, 255, 224, 0.8);
-}
-
-.year-btn.active {
-  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-magenta));
-  color: var(--color-background-primary);
-  border-color: transparent;
-  box-shadow: 0 4px 12px rgba(0, 255, 224, 0.3);
-  animation: none;
-}
+/* Duplicate year button styles removed - using compact redesign styles from line 813 */
 
 /* ════════════════════════════════════════════════════════════════════════
    Scene Illustrations (SVG overlays)

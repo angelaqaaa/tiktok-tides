@@ -1301,7 +1301,6 @@ export class EmotionViz extends EventEmitter {
         />
         <span class="emotion-legend-chip" style="--emotion-color:${color}">
           <span class="emotion-legend-checkmark"></span>
-          <span class="emotion-legend-color-dot"></span>
           <span class="emotion-legend-text">${emotion}</span>
         </span>
       </label>

@@ -241,16 +241,13 @@
               </li>
             </ul>
 
-            <!-- Color Gradient Scale -->
+            <!-- Compact Color Gradient Scale -->
             <div class="color-gradient-container">
               <div class="color-gradient-bar"></div>
               <div class="color-gradient-labels">
-                <span>0.0<br><small>Low</small></span>
-                <span>0.2</span>
-                <span>0.4</span>
-                <span>0.6</span>
-                <span>0.8</span>
-                <span>1.0<br><small>High</small></span>
+                <span>1.0 <small>High</small></span>
+                <span>0.5</span>
+                <span>0.0 <small>Low</small></span>
               </div>
             </div>
           </div>
@@ -609,11 +606,6 @@
             </ul>
           </div>
 
-          <!-- Emotion Sort Toggle (Jon's feature) -->
-          <button class="emotion-sort-toggle step-button" aria-pressed="false" style="margin-bottom: var(--space-4);">
-            Sort into columns
-          </button>
-
           <!-- Guided Steps -->
           <div class="guided-steps" role="complementary" aria-label="Guided exploration">
             <h3 class="steps-title">Explore emotions</h3>
@@ -621,9 +613,9 @@
               <li class="step-item">
                 <span class="step-number">1</span>
                 <div class="step-content">
-                  <p class="step-instruction">See all emotion clusters</p>
-                  <button class="step-button" data-viz-action="emotion-show-all">
-                    Show emotion groups
+                  <p class="step-instruction">Choose your preferred layout</p>
+                  <button class="emotion-sort-toggle filter-button" aria-pressed="false">
+                    Sort into columns
                   </button>
                 </div>
               </li>
