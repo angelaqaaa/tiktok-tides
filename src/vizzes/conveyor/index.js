@@ -15,7 +15,8 @@ export class ConveyorViz extends EventEmitter {
       currentGuess: '',
       score: 0,
       totalAttempts: 0,
-      revealed: false
+      revealed: false,
+      answeredCorrectly: [] // Track which questions were answered correctly
     };
     this.options = { ...DEFAULT_OPTIONS };
     this.mounted = false;
@@ -150,7 +151,24 @@ export class ConveyorViz extends EventEmitter {
     `;
     this.container.appendChild(header);
 
-    // Create conveyor belt wrapper
+    // Create controls (moved above belt)
+    const controls = document.createElement('div');
+    controls.className = 'conveyor-controls';
+    controls.innerHTML = `
+      <button class="btn-primary start-btn" aria-label="Start conveyor belt">
+        Start Conveyor
+      </button>
+      <button class="btn-secondary restart-btn" aria-label="Restart from beginning" style="display:none;">
+        Restart
+      </button>
+    `;
+    this.container.appendChild(controls);
+
+    // Create interaction panel (moved above belt)
+    const panel = this.createInteractionPanel();
+    this.container.appendChild(panel);
+
+    // Create conveyor belt wrapper (now below controls and panel)
     const beltWrapper = document.createElement('div');
     beltWrapper.className = 'conveyor-belt-wrapper';
     
@@ -168,23 +186,6 @@ export class ConveyorViz extends EventEmitter {
 
     beltWrapper.appendChild(belt);
     this.container.appendChild(beltWrapper);
-
-    // Create interaction panel
-    const panel = this.createInteractionPanel();
-    this.container.appendChild(panel);
-
-    // Create controls
-    const controls = document.createElement('div');
-    controls.className = 'conveyor-controls';
-    controls.innerHTML = `
-      <button class="btn-primary start-btn" aria-label="Start conveyor belt">
-        Start Conveyor
-      </button>
-      <button class="btn-secondary restart-btn" aria-label="Restart from beginning" style="display:none;">
-        Restart
-      </button>
-    `;
-    this.container.appendChild(controls);
 
     // Position first box at center
     this.updateBeltPosition();
@@ -212,6 +213,7 @@ export class ConveyorViz extends EventEmitter {
       <div class="box-answer-label">Answer:</div>
       <div class="box-answer">${item.answer}</div>
       <div class="box-checkmark">✓</div>
+      <div class="box-xmark">✗</div>
     `;
 
     box.appendChild(front);
@@ -483,10 +485,18 @@ export class ConveyorViz extends EventEmitter {
 
     this.state.revealed = true;
 
-    // Flip current box
+    // Track if this was answered correctly
+    this.state.answeredCorrectly[this.state.currentIndex] = lastGuessCorrect;
+
+    // Flip current box and mark as correct or incorrect
     const currentBox = this.container.querySelector(`.conveyor-box[data-index="${this.state.currentIndex}"]`);
     if (currentBox) {
       currentBox.classList.add('flipped');
+      if (lastGuessCorrect) {
+        currentBox.classList.add('correct');
+      } else {
+        currentBox.classList.add('incorrect');
+      }
     }
 
     // Hide reveal button, show next button
@@ -534,6 +544,12 @@ export class ConveyorViz extends EventEmitter {
   }
 
   finish() {
+    // Remove active class from the last card
+    const currentBox = this.container.querySelector(`.conveyor-box[data-index="${this.state.currentIndex}"]`);
+    if (currentBox) {
+      currentBox.classList.remove('active');
+    }
+
     const panel = this.container.querySelector('.interaction-panel');
     panel.innerHTML = `
       <div class="completion-message">
@@ -578,12 +594,13 @@ export class ConveyorViz extends EventEmitter {
       currentGuess: '',
       score: 0,
       totalAttempts: 0,
-      revealed: false
+      revealed: false,
+      answeredCorrectly: []
     };
 
     // Reset all boxes (remove flipped class)
     const boxes = this.container.querySelectorAll('.conveyor-box');
-    boxes.forEach(box => box.classList.remove('flipped', 'active'));
+    boxes.forEach(box => box.classList.remove('flipped', 'active', 'correct', 'incorrect'));
 
     // Re-render
     this.render();
