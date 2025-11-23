@@ -589,8 +589,8 @@ class TikTokTidesApp {
     // Planet actions
     if (action === 'planet-highlight-danceability') {
       const viz = this.vizControllers.planets;
-      // TODO: Implement highlight high danceability
-      console.log('TODO: Highlight high danceability planets');
+      viz.highlightHighDanceability?.();
+      this.announce('Highlighting planets with high danceability');
     }
 
     if (action === 'planet-year') {
@@ -604,52 +604,57 @@ class TikTokTidesApp {
       });
 
       // Re-render planet viz with new year
-      viz.mount?.();
+      viz.resetHighlights?.();
+      viz.switchYear(year);
+      this.announce(`Showing songs from ${year}`);
     }
 
     if (action === 'planet-highlight-repeat') {
       const viz = this.vizControllers.planets;
-      // TODO: Implement highlight repeated artists
-      console.log('TODO: Highlight repeated viral artists');
+      viz.highlightRepeatedArtists?.();
+      this.announce('Highlighting artists who appear across multiple years');
     }
 
     // Record player actions
     if (action === 'record-rotate') {
       const viz = this.vizControllers.recordPlayer;
-      // TODO: Rotate through records
-      console.log('TODO: Rotate through top sounds');
+      viz.rotateToNextRecord?.();
+      // Announce current record name
+      const currentIndex = viz.guidedRotationIndex || 0;
+      const recordName = viz.data?.[currentIndex]?.name || 'record';
+      this.announce(`Playing ${recordName}`);
     }
 
     if (action === 'record-highlight-top3') {
       const viz = this.vizControllers.recordPlayer;
-      // TODO: Highlight top 3
-      console.log('TODO: Highlight top 3 records');
+      viz.highlightTop3?.();
+      this.announce('Highlighting the top 3 most popular sounds');
     }
 
     // Stopwatch actions
     if (action === 'stopwatch-short') {
       const viz = this.vizControllers.stopwatch;
-      // TODO: Highlight short duration band
-      console.log('TODO: Highlight short clips <15s');
+      viz.highlightShortClips?.();
+      this.announce('Highlighting short clips under 15 seconds');
     }
 
     if (action === 'stopwatch-mid') {
       const viz = this.vizControllers.stopwatch;
-      // TODO: Highlight mid duration band
-      console.log('TODO: Highlight mid-length clips 15-30s');
+      viz.highlightMidClips?.();
+      this.announce('Highlighting mid-length clips, 15 to 30 seconds');
     }
 
     if (action === 'stopwatch-long') {
       const viz = this.vizControllers.stopwatch;
-      // TODO: Highlight long duration band
-      console.log('TODO: Highlight long clips >30s');
+      viz.highlightLongClips?.();
+      this.announce('Highlighting long clips over 30 seconds');
     }
 
     // Ranking actions
     if (action === 'ranking-reveal') {
       const viz = this.vizControllers.ranking;
-      // TODO: Reveal pyramid layers
-      console.log('TODO: Reveal pyramid layers sequentially');
+      viz.revealPyramidLayers?.();
+      this.announce('Revealing pyramid layers from base to peak');
     }
 
     if (action === 'ranking-dive') {

@@ -537,4 +537,43 @@ export class RankingViz extends EventEmitter {
       });
     });
   }
+
+  /**
+   * Programmatically reveal all pyramid layers sequentially
+   * Triggers cover-fall animation from bottom to top for guided exploration
+   */
+  revealPyramidLayers() {
+    if (!this.svg) {
+      console.warn('[Ranking] Cannot reveal pyramid - SVG not initialized');
+      return;
+    }
+
+    const pages = this.svg.selectAll('g.page');
+    if (pages.empty()) {
+      console.warn('[Ranking] Cannot reveal pyramid - No pages found');
+      return;
+    }
+
+    // Trigger mouseenter events sequentially to reveal layers
+    // Bottom row (indices 3,4,5) -> Middle row (1,2) -> Top (0)
+    const revealSequence = [5, 4, 3, 2, 1, 0]; // Bottom to top
+
+    revealSequence.forEach((index, seqIndex) => {
+      setTimeout(() => {
+        const page = pages.filter((d, i) => i === index);
+        if (!page.empty()) {
+          const node = page.node();
+          const event = new MouseEvent('mouseenter', {
+            view: window,
+            bubbles: true,
+            cancelable: true
+          });
+          node.dispatchEvent(event);
+          console.log(`[Ranking] Revealed layer ${index + 1}`);
+        }
+      }, seqIndex * 800); // Stagger by 800ms
+    });
+
+    console.log('[Ranking] Starting pyramid layer reveal animation');
+  }
 }

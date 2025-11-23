@@ -440,4 +440,63 @@ export class PlanetViz extends EventEmitter {
       .duration(600)
       .attr('opacity', 0);
   }
+
+  /**
+   * Highlight planets with high danceability (above threshold)
+   * Dims planets below the threshold to draw attention to danceable tracks
+   */
+  highlightHighDanceability() {
+    const threshold = 0.65; // Danceability above 0.65 is considered "high"
+
+    this.svg.selectAll('.planet')
+      .transition()
+      .duration(600)
+      .attr('opacity', d => d.avgDanceability >= threshold ? 1 : 0.25)
+      .attr('stroke-width', d => d.avgDanceability >= threshold ? 3 : 2);
+  }
+
+  /**
+   * Highlight artists who appear in multiple years (repeated viral artists)
+   * Identifies artists with songs in 2+ years and highlights them
+   */
+  highlightRepeatedArtists() {
+    // Build map of artist -> years they appear in
+    const artistYears = new Map();
+
+    Object.entries(this.data).forEach(([year, yearData]) => {
+      yearData.forEach(artist => {
+        if (!artistYears.has(artist.name)) {
+          artistYears.set(artist.name, new Set());
+        }
+        artistYears.get(artist.name).add(year);
+      });
+    });
+
+    // Find artists appearing in 2+ years
+    const repeatedArtists = Array.from(artistYears.entries())
+      .filter(([_, years]) => years.size >= 2)
+      .map(([name, _]) => name);
+
+    console.log('Repeated viral artists:', repeatedArtists);
+
+    // Highlight repeated artists
+    this.svg.selectAll('.planet')
+      .transition()
+      .duration(600)
+      .attr('opacity', d => repeatedArtists.includes(d.name) ? 1 : 0.2)
+      .attr('stroke-width', d => repeatedArtists.includes(d.name) ? 4 : 2)
+      .attr('stroke', d => repeatedArtists.includes(d.name) ? '#FBEB35' : '#fff'); // Yellow glow for repeated
+  }
+
+  /**
+   * Reset all planet highlights to normal state
+   */
+  resetHighlights() {
+    this.svg.selectAll('.planet')
+      .transition()
+      .duration(400)
+      .attr('opacity', 1)
+      .attr('stroke-width', 2)
+      .attr('stroke', '#fff');
+  }
 }

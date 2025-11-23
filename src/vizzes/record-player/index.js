@@ -451,6 +451,90 @@ export class RecordPlayerViz {
         }
     }
 
+    /**
+     * Rotate to the next record in sequence (for guided exploration)
+     * Cycles through records one by one from outermost (top) to innermost
+     */
+    rotateToNextRecord() {
+        // Initialize or increment the rotation index
+        if (this.guidedRotationIndex === undefined) {
+            this.guidedRotationIndex = 0;
+        } else {
+            this.guidedRotationIndex = (this.guidedRotationIndex + 1) % this.data.length;
+        }
+
+        const index = this.guidedRotationIndex;
+
+        // Activate the record
+        this.activateRing(index, { locked: true, source: 'guided' });
+
+        // Start rotation animation
+        this.startRingRotation(index);
+
+        console.log(`[RecordPlayer] Rotated to record ${index + 1}/${this.data.length}: ${this.data[index].name}`);
+    }
+
+    /**
+     * Highlight the top 3 records by adding visual emphasis
+     * Dims records 4-10 to draw attention to the most popular sounds
+     */
+    highlightTop3() {
+        const top3Indices = [0, 1, 2]; // Top 3 are already sorted by playCount
+
+        this.ringsGroup.selectAll('.record-ring').each((d, i, nodes) => {
+            const ringIndex = Number(nodes[i].dataset.songIndex);
+            const isTop3 = top3Indices.includes(ringIndex);
+
+            // Add glow effect to top 3, dim others
+            const ringEl = d3.select(nodes[i]);
+            const arc = ringEl.select('.record-ring-arc');
+            const label = ringEl.select('.record-ring-label');
+
+            if (isTop3) {
+                // Highlight top 3 with cyan glow
+                arc.style('filter', 'drop-shadow(0 0 8px var(--color-accent-cyan))');
+                arc.style('stroke', 'var(--color-accent-cyan)');
+                arc.style('opacity', 1);
+                label.style('opacity', 1);
+                label.style('font-weight', 'bold');
+
+                // Start rotation for visual emphasis
+                this.startRingRotation(ringIndex);
+            } else {
+                // Dim others
+                arc.style('filter', 'none');
+                arc.style('stroke', 'var(--color-border-primary)');
+                arc.style('opacity', 0.3);
+                label.style('opacity', 0.3);
+                label.style('font-weight', 'normal');
+
+                this.stopRingRotation(ringIndex);
+            }
+        });
+
+        console.log('[RecordPlayer] Highlighted top 3 records');
+    }
+
+    /**
+     * Reset all record highlights to normal state
+     */
+    resetHighlights() {
+        this.ringsGroup.selectAll('.record-ring').each((d, i, nodes) => {
+            const ringEl = d3.select(nodes[i]);
+            const arc = ringEl.select('.record-ring-arc');
+            const label = ringEl.select('.record-ring-label');
+
+            arc.style('filter', 'none');
+            arc.style('stroke', 'var(--color-border-primary)');
+            arc.style('opacity', 1);
+            label.style('opacity', 1);
+            label.style('font-weight', 'normal');
+        });
+
+        this.stopAllRingRotation();
+        this.clearActiveRing({ preserveLocked: false });
+    }
+
     mount() {
         this.mounted = true;
     }
