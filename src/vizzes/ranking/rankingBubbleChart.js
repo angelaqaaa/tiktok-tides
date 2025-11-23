@@ -25,7 +25,7 @@ export class RankingBubbleChart {
     this.gifUrl = gifUrl || null;
     this.options = {
       maxAuthors: 18, // show top N authors in this category
-      margin: { top: 40, right: 24, bottom: 32, left: 24 },
+      margin: { top: 40, right: 10, bottom: 25, left: 10 },
       minRadius: 14,
       maxRadius: 60,
       dataPath: '/data/youtube_shorts_tiktok_trends_2025.csv',
@@ -86,6 +86,22 @@ export class RankingBubbleChart {
       .attr('height', this.height)
       .attr('rx', rx)
       .attr('ry', ry);
+    
+    // TikTok-style gradient for hover strokes
+    const hoverGradient = defs.append('linearGradient')
+      .attr('id', 'bubbleHoverStroke')
+      .attr('x1', '0%')
+      .attr('y1', '0%')
+      .attr('x2', '100%')
+      .attr('y2', '100%'); // roughly 135deg
+
+    hoverGradient.append('stop')
+      .attr('offset', '0%')
+      .attr('stop-color', '#00f7ff'); // aqua
+
+    hoverGradient.append('stop')
+      .attr('offset', '100%')
+      .attr('stop-color', '#ff5ce7'); // pink
 
      // Background + border for the whole drawing area
     this.svg
@@ -111,6 +127,7 @@ export class RankingBubbleChart {
         .attr('width', this.width)
         .attr('height', this.height)
         .attr('opacity', 0.75)
+        .attr('filter', 'brightness(0.3)') // darken for contrast
         .attr('preserveAspectRatio', 'xMidYMid slice')
         .attr('clip-path', 'url(#bubbleChartRoundedClip)');
     }
@@ -149,22 +166,23 @@ export class RankingBubbleChart {
       .append('text')
       .attr('class', 'bubble-title')
       .attr('x', this.innerWidth / 2)
-      .attr('y', -16)
+      .attr('y', 28)
       .attr('text-anchor', 'middle')
       .text(this.category ? `${this.category}Tok` : 'Creators')
-      .style('font-size', '25px')
-      .style('font-weight', '600');
+      .style('font-size', '60px')
+      .style('font-weight', '700')
+      .style('fill', 'url(#bubbleHoverStroke)');
     
     // Subtitle
     this.subtitle = this.chartG
       .append('text')
       .attr('class', 'bubble-subtitle')
       .attr('x', this.innerWidth / 2)
-      .attr('y', 5)  // just below the title; tweak as needed
+      .attr('y', 60)  // just below the title; tweak as needed
       .attr('text-anchor', 'middle')
-      .style('fill', 'var(--color-text-secondary)')
-      .style('font-size', '15px')
-      .style('fill', '#515151ff')
+      .style('font-size', '20px')
+      .style('font-weight', '700')
+      .style('fill', 'url(#bubbleHoverStroke)')
       .text('Top Creators In This Community');
 
 
@@ -178,7 +196,7 @@ export class RankingBubbleChart {
         .style('pointer-events', 'none')   // ignore mouse events
       .style('z-index', '9999')          // sit on top of SVG & overlays
       .style('opacity', 0)
-      .style('width', '350px')          // fixed width
+      .style('width', '300px')          // fixed width
       .style('max-width', '350px')      // (optional) enforce max
       .style('white-space', 'normal')   // allow wrapping
       .style('word-wrap', 'break-word') // break long tokens if needed
@@ -366,7 +384,7 @@ export class RankingBubbleChart {
     simNodes.forEach((d) => {
         // keep each circle fully inside [0, innerWidth] x [30, innerHeight]
         d.x = Math.max(d.r, Math.min(this.innerWidth - d.r, d.x));
-        d.y = Math.max(d.r + 30, Math.min((this.innerHeight) - d.r, d.y));
+        d.y = Math.max(d.r + 80, Math.min((this.innerHeight) - d.r, d.y));
     });
     }
     simulation.stop();
@@ -400,7 +418,7 @@ export class RankingBubbleChart {
       .attr('class', 'author-circle')
       .attr('r', 0)
       .attr('fill', this.categoryColor)
-      .attr('fill-opacity', 0.9);
+      .attr('fill-opacity', 1);
 
     nodesEnter
       .append('text')
@@ -408,6 +426,8 @@ export class RankingBubbleChart {
       .attr('text-anchor', 'middle')
       .attr('dy', '0.35em')
       .style('pointer-events', 'none')
+      .style('font-weight', '600')
+      .style('fill', '#292929ff')
       .text((d) => d.author);
 
     // ENTER + UPDATE MERGE
@@ -481,14 +501,12 @@ export class RankingBubbleChart {
 
         // Highlight circle with TikTok aqua
         node.select('.author-circle')
-          .attr('fill-opacity', 1)
-          .attr('stroke', '#484848ff')
-          .attr('stroke-width', 5);
+            .attr('stroke', 'url(#bubbleHoverStroke)')
+            .attr('stroke-width', 5);
 
         this.tooltip
           .style('opacity', 1)
           .html(this.getTooltipHtml(d));
-        this.moveTooltip(event);
       })
       .on('mousemove', (event) => {
         this.moveTooltip(event);
@@ -498,12 +516,9 @@ export class RankingBubbleChart {
 
         // Remove highlight, restore original (no stroke)
         node.select('.author-circle')
-          .attr('fill-opacity', 0.9)
           .attr('stroke', null)
           .attr('stroke-width', null);
         this.tooltip
-          .transition()
-          .duration(0.1)
           .style('opacity', 0);
       });
   }
@@ -525,41 +540,227 @@ export class RankingBubbleChart {
 
   getTooltipHtml(d) {
     const fmt = d3.format(',d');
+
+    const firstLetter =
+      d.author && d.author.length ? d.author[0].toUpperCase() : '?';
+
+    // Build hashtag "chips"
+    const hashtags =
+      d.hashtags && d.hashtags.length
+        ? d.hashtags.slice(0, 8)
+            .map((h) => {
+              const label = String(h).replace(/^#/, '');
+              return `
+                <span style="
+                  font-size: 0.8rem;
+                  padding: 0.1rem 0.45rem;
+                  border-radius: 999px;
+                  background: rgba(15, 23, 42, 0.85);
+                  border: 1px solid rgba(148, 163, 184, 0.4);
+                  color: rgba(226, 232, 240, 0.95);
+                  white-space: nowrap;
+                  margin-right: 0.25rem;
+                  margin-bottom: 0.25rem;
+                  display: inline-flex;
+                  align-items: center;
+                ">#${label}</span>
+              `;
+            })
+            .join('')
+        : '';
+
+    // Build sound "chips"
+    const sounds =
+      d.sounds && d.sounds.length
+        ? d.sounds.slice(0, 4)
+            .map((s) => {
+              const label = String(s);
+              return `
+                <span style="
+                  font-size: 0.8rem;
+                  padding: 0.1rem 0.45rem;
+                  border-radius: 999px;
+                  background: rgba(15, 23, 42, 0.85);
+                  border: 1px solid rgba(255, 92, 231, 0.5);
+                  color: rgba(226, 232, 240, 0.95);
+                  white-space: nowrap;
+                  margin-right: 0.25rem;
+                  margin-bottom: 0.25rem;
+                  display: inline-flex;
+                  align-items: center;
+                ">${label}</span>
+              `;
+            })
+            .join('')
+        : '';
+
     return `
-      <div class="tooltip-title">@${d.author}</div>
-      <div class="tooltip-metric"><span>Views:</span> ${fmt(
-        d.totalViews
-      )}</div>
-      <div class="tooltip-metric"><span>Likes:</span> ${fmt(
-        d.totalLikes
-      )}</div>
-      <div class="tooltip-metric"><span>Comments:</span> ${fmt(
-        d.totalComments
-      )}</div>
-      <div class="tooltip-metric"><span>Shares:</span> ${fmt(
-        d.totalShares
-      )}</div>
-      <div class="tooltip-metric"><span>Saves:</span> ${fmt(
-        d.totalSaves
-      )}</div>
-      ${
-        d.hashtags &&
-        d.hashtags.length
-          ? `<div class="tooltip-list"><span>Hashtags:</span> ${d.hashtags.join(
-              ', '
-            )}</div>`
-          : ''
-      }
-      ${
-        d.sounds &&
-        d.sounds.length
-          ? `<div class="tooltip-list"><span>Sounds:</span> ${d.sounds.join(
-              ', '
-            )}</div>`
-          : ''
-      }
+      <div style="
+        min-width: 260px;
+        max-width: 340px;
+        padding: 12px 16px;
+        border-radius: 14px;
+        background: rgba(10, 13, 24, 0.96);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.6);
+        color: #f9fafb;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      ">
+        <!-- Header -->
+        <div style="
+          display: flex;
+          align-items: center;
+          gap: 0.7rem;
+          margin-bottom: 0.4rem;
+        ">
+          <div style="
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #050609;
+            background: linear-gradient(135deg, #00f7ff, #ff5ce7);
+          ">
+            ${firstLetter}
+          </div>
+          <div style="display: flex; flex-direction: column;">
+            <div style="font-size: 1rem; font-weight: 600;">
+              @${d.author}
+            </div>
+            <div style="
+              font-size: 0.8rem;
+              color: rgba(148, 163, 184, 0.9);
+            ">
+              Top creator in
+              <span style="
+                padding: 0.1rem 0.45rem;
+                border-radius: 999px;
+                background: rgba(0, 247, 255, 0.12);
+                color: #7cf0ff;
+                margin-left: 0.2rem;
+              ">${this.category}Tok</span>
+            </div>
+          </div>
+        </div>
+
+          <!-- Performance section -->
+        <div style="margin-top: 0.2rem;">
+          <div style="
+            font-size: 0.75rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: rgba(148, 163, 184, 0.9);
+            margin-bottom: 0.2rem;
+          ">
+          </div>
+
+          ${['Views', 'Likes', 'Comments', 'Shares', 'Saves']
+            .map((label) => {
+              const key = 'total' + label;
+              const value = fmt(d[key] || 0);
+              return `
+                <div style="
+                  display: flex;
+                  justify-content: space-between;
+                  font-size: 0.85rem;
+                  margin-top: 0.1rem;
+                ">
+                  <span style="color: rgba(148, 163, 184, 0.95);">${label}</span>
+                  <strong style="font-weight: 600;">${value}</strong>
+                </div>
+              `;
+            })
+            .join('')}
+        </div>
+
+        <!-- Hashtags -->
+        ${
+          hashtags
+            ? `
+        <div style="margin-top: 0.8rem;">
+          <div style="
+            font-size: 0.8rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: rgba(148, 163, 184, 0.9);
+            margin-bottom: 0.2rem;
+          ">
+            Signature hashtags
+          </div>
+          <div style="display: flex; flex-wrap: wrap;">
+            ${hashtags}
+          </div>
+        </div>
+        `
+            : ''
+        }
+
+        <!-- Sounds -->
+        ${
+          sounds
+            ? `
+        <div style="margin-top: 0.5rem;">
+          <div style="
+            font-size: 0.8rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: rgba(148, 163, 184, 0.9);
+            margin-bottom: 0.2rem;
+          ">
+            Sounds
+          </div>
+          <div style="display: flex; flex-wrap: wrap;">
+            ${sounds}
+          </div>
+        </div>
+        `
+            : ''
+        }
+      </div>
     `;
   }
+
+  // getTooltipHtml(d) {
+  //   const fmt = d3.format(',d');
+  //   return `
+  //     <div class="tooltip-title">@${d.author}</div>
+  //     <div class="tooltip-metric"><span>Views:</span> ${fmt(
+  //       d.totalViews
+  //     )}</div>
+  //     <div class="tooltip-metric"><span>Likes:</span> ${fmt(
+  //       d.totalLikes
+  //     )}</div>
+  //     <div class="tooltip-metric"><span>Comments:</span> ${fmt(
+  //       d.totalComments
+  //     )}</div>
+  //     <div class="tooltip-metric"><span>Shares:</span> ${fmt(
+  //       d.totalShares
+  //     )}</div>
+  //     <div class="tooltip-metric"><span>Saves:</span> ${fmt(
+  //       d.totalSaves
+  //     )}</div>
+  //     ${
+  //       d.hashtags &&
+  //       d.hashtags.length
+  //         ? `<div class="tooltip-list"><span>Hashtags:</span> ${d.hashtags.join(
+  //             ', '
+  //           )}</div>`
+  //         : ''
+  //     }
+  //     ${
+  //       d.sounds &&
+  //       d.sounds.length
+  //         ? `<div class="tooltip-list"><span>Sounds:</span> ${d.sounds.join(
+  //             ', '
+  //           )}</div>`
+  //         : ''
+  //     }
+  //   `;
+  // }
 
   // ---------- LIFECYCLE HELPERS ----------
 
