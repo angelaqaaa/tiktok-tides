@@ -6,6 +6,30 @@ const OUTER_RADIUS = CENTER - 60;
 const INNER_RADIUS = 60;
 const ROTATION_SPEED = 360 / 12000; // deg per ms
 
+// Default album cover when no song is selected
+const DEFAULT_ALBUM_COVER = "/data/record_music_cover/noSong.jpg";
+
+// Album cover paths - randomly shuffled
+const albumCoverPaths = [
+    "/data/record_music_cover/premium_vector-1711922642822-695731cfcb4a.avif",
+    "/data/record_music_cover/premium_vector-1711987689675-439d95531384.avif",
+    "/data/record_music_cover/premium_vector-1717009247018-b153fdffe0d7.avif",
+    "/data/record_music_cover/premium_vector-1725675010771-4bc9e0c22249.avif",
+    "/data/record_music_cover/premium_vector-1745509208269-c7a2d8c1ac6e.avif",
+    "/data/record_music_cover/premium_vector-1758194439297-68d0d2577abb.avif",
+    "/data/record_music_cover/premium_vector-1762261283518-65c1081da634.avif"
+];
+
+// Shuffle array function
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
 export class RecordPlayerViz {
     constructor() {
         this.container = null;
@@ -19,8 +43,10 @@ export class RecordPlayerViz {
         this.tonearmHead = null;
 
         this.data = [];
+        this.songInfo = []; // song info data
         this.radiusScale = null;
         this.angleScale = null;
+        this.shuffledAlbumCovers = shuffleArray(albumCoverPaths); // Randomly shuffled album covers
 
         this.activeIndex = null;
         this.lockedIndex = null;
@@ -33,10 +59,12 @@ export class RecordPlayerViz {
         this.audioCache = new Map(); // url -> Audio
         this.currentAudio = null;
         this.currentAudioIndex = null;
+        this.isMuted = true; // mute state - default to muted
 
         this.autoplayUnlocked = false;
         this.pendingAudioIndex = null;
         this.handleFirstGesture = this.handleFirstGesture.bind(this);
+        this.handleMuteToggle = this.handleMuteToggle.bind(this);
     }
 
     async init(selector, options = {}) {
@@ -54,11 +82,22 @@ export class RecordPlayerViz {
         this.tonearmHinge = this.container.querySelector('.tonearm-hinge');
         this.tonearmHead = this.container.querySelector('.tonearm-head');
 
+        // Song info screen elements
+        this.songInfoScreen = this.container.querySelector('[data-song-info-screen]');
+        this.songTitleEl = this.container.querySelector('[data-song-title]');
+        this.songDescriptionEl = this.container.querySelector('[data-song-description]');
+        this.albumCoverEl = this.container.querySelector('[data-album-cover]');
+
+        // Mute toggle button
+        this.muteToggleButton = this.container.querySelector('[data-mute-toggle]');
 
         await this.loadData();
         this.setupScales();
         this.renderRings();
         this.bindInteractions();
+        this.bindMuteToggle();
+        this.initializeMuteButton(); // Set initial mute button state
+        this.resetSongInfo(); // Set default "no song" state
         document.addEventListener('pointerdown', this.handleFirstGesture, { once: true });
         this.setTonearmToIndex(0, { silent: true });
     }
@@ -75,15 +114,18 @@ export class RecordPlayerViz {
             .sort((a, b) => b.totalPlayCount - a.totalPlayCount)
             .slice(0, 10);
 
-        // set songs playing muted on the background, only unmuted if hovered or interacted
+        // Load song info data
+        try {
+            const songInfoResponse = await fetch('/data/songInfo/songInfo.json');
+            this.songInfo = await songInfoResponse.json();
+        } catch (error) {
+            console.warn('Failed to load song info:', error);
+            this.songInfo = [];
+        }
+
+        // Initialize audio cache but don't play until hovered/interacted
         this.audioCache = new Map(); //map storing loaded music
-        this.data.forEach(song => {
-            const audio = new Audio(song.playUrl);
-            audio.loop = true;
-            audio.muted = true;
-            audio.play().catch(() => { });
-            this.audioCache.set(song.playUrl, audio);
-        });
+        // Don't preload and play all songs - only create when needed
 
         this.totalRings = this.data.length;
     }
@@ -92,8 +134,8 @@ export class RecordPlayerViz {
         const ringStep = (OUTER_RADIUS - INNER_RADIUS) / this.data.length;
         this.radiusScale = (index) => OUTER_RADIUS - (index + 0.75) * ringStep;
 
-        const maxAngle = 30;
-        const minAngle = 0;
+        const maxAngle = 35;
+        const minAngle = 10;
         this.angleScale = d3.scaleLinear().domain([0, this.totalRings - 1]).range([minAngle, maxAngle]);
     }
 
@@ -210,6 +252,8 @@ export class RecordPlayerViz {
                 if (this.lockedIndex === index) this.lockedIndex = null;
                 if (this.activeIndex === index) this.activeIndex = null;
                 this.stopSong(true);
+                // Reset song info display when hover ends
+                this.resetSongInfo();
             });
 
             ringEl.addEventListener('click', () => {
@@ -226,6 +270,7 @@ export class RecordPlayerViz {
                 this.stopAllRingRotation();
                 this.clearActiveRing({ preserveLocked: false });
                 this.stopSong(true);
+                this.resetSongInfo();
                 showIndicator();
             });
         }
@@ -321,6 +366,9 @@ export class RecordPlayerViz {
             this.stopRingRotation(index);
         }
 
+        // Update song info display
+        this.updateSongInfo(index);
+
         this.playSong(index, { autoplay: isHover || locked });
         if (isHover) {
             this.setTonearmToIndex(index, { silent: true });
@@ -361,6 +409,52 @@ export class RecordPlayerViz {
         return Math.max(min, Math.min(max, angle));
     }
 
+    updateSongInfo(index) {
+        if (index == null || index < 0 || index >= this.data.length) {
+            return;
+        }
+
+        const song = this.data[index];
+        const info = this.songInfo.find(si => si.name === song.name);
+
+        if (this.songTitleEl) {
+            this.songTitleEl.textContent = song.name || 'No song selected';
+        }
+
+        if (this.songDescriptionEl) {
+            this.songDescriptionEl.textContent = info?.description || 'Hover over a ring to see song information';
+        }
+
+        if (this.albumCoverEl) {
+            // Get album cover based on ring index (sorted by popularity)
+            // Index 0 = most popular (outermost ring), index 9 = least popular (innermost ring)
+            const albumCoverPath = this.shuffledAlbumCovers[index % this.shuffledAlbumCovers.length];
+
+            if (albumCoverPath) {
+                this.albumCoverEl.src = albumCoverPath;
+                this.albumCoverEl.alt = `${song.name} album cover`;
+            } else {
+                this.albumCoverEl.src = '';
+                this.albumCoverEl.alt = 'Album cover';
+            }
+        }
+    }
+
+    resetSongInfo() {
+        if (this.songTitleEl) {
+            this.songTitleEl.textContent = 'No song selected';
+        }
+
+        if (this.songDescriptionEl) {
+            this.songDescriptionEl.textContent = 'Hover over a ring to see song information';
+        }
+
+        if (this.albumCoverEl) {
+            this.albumCoverEl.src = DEFAULT_ALBUM_COVER;
+            this.albumCoverEl.alt = 'No song selected';
+        }
+    }
+
     playSong(index, { autoplay = true, force = false } = {}) {
         const song = this.data[index];
 
@@ -368,6 +462,9 @@ export class RecordPlayerViz {
             this.stopSong(true);
             return;
         }
+
+        // Update song info display
+        this.updateSongInfo(index);
 
         let audio = this.audioCache.get(song.playUrl);
         if (!audio) {
@@ -377,7 +474,7 @@ export class RecordPlayerViz {
             this.audioCache.set(song.playUrl, audio);
         }
 
-        audio.muted = false;
+        audio.muted = this.isMuted;
 
         if (autoplay && !force && !this.autoplayUnlocked) {
             this.currentAudio = audio;
@@ -386,7 +483,7 @@ export class RecordPlayerViz {
             audio.currentTime = 0;
             audio.muted = true;
             audio.play().then(() => {
-                audio.muted = false;
+                audio.muted = this.isMuted;
                 audio.currentTime = 0;
                 this.autoplayUnlocked = true;
                 audio.play().then(() => {
@@ -433,13 +530,24 @@ export class RecordPlayerViz {
 
 
     stopSong(force = false) {
-        if (!this.currentAudio) return;
+        if (!this.currentAudio) {
+            // Even if no audio, ensure song info is reset if no active song
+            if (this.activeIndex === null && this.lockedIndex === null) {
+                this.resetSongInfo();
+            }
+            return;
+        }
         if (!force && this.lockedIndex !== null) return;
         this.currentAudio.pause();
         this.currentAudio.currentTime = 0;
+        this.currentAudio.muted = true; // Ensure it's muted when stopped
         this.currentAudio = null;
         this.currentAudioIndex = null;
         this.toggleNotes(false);
+        // Reset song info when stopping if no active or locked song
+        if (this.activeIndex === null && this.lockedIndex === null) {
+            this.resetSongInfo();
+        }
     }
 
     toggleNotes(isPlaying) {
@@ -469,6 +577,60 @@ export class RecordPlayerViz {
             const pending = this.pendingAudioIndex;
             this.pendingAudioIndex = null;
             this.playSong(pending, { autoplay: true, force: true });
+        }
+    }
+
+    bindMuteToggle() {
+        if (!this.muteToggleButton) return;
+        this.muteToggleButton.addEventListener('click', this.handleMuteToggle);
+    }
+
+    initializeMuteButton() {
+        // Set initial mute button state to muted
+        if (this.muteToggleButton) {
+            this.muteToggleButton.classList.add('is-muted');
+            const iconPath = this.muteToggleButton.querySelector('path');
+            if (iconPath) {
+                // Set to muted icon
+                iconPath.setAttribute('d', 'M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z');
+            }
+        }
+        // Audio cache is empty initially, so no need to set muted state
+    }
+
+    handleMuteToggle() {
+        this.isMuted = !this.isMuted;
+
+        // Update button visual state
+        if (this.muteToggleButton) {
+            if (this.isMuted) {
+                this.muteToggleButton.classList.add('is-muted');
+                // Update icon to muted state
+                const iconPath = this.muteToggleButton.querySelector('path');
+                if (iconPath) {
+                    iconPath.setAttribute('d', 'M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z');
+                }
+            } else {
+                this.muteToggleButton.classList.remove('is-muted');
+                // Update icon to unmuted state
+                const iconPath = this.muteToggleButton.querySelector('path');
+                if (iconPath) {
+                    iconPath.setAttribute('d', 'M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z');
+                }
+            }
+        }
+
+        // Only update the currently playing audio if there's an active song
+        // Don't resume playback if no song is currently active (hovered/clicked)
+        if (this.currentAudio && this.activeIndex !== null) {
+            this.currentAudio.muted = this.isMuted;
+        } else if (this.currentAudio && this.activeIndex === null) {
+            // If no active song but audio exists, stop it and reset song info
+            this.stopSong(true);
+            this.resetSongInfo();
+        } else if (!this.currentAudio && this.activeIndex === null) {
+            // If no audio and no active song, ensure song info is reset
+            this.resetSongInfo();
         }
     }
 }
