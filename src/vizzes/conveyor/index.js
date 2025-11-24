@@ -44,42 +44,42 @@ export class ConveyorViz extends EventEmitter {
         id: 'duration',
         label: 'Ideal Video Duration ⏱️',
         answer: '20-30 seconds',
-        hint: 'Keep it punchy to maximize completion and replays.',
+        hint: 'Check the stopwatch—which duration got the biggest radius?',
         options: ['10-15 seconds', '45-60 seconds', '20-30 seconds', '2-3 minutes']
       },
       {
         id: 'popular_sound',
         label: 'Most Popular Sound to Use 🎵',
         answer: 'Anxiety by Doechii',
-        hint: 'This track topped the TikTok charts recently.',
+        hint: 'Spin back to the vinyl—which track sits on the outermost ring?',
         options: ['Streets by Doja Cat', 'Cold Water by Justin Bieber', 'Anxiety by Doechii', 'Cruel Summer by Taylor Swift']
       },
       {
         id: 'danceability_avg',
         label: 'Average Danceability for Sounds 💃',
         answer: '0.8',
-        hint: 'On a 0–1 scale, higher means more groove.',
+        hint: 'Remember the planet colors? What\'s the typical danceability score?',
         options: ['0.4', '0.6', '0.8', '0.2']
       },
       {
         id: 'energy_avg',
         label: 'Average Energy for Sounds ⚡',
         answer: '0.7',
-        hint: '0–1 scale; think intensity and activity.',
+        hint: 'Think solar system—how far from the sun are most planets orbiting?',
         options: ['0.3', '0.5', '0.7', '0.9']
       },
       {
         id: 'caption_word',
         label: 'What Word to Include in the Caption ✍️',
         answer: 'fyp',
-        hint: 'A classic tag to boost discoverability.',
+        hint: 'The emotion bubbles revealed the most popular language—what was it?',
         options: ['pls', 'linkinbio', 'omg', 'fyp']
       },
       {
         id: 'community',
         label: 'Popular TikTok Community 🐾',
         answer: 'pets',
-        hint: 'Content that never goes out of style.',
+        hint: 'Who climbed highest on the pyramid without even trying?',
         options: ['finance', 'origami', 'pets', 'meteorology']
       }
     ];
