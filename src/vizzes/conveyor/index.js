@@ -398,19 +398,40 @@ export class ConveyorViz extends EventEmitter {
 
     if (isCorrect) {
       this.state.score++;
-      this.showFeedback(`🎉 Correct! "${current.answer}"`, 'correct');
+      // Mark the correct button as green
+      if (btnEl) btnEl.classList.add('correct-answer');
+      
       // Disable all options after correct
       this.disableAllOptions();
+      
+      // Show feedback area and next button immediately
+      const feedbackArea = this.container.querySelector('.feedback-area');
+      const nextBtn = this.container.querySelector('.next-btn');
+      
+      if (feedbackArea) feedbackArea.style.display = 'flex';
+      
+      if (nextBtn) {
+        nextBtn.style.display = 'inline-block';
+        // Update button text for last item
+        if (this.state.currentIndex >= this.data.length - 1) {
+          nextBtn.textContent = 'Finish';
+        } else {
+          nextBtn.textContent = 'Next →';
+        }
+      }
       
       // Auto-reveal after short delay
       setTimeout(() => this.revealAnswer(), 1000);
     } else {
+      // Mark the incorrect button as red
+      if (btnEl) btnEl.classList.add('incorrect-answer');
+      
       this.state.attemptsLeft = Math.max(0, (this.state.attemptsLeft || 1) - 1);
       const attemptsEl = this.container.querySelector('.attempts-remaining');
       if (attemptsEl) attemptsEl.textContent = `Attempts left: ${this.state.attemptsLeft}`;
 
       if (this.state.attemptsLeft > 0) {
-        this.showFeedback(`Not quite! Try again.`, 'incorrect');
+        // Don't show feedback bar - just let the red button indicate the error
       } else {
         this.showFeedback(`Out of attempts. You can reveal the answer.`, 'warning');
         // Disable remaining options
@@ -421,15 +442,20 @@ export class ConveyorViz extends EventEmitter {
           revealBtn.style.display = 'inline-block';
           revealBtn.disabled = false;
         }
+        // Show feedback area for reveal button
+        const feedbackArea = this.container.querySelector('.feedback-area');
+        feedbackArea.style.display = 'block';
       }
     }
 
     // Update score
     this.updateScore();
 
-    // Show reveal/next buttons
-    const feedbackArea = this.container.querySelector('.feedback-area');
-    feedbackArea.style.display = 'block';
+    // Show feedback area only when out of attempts
+    if (!isCorrect && this.state.attemptsLeft <= 0) {
+      const feedbackArea = this.container.querySelector('.feedback-area');
+      feedbackArea.style.display = 'block';
+    }
   }
 
   disableAllOptions() {
