@@ -167,7 +167,7 @@
                     <g class="record-rings" data-record-rings></g>
                   </svg>
                   <div class="record-center-cap" aria-hidden="true">
-                    <span class="record-center-year">2019–2025</span>
+                    <span class="record-center-year" data-year-range-display>2020–2025</span>
                   </div>
                 </div>
                 <div class="tonearm" data-tonearm>
@@ -186,8 +186,22 @@
                   </div>
                   <div class="song-info-screen__right">
                     <h3 class="song-info-screen__title" data-song-title>No song selected</h3>
-                    <p class="song-info-screen__description" data-song-description>Hover over a ring to see song information</p>
+                    <p class="song-info-screen__description" data-song-description>🎧 Play Count: —<br>✨ Author: —</p>
                   </div>
+                </div>
+                <div class="year-range-control" data-year-range>
+                  <div class="year-range-control__header">
+                    <span class="year-range-control__label">Year Range</span>
+                    <span class="year-range-control__value" data-year-range-label>2020 – 2025</span>
+                  </div>
+                  <div class="year-range-slider" data-year-slider>
+                    <div class="year-range-slider__glow"></div>
+                    <div class="year-range-slider__track"></div>
+                    <div class="year-range-slider__selection" data-year-range-selection></div>
+                    <button class="year-range-slider__handle year-range-slider__handle--start" type="button" aria-label="Select start year" data-year-handle-start></button>
+                    <button class="year-range-slider__handle year-range-slider__handle--end" type="button" aria-label="Select end year" data-year-handle-end></button>
+                  </div>
+                  <div class="year-range-slider__ticks" data-year-slider-ticks></div>
                 </div>
               </div>
               <div class="record-player-notes" aria-hidden="true">
@@ -308,37 +322,7 @@
     <!-- Main App -->
     <script type="module" src="/src/js/main.js"></script>
 
-    <!-- Inline SVG Noise Filter -->
-    <!-- Grain overlay disabled for better visibility
-    <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
-      <filter id="noise" x="0" y="0" width="100%" height="100%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch" />
-        <feColorMatrix type="matrix" values="0 0 0 0 0
-                0 0 0 0 0
-                0 0 0 0 0
-                0 0 0 0.12 0" />
-      </filter>
-    </svg>
-    <div class="grain-overlay" aria-hidden="true"></div>
-    <style>
-      .grain-overlay {
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        z-index: 9999;
-        background: #000;
-        filter: url(#noise);
-        mix-blend-mode: overlay;
-        opacity: .06;
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .grain-overlay {
-          display: none;
-        }
-      }
-    </style>
-    -->
+   
   </body>
 
 </html>

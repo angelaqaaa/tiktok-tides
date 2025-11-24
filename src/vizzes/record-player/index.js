@@ -6,6 +6,13 @@ const OUTER_RADIUS = CENTER - 60;
 const INNER_RADIUS = 60;
 const ROTATION_SPEED = 360 / 12000; // deg per ms
 
+function formatPlayCount(count) {
+    if (!Number.isFinite(count)) return null;
+    const millions = count / 1_000_000;
+    const decimals = millions >= 100 ? 0 : 1;
+    return `${millions.toFixed(decimals)}M`;
+}
+
 // Default album cover when no song is selected
 const DEFAULT_ALBUM_COVER = "/data/record_music_cover/noSong.jpg";
 
@@ -48,6 +55,11 @@ export class RecordPlayerViz {
         this.angleScale = null;
         this.shuffledAlbumCovers = shuffleArray(albumCoverPaths); // Randomly shuffled album covers
 
+        this.allSongs = [];
+        this.availableYears = [];
+        this.yearBounds = [2020, 2025];
+        this.currentYearRange = [2020, 2025];
+
         this.activeIndex = null;
         this.lockedIndex = null;
         this.isDraggingTonearm = false;
@@ -60,6 +72,20 @@ export class RecordPlayerViz {
         this.currentAudio = null;
         this.currentAudioIndex = null;
         this.isMuted = true; // mute state - default to muted
+
+        this.yearSliderEl = null;
+        this.yearSelectionEl = null;
+        this.yearStartHandle = null;
+        this.yearEndHandle = null;
+        this.yearTicksEl = null;
+        this.yearRangeLabelEl = null;
+        this.yearTrackEl = null;
+        this.recordCenterLabelEl = null;
+        this.sliderActiveHandle = null;
+        this.sliderPointerMoveHandler = this.handleSliderPointerMove.bind(this);
+        this.sliderPointerUpHandler = this.handleSliderPointerUp.bind(this);
+        this.handleResizeBound = () => this.updateYearSliderUI();
+        this.setHoverState(false);
 
         this.autoplayUnlocked = false;
         this.pendingAudioIndex = null;
@@ -81,6 +107,7 @@ export class RecordPlayerViz {
         this.tonearmArm = this.container.querySelector('[data-tonearm-arm]');
         this.tonearmHinge = this.container.querySelector('.tonearm-hinge');
         this.tonearmHead = this.container.querySelector('.tonearm-head');
+        this.recordCenterLabelEl = this.container.querySelector('[data-year-range-display]');
 
         // Song info screen elements
         this.songInfoScreen = this.container.querySelector('[data-song-info-screen]');
@@ -91,10 +118,18 @@ export class RecordPlayerViz {
         // Mute toggle button
         this.muteToggleButton = this.container.querySelector('[data-mute-toggle]');
 
+        // Year range slider elements
+        this.yearSliderEl = this.container.querySelector('[data-year-slider]');
+        this.yearSelectionEl = this.container.querySelector('[data-year-range-selection]');
+        this.yearStartHandle = this.container.querySelector('[data-year-handle-start]');
+        this.yearEndHandle = this.container.querySelector('[data-year-handle-end]');
+        this.yearTicksEl = this.container.querySelector('[data-year-slider-ticks]');
+        this.yearRangeLabelEl = this.container.querySelector('[data-year-range-label]');
+        this.yearTrackEl = this.container.querySelector('.year-range-slider__track');
+
         await this.loadData();
-        this.setupScales();
-        this.renderRings();
         this.bindInteractions();
+        this.initializeYearSlider();
         this.bindMuteToggle();
         this.initializeMuteButton(); // Set initial mute button state
         this.resetSongInfo(); // Set default "no song" state
@@ -103,16 +138,49 @@ export class RecordPlayerViz {
     }
 
     async loadData() {
-        const parsed = await d3.csv('/data/top10_music.csv', (d) => ({
-            name: d['musicMeta/musicName'] ?? d['Music Name'],
-            playUrl: d['music_playUrl'] ?? d['musicMeta/musicPlayUrl'] ?? '',
-            totalPlayCount: +d['total_playCount'] || +d['Total Digg'] || 0
-        }));
+        const parsed = await d3.csv('/data/top_music.csv', (d) => {
+            const year = +d.year || +d.Year;
+            const name = d.music_name || d['musicMeta/musicName'] || d['music_name'] || d.name;
+            const playUrl = d.music_url || d['musicMeta/playUrl'] || d.play_url || d.playUrl || '';
+            const playCount = +d.play_count || +d.playCount || 0;
+            const coverUrl = d.cover_url || d['musicMeta/coverMediumUrl'] || d.coverUrl || '';
+            const author = d.music_author || d['musicMeta/musicAuthor'] || d.author || '';
+            return {
+                year,
+                name,
+                playUrl,
+                totalPlayCount: playCount,
+                coverUrl,
+                author
+            };
+        });
 
-        this.data = parsed
-            .filter((row) => row.name && Number.isFinite(row.totalPlayCount))
-            .sort((a, b) => b.totalPlayCount - a.totalPlayCount)
-            .slice(0, 10);
+        this.allSongs = parsed
+            .filter((song) =>
+                song.name &&
+                Number.isFinite(song.totalPlayCount) &&
+                Number.isFinite(song.year) &&
+                song.year >= 2020 &&
+                song.year <= 2025
+            )
+            .sort((a, b) => b.totalPlayCount - a.totalPlayCount);
+
+        this.availableYears = Array.from(new Set(this.allSongs.map((song) => song.year))).sort((a, b) => a - b);
+        if (this.availableYears.length === 0) {
+            this.availableYears = [2020, 2025];
+        }
+        this.yearBounds = [
+            Math.min(...this.availableYears),
+            Math.max(...this.availableYears)
+        ];
+
+        const defaultRange = [2020, 2025];
+        this.currentYearRange = [
+            Math.max(this.yearBounds[0], defaultRange[0]),
+            Math.min(this.yearBounds[1], defaultRange[1])
+        ];
+
+        this.updateDataForYearRange(this.currentYearRange, { skipSliderUpdate: true, animate: false });
 
         // Load song info data
         try {
@@ -124,27 +192,186 @@ export class RecordPlayerViz {
         }
 
         // Initialize audio cache but don't play until hovered/interacted
-        this.audioCache = new Map(); //map storing loaded music
-        // Don't preload and play all songs - only create when needed
+        this.audioCache = new Map();
+    }
 
-        this.totalRings = this.data.length;
+    getSongsForRange(range) {
+        if (!Array.isArray(range) || range.length < 2) return [];
+        const [startYear, endYear] = range;
+        return this.allSongs
+            .filter((song) => song.year >= startYear && song.year <= endYear)
+            .sort((a, b) => b.totalPlayCount - a.totalPlayCount)
+            .slice(0, 7);
+    }
+
+    updateDataForYearRange(range, { skipSliderUpdate = false, animate = true } = {}) {
+        if (!Array.isArray(range) || range.length < 2) return;
+        const sanitizedStart = Math.max(this.yearBounds[0], Math.min(range[0], range[1]));
+        const sanitizedEnd = Math.min(this.yearBounds[1], Math.max(range[0], range[1]));
+        this.currentYearRange = [sanitizedStart, sanitizedEnd];
+
+        this.data = this.getSongsForRange(this.currentYearRange);
+        this.totalRings = Math.max(this.data.length, 1);
+        this.setupScales();
+        this.renderRings({ animate });
+        this.bindRingEvents();
+        this.updateYearRangeLabel();
+        if (!skipSliderUpdate) {
+            this.updateYearSliderUI();
+        }
+
+        this.clearActiveRing({ preserveLocked: false });
+        this.stopSong(true);
+        this.resetSongInfo();
+        this.toggleNotes(false);
+        this.setHoverState(false);
+    }
+
+    initializeYearSlider() {
+        if (!this.yearSliderEl) return;
+
+        if (this.yearTicksEl) {
+            this.yearTicksEl.innerHTML = '';
+            const tickYears = [];
+            for (let year = this.yearBounds[0]; year <= this.yearBounds[1]; year += 1) {
+                tickYears.push(year);
+            }
+            tickYears.forEach((year) => {
+                const tick = document.createElement('span');
+                tick.textContent = year;
+                tick.dataset.yearTick = year.toString();
+                this.yearTicksEl.appendChild(tick);
+            });
+        }
+
+        const startHandler = (event) => this.handleSliderPointerDown(event, 'start');
+        const endHandler = (event) => this.handleSliderPointerDown(event, 'end');
+
+        this.yearStartHandle?.addEventListener('pointerdown', startHandler);
+        this.yearEndHandle?.addEventListener('pointerdown', endHandler);
+
+        this.updateYearSliderUI();
+        window.addEventListener('resize', this.handleResizeBound);
+    }
+
+    updateYearSliderUI() {
+        if (!this.yearSliderEl || !this.yearTrackEl) return;
+        const sliderRect = this.yearSliderEl.getBoundingClientRect();
+        const trackRect = this.yearTrackEl.getBoundingClientRect();
+        const trackWidth = trackRect.width || 1;
+        const offsetLeft = trackRect.left - sliderRect.left;
+        const [startYear, endYear] = this.currentYearRange;
+        const startRatio = this.yearToRatio(startYear);
+        const endRatio = this.yearToRatio(endYear);
+        const startPx = offsetLeft + trackWidth * startRatio;
+        const endPx = offsetLeft + trackWidth * endRatio;
+        const widthPx = Math.max(4, endPx - startPx);
+
+        if (this.yearSelectionEl) {
+            this.yearSelectionEl.style.left = `${startPx}px`;
+            this.yearSelectionEl.style.width = `${widthPx}px`;
+        }
+        if (this.yearStartHandle) {
+            this.yearStartHandle.style.left = `${startPx}px`;
+        }
+        if (this.yearEndHandle) {
+            this.yearEndHandle.style.left = `${endPx}px`;
+        }
+        this.updateYearRangeLabel();
+    }
+
+    yearToRatio(year) {
+        const span = Math.max(this.yearBounds[1] - this.yearBounds[0], 1);
+        return (year - this.yearBounds[0]) / span;
+    }
+
+    handleSliderPointerDown(event, handle) {
+        event.preventDefault();
+        this.sliderActiveHandle = handle;
+        this.yearSliderEl.classList.add('is-dragging');
+        window.addEventListener('pointermove', this.sliderPointerMoveHandler);
+        window.addEventListener('pointerup', this.sliderPointerUpHandler);
+        window.addEventListener('pointercancel', this.sliderPointerUpHandler);
+        this.handleSliderPointerMove(event);
+    }
+
+    handleSliderPointerMove(event) {
+        if (!this.sliderActiveHandle || !this.yearTrackEl) return;
+        const bounds = this.yearTrackEl.getBoundingClientRect();
+        const width = bounds.width || 1;
+        const ratio = (event.clientX - bounds.left) / bounds.width;
+        const clampedRatio = Math.min(1, Math.max(0, ratio || 0));
+        const rawYear = this.yearBounds[0] + clampedRatio * (this.yearBounds[1] - this.yearBounds[0]);
+        const snappedYear = Math.round(rawYear);
+        this.updateRangeFromHandle(this.sliderActiveHandle, snappedYear);
+    }
+
+    handleSliderPointerUp() {
+        this.sliderActiveHandle = null;
+        this.yearSliderEl?.classList.remove('is-dragging');
+        window.removeEventListener('pointermove', this.sliderPointerMoveHandler);
+        window.removeEventListener('pointerup', this.sliderPointerUpHandler);
+        window.removeEventListener('pointercancel', this.sliderPointerUpHandler);
+    }
+
+    updateRangeFromHandle(handle, year) {
+        const [startYear, endYear] = this.currentYearRange;
+        if (handle === 'start') {
+            if (year > endYear) {
+                this.sliderActiveHandle = 'end';
+                this.updateDataForYearRange([endYear, year]);
+                return;
+            }
+            if (year === startYear) {
+                this.updateYearSliderUI();
+                return;
+            }
+            const nextStart = Math.min(year, endYear);
+            this.updateDataForYearRange([nextStart, endYear]);
+        } else {
+            if (year < startYear) {
+                this.sliderActiveHandle = 'start';
+                this.updateDataForYearRange([year, startYear]);
+                return;
+            }
+            if (year === endYear) {
+                this.updateYearSliderUI();
+                return;
+            }
+            const nextEnd = Math.max(year, startYear);
+            this.updateDataForYearRange([startYear, nextEnd]);
+        }
+    }
+
+    updateYearRangeLabel() {
+        if (!this.currentYearRange) return;
+        const [startYear, endYear] = this.currentYearRange;
+        const labelText = `${startYear} – ${endYear}`;
+        if (this.yearRangeLabelEl) {
+            this.yearRangeLabelEl.textContent = labelText;
+        }
+        if (this.recordCenterLabelEl) {
+            this.recordCenterLabelEl.textContent = labelText.replace(' – ', '–');
+        }
     }
 
     setupScales() {
-        const ringStep = (OUTER_RADIUS - INNER_RADIUS) / this.data.length;
+        const ringCount = Math.max(this.data.length, 1);
+        const ringStep = (OUTER_RADIUS - INNER_RADIUS) / ringCount;
         this.radiusScale = (index) => OUTER_RADIUS - (index + 0.75) * ringStep;
-
         const maxAngle = 35;
         const minAngle = 10;
-        this.angleScale = d3.scaleLinear().domain([0, this.totalRings - 1]).range([minAngle, maxAngle]);
+        const domainEnd = Math.max(ringCount - 1, 1);
+        this.angleScale = d3.scaleLinear().domain([0, domainEnd]).range([minAngle, maxAngle]);
     }
 
-    renderRings() {
+    renderRings({ animate = false } = {}) {
         // reset timers/angles when rendering
         this.stopAllRingRotation();
         this.spinAngles.clear();
 
         const defs = this.ensureDefs();
+        const transition = animate ? d3.transition().duration(650).ease(d3.easeCubicOut) : null;
 
         const rings = this.ringsGroup
             .selectAll('.record-ring')
@@ -154,10 +381,17 @@ export class RecordPlayerViz {
             .append('g')
             .attr('class', 'record-ring')
             .attr('data-song-index', (_, i) => i)
-            .attr('transform', `translate(${CENTER}, ${CENTER})`);
+            .attr('transform', `translate(${CENTER}, ${CENTER})`)
+            .style('opacity', 0);
 
         ringsEnter.append('circle').attr('class', 'record-ring-arc');
         ringsEnter.append('text').attr('class', 'record-ring-label').append('textPath');
+
+        if (transition) {
+            ringsEnter.transition(transition).style('opacity', 1);
+        } else {
+            ringsEnter.style('opacity', 1);
+        }
 
         const ringsMerge = ringsEnter.merge(rings);
 
@@ -171,9 +405,15 @@ export class RecordPlayerViz {
                 const ringSel = d3.select(nodes[i]);
                 const arc = ringSel.select('.record-ring-arc');
 
-                arc
-                    .attr('r', radius)
-                    .attr('stroke-width', strokeWidth);
+                if (transition) {
+                    arc.transition(transition)
+                        .attr('r', radius)
+                        .attr('stroke-width', strokeWidth);
+                } else {
+                    arc
+                        .attr('r', radius)
+                        .attr('stroke-width', strokeWidth);
+                }
 
                 const labelRadius = Math.max(12, radius - strokeWidth * 0.35);
                 const sweep = Math.PI * 0.72;
@@ -203,7 +443,7 @@ export class RecordPlayerViz {
                     .attr('method', 'stretch')
                     .attr('dy', 0)
                     .classed('inner-label', isInner)
-                    .attr('textLength', isInner ? sweep * labelRadius * 1 : null)
+                    .attr('textLength', isInner ? sweep * labelRadius * 1.1 : null)
                     // .attr('textLength',  sweep * labelRadius * 1)
                     .text(() => {
                         const millions = d.totalPlayCount / 1_000_000;
@@ -215,7 +455,11 @@ export class RecordPlayerViz {
                 this.applyRingTransform(i);
             });
 
-        rings.exit().remove();
+        if (transition) {
+            rings.exit().transition(transition).style('opacity', 0).remove();
+        } else {
+            rings.exit().remove();
+        }
     }
 
     ensureDefs() {
@@ -227,17 +471,42 @@ export class RecordPlayerViz {
     }
 
     bindInteractions() {
-        const ringNodes = this.container.querySelectorAll('.record-ring');
-        const indicatorMax = this.container.querySelector('.record-indicator-line--max');
-        const showIndicator = () => indicatorMax?.classList.remove('is-hidden');
-        const hideIndicator = () => indicatorMax?.classList.add('is-hidden');
-        showIndicator();
+        this.indicatorMax = this.container.querySelector('.record-indicator-line--max');
+        this.discArea = this.container.querySelector('.record-disc-area');
+        if (this.discArea && !this.discArea.dataset.bound) {
+            this.discArea.dataset.bound = 'true';
+            this.discArea.addEventListener('mouseleave', () => {
+                this.stopAllRingRotation();
+                this.clearActiveRing({ preserveLocked: false });
+                this.stopSong(true);
+                this.resetSongInfo();
+                this.showIndicator();
+                this.setHoverState(false);
+            });
+        }
+        this.showIndicator();
+        this.bindRingEvents();
+    }
 
+    showIndicator() {
+        this.indicatorMax?.classList.remove('is-hidden');
+    }
+
+    hideIndicator() {
+        this.indicatorMax?.classList.add('is-hidden');
+    }
+
+    bindRingEvents() {
+        const ringNodes = this.container.querySelectorAll('.record-ring');
         ringNodes.forEach((ringEl) => {
+            if (ringEl.dataset.bound === 'true') return;
+            ringEl.dataset.bound = 'true';
+
             ringEl.addEventListener('mouseenter', () => {
                 const index = Number(ringEl.dataset.songIndex);
                 this.activateRing(index, { locked: false, source: 'hover' });
-                hideIndicator();
+                this.hideIndicator();
+                this.setHoverState(true);
             });
 
             ringEl.addEventListener('mouseleave', () => {
@@ -252,28 +521,17 @@ export class RecordPlayerViz {
                 if (this.lockedIndex === index) this.lockedIndex = null;
                 if (this.activeIndex === index) this.activeIndex = null;
                 this.stopSong(true);
-                // Reset song info display when hover ends
                 this.resetSongInfo();
+                this.setHoverState(false);
             });
 
             ringEl.addEventListener('click', () => {
                 const index = Number(ringEl.dataset.songIndex);
                 this.handleFirstGesture();
                 this.activateRing(index, { locked: true, source: 'click' });
-                hideIndicator();
+                this.hideIndicator();
             });
         });
-
-        const discArea = this.container.querySelector('.record-disc-area');
-        if (discArea) {
-            discArea.addEventListener('mouseleave', () => {
-                this.stopAllRingRotation();
-                this.clearActiveRing({ preserveLocked: false });
-                this.stopSong(true);
-                this.resetSongInfo();
-                showIndicator();
-            });
-        }
     }
 
     getRingSelection(index) {
@@ -361,6 +619,12 @@ export class RecordPlayerViz {
         ringSel.classed('is-active', locked || this.lockedIndex === index || !isHover);
 
         if (isHover) {
+            this.setHoverState(true);
+        } else if (!locked && this.lockedIndex !== index) {
+            this.setHoverState(false);
+        }
+
+        if (isHover) {
             this.startRingRotation(index);
         } else if (!locked && this.lockedIndex !== index) {
             this.stopRingRotation(index);
@@ -390,6 +654,7 @@ export class RecordPlayerViz {
             this.lockedIndex = null;
         }
         this.activeIndex = null;
+        this.setHoverState(false);
     }
 
     setTonearmToIndex(index, { silent = false } = {}) {
@@ -422,21 +687,17 @@ export class RecordPlayerViz {
         }
 
         if (this.songDescriptionEl) {
-            this.songDescriptionEl.textContent = info?.description || 'Hover over a ring to see song information';
+            const formattedPlays = formatPlayCount(song.totalPlayCount) || 'Unavailable';
+            const authorName = (song.author && song.author.trim()) || info?.musicAuthor || 'Unknown artist';
+            const playLine = `🎧 Play Count: ${formattedPlays}`;
+            const authorLine = `✨ Author: ${authorName}`;
+            this.songDescriptionEl.innerHTML = `${playLine}<br>${authorLine}`;
         }
 
         if (this.albumCoverEl) {
-            // Get album cover based on ring index (sorted by popularity)
-            // Index 0 = most popular (outermost ring), index 9 = least popular (innermost ring)
-            const albumCoverPath = this.shuffledAlbumCovers[index % this.shuffledAlbumCovers.length];
-
-            if (albumCoverPath) {
-                this.albumCoverEl.src = albumCoverPath;
-                this.albumCoverEl.alt = `${song.name} album cover`;
-            } else {
-                this.albumCoverEl.src = '';
-                this.albumCoverEl.alt = 'Album cover';
-            }
+            const albumCoverPath = this.getAlbumCoverUrl(song.coverUrl, index);
+            this.albumCoverEl.src = albumCoverPath;
+            this.albumCoverEl.alt = song.name ? `${song.name} album cover` : 'Album cover';
         }
     }
 
@@ -446,7 +707,7 @@ export class RecordPlayerViz {
         }
 
         if (this.songDescriptionEl) {
-            this.songDescriptionEl.textContent = 'Hover over a ring to see song information';
+            this.songDescriptionEl.innerHTML = '🎧 Play Count: —<br>✨ Author: —';
         }
 
         if (this.albumCoverEl) {
@@ -466,12 +727,15 @@ export class RecordPlayerViz {
         // Update song info display
         this.updateSongInfo(index);
 
-        let audio = this.audioCache.get(song.playUrl);
+        const resolvedUrl = this.normalizeDriveUrl(song.playUrl, { contentType: 'audio' });
+
+        let audio = this.audioCache.get(resolvedUrl);
         if (!audio) {
-            audio = new Audio(song.playUrl);
+            audio = new Audio(resolvedUrl);
             audio.loop = true;
             audio.preload = 'auto';
-            this.audioCache.set(song.playUrl, audio);
+            audio.crossOrigin = 'anonymous';
+            this.audioCache.set(resolvedUrl, audio);
         }
 
         audio.muted = this.isMuted;
@@ -559,6 +823,15 @@ export class RecordPlayerViz {
         }
     }
 
+    setHoverState(isHovering) {
+        if (!this.wrapperEl) return;
+        if (isHovering) {
+            this.wrapperEl.classList.add('is-hovering');
+        } else {
+            this.wrapperEl.classList.remove('is-hovering');
+        }
+    }
+
     mount() {
         this.mounted = true;
     }
@@ -568,6 +841,35 @@ export class RecordPlayerViz {
     destroy() {
         this.stopSong(true);
         this.stopAllRingRotation();
+        window.removeEventListener('resize', this.handleResizeBound);
+    }
+
+    getAlbumCoverUrl(rawUrl, index) {
+        const fallbackCover = this.shuffledAlbumCovers[index % this.shuffledAlbumCovers.length];
+        const candidate = rawUrl || fallbackCover || DEFAULT_ALBUM_COVER;
+        return this.normalizeDriveUrl(candidate, { contentType: 'image' });
+    }
+
+    normalizeDriveUrl(url, { contentType = 'audio' } = {}) {
+        if (!url) return '';
+        try {
+            const parsed = new URL(url, window.location.origin);
+            if (!parsed.hostname.includes('drive.google.com')) {
+                return url;
+            }
+            const fileIdMatch = parsed.pathname.match(/\/file\/d\/([^/]+)\//);
+            const idParam = parsed.searchParams.get('id');
+            const fileId = fileIdMatch?.[1] || idParam;
+            if (!fileId) {
+                return url;
+            }
+            if (contentType === 'image') {
+                return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+            }
+            return `https://drive.google.com/uc?export=download&id=${fileId}`;
+        } catch {
+            return url;
+        }
     }
 
     handleFirstGesture() {
@@ -634,3 +936,4 @@ export class RecordPlayerViz {
         }
     }
 }
+
