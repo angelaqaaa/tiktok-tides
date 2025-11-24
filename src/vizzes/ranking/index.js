@@ -19,6 +19,8 @@ export class RankingViz extends EventEmitter {
     this.svg = null;
     this.simulation = null;
     this.popup = null;
+
+    this.currentAudio = null;
   }
 
   async init(selector, options = {}) {
@@ -131,6 +133,11 @@ export class RankingViz extends EventEmitter {
 
     const width = 1000, height = 800;
 
+    const rectWidth = 200;
+    const rectHeight = 150;
+    const paddingX = 40;
+    const cornerRadius = 20;
+
     this.svg = d3.select(this.container)
       .append('svg')
       .attr('viewBox', `0 0 ${width} ${height}`)
@@ -153,12 +160,12 @@ export class RankingViz extends EventEmitter {
       .style('color', 'white')
       .style('z-index', 2000)
       .html(`
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-      <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="none"/>
-      <line x1="12" y1="10" x2="12" y2="16" stroke="white" stroke-width="2" />
-      <circle cx="12" cy="7" r="1.5" fill="white"/>
-    </svg>
-  `);
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+          <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="none"/>
+          <line x1="12" y1="10" x2="12" y2="16" stroke="white" stroke-width="2" />
+          <circle cx="12" cy="7" r="1.5" fill="white"/>
+        </svg>
+      `);
 
     let infoTooltipOpen = false;
 
@@ -177,21 +184,21 @@ export class RankingViz extends EventEmitter {
       .style('pointer-events', 'none')
       .style('transition', 'opacity 0.25s ease')
       .html(`
-    <div style="font-size: 15px; font-weight: 600; margin-bottom: 6px;">
-      About this visualization
-    </div>
-    <div style="font-size: 13px; line-height: 1.4;">
-      This ranking layout is inspired by the viral 
-      <b>Pyramid Ranking Trend</b> on TikTok.
-    </div>
-    <div style="margin-top: 10px;">
-      <a href="https://www.tiktok.com/discover/pyramid-ranking-trend" 
-         target="_blank" 
-         style="color: #0077ff; font-size: 13px; text-decoration: underline;">
-         View the original trend on TikTok →
-      </a>
-    </div>
-  `);
+        <div style="font-size: 15px; font-weight: 600; margin-bottom: 6px;">
+          About this visualization
+        </div>
+        <div style="font-size: 13px; line-height: 1.4;">
+          This ranking layout is inspired by the viral 
+          <b>Pyramid Ranking Trend</b> on TikTok.
+        </div>
+        <div style="margin-top: 10px;">
+          <a href="https://www.tiktok.com/discover/pyramid-ranking-trend"
+             target="_blank"
+             style="color: #0077ff; font-size: 13px; text-decoration: underline;">
+             View the original trend →
+          </a>
+        </div>
+      `);
 
     infoBtn.on('click', () => {
       infoTooltipOpen = !infoTooltipOpen;
@@ -202,7 +209,7 @@ export class RankingViz extends EventEmitter {
     });
 
     // --- Reset Button ---
-    const resetBtn = d3.select(this.container)
+    d3.select(this.container)
       .append('div')
       .attr('class', 'viz-reset-button')
       .style('position', 'absolute')
@@ -214,6 +221,7 @@ export class RankingViz extends EventEmitter {
       .style('border-radius', '10px')
       .style('cursor', 'pointer')
       .style('font-weight', 'bold')
+      .style('color', 'white')
       .style('z-index', 2000)
       .text('Reset')
       .on('click', () => this.animatedReset());
@@ -224,7 +232,7 @@ export class RankingViz extends EventEmitter {
         `translate(${width / 2}, ${height / 2}) translate(${-width / 2}, ${-height / 2})`
       );
 
-    const pyramidData = this.data.categories.map((d, i) => {
+    let pyramidData = this.data.categories.map((d, i) => {
       let row, column;
       if (i === 0) { row = 0; column = 0; }
       else if (i <= 2) { row = 1; column = i - 1; }
@@ -233,11 +241,6 @@ export class RankingViz extends EventEmitter {
       const y = 100 + row * rowSpacing;
       return { ...d, row, column, y, coverFallen: false };
     });
-
-    const rectWidth = 200;
-    const rectHeight = 150;
-    const paddingX = 40; // padding btn columns
-    const cornerRadius = 20;
 
     const columnXPositions = (row) => {
       switch (row) {
@@ -271,8 +274,10 @@ export class RankingViz extends EventEmitter {
       .enter()
       .append('g')
       .attr('class', 'page')
-      .attr('transform', d => `translate(${columnXPositions(d.row)[d.column]}, ${d.y})`)
-      .style('cursor', d => d.coverFallen ? 'pointer' : 'default');
+      .attr('transform', d => {
+        const x = columnXPositions(d.row)[d.column];
+        return `translate(${x}, ${d.y})`;
+      });
 
     // --- categories page ---
     const gifMap = {
@@ -284,16 +289,29 @@ export class RankingViz extends EventEmitter {
       "Food": "https://studentlife.dal.ca/article/2019/5-tips-for-your-next--or-first--meatless-monday/_jcr_content/root/maincontent/main/article-body/center/contentfragment/par17/image.coreimg.gif/1572312628676/veggie-food.gif"
     };
 
-    // create a clipPath for rounded corners (reusable)
-    const defss = this.svg.append("defs");
-
-    defss.append("clipPath")
+    const defs = this.svg.append("defs");
+    defs.append("clipPath")
       .attr("id", "roundedClip")
       .append("rect")
       .attr("width", rectWidth)
       .attr("height", rectHeight)
       .attr("rx", cornerRadius)
       .attr("ry", cornerRadius);
+
+    const glow = defs.append("filter")
+      .attr("id", "hoverGlow")
+      .attr("width", "300%")
+      .attr("height", "300%")
+      .attr("x", "-100%")
+      .attr("y", "-100%");
+
+    glow.append("feGaussianBlur").attr("stdDeviation", 6).attr("result", "blur1");
+    glow.append("feGaussianBlur").attr("stdDeviation", 14).attr("result", "blur2");
+
+    const merge = glow.append("feMerge");
+    merge.append("feMergeNode").attr("in", "blur1");
+    merge.append("feMergeNode").attr("in", "blur2");
+    merge.append("feMergeNode").attr("in", "SourceGraphic");
 
     pages.append("g")
       .attr("class", "page-bg")
@@ -321,42 +339,17 @@ export class RankingViz extends EventEmitter {
           .attr("fill", "white")
           .style("font-size", "30px")
           .style("font-weight", "bold")
-          // .style("text-shadow", "0 2px 5px rgba(0,0,0,0.5)")
           .text(d.category);
       });
 
-    const glow = defss.append("filter") // category glow
-      .attr("id", "hoverGlow")
-      .attr("width", "300%")
-      .attr("height", "300%")
-      .attr("x", "-100%")
-      .attr("y", "-100%");
-
-    glow.append("feGaussianBlur")
-      .attr("stdDeviation", 6)
-      .attr("result", "blur1");
-
-    glow.append("feGaussianBlur")
-      .attr("stdDeviation", 14)
-      .attr("result", "blur2");
-
-    const merge = glow.append("feMerge");
-    merge.append("feMergeNode").attr("in", "blur1");
-    merge.append("feMergeNode").attr("in", "blur2");
-    merge.append("feMergeNode").attr("in", "SourceGraphic");
-
-    // --- cover page ---
-    const defs = this.svg.append('defs');
-
-    //  paper gradient 
-    const gradient = defs.append('linearGradient')
+    const paperGrad = defs.append('linearGradient')
       .attr('id', 'paperGradient')
       .attr('x1', '0%')
       .attr('y1', '0%')
       .attr('x2', '100%')
       .attr('y2', '100%');
 
-    gradient.selectAll('stop')
+    paperGrad.selectAll('stop')
       .data([
         { offset: '0%', color: '#ffffff' },
         { offset: '100%', color: '#d5cfbd' }
@@ -421,252 +414,205 @@ export class RankingViz extends EventEmitter {
       .attr('transform', d => {
         const angle = (Math.random() * 10 - 5).toFixed(1);
         return `rotate(${angle}, ${rectWidth / 2}, 0)`;
-      })
-      .style('pointer-events', 'none');
-
-    // drop cover (on hover)
-    const fallenPages = new Set();
-    let nextToFallIndex = 0;
-
-    const fallOrder = new Map(
-      pyramidData.map((d, i) => [d.category, i])
-    );
-
-    let isAudioPlaying = false;
-
-    pages.on('mouseenter', function (event, d) {
-      if (isAudioPlaying) return;
-
-      const bg = d3.select(this).select('.page-bg'); // category glow
-
-      bg
-        .style('filter', 'url(#hoverGlow)')
-        .transition()
-        .duration(350)
-        .style('opacity', 1)
-        .transition()
-        .duration(300)
-        .style('filter', 'url(#hoverGlow) brightness(1.2)');
-
-      bg.select('rect:last-of-type')
-        .transition()
-        .duration(300)
-        .style('fill', 'rgba(0,0,0,0.2)');
-
-      const cover = d3.select(this).select('.cover-group');
-
-      d3.select(this).select('rect')
-        .transition()
-        .duration(300)
-        .style('filter', 'brightness(1.5)');
-
-      if (!d.coverFallen) {
-        d3.select(this).select('.cover-group text')
-          .transition()
-          .duration(300)
-          .style('fill', '#999999');
-      }
-      const expectedIndex = nextToFallIndex;
-      const thisIndex = fallOrder.get(d.category);
-
-      if (thisIndex !== expectedIndex) return;
-
-      const scaleUp = 1.1;
-      const originX = rectWidth / 2, originY = 0;
-
-      cover.transition()
-        .duration(300)
-        .ease(d3.easeCubicOut)
-        .attr('transform', `scale(${scaleUp}) translate(${originX * (1 - scaleUp) / scaleUp}, ${originY * (1 - scaleUp) / scaleUp})`);
-
-      fallenPages.add(d.category);
-      nextToFallIndex++;
-
-      const fallOffset = 50;
-      const baseOfPyramid = 100 + 2 * 200 + rectHeight;
-      const groundY = baseOfPyramid + fallOffset;
-      const delayArray = [1000, 1000, 1100, 2000, 2000, 6000];
-      const delayTime = delayArray[expectedIndex] || 1000;
-      const audioPath = `/assets/audio/ranking${expectedIndex}.mp3`;
-      const fallAudio = new Audio(audioPath);
-
-      fallAudio.volume = 1;
-
-      isAudioPlaying = true;
-
-      fallAudio.addEventListener('ended', () => {
-        isAudioPlaying = false;
       });
 
-      fallAudio.addEventListener('loadedmetadata', () => {
-        setTimeout(() => {
-          const randomTilt = Math.random() * 40 - 20;
-          const randomXShift = Math.random() * 80 - 40;
-          const randomBounce = 1 + Math.random() * 0.05;
-
-          cover.transition()
-            .duration(400 + Math.random() * 400) // some fall slower
-            .ease(d3.easeCubicIn)
-            .attr('transform', `
-                  translate(${randomXShift}, ${groundY - d.y})
-                  rotate(${randomTilt}, ${rectWidth / 2}, ${rectHeight / 2})
-                  scale(${randomBounce}, 0.6)
-              `);
-          d.coverFallen = true;
-          d3.select(this).style('cursor', 'pointer');
-
-        }, delayTime);
-
-        fallAudio.play().catch(error => {
-          console.error('Error playing audio:', error);
-        });
-
-        const fadeOutStartTime = fallAudio.duration - 500 / 1000;
-
-        setTimeout(() => {
-          const fadeOutInterval = setInterval(() => {
-            if (fallAudio.volume > 0) {
-              fallAudio.volume = Math.max(0, fallAudio.volume - 0.05); // clamp to 0
-            } else {
-              fallAudio.volume = 0;
-              clearInterval(fadeOutInterval);
-            }
-          }, 50);
-        }, fadeOutStartTime * 1000);
-      });
-
-      fallAudio.onerror = (error) => {
-        console.error('Error playing audio:', error);
-      };
-    });
-
-    pages.on('mouseleave', function (event, d) { // reset hover effects
-      const bg = d3.select(this).select('.page-bg'); // category glow
-
-      bg
-        .transition()
-        .duration(300)
-        .style('filter', 'none')
-        .style('opacity', 1);  // reset
-
-      bg.select('rect:last-of-type')
-        .transition()
-        .duration(250)
-        .style('fill', 'rgba(0,0,0,0.20)');
-
-      d3.select(this).select('rect') // page brightness
-        .transition()
-        .duration(300)
-        .style('filter', 'brightness(1)');
-
-      d3.select(this).select('.cover-group text') // cover rank text brightness
-        .transition()
-        .duration(300)
-        .style('fill', 'black');
-    });
-
-    // --- popup ---
     pages.on('click', (event, d) => {
-      event.stopPropagation();
-
-      if (!d.coverFallen) return;  // prevent popup if cover is still on top
-
-      if (this.popup) {
-        this.popup.remove();
-        d3.select(this.container).select('.overlay').remove();
-        this.popup = null;
-        window.removeEventListener('resize', this._popupResizeHandler);
-      }
-
-      // overlay
-      const overlay = d3.select(this.container)
-        .append('div')
-        .attr('class', 'overlay')
-        .style('position', 'absolute')
-        .style('top', 0)
-        .style('left', 0)
-        .style('width', '100%')
-        .style('height', '100%')
-        .style('background', 'rgba(0,0,0,0.3)')
-        .style('backdrop-filter', 'blur(0px)')
-        .style('z-index', 999)
-        .style('opacity', 0)
-        .style('transition', 'opacity 0.4s ease-out, backdrop-filter 0.4s ease-out');
-
-      setTimeout(() => {
-        overlay
-          .style('opacity', 1)
-          .style('backdrop-filter', 'blur(5px)');
-      }, 10);
-
-      // calculate dynamic size
-      const getPopupSize = () => ({
-        width: Math.min(window.innerWidth * 0.8, 700),
-        height: Math.min(window.innerHeight * 0.8, 500)
+      if (!d.coverFallen) return;
+      this.openPopup(d);
+    })
+      .on("mouseover", function (event, d) {
+        if (d.coverFallen) {
+          const bg = d3.select(this).select(".page-bg");
+          bg.style("filter", "url(#hoverGlow)");
+          d3.select(this).style("cursor", "pointer");
+        } else {
+          d3.select(this).style("cursor", "default");
+        }
+      })
+      .on("mouseout", function () {
+        const bg = d3.select(this).select(".page-bg");
+        bg.style("filter", "none");
+        d3.select(this).style("cursor", "default");
       });
 
-      const { width, height } = getPopupSize();
+    this.startAutomaticFalling(pages, pyramidData, rectWidth, rectHeight);
 
-      // popup
-      this.popup = d3.select(this.container)
-        .append('div')
-        .attr('class', 'bubble-popup')
-        .style('position', 'absolute')
-        .style('top', '50%')
-        .style('left', '50%')
-        .style('transform', 'translate(-50%, -50%) scale(0.7)')
-        .style('opacity', 0)
-        .style('background', 'white')
-        .style('border-radius', '30px')
-        // .style('padding', '16px')   -- makes sure gif svg fits exactly
-        .style('z-index', 1000)
-        .style('width', width + 'px')
-        .style('height', height + 'px')
-        .style('transition', 'transform 0.4s ease-out, opacity 0.4s ease-out, width 0.3s ease, height 0.3s ease');
+  }
 
-      setTimeout(() => {
-        this.popup
-          .style('transform', 'translate(-50%, -50%) scale(1)')
-          .style('opacity', 1);
-      }, 10);
+  startAutomaticFalling(pages, pyramidData, rectWidth, rectHeight) {
+    const delayArray = [1000, 1000, 1100, 2000, 2000, 6000];
+    let index = 0;
 
-      new RankingBubbleChart(
-        this.popup.node(),
-        d.category,
-        d.color,
-        gifMap[d.category] || '',
-        { maxAuthors: 18 }
+    const fallNext = () => {
+      if (index >= pyramidData.length) return;
+
+      const d = pyramidData[index];
+      const page = pages.filter(p => p === d).nodes()[0];
+
+      const audio = this.triggerFall(
+        d3.select(page),
+        d,
+        index,
+        rectWidth,
+        rectHeight,
+        delayArray[index] || 0
       );
 
-      // --- window resize ---
-      this._popupResizeHandler = () => {
-        if (!this.popup) return;
-        const { width, height } = getPopupSize();
-        this.popup
-          .style('width', width + 'px')
-          .style('height', height + 'px');
-      };
-      window.addEventListener('resize', this._popupResizeHandler);
-
-      // close popup (when clicking outside)
-      overlay.on('click', () => {
-        this.popup
-          .style('transform', 'translate(-50%, -50%) scale(0.7)')
-          .style('opacity', 0);
-
-        overlay
-          .style('opacity', 0)
-          .style('backdrop-filter', 'blur(0px)');
-
+      audio.onended = () => {
         setTimeout(() => {
-          if (this.popup) {
-            this.popup.remove();
-            this.popup = null;
-            window.removeEventListener('resize', this._popupResizeHandler);
-          }
-          overlay.remove();
-        }, 400);
-      });
+          index++;
+          fallNext();
+        }, 1000);
+      };
+    };
+
+    setTimeout(fallNext, 800);
+  }
+
+  triggerFall(pageSel, d, index, rectWidth, rectHeight, fallDelay = 0) {
+    const cover = pageSel.select('.cover-group');
+    const baseOfPyramid = 100 + 2 * 200 + rectHeight;
+    const groundY = baseOfPyramid + 50;
+
+    const audioPath = `/assets/audio/ranking${index}.mp3`;
+    const audio = new Audio(audioPath);
+    this.currentAudio = audio;
+    audio.volume = 1;
+
+    // schedule fall after fallDelay
+    setTimeout(() => {
+      const randomTilt = Math.random() * 40 - 20;
+      const randomXShift = Math.random() * 80 - 40;
+      const randomBounce = 1 + Math.random() * 0.05;
+
+      cover.transition()
+        .duration(400 + Math.random() * 400)
+        .ease(d3.easeCubicIn)
+        .attr('transform', `
+        translate(${randomXShift}, ${groundY - d.y})
+        rotate(${randomTilt}, ${rectWidth / 2}, ${rectHeight / 2})
+        scale(${randomBounce}, 0.6)
+      `);
+
+      d.coverFallen = true;
+    }, fallDelay);
+
+    // Audio fade-out
+    audio.addEventListener('timeupdate', () => {
+      const fadeStart = audio.duration - 0.5;
+      if (audio.currentTime >= fadeStart && audio.volume > 0) {
+        audio.volume = Math.max(0, audio.volume - 0.05);
+      }
+    });
+
+    audio.play().catch(err => console.error('Audio error:', err));
+
+    return audio;
+  }
+
+  openPopup(d) {
+    const gifMap = {
+      "Pets": "https://hips.hearstapps.com/toc.h-cdn.co/assets/16/23/640x320/landscape-1465404255-tc-060816-dog-breeds.gif?resize=640:*",
+      "Fitness": "https://cdn.prod.website-files.com/66c501d753ae2a8c705375b6/67ed6a2da06e77b57e4fd380_Chest-Press-Throw.gif",
+      "Music": "https://cdn.merriammusic.com/2015/07/5CuqBlN.gif",
+      "Art": "https://images.squarespace-cdn.com/content/v1/54ecfc32e4b0866fef096797/1627925527930-83LG5C1EZEV3BZGMJU9R/Angled+Stroke+3.gif",
+      "Tech": "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3b2t2tGN1MTJsNjFsd2pzOGt5M3d4OHAxeW94Zjhkendob3Bwd3RzdCZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/WTcJBZROKjmSf5prBl/giphy.gif",
+      "Food": "https://studentlife.dal.ca/article/2019/5-tips-for-your-next--or-first--meatless-monday/_jcr_content/root/maincontent/main/article-body/center/contentfragment/par17/image.coreimg.gif/1572312628676/veggie-food.gif"
+    };
+
+    if (this.popup) {
+      this.popup.remove();
+      this.popup = null;
+    }
+
+    // overlay
+    const overlay = d3.select(this.container)
+      .append('div')
+      .attr('class', 'overlay')
+      .style('position', 'absolute')
+      .style('top', 0)
+      .style('left', 0)
+      .style('width', '100%')
+      .style('height', '100%')
+      .style('background', 'rgba(0,0,0,0.3)')
+      .style('backdrop-filter', 'blur(0px)')
+      .style('z-index', 999)
+      .style('opacity', 0)
+      .style('transition', 'opacity 0.4s ease-out, backdrop-filter 0.4s ease-out');
+
+    setTimeout(() => {
+      overlay
+        .style('opacity', 1)
+        .style('backdrop-filter', 'blur(5px)');
+    }, 10);
+
+    // calculate dynamic size
+    const getPopupSize = () => ({
+      width: Math.min(window.innerWidth * 0.8, 700),
+      height: Math.min(window.innerHeight * 0.8, 500)
+    });
+
+    const { width, height } = getPopupSize();
+
+    // popup
+    this.popup = d3.select(this.container)
+      .append('div')
+      .attr('class', 'bubble-popup')
+      .style('position', 'absolute')
+      .style('top', '50%')
+      .style('left', '50%')
+      .style('transform', 'translate(-50%, -50%) scale(0.7)')
+      .style('opacity', 0)
+      .style('background', 'white')
+      .style('border-radius', '30px')
+      // .style('padding', '16px')   -- makes sure gif svg fits exactly
+      .style('z-index', 1000)
+      .style('width', width + 'px')
+      .style('height', height + 'px')
+      .style('transition', 'transform 0.4s ease-out, opacity 0.4s ease-out, width 0.3s ease, height 0.3s ease');
+
+    setTimeout(() => {
+      this.popup
+        .style('transform', 'translate(-50%, -50%) scale(1)')
+        .style('opacity', 1);
+    }, 10);
+
+    new RankingBubbleChart(
+      this.popup.node(),
+      d.category,
+      d.color,
+      gifMap[d.category] || '',
+      { maxAuthors: 18 }
+    );
+
+    // --- window resize ---
+    this._popupResizeHandler = () => {
+      if (!this.popup) return;
+      const { width, height } = getPopupSize();
+      this.popup
+        .style('width', width + 'px')
+        .style('height', height + 'px');
+    };
+    window.addEventListener('resize', this._popupResizeHandler);
+
+    // close popup (when clicking outside)
+    overlay.on('click', () => {
+      this.popup
+        .style('transform', 'translate(-50%, -50%) scale(0.7)')
+        .style('opacity', 0);
+
+      overlay
+        .style('opacity', 0)
+        .style('backdrop-filter', 'blur(0px)');
+
+      setTimeout(() => {
+        if (this.popup) {
+          this.popup.remove();
+          this.popup = null;
+          window.removeEventListener('resize', this._popupResizeHandler);
+        }
+        overlay.remove();
+      }, 400);
     });
   }
 
@@ -678,10 +624,6 @@ export class RankingViz extends EventEmitter {
     pages.each(function () {
       const page = d3.select(this);
       const cover = page.select('.cover-group');
-
-      // original position
-      const ox = +page.attr('data-ox');
-      const oy = +page.attr('data-oy');
 
       cover
         .transition()
@@ -702,7 +644,6 @@ export class RankingViz extends EventEmitter {
     this.resetVizHard();
   }
 
-
   resetVizHard() {
     // kill popup
     if (this.popup) {
@@ -713,8 +654,10 @@ export class RankingViz extends EventEmitter {
 
     // stop audio
     if (this.currentAudio) {
-      this.currentAudio.pause();
-      this.currentAudio.currentTime = 0;
+      try {
+        this.currentAudio.pause();
+        this.currentAudio.currentTime = 0;
+      } catch (e) { }
     }
 
     // clear viz
