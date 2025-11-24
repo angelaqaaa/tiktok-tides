@@ -20,6 +20,7 @@ export class PlanetViz extends EventEmitter {
     this.tooltip = null;
     this.animationRunning = true;
     this.startTime = Date.now();
+    this.previousPlanetsData = null;
   }
 
   async init(selector, options = {}) {
@@ -51,9 +52,6 @@ export class PlanetViz extends EventEmitter {
         '2021': this.processData(data2021),
         '2022': this.processData(data2022)
       };
-      
-      // Calculate artist appearances across years
-      this.calculateArtistPersistence();
     } catch (error) {
       console.error('Error loading CSV data:', error);
       throw error;
@@ -90,18 +88,6 @@ export class PlanetViz extends EventEmitter {
       avgEnergy: d3.mean(artist.energies),
       songs: artist.songs
     }));
-  }
-
-  calculateArtistPersistence() {
-    // Count how many years each artist appears in
-    this.artistYearCount = new Map();
-    
-    Object.keys(this.data).forEach(year => {
-      this.data[year].forEach(artist => {
-        const count = this.artistYearCount.get(artist.name) || 0;
-        this.artistYearCount.set(artist.name, count + 1);
-      });
-    });
   }
 
   danceabilityToColor(danceability) {
@@ -207,7 +193,6 @@ export class PlanetViz extends EventEmitter {
       .attr('aria-label', 'Planet system visualization showing artists as gravitational centers');
 
     this.svg.append('g').attr('id', 'orbits');
-    this.svg.append('g').attr('id', 'planet-rings');
     this.svg.append('g').attr('id', 'planets');
 
     const defs = this.svg.append('defs');
@@ -285,6 +270,9 @@ export class PlanetViz extends EventEmitter {
     // Sort planets by size (songCount) so larger planets render first (in back)
     const sortedPlanetsData = [...planetsData].sort((a, b) => b.songCount - a.songCount);
 
+    // Store reference to previous year's data for smooth transitions
+    const previousData = this.previousPlanetsData;
+
     const orbits = this.svg.select('#orbits')
       .selectAll('.planet-orbit')
       .data(planetsData, d => d.name);
@@ -310,58 +298,6 @@ export class PlanetViz extends EventEmitter {
       .attr('r', 0)
       .remove();
 
-    // Add rings for artists that appear in multiple years
-    const rings = this.svg.select('#planet-rings')
-      .selectAll('.planet-ring-group')
-      .data(sortedPlanetsData.filter(d => this.artistYearCount.get(d.name) > 1), d => d.name);
-
-    const ringsEnter = rings.enter()
-      .append('g')
-      .attr('class', 'planet-ring-group');
-
-    const yearCount = d => this.artistYearCount.get(d.name);
-    
-    ringsEnter.each(function(d) {
-      const group = d3.select(this);
-      const numRings = yearCount(d);
-      
-      // Create multiple rings based on year count
-      for (let i = 0; i < numRings; i++) {
-        group.append('ellipse')
-          .attr('class', `planet-ring ring-${i}`)
-          .attr('rx', 0)
-          .attr('ry', 0)
-          .attr('fill', 'none')
-          .attr('stroke', '#FFD700')
-          .attr('stroke-width', 1.5)
-          .attr('opacity', 0.6 - (i * 0.15));
-      }
-    });
-
-    const allRings = ringsEnter.merge(rings);
-    
-    allRings.attr('transform', d => `translate(${d.x}, ${d.y})`);
-    
-    allRings.each(function(d) {
-      const group = d3.select(this);
-      const planetRadius = sizeScale(d.songCount);
-      const numRings = yearCount(d);
-      
-      group.selectAll('.planet-ring').each(function(_, i) {
-        d3.select(this)
-          .transition()
-          .duration(1000)
-          .attr('rx', planetRadius + 8 + (i * 5))
-          .attr('ry', (planetRadius + 8 + (i * 5)) * 0.3);
-      });
-    });
-
-    rings.exit()
-      .transition()
-      .duration(500)
-      .style('opacity', 0)
-      .remove();
-
     const planets = this.svg.select('#planets')
       .selectAll('.planet')
       .data(sortedPlanetsData, d => d.name);
@@ -372,12 +308,40 @@ export class PlanetViz extends EventEmitter {
     const planetsEnter = planets.enter()
       .append('circle')
       .attr('class', 'planet')
-      .attr('cx', centerX)
-      .attr('cy', centerY)
-      .attr('r', 0)
+      .attr('cx', d => {
+        // Check if planet existed in previous year
+        if (previousData) {
+          const prevPlanet = previousData.find(p => p.name === d.name);
+          if (prevPlanet) return prevPlanet.x;
+        }
+        return centerX;
+      })
+      .attr('cy', d => {
+        if (previousData) {
+          const prevPlanet = previousData.find(p => p.name === d.name);
+          if (prevPlanet) return prevPlanet.y;
+        }
+        return centerY;
+      })
+      .attr('r', d => {
+        // Start with previous size if planet existed before
+        if (previousData) {
+          const prevPlanet = previousData.find(p => p.name === d.name);
+          if (prevPlanet) return sizeScale(prevPlanet.songCount);
+        }
+        return 0;
+      })
       .attr('fill', d => this.danceabilityToColor(d.avgDanceability))
       .attr('stroke', '#fff')
-      .attr('stroke-width', 2);
+      .attr('stroke-width', 2)
+      .attr('opacity', d => {
+        // Returning planets start visible, new planets fade in
+        if (previousData) {
+          const prevPlanet = previousData.find(p => p.name === d.name);
+          if (prevPlanet) return 1;
+        }
+        return 0;
+      });
 
     // Merge enter and update selections, then set up event handlers
     const allPlanets = planetsEnter.merge(planets)
@@ -398,14 +362,12 @@ export class PlanetViz extends EventEmitter {
           .style('opacity', 1);
       })
       .on('mousemove', function(event, d) {
-        const yearsOnChart = self.artistYearCount.get(d.name);
         tooltip
           .html(`
             <strong>${d.name}</strong>
             <div>Songs: ${d.songCount}</div>
             <div>Avg Danceability: ${d.avgDanceability.toFixed(2)}</div>
             <div>Avg Energy: ${d.avgEnergy.toFixed(2)}</div>
-            ${yearsOnChart > 1 ? `<div style="color: #FFD700;">⭐ ${yearsOnChart} years on chart</div>` : ''}
             <div style="margin-top: 5px; font-size: 0.8rem; color: #aaa;">
               ${d.songs.slice(0, 3).join(', ')}${d.songs.length > 3 ? '...' : ''}
             </div>
@@ -438,15 +400,23 @@ export class PlanetViz extends EventEmitter {
       .attr('cx', d => d.x)
       .attr('cy', d => d.y)
       .attr('r', d => sizeScale(d.songCount))
-      .attr('fill', d => this.danceabilityToColor(d.avgDanceability));
+      .attr('fill', d => this.danceabilityToColor(d.avgDanceability))
+      .attr('opacity', 1);
 
     planets.exit()
       .transition()
       .duration(500)
+      .attr('opacity', 0)
       .attr('r', 0)
-      .attr('cx', centerX)
-      .attr('cy', centerY)
       .remove();
+
+    // Store current planets data for next year transition
+    this.previousPlanetsData = sortedPlanetsData.map(d => ({
+      name: d.name,
+      x: d.x,
+      y: d.y,
+      songCount: d.songCount
+    }));
 
     if (this.animationRunning && !this.options.reducedMotion) {
       this.animatePlanets(sortedPlanetsData, centerX, centerY, sizeScale);
@@ -469,17 +439,6 @@ export class PlanetViz extends EventEmitter {
         .attr('cy', d => {
           const angle = d.baseAngle + (elapsed * d.orbitalSpeed);
           return centerY + d.distance * Math.sin(angle);
-        });
-
-      // Animate rings with planets
-      this.svg.select('#planet-rings')
-        .selectAll('.planet-ring-group')
-        .data(planetsData.filter(d => this.artistYearCount.get(d.name) > 1), d => d.name)
-        .attr('transform', d => {
-          const angle = d.baseAngle + (elapsed * d.orbitalSpeed);
-          const x = centerX + d.distance * Math.cos(angle);
-          const y = centerY + d.distance * Math.sin(angle);
-          return `translate(${x}, ${y})`;
         });
 
       requestAnimationFrame(animate);
