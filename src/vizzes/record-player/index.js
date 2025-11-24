@@ -727,15 +727,13 @@ export class RecordPlayerViz {
         // Update song info display
         this.updateSongInfo(index);
 
-        const resolvedUrl = this.normalizeDriveUrl(song.playUrl, { contentType: 'audio' });
-
-        let audio = this.audioCache.get(resolvedUrl);
+        let audio = this.audioCache.get(song.playUrl);
         if (!audio) {
-            audio = new Audio(resolvedUrl);
+            audio = new Audio(song.playUrl);
             audio.loop = true;
             audio.preload = 'auto';
             audio.crossOrigin = 'anonymous';
-            this.audioCache.set(resolvedUrl, audio);
+            this.audioCache.set(song.playUrl, audio);
         }
 
         audio.muted = this.isMuted;
@@ -847,29 +845,7 @@ export class RecordPlayerViz {
     getAlbumCoverUrl(rawUrl, index) {
         const fallbackCover = this.shuffledAlbumCovers[index % this.shuffledAlbumCovers.length];
         const candidate = rawUrl || fallbackCover || DEFAULT_ALBUM_COVER;
-        return this.normalizeDriveUrl(candidate, { contentType: 'image' });
-    }
-
-    normalizeDriveUrl(url, { contentType = 'audio' } = {}) {
-        if (!url) return '';
-        try {
-            const parsed = new URL(url, window.location.origin);
-            if (!parsed.hostname.includes('drive.google.com')) {
-                return url;
-            }
-            const fileIdMatch = parsed.pathname.match(/\/file\/d\/([^/]+)\//);
-            const idParam = parsed.searchParams.get('id');
-            const fileId = fileIdMatch?.[1] || idParam;
-            if (!fileId) {
-                return url;
-            }
-            if (contentType === 'image') {
-                return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
-            }
-            return `https://drive.google.com/uc?export=download&id=${fileId}`;
-        } catch {
-            return url;
-        }
+        return candidate;
     }
 
     handleFirstGesture() {
