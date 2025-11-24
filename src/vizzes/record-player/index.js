@@ -444,11 +444,10 @@ export class RecordPlayerViz {
                     .attr('dy', 0)
                     .classed('inner-label', isInner)
                     .attr('textLength', isInner ? sweep * labelRadius * 1.1 : null)
-                    // .attr('textLength',  sweep * labelRadius * 1)
                     .text(() => {
                         const millions = d.totalPlayCount / 1_000_000;
                         const metric = millions >= 100 ? Math.round(millions) : millions.toFixed(1);
-                        return `🎵 ${d.name} • ${metric}M`;
+                        return `${d.name} • ${metric}M`;
                     });
 
                 this.spinAngles.set(i, this.spinAngles.get(i) ?? 0);
@@ -683,7 +682,11 @@ export class RecordPlayerViz {
         const info = this.songInfo.find(si => si.name === song.name);
 
         if (this.songTitleEl) {
-            this.songTitleEl.textContent = song.name || 'No song selected';
+            if (song.name) {
+                this.songTitleEl.innerHTML = `<span class="music-icon">♪</span> ${song.name}`;
+            } else {
+                this.songTitleEl.textContent = 'No song selected';
+            }
         }
 
         if (this.songDescriptionEl) {
