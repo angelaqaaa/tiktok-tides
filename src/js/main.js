@@ -13,16 +13,37 @@ import { ConveyorViz } from '../vizzes/conveyor/index.js';
 import { initMicroInteractions } from './micro-interactions.js';
 import { installIllustrations } from '../illustrations/index.js';
 
-// Scene mapping for semantic worlds (updated for redesign)
+// Scene mapping for semantic worlds (v3 spec - 8 scenes)
 const SCENE_MAP = {
+  // V3 scene IDs
+  '#scene-hero': 'cosmos',
+  '#scene-music-galaxy': 'orbit',
+  '#scene-viral-sounds': 'orbit',
+  '#scene-timing': 'dawn',
+  '#scene-trend-pyramid': 'forest',
+  '#scene-captions-emotion': 'air',
+  '#scene-quiz': 'lab',
+  '#scene-wrap-up': 'cosmos',
+  // Legacy IDs (for backwards compatibility during transition)
   '#scene-landing': 'cosmos',
   '#scene-sound-universe': 'orbit',
   '#scene-top-sounds': 'orbit',
   '#scene-duration': 'dawn',
   '#scene-category': 'forest',
   '#scene-emotion': 'air',
-  '#scene-quiz': 'lab',
   '#scene-summary': 'cosmos'
+};
+
+// Node positions for alien marker on map canvas (using legacy section IDs)
+const NODE_POSITIONS = {
+  'scene-landing': { x: '30%', y: '8%' },
+  'scene-sound-universe': { x: '58%', y: '15%' },
+  'scene-top-sounds': { x: '78%', y: '28%' },
+  'scene-duration': { x: '72%', y: '45%' },
+  'scene-category': { x: '58%', y: '60%' },
+  'scene-emotion': { x: '42%', y: '72%' },
+  'scene-quiz': { x: '28%', y: '82%' },
+  'scene-summary': { x: '50%', y: '90%' }
 };
 
 // Scene names for keyboard shortcuts
@@ -123,16 +144,25 @@ class TikTokTidesApp {
     this.liveRegion = document.querySelector('[role="status"]');
     this.audioMuted = true;
 
-    // Section metadata for transitions
+    // Section metadata for transitions (v3 spec)
     this.sectionMeta = {
-      'scene-landing': { bg: 'bg-cosmos', name: 'Welcome', scene: 'landing' },
-      'scene-sound-universe': { bg: 'bg-orbit', name: 'Sound Universe', scene: 'sound' },
-      'scene-top-sounds': { bg: 'bg-orbit', name: 'Top Sounds', scene: 'sound' },
-      'scene-duration': { bg: 'bg-dawn', name: 'Duration', scene: 'duration' },
-      'scene-category': { bg: 'bg-forest', name: 'Category', scene: 'category' },
-      'scene-emotion': { bg: 'bg-air', name: 'Emotion', scene: 'emotion' },
-      'scene-quiz': { bg: 'bg-lab', name: 'Quiz', scene: 'quiz' },
-      'scene-summary': { bg: 'bg-cosmos', name: 'Summary', scene: 'summary' }
+      // V3 scene IDs
+      'scene-hero': { bg: 'bg-cosmos', name: 'Arrival', scene: 'hero', nodeNum: 1 },
+      'scene-music-galaxy': { bg: 'bg-orbit', name: 'Music Galaxy', scene: 'music-galaxy', nodeNum: 2 },
+      'scene-viral-sounds': { bg: 'bg-orbit', name: 'Viral Sounds', scene: 'viral-sounds', nodeNum: 3 },
+      'scene-timing': { bg: 'bg-dawn', name: 'Timing', scene: 'timing', nodeNum: 4 },
+      'scene-trend-pyramid': { bg: 'bg-forest', name: 'Trend Pyramid', scene: 'trend-pyramid', nodeNum: 5 },
+      'scene-captions-emotion': { bg: 'bg-air', name: 'Captions & Emotion', scene: 'captions-emotion', nodeNum: 6 },
+      'scene-quiz': { bg: 'bg-lab', name: 'Quiz', scene: 'quiz', nodeNum: 7 },
+      'scene-wrap-up': { bg: 'bg-cosmos', name: 'Wrap-up', scene: 'wrap-up', nodeNum: 8 },
+      // Legacy IDs (for backwards compatibility)
+      'scene-landing': { bg: 'bg-cosmos', name: 'Welcome', scene: 'hero', nodeNum: 1 },
+      'scene-sound-universe': { bg: 'bg-orbit', name: 'Sound Universe', scene: 'music-galaxy', nodeNum: 2 },
+      'scene-top-sounds': { bg: 'bg-orbit', name: 'Top Sounds', scene: 'viral-sounds', nodeNum: 3 },
+      'scene-duration': { bg: 'bg-dawn', name: 'Duration', scene: 'timing', nodeNum: 4 },
+      'scene-category': { bg: 'bg-forest', name: 'Category', scene: 'trend-pyramid', nodeNum: 5 },
+      'scene-emotion': { bg: 'bg-air', name: 'Emotion', scene: 'captions-emotion', nodeNum: 6 },
+      'scene-summary': { bg: 'bg-cosmos', name: 'Summary', scene: 'wrap-up', nodeNum: 8 }
     };
 
     // Insight callout state (track which have been revealed)
@@ -413,80 +443,177 @@ class TikTokTidesApp {
   }
 
   setupJourneyMap() {
-    const toggle = document.querySelector('[data-journey-toggle]');
-    const journeyMap = document.querySelector('.journey-map');
+    // V3 Navigation Elements
+    const mapToggle = document.querySelector('.map-toggle-btn, [data-journey-toggle]');
+    const journeyOverlay = document.querySelector('.journey-map-overlay');
     const closeBtn = document.querySelector('.journey-map-close');
+    const topNavBar = document.querySelector('.top-nav-bar');
 
-    if (!toggle || !journeyMap) return;
+    // Mini-strip navigation
+    this.setupMiniStripNavigation();
 
-    // Toggle journey map overlay
-    toggle.addEventListener('click', () => {
-      const isHidden = journeyMap.getAttribute('aria-hidden') === 'true';
-      journeyMap.setAttribute('aria-hidden', isHidden ? 'false' : 'true');
+    // Map overlay toggle
+    if (mapToggle && journeyOverlay) {
+      mapToggle.addEventListener('click', () => {
+        const isHidden = journeyOverlay.getAttribute('aria-hidden') === 'true';
+        journeyOverlay.setAttribute('aria-hidden', isHidden ? 'false' : 'true');
 
-      if (!isHidden) {
-        // Closing
-        toggle.focus();
-      } else {
-        // Opening
-        closeBtn?.focus();
-      }
-    });
+        if (isHidden) {
+          // Opening - focus close button
+          setTimeout(() => closeBtn?.focus(), 100);
+        }
+      });
+    }
 
     // Close button
     closeBtn?.addEventListener('click', () => {
-      journeyMap.setAttribute('aria-hidden', 'true');
-      toggle.focus();
+      journeyOverlay?.setAttribute('aria-hidden', 'true');
+      mapToggle?.focus();
     });
 
-    // Journey node clicks
-    document.querySelectorAll('.journey-node').forEach(node => {
-      node.addEventListener('click', () => {
-        const target = document.querySelector(node.dataset.target);
-        if (target) {
-          // Close journey map
-          journeyMap.setAttribute('aria-hidden', 'true');
+    // Click outside to close
+    journeyOverlay?.addEventListener('click', (e) => {
+      if (e.target === journeyOverlay) {
+        journeyOverlay.setAttribute('aria-hidden', 'true');
+        mapToggle?.focus();
+      }
+    });
 
-          // Scroll to target
+    // Map node clicks (desktop cartoon map)
+    document.querySelectorAll('.map-node').forEach(node => {
+      node.addEventListener('click', () => {
+        const targetId = node.dataset.target;
+        const target = document.getElementById(targetId);
+        if (target) {
+          journeyOverlay?.setAttribute('aria-hidden', 'true');
           target.scrollIntoView({
             behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
             block: 'start'
           });
+        }
+      });
+    });
 
-          // Mark as completed (for visual progress)
-          this.markJourneyNodeCompleted(node.dataset.scene);
+    // Mobile list item clicks
+    document.querySelectorAll('.map-list-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const targetId = item.dataset.target;
+        const target = document.getElementById(targetId);
+        if (target) {
+          journeyOverlay?.setAttribute('aria-hidden', 'true');
+          target.scrollIntoView({
+            behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
+            block: 'start'
+          });
         }
       });
     });
 
     // Close on escape
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && journeyMap.getAttribute('aria-hidden') === 'false') {
-        journeyMap.setAttribute('aria-hidden', 'true');
-        toggle.focus();
+      if (e.key === 'Escape' && journeyOverlay?.getAttribute('aria-hidden') === 'false') {
+        journeyOverlay.setAttribute('aria-hidden', 'true');
+        mapToggle?.focus();
       }
+    });
+
+    // Nav bar scroll effect (more opaque on scroll)
+    if (topNavBar) {
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            if (window.scrollY > 50) {
+              topNavBar.classList.add('scrolled');
+            } else {
+              topNavBar.classList.remove('scrolled');
+            }
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+    }
+  }
+
+  setupMiniStripNavigation() {
+    // Mini-strip node clicks
+    document.querySelectorAll('.mini-node').forEach(node => {
+      node.addEventListener('click', () => {
+        const targetId = node.dataset.sceneTarget;
+        const target = document.getElementById(targetId);
+        if (target) {
+          target.scrollIntoView({
+            behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
+            block: 'start'
+          });
+        }
+      });
     });
   }
 
   updateJourneyMapHighlight(sectionId) {
-    // Update which journey node is highlighted as current
+    // Update which navigation elements are highlighted as current
     const meta = this.sectionMeta[sectionId];
     if (!meta) return;
 
-    document.querySelectorAll('.journey-node').forEach(node => {
-      if (node.dataset.scene === meta.scene) {
-        node.classList.add('journey-node--current');
-        this.markJourneyNodeCompleted(meta.scene);
-      } else {
-        node.classList.remove('journey-node--current');
-      }
+    // Update mini-strip nodes in top navbar
+    document.querySelectorAll('.mini-node').forEach(node => {
+      const isActive = node.dataset.sceneTarget === sectionId;
+      node.classList.toggle('active', isActive);
+      node.setAttribute('aria-current', isActive ? 'true' : 'false');
     });
+
+    // Update map overlay nodes (desktop cartoon map)
+    document.querySelectorAll('.map-node').forEach(node => {
+      const isActive = node.dataset.target === sectionId;
+      node.classList.toggle('active', isActive);
+      node.setAttribute('aria-current', isActive ? 'true' : 'false');
+    });
+
+    // Update mobile list items
+    document.querySelectorAll('.map-list-item').forEach(item => {
+      const isActive = item.dataset.target === sectionId;
+      item.classList.toggle('active', isActive);
+      item.setAttribute('aria-current', isActive ? 'true' : 'false');
+    });
+
+    // Update alien marker position on map canvas
+    this.updateAlienMarkerPosition(sectionId);
+
+    // Mark as visited/completed
+    this.markSceneVisited(sectionId);
   }
 
-  markJourneyNodeCompleted(sceneId) {
-    const node = document.querySelector(`.journey-node[data-scene="${sceneId}"]`);
-    if (node) {
-      node.classList.add('journey-node--completed');
+  updateAlienMarkerPosition(sectionId) {
+    const alienMarker = document.querySelector('.map-alien-marker');
+    const position = NODE_POSITIONS[sectionId];
+
+    if (alienMarker && position) {
+      alienMarker.style.setProperty('--marker-x', position.x);
+      alienMarker.style.setProperty('--marker-y', position.y);
+      // Also update the data attribute for debugging
+      alienMarker.dataset.currentNode = this.sectionMeta[sectionId]?.nodeNum || 1;
+    }
+  }
+
+  markSceneVisited(sectionId) {
+    // Mark mini-strip node as visited
+    const miniNode = document.querySelector(`.mini-node[data-scene-target="${sectionId}"]`);
+    if (miniNode) {
+      miniNode.classList.add('visited');
+    }
+
+    // Mark map node as visited
+    const mapNode = document.querySelector(`.map-node[data-target="${sectionId}"]`);
+    if (mapNode) {
+      mapNode.classList.add('visited');
+    }
+
+    // Mark mobile list item as visited
+    const listItem = document.querySelector(`.map-list-item[data-target="${sectionId}"]`);
+    if (listItem) {
+      listItem.classList.add('visited');
     }
   }
 

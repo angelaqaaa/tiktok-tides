@@ -27,106 +27,311 @@
   <!-- Progress Bar -->
   <div class="progress-bar" aria-hidden="true"></div>
 
-  <!-- Fixed Top Navigation -->
-  <nav class="nav-header" role="navigation" aria-label="Main navigation">
-    <div class="nav-container">
-      <div class="nav-brand">
-        <h1 class="nav-title">TikTok Tides</h1>
-        <p class="nav-subtitle">Decoding viral short videos</p>
-      </div>
-      <ul class="nav-links" role="list">
-        <li><a href="#scene-landing" aria-current="false">Story</a></li>
-        <li><a href="#scene-sound-universe" aria-current="false">Visual Journey</a></li>
-        <li><a href="#scene-quiz" aria-current="false">Quiz</a></li>
-        <li><a href="#scene-summary" aria-current="false">About</a></li>
-      </ul>
-      <button class="journey-map-toggle" aria-label="Show journey map" data-journey-toggle>
-        <!-- Icon will be added via CSS or inline SVG -->
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="5" r="2"/>
-          <circle cx="12" cy="12" r="2"/>
-          <circle cx="12" cy="19" r="2"/>
-          <line x1="12" y1="7" x2="12" y2="10"/>
-          <line x1="12" y1="14" x2="12" y2="17"/>
+  <!-- Fixed Top Navigation - v3 TopNavBar -->
+  <nav class="top-nav-bar" role="navigation" aria-label="Main navigation">
+    <!-- Left: Site Logo Cluster (25%) -->
+    <a href="#scene-landing" class="nav-logo-cluster" aria-label="Go to start">
+      <!-- TikTok-inspired logo mark with alien -->
+      <div class="logo-mark">
+        <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true">
+          <!-- Rounded square with TikTok-like gradient border -->
+          <defs>
+            <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#2DCCD3"/>
+              <stop offset="100%" stop-color="#F1204A"/>
+            </linearGradient>
+          </defs>
+          <rect x="2" y="2" width="32" height="32" rx="8" fill="none" stroke="url(#logo-gradient)" stroke-width="2"/>
+          <!-- Simple alien head silhouette -->
+          <ellipse cx="18" cy="16" rx="8" ry="9" fill="#BAF6F0" opacity="0.9"/>
+          <ellipse cx="14" cy="14" rx="2.5" ry="3" fill="#033624"/>
+          <ellipse cx="22" cy="14" rx="2.5" ry="3" fill="#033624"/>
+          <path d="M16 20 Q18 22 20 20" stroke="#033624" fill="none" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Lab coat collar hint -->
+          <path d="M12 25 L18 28 L24 25" stroke="#F0F2F5" fill="none" stroke-width="1.5"/>
         </svg>
-      </button>
+      </div>
+      <span class="logo-text">TikTok Tides</span>
+    </a>
+
+    <!-- Center: Journey Map Mini-Strip (50%) -->
+    <div class="journey-mini-strip" role="navigation" aria-label="Scene navigation">
+      <div class="mini-strip-line" aria-hidden="true"></div>
+      <div class="mini-strip-nodes">
+        <!-- Scene 1: Arrival (Spaceship) - targets scene-landing -->
+        <button class="mini-node" data-scene-target="scene-landing" aria-label="Scene 1: Arrival" data-tooltip="Arrival">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <ellipse cx="12" cy="10" rx="8" ry="4"/>
+            <path d="M8 10 L6 16 M16 10 L18 16"/>
+            <circle cx="12" cy="9" r="2" fill="currentColor"/>
+            <path d="M4 14 L12 18 L20 14" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <!-- Scene 2: Music Galaxy (Planet) - targets scene-sound-universe -->
+        <button class="mini-node" data-scene-target="scene-sound-universe" aria-label="Scene 2: Music Galaxy" data-tooltip="Music Galaxy">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="5"/>
+            <ellipse cx="12" cy="12" rx="10" ry="3" transform="rotate(-20 12 12)"/>
+            <circle cx="12" cy="12" r="2" fill="currentColor"/>
+          </svg>
+        </button>
+        <!-- Scene 3: Viral Sounds (Vinyl Disc) - targets scene-top-sounds -->
+        <button class="mini-node" data-scene-target="scene-top-sounds" aria-label="Scene 3: Viral Sounds" data-tooltip="Viral Sounds">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="9"/>
+            <circle cx="12" cy="12" r="3"/>
+            <circle cx="12" cy="12" r="1" fill="currentColor"/>
+            <path d="M12 6 L12 3"/>
+          </svg>
+        </button>
+        <!-- Scene 4: Timing (Clock) - targets scene-duration -->
+        <button class="mini-node" data-scene-target="scene-duration" aria-label="Scene 4: Timing" data-tooltip="Timing">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="13" r="8"/>
+            <path d="M12 5 L12 3"/>
+            <path d="M12 9 L12 13 L15 15" stroke-linecap="round"/>
+            <circle cx="12" cy="3" r="1" fill="currentColor"/>
+          </svg>
+        </button>
+        <!-- Scene 5: Trend Pyramid (Layered) - targets scene-category -->
+        <button class="mini-node" data-scene-target="scene-category" aria-label="Scene 5: Trend Pyramid" data-tooltip="Trend Pyramid">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 3 L3 21 L21 21 Z"/>
+            <path d="M7 15 L17 15"/>
+            <path d="M9 11 L15 11"/>
+          </svg>
+        </button>
+        <!-- Scene 6: Captions (Chat Bubble) - targets scene-emotion -->
+        <button class="mini-node" data-scene-target="scene-emotion" aria-label="Scene 6: Captions & Emotion" data-tooltip="Captions">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            <circle cx="8" cy="10" r="1" fill="currentColor"/>
+            <circle cx="12" cy="10" r="1" fill="currentColor"/>
+            <circle cx="16" cy="10" r="1" fill="currentColor"/>
+          </svg>
+        </button>
+        <!-- Scene 7: Quiz (Check Circle) - targets scene-quiz -->
+        <button class="mini-node" data-scene-target="scene-quiz" aria-label="Scene 7: Quiz" data-tooltip="Quiz">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M9 12 L11 14 L15 10" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <!-- Scene 8: Wrap-up (Flag/Home) - targets scene-summary -->
+        <button class="mini-node" data-scene-target="scene-summary" aria-label="Scene 8: Wrap-up" data-tooltip="Wrap-up">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 21 L4 4"/>
+            <path d="M4 4 L14 4 L14 12 L4 12" fill="currentColor" opacity="0.3"/>
+            <path d="M4 4 L14 4 L12 8 L14 12 L4 12"/>
+          </svg>
+        </button>
+      </div>
     </div>
+
+    <!-- Right: Map Toggle Button (25%) -->
+    <button class="map-toggle-btn" aria-label="Open Mission Map" data-journey-toggle>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+        <circle cx="12" cy="10" r="3"/>
+      </svg>
+      <span class="map-toggle-label">Map</span>
+    </button>
   </nav>
 
-  <!-- Journey Map Overlay (initially hidden) -->
-  <aside class="journey-map" aria-hidden="true" role="dialog" aria-labelledby="journey-map-title">
-    <div class="journey-map-content">
-      <div class="journey-map-header">
-        <h2 id="journey-map-title">Your Journey</h2>
-        <button class="journey-map-close" aria-label="Close journey map">×</button>
+  <!-- Journey Map Overlay - v3 Cartoon Map Style -->
+  <aside class="journey-map-overlay" aria-hidden="true" role="dialog" aria-labelledby="journey-map-title">
+    <div class="journey-map-panel">
+      <!-- Header -->
+      <header class="journey-map-header">
+        <h2 id="journey-map-title">Mission Map</h2>
+        <button class="journey-map-close" aria-label="Close map">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </header>
+
+      <!-- Cartoon Map Canvas -->
+      <div class="journey-map-canvas">
+        <!-- Background illustration layers -->
+        <div class="map-bg-layer map-bg-stars" aria-hidden="true"></div>
+        <div class="map-bg-layer map-bg-terrain" aria-hidden="true"></div>
+
+        <!-- Neon path connecting all nodes -->
+        <svg class="map-path-svg" viewBox="0 0 600 500" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <defs>
+            <linearGradient id="path-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#2DCCD3"/>
+              <stop offset="50%" stop-color="#BAF6F0"/>
+              <stop offset="100%" stop-color="#2DCCD3"/>
+            </linearGradient>
+            <filter id="neon-glow">
+              <feGaussianBlur stdDeviation="3" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <!-- The winding path through all scenes (follows new node positions) -->
+          <path class="map-path-line"
+                d="M180 40 Q260 55 348 75 Q420 90 468 140 Q490 180 432 225 Q380 260 348 300 Q310 340 252 360 Q200 380 168 410 Q150 430 300 450"
+                fill="none"
+                stroke="url(#path-glow)"
+                stroke-width="4"
+                stroke-linecap="round"
+                filter="url(#neon-glow)"
+                stroke-dasharray="8 4"/>
+        </svg>
+
+        <!-- Scene nodes on the map -->
+        <div class="map-nodes">
+          <!-- Node 1: Arrival (Space area, top-center) - targets scene-landing -->
+          <button class="map-node" data-node="1" data-target="scene-landing" style="--node-x: 30%; --node-y: 8%;">
+            <span class="node-number">1</span>
+            <div class="node-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <ellipse cx="12" cy="10" rx="8" ry="4"/>
+                <circle cx="12" cy="9" r="2" fill="currentColor"/>
+              </svg>
+            </div>
+            <span class="node-label">Arrival</span>
+          </button>
+
+          <!-- Node 2: Music Galaxy (Orbit area, center-right) - targets scene-sound-universe -->
+          <button class="map-node" data-node="2" data-target="scene-sound-universe" style="--node-x: 58%; --node-y: 15%;">
+            <span class="node-number">2</span>
+            <div class="node-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="5"/>
+                <ellipse cx="12" cy="12" rx="10" ry="3" transform="rotate(-20 12 12)"/>
+              </svg>
+            </div>
+            <span class="node-label">Galaxy</span>
+          </button>
+
+          <!-- Node 3: Viral Sounds (Record, far right) - targets scene-top-sounds -->
+          <button class="map-node" data-node="3" data-target="scene-top-sounds" style="--node-x: 78%; --node-y: 28%;">
+            <span class="node-number">3</span>
+            <div class="node-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="9"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </div>
+            <span class="node-label">Sounds</span>
+          </button>
+
+          <!-- Node 4: Timing (Clock tower, right side) - targets scene-duration -->
+          <button class="map-node" data-node="4" data-target="scene-duration" style="--node-x: 72%; --node-y: 45%;">
+            <span class="node-number">4</span>
+            <div class="node-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="13" r="8"/>
+                <path d="M12 9 L12 13 L15 15"/>
+              </svg>
+            </div>
+            <span class="node-label">Timing</span>
+          </button>
+
+          <!-- Node 5: Trend Pyramid (Desert, center-right) - targets scene-category -->
+          <button class="map-node" data-node="5" data-target="scene-category" style="--node-x: 58%; --node-y: 60%;">
+            <span class="node-number">5</span>
+            <div class="node-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 3 L3 21 L21 21 Z"/>
+              </svg>
+            </div>
+            <span class="node-label">Pyramid</span>
+          </button>
+
+          <!-- Node 6: Captions (Canyon, center) - targets scene-emotion -->
+          <button class="map-node" data-node="6" data-target="scene-emotion" style="--node-x: 42%; --node-y: 72%;">
+            <span class="node-number">6</span>
+            <div class="node-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <span class="node-label">Emotions</span>
+          </button>
+
+          <!-- Node 7: Quiz (Stage, center-left) - targets scene-quiz -->
+          <button class="map-node" data-node="7" data-target="scene-quiz" style="--node-x: 28%; --node-y: 82%;">
+            <span class="node-number">7</span>
+            <div class="node-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M9 12 L11 14 L15 10"/>
+              </svg>
+            </div>
+            <span class="node-label">Quiz</span>
+          </button>
+
+          <!-- Node 8: Wrap-up (Hill, bottom-center) - targets scene-summary -->
+          <button class="map-node" data-node="8" data-target="scene-summary" style="--node-x: 50%; --node-y: 90%;">
+            <span class="node-number">8</span>
+            <div class="node-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M4 21 L4 4"/>
+                <path d="M4 4 L14 4 L12 8 L14 12 L4 12"/>
+              </svg>
+            </div>
+            <span class="node-label">Wrap-up</span>
+          </button>
+        </div>
+
+        <!-- Alien avatar marker (shows current position) -->
+        <div class="map-alien-marker" data-current-node="1" aria-label="You are here">
+          <img src="/assets/icons/cute-alien-wearing-hoodie-jacket-cartoon-vector-icon-illustration-science-technology-isolated-flat_138676-13026.avif"
+               alt="Alien guide"
+               width="40"
+               height="40"
+               onerror="this.style.display='none'"/>
+        </div>
       </div>
-      <nav class="journey-nodes" aria-label="Scene navigation">
-        <button class="journey-node" data-scene="landing" data-target="#scene-landing">
-          <svg class="node-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <!-- Compass icon -->
-            <circle cx="12" cy="12" r="10"/>
-            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
-          </svg>
-          <span class="node-label">Welcome</span>
-          <span class="node-check" aria-hidden="true">✓</span>
-        </button>
 
-        <button class="journey-node" data-scene="sound" data-target="#scene-sound-universe">
-          <svg class="node-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <!-- Music note icon -->
-            <path d="M9 18V5l12-2v13"/>
-            <circle cx="6" cy="18" r="3"/>
-            <circle cx="18" cy="16" r="3"/>
-          </svg>
-          <span class="node-label">Sound</span>
-          <span class="node-check" aria-hidden="true">✓</span>
+      <!-- Mobile: Vertical list fallback -->
+      <nav class="journey-map-list" aria-label="Scene navigation (list view)">
+        <button class="map-list-item" data-target="scene-landing">
+          <span class="list-number">1</span>
+          <span class="list-label">Arrival</span>
+          <span class="list-desc">Welcome to the viral lab</span>
         </button>
-
-        <button class="journey-node" data-scene="duration" data-target="#scene-duration">
-          <svg class="node-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <!-- Clock icon -->
-            <circle cx="12" cy="12" r="10"/>
-            <polyline points="12 6 12 12 16 14"/>
-          </svg>
-          <span class="node-label">Duration</span>
-          <span class="node-check" aria-hidden="true">✓</span>
+        <button class="map-list-item" data-target="scene-sound-universe">
+          <span class="list-number">2</span>
+          <span class="list-label">Music Galaxy</span>
+          <span class="list-desc">Artists that orbit virality</span>
         </button>
-
-        <button class="journey-node" data-scene="category" data-target="#scene-category">
-          <svg class="node-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <!-- Pyramid/Triangle icon -->
-            <path d="M12 2 L2 22 L22 22 Z"/>
-          </svg>
-          <span class="node-label">Category</span>
-          <span class="node-check" aria-hidden="true">✓</span>
+        <button class="map-list-item" data-target="scene-top-sounds">
+          <span class="list-number">3</span>
+          <span class="list-label">Viral Sounds</span>
+          <span class="list-desc">A few tracks spin above the rest</span>
         </button>
-
-        <button class="journey-node" data-scene="emotion" data-target="#scene-emotion">
-          <svg class="node-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <!-- Chat bubble icon -->
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-          </svg>
-          <span class="node-label">Emotion</span>
-          <span class="node-check" aria-hidden="true">✓</span>
+        <button class="map-list-item" data-target="scene-duration">
+          <span class="list-number">4</span>
+          <span class="list-label">Timing</span>
+          <span class="list-desc">How long should your clip be?</span>
         </button>
-
-        <button class="journey-node" data-scene="quiz" data-target="#scene-quiz">
-          <svg class="node-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <!-- Flask icon -->
-            <path d="M9 3h6v7l4 8a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2l4-8V3z"/>
-          </svg>
-          <span class="node-label">Quiz</span>
-          <span class="node-check" aria-hidden="true">✓</span>
+        <button class="map-list-item" data-target="scene-category">
+          <span class="list-number">5</span>
+          <span class="list-label">Trend Pyramid</span>
+          <span class="list-desc">Climbing the content categories</span>
         </button>
-
-        <button class="journey-node" data-scene="summary" data-target="#scene-summary">
-          <svg class="node-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <!-- Book icon -->
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-          </svg>
-          <span class="node-label">Summary</span>
-          <span class="node-check" aria-hidden="true">✓</span>
+        <button class="map-list-item" data-target="scene-emotion">
+          <span class="list-number">6</span>
+          <span class="list-label">Captions & Emotion</span>
+          <span class="list-desc">The emotional language of virality</span>
+        </button>
+        <button class="map-list-item" data-target="scene-quiz">
+          <span class="list-number">7</span>
+          <span class="list-label">Quiz</span>
+          <span class="list-desc">Test your viral readiness</span>
+        </button>
+        <button class="map-list-item" data-target="scene-summary">
+          <span class="list-number">8</span>
+          <span class="list-label">Wrap-up</span>
+          <span class="list-desc">Mission complete</span>
         </button>
       </nav>
     </div>

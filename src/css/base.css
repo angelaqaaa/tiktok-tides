@@ -3005,3 +3005,695 @@ circle[data-type="bubble"] {
     gap: var(--space-4);
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   V3 NAVIGATION SYSTEM
+   Based on tiktok-tides-implementation-spec-v3.md Section 2
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* Hide old navigation if still present */
+.nav-header {
+  display: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   TopNavBar - Fixed top navigation bar
+   Height: 64px desktop, 56px tablet, 48px mobile
+   ───────────────────────────────────────────────────────────────────────── */
+.top-nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-5);
+  background: rgba(10, 10, 15, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(45, 204, 211, 0.15);
+  transition: background-color 300ms ease, border-color 300ms ease;
+}
+
+/* On scroll state - more opaque */
+.top-nav-bar.scrolled {
+  background: rgba(10, 10, 15, 0.92);
+  border-bottom-color: rgba(45, 204, 211, 0.25);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Logo Cluster - Left section (~25% width)
+   ───────────────────────────────────────────────────────────────────────── */
+.nav-logo-cluster {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  flex-shrink: 0;
+  min-width: 160px;
+}
+
+.logo-mark {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  transition: transform 200ms ease;
+}
+
+.nav-logo-cluster:hover .logo-mark {
+  transform: scale(1.05);
+}
+
+.logo-text {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  background: linear-gradient(90deg, #2DCCD3, #F1204A);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Journey Mini-Strip - Center section (~50% width)
+   Horizontal line with 8 scene icons
+   ───────────────────────────────────────────────────────────────────────── */
+.journey-mini-strip {
+  flex: 1;
+  max-width: 500px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--space-4);
+}
+
+/* The connecting line behind nodes */
+.mini-strip-line {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: linear-gradient(90deg,
+    rgba(45, 204, 211, 0.2),
+    rgba(45, 204, 211, 0.4),
+    rgba(45, 204, 211, 0.2)
+  );
+  border-radius: 1px;
+}
+
+.mini-strip-nodes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+/* Individual mini nodes */
+.mini-node {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(20, 21, 28, 0.8);
+  border: 2px solid rgba(160, 163, 175, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 200ms ease;
+  position: relative;
+}
+
+.mini-node svg {
+  width: 14px;
+  height: 14px;
+  color: var(--color-text-secondary);
+  transition: color 200ms ease;
+}
+
+/* Tooltip on hover - positioned below to avoid browser chrome */
+.mini-node::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  padding: 4px 8px;
+  background: rgba(20, 21, 28, 0.95);
+  border: 1px solid rgba(45, 204, 211, 0.3);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 150ms ease, visibility 150ms ease;
+  pointer-events: none;
+  z-index: 1001;
+}
+
+.mini-node:hover::before,
+.mini-node:focus::before {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Hover state */
+.mini-node:hover {
+  border-color: rgba(45, 204, 211, 0.6);
+  box-shadow: 0 0 12px rgba(45, 204, 211, 0.25);
+}
+
+.mini-node:hover svg {
+  color: #2DCCD3;
+}
+
+/* Focus state for accessibility */
+.mini-node:focus {
+  outline: none;
+  border-color: #2DCCD3;
+  box-shadow: 0 0 0 3px rgba(45, 204, 211, 0.2);
+}
+
+/* Active/Current scene state */
+.mini-node.active {
+  width: 32px;
+  height: 32px;
+  background: rgba(45, 204, 211, 0.15);
+  border-color: #2DCCD3;
+  box-shadow: 0 0 16px rgba(45, 204, 211, 0.4);
+}
+
+.mini-node.active svg {
+  width: 16px;
+  height: 16px;
+  color: #2DCCD3;
+}
+
+/* Visited state - shows user has been to this scene */
+.mini-node.visited {
+  background: rgba(45, 204, 211, 0.08);
+  border-color: rgba(45, 204, 211, 0.4);
+}
+
+.mini-node.visited svg {
+  color: rgba(45, 204, 211, 0.7);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Map Toggle Button - Right section (~25% width)
+   ───────────────────────────────────────────────────────────────────────── */
+.map-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 16px;
+  background: rgba(45, 204, 211, 0.1);
+  border: 1px solid rgba(45, 204, 211, 0.3);
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all 200ms ease;
+  flex-shrink: 0;
+}
+
+.map-toggle-btn svg {
+  width: 18px;
+  height: 18px;
+  color: #2DCCD3;
+}
+
+.map-toggle-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.map-toggle-btn:hover {
+  background: rgba(45, 204, 211, 0.2);
+  border-color: #2DCCD3;
+  box-shadow: 0 0 12px rgba(45, 204, 211, 0.3);
+}
+
+.map-toggle-btn:focus {
+  outline: none;
+  border-color: #2DCCD3;
+  box-shadow: 0 0 0 3px rgba(45, 204, 211, 0.2);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Journey Map Overlay - Cartoon Map Style
+   Covers ~80% viewport, slides in from bottom or fades in centered
+   ───────────────────────────────────────────────────────────────────────── */
+.journey-map-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 400ms ease, visibility 400ms ease;
+}
+
+.journey-map-overlay[aria-hidden="false"] {
+  opacity: 1;
+  visibility: visible;
+}
+
+.journey-map-panel {
+  width: 90%;
+  max-width: 700px;
+  height: 85vh;
+  max-height: 600px;
+  background: linear-gradient(180deg,
+    rgba(10, 10, 20, 0.98) 0%,
+    rgba(20, 25, 40, 0.98) 100%
+  );
+  border: 1px solid rgba(45, 204, 211, 0.3);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    0 0 40px rgba(45, 204, 211, 0.15),
+    0 20px 60px rgba(0, 0, 0, 0.5);
+  transform: translateY(20px) scale(0.95);
+  transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.journey-map-overlay[aria-hidden="false"] .journey-map-panel {
+  transform: translateY(0) scale(1);
+}
+
+/* Map Header */
+.journey-map-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid rgba(45, 204, 211, 0.2);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.journey-map-header h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2DCCD3;
+  margin: 0;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.journey-map-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(241, 32, 74, 0.1);
+  border: 1px solid rgba(241, 32, 74, 0.3);
+  color: #F1204A;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 200ms ease;
+}
+
+.journey-map-close:hover {
+  background: rgba(241, 32, 74, 0.2);
+  border-color: #F1204A;
+}
+
+.journey-map-close:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(241, 32, 74, 0.2);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Cartoon Map Canvas (Desktop)
+   ───────────────────────────────────────────────────────────────────────── */
+.journey-map-canvas {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Background layers */
+.map-bg-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.map-bg-stars {
+  background:
+    radial-gradient(circle 1px at 10% 15%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 25% 8%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(circle 1px at 40% 20%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(circle 2px at 55% 5%, rgba(255,255,255,0.9) 0%, transparent 100%),
+    radial-gradient(circle 1px at 70% 18%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 85% 12%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(circle 1px at 92% 25%, rgba(255,255,255,0.6) 0%, transparent 100%);
+}
+
+.map-bg-terrain {
+  background:
+    /* Desert/pyramid area - warm gradient at bottom right */
+    radial-gradient(ellipse 300px 150px at 70% 65%, rgba(255, 180, 100, 0.15) 0%, transparent 100%),
+    /* Canyon area - purple tint at bottom */
+    radial-gradient(ellipse 250px 120px at 35% 80%, rgba(140, 80, 160, 0.12) 0%, transparent 100%),
+    /* Nebula at top */
+    radial-gradient(ellipse 400px 200px at 30% 20%, rgba(100, 150, 255, 0.1) 0%, transparent 100%);
+}
+
+/* SVG Path line */
+.map-path-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.map-path-line {
+  stroke-dashoffset: 0;
+  animation: pathDash 20s linear infinite;
+}
+
+@keyframes pathDash {
+  to { stroke-dashoffset: -100; }
+}
+
+/* Map Nodes Container */
+.map-nodes {
+  position: absolute;
+  inset: 0;
+}
+
+/* Individual Map Node */
+.map-node {
+  position: absolute;
+  left: var(--node-x);
+  top: var(--node-y);
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  transition: transform 200ms ease;
+}
+
+.map-node:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.map-node:focus {
+  outline: none;
+}
+
+.node-number {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(135deg, #2DCCD3, #F1204A);
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.node-icon-wrap {
+  width: 44px;
+  height: 44px;
+  background: rgba(20, 21, 28, 0.9);
+  border: 2px solid rgba(45, 204, 211, 0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 200ms ease;
+}
+
+.node-icon-wrap svg {
+  width: 22px;
+  height: 22px;
+  color: var(--color-text-secondary);
+  transition: color 200ms ease;
+}
+
+.map-node:hover .node-icon-wrap {
+  border-color: #2DCCD3;
+  box-shadow: 0 0 20px rgba(45, 204, 211, 0.4);
+  background: rgba(45, 204, 211, 0.15);
+}
+
+.map-node:hover .node-icon-wrap svg {
+  color: #2DCCD3;
+}
+
+.map-node:focus .node-icon-wrap {
+  border-color: #2DCCD3;
+  box-shadow: 0 0 0 3px rgba(45, 204, 211, 0.2);
+}
+
+/* Active node (current scene) */
+.map-node.active .node-icon-wrap {
+  background: rgba(45, 204, 211, 0.2);
+  border-color: #2DCCD3;
+  box-shadow: 0 0 24px rgba(45, 204, 211, 0.5);
+}
+
+.map-node.active .node-icon-wrap svg {
+  color: #2DCCD3;
+}
+
+.node-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 200ms ease;
+}
+
+.map-node:hover .node-label,
+.map-node.active .node-label {
+  color: var(--color-text-primary);
+}
+
+/* Visited state for map nodes */
+.map-node.visited .node-icon-wrap {
+  background: rgba(45, 204, 211, 0.12);
+  border-color: rgba(45, 204, 211, 0.5);
+}
+
+.map-node.visited .node-icon-wrap svg {
+  color: rgba(45, 204, 211, 0.8);
+}
+
+/* Alien Marker on Map */
+.map-alien-marker {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  transition: left 600ms cubic-bezier(0.4, 0, 0.2, 1), top 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  /* Default position - updated by JS via custom properties */
+  --marker-x: 10%;
+  --marker-y: 8%;
+  left: var(--marker-x);
+  top: var(--marker-y);
+  transform: translate(-50%, -100%);
+}
+
+.map-alien-marker img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+  animation: alienBob 2s ease-in-out infinite;
+}
+
+@keyframes alienBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Mobile List View (hidden on desktop)
+   ───────────────────────────────────────────────────────────────────────── */
+.journey-map-list {
+  display: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Navigation Responsive Styles
+   ───────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .top-nav-bar {
+    height: 56px;
+    padding: 0 var(--space-4);
+  }
+
+  .journey-mini-strip {
+    max-width: 400px;
+  }
+
+  .mini-node {
+    width: 24px;
+    height: 24px;
+  }
+
+  .mini-node svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .mini-node.active {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .top-nav-bar {
+    height: 48px;
+    padding: 0 var(--space-3);
+  }
+
+  .logo-text {
+    display: none;
+  }
+
+  .logo-mark {
+    width: 32px;
+    height: 32px;
+  }
+
+  .journey-mini-strip {
+    display: none;
+  }
+
+  .map-toggle-label {
+    display: none;
+  }
+
+  .map-toggle-btn {
+    padding: 8px;
+  }
+
+  /* Show list view on mobile, hide canvas */
+  .journey-map-canvas {
+    display: none;
+  }
+
+  .journey-map-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-3);
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  .map-list-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    background: rgba(20, 21, 28, 0.6);
+    border: 1px solid rgba(74, 77, 94, 0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 200ms ease;
+  }
+
+  .map-list-item:hover {
+    background: rgba(45, 204, 211, 0.1);
+    border-color: rgba(45, 204, 211, 0.3);
+  }
+
+  .map-list-item:focus {
+    outline: none;
+    border-color: #2DCCD3;
+  }
+
+  .map-list-item.active {
+    background: rgba(45, 204, 211, 0.15);
+    border-color: #2DCCD3;
+  }
+
+  .map-list-item.visited {
+    background: rgba(45, 204, 211, 0.08);
+    border-color: rgba(45, 204, 211, 0.4);
+  }
+
+  .map-list-item.visited .list-number {
+    opacity: 0.8;
+  }
+
+  .list-number {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #2DCCD3, #F1204A);
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .list-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    flex: 1;
+  }
+
+  .list-desc {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    display: none;
+  }
+
+  .journey-map-panel {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    border-radius: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-logo-cluster {
+    min-width: auto;
+  }
+
+  .map-toggle-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+}
