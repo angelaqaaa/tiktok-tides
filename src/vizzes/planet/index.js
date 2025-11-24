@@ -92,14 +92,9 @@ export class PlanetViz extends EventEmitter {
 
   danceabilityToColor(danceability) {
     const colors = [
-      { value: 0.0, color: '#FF0000' },  
-      { value: 0.15, color: '#FF7F00' }, 
-      { value: 0.3, color: '#FFFF00' },  
-      { value: 0.45, color: '#00FF00' }, 
-      { value: 0.6, color: '#00FFFF' },  
-      { value: 0.75, color: '#0000FF' }, 
-      { value: 0.9, color: '#8B00FF' },  
-      { value: 1.0, color: '#FF00FF' }   
+      { value: 0.0, color: '#FFFFFF' },  // White at bottom
+      { value: 0.5, color: '#2af0ea' },  // TikTok blue in middle
+      { value: 1.0, color: '#fe2858' }   // TikTok pink at top
     ];
     
     for (let i = 0; i < colors.length - 1; i++) {
