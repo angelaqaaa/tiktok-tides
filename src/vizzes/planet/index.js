@@ -93,7 +93,7 @@ export class PlanetViz extends EventEmitter {
   danceabilityToColor(danceability) {
     const colors = [
       { value: 0.0, color: '#FFFFFF' },  // White at bottom
-      { value: 0.5, color: '#2af0ea' },  // TikTok blue in middle
+      { value: 0.35, color: '#2af0ea' },  // TikTok blue in lower-middle
       { value: 1.0, color: '#fe2858' }   // TikTok pink at top
     ];
     
