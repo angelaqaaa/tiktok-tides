@@ -147,58 +147,34 @@ export class RankingViz extends EventEmitter {
     // --- info button ---
     const infoBtn = d3.select(this.container)
       .append('div')
-      .attr('class', 'viz-info-button')
-      .style('position', 'absolute')
-      .style('top', '10px')
-      .style('left', '10px')
-      .style('padding', '8px 16px')
-      .style('background', '#2c2c2cff')
-      .style('border', '1px solid #ccc')
-      .style('border-radius', '10px')
-      .style('cursor', 'pointer')
-      .style('font-weight', 'bold')
-      .style('color', 'white')
-      .style('z-index', 2000)
+      .attr('class', 'viz-btn viz-btn--info')
       .html(`
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
           <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="none"/>
           <line x1="12" y1="10" x2="12" y2="16" stroke="white" stroke-width="2" />
           <circle cx="12" cy="7" r="1.5" fill="white"/>
         </svg>
-      `);
+  `);
 
     let infoTooltipOpen = false;
 
     const infoTooltip = d3.select(this.container)
-      .append('div')
-      .attr('class', 'viz-info-tooltip')
-      .style('position', 'absolute')
-      .style('top', '55px')
-      .style('left', '10px')
-      .style('padding', '15px')
-      .style('background', 'black')
-      .style('border-radius', '12px')
-      .style('box-shadow', '0 4px 12px rgba(0,0,0,0.15)')
-      .style('width', '260px')
-      .style('opacity', 0)
-      .style('pointer-events', 'none')
-      .style('transition', 'opacity 0.25s ease')
+      .append("div")
+      .attr("class", "viz-info-tooltip")
       .html(`
-        <div style="font-size: 15px; font-weight: 600; margin-bottom: 6px;">
-          About this visualization
-        </div>
-        <div style="font-size: 13px; line-height: 1.4;">
-          This ranking layout is inspired by the viral 
-          <b>Pyramid Ranking Trend</b> on TikTok.
-        </div>
-        <div style="margin-top: 10px;">
-          <a href="https://www.tiktok.com/discover/pyramid-ranking-trend"
-             target="_blank"
-             style="color: #0077ff; font-size: 13px; text-decoration: underline;">
-             View the original trend →
-          </a>
-        </div>
-      `);
+    <div class="title">About this visualization</div>
+
+    <div class="body">
+      This layout is inspired by the viral 
+      <b>Pyramid Ranking Trend</b> on TikTok.
+      Each card falls in ranked sequence and can be explored interactively!
+    </div>
+
+    <a href="https://www.tiktok.com/discover/pyramid-ranking-trend"
+       target="_blank">
+      View the original trend →
+    </a>
+  `);
 
     infoBtn.on('click', () => {
       infoTooltipOpen = !infoTooltipOpen;
@@ -211,38 +187,26 @@ export class RankingViz extends EventEmitter {
     // --- Reset Button ---
     d3.select(this.container)
       .append('div')
-      .attr('class', 'viz-reset-button')
-      .style('position', 'absolute')
-      .style('top', '10px')
-      .style('right', '10px')
-      .style('padding', '8px 16px')
-      .style('background', '#2c2c2cff')
-      .style('border', '1px solid #ccc')
-      .style('border-radius', '10px')
-      .style('cursor', 'pointer')
-      .style('font-weight', 'bold')
-      .style('color', 'white')
-      .style('z-index', 2000)
-      .text('Reset')
+      .attr('class', 'viz-btn viz-btn--reset')
+      .html(`
+    <svg viewBox="0 0 24 24">
+      <path fill="white" d="M12 5V1L7 6l5 5V7c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8z" />
+    </svg>
+  `)
       .on('click', () => this.animatedReset());
+
 
     // --- Skip Button ---
     d3.select(this.container)
       .append('div')
-      .attr('class', 'viz-skip-button')
-      .style('position', 'absolute')
-      .style('top', '60px')
-      .style('right', '10px')
-      .style('padding', '8px 16px')
-      .style('background', '#2c2c2cff')
-      .style('border', '1px solid #ccc')
-      .style('border-radius', '10px')
-      .style('cursor', 'pointer')
-      .style('font-weight', 'bold')
-      .style('color', 'white')
-      .style('z-index', 2000)
-      .text('Skip')
+      .attr('class', 'viz-btn viz-btn--skip')
+      .html(`
+    <svg viewBox="0 0 24 24">
+      <path fill="white" d="M7 6l6 6-6 6V6zm7 0h3v12h-3V6z"/>
+    </svg>
+  `)
       .on('click', () => this.skipRemainingFalls());
+
 
     const centerGroup = this.svg.append('g')
       .attr(
