@@ -1484,7 +1484,6 @@ circle[data-type="bubble"] {
     #FFFFFF 100%     /* White - 0.0 (low danceability) */
   );
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .color-gradient-labels {
