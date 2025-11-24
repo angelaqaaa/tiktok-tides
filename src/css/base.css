@@ -1469,6 +1469,8 @@ circle[data-type="bubble"] {
   display: flex;
   gap: 16px;
   align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .color-gradient-bar {

@@ -223,6 +223,18 @@ export class PlanetViz extends EventEmitter {
       .style('pointer-events', 'none')
       .style('z-index', '1000')
       .style('font-size', '0.9rem');
+
+    // Create danceability indicator arrow for legend
+    this.legendIndicator = d3.select('.color-gradient-container').append('div')
+      .attr('class', 'danceability-indicator')
+      .style('position', 'absolute')
+      .style('right', '-2px')
+      .style('opacity', 0)
+      .style('pointer-events', 'none')
+      .style('transition', 'all 0.2s ease')
+      .style('font-size', '20px')
+      .style('color', '#FFD700')
+      .text('◀');
   }
 
   updateVisualization() {
@@ -355,6 +367,19 @@ export class PlanetViz extends EventEmitter {
           .transition()
           .duration(200)
           .style('opacity', 1);
+
+        // Show indicator arrow on legend
+        const gradientBar = document.querySelector('.color-gradient-bar');
+        if (gradientBar && self.legendIndicator) {
+          const barRect = gradientBar.getBoundingClientRect();
+          const barHeight = barRect.height;
+          // Position from top: 1.0 is at top (0%), 0.0 is at bottom (100%)
+          const position = (1 - d.avgDanceability) * barHeight;
+          
+          self.legendIndicator
+            .style('top', `${position}px`)
+            .style('opacity', 1);
+        }
       })
       .on('mousemove', function(event, d) {
         tooltip
@@ -386,6 +411,11 @@ export class PlanetViz extends EventEmitter {
           .on('end', function() {
             d3.select(this).style('display', 'none');
           });
+
+        // Hide indicator arrow
+        if (self.legendIndicator) {
+          self.legendIndicator.style('opacity', 0);
+        }
       });
 
     // Apply transitions after event handlers are set
