@@ -266,6 +266,9 @@ export class PlanetViz extends EventEmitter {
       };
     });
 
+    // Sort planets by size (songCount) so larger planets render first (in back)
+    const sortedPlanetsData = [...planetsData].sort((a, b) => b.songCount - a.songCount);
+
     const orbits = this.svg.select('#orbits')
       .selectAll('.planet-orbit')
       .data(planetsData, d => d.name);
@@ -293,7 +296,7 @@ export class PlanetViz extends EventEmitter {
 
     const planets = this.svg.select('#planets')
       .selectAll('.planet')
-      .data(planetsData, d => d.name);
+      .data(sortedPlanetsData, d => d.name);
 
     const tooltip = this.tooltip;
     const self = this;
@@ -376,7 +379,7 @@ export class PlanetViz extends EventEmitter {
       .remove();
 
     if (this.animationRunning && !this.options.reducedMotion) {
-      this.animatePlanets(planetsData, centerX, centerY, sizeScale);
+      this.animatePlanets(sortedPlanetsData, centerX, centerY, sizeScale);
     }
   }
 
