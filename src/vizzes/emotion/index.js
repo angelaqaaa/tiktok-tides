@@ -1282,6 +1282,7 @@ export class EmotionViz extends EventEmitter {
     const legendPanel = document.querySelector(".emotion-legend");
     if (!legendPanel || !this.data) return;
 
+    // Interactive checkbox legend without redundant color dots
     legendPanel.innerHTML = "";
     const viz = this;
 
@@ -1330,7 +1331,7 @@ export class EmotionViz extends EventEmitter {
       }
     });
 
-    // Optional sort toggle control (checkbox or button)
+    // Wire up sort toggle control (button with aria-pressed)
     const sortToggle = document.querySelector(".emotion-sort-toggle");
     if (sortToggle) {
       // checkbox style
@@ -1426,9 +1427,11 @@ export class EmotionViz extends EventEmitter {
 
         // remove hover connections
         this.clearHoverLinks();
+      })
+      .on("click", (_event, d) => {
+        // Open detail drawer on click (Stage 5 requirement)
+        this.openDetailDrawer(d);
       });
-
-    // no click handler: clicking does nothing now
   }
 
   showBubbleDetail(data) {
@@ -1477,6 +1480,39 @@ export class EmotionViz extends EventEmitter {
       .transition()
       .duration(400)
       .attr("opacity", (d) => (d.count >= threshold ? 1 : 0.25));
+  }
+
+  /**
+   * Highlight positive and hype-oriented emotion bubbles.
+   * Dims neutral, negative, and disappointment emotions.
+   * For Stage 5 guided interaction.
+   */
+  highlightPositiveEmotions() {
+    if (!this.svg || !this.data) return;
+
+    const positiveEmotions = new Set(['joy', 'excitement', 'hope']);
+
+    this.svg
+      .selectAll(".word-bubble")
+      .transition()
+      .duration(600)
+      .attr("opacity", (d) => positiveEmotions.has(d.emotion) ? 1 : 0.25)
+      .attr("stroke-width", (d) => positiveEmotions.has(d.emotion) ? 2 : 1);
+  }
+
+  /**
+   * Reset all bubble highlights to default state.
+   * Restores full opacity and default stroke width.
+   */
+  resetHighlights() {
+    if (!this.svg || !this.data) return;
+
+    this.svg
+      .selectAll(".word-bubble")
+      .transition()
+      .duration(400)
+      .attr("opacity", 1)
+      .attr("stroke-width", 1);
   }
 
   emphasizeOutlines() {

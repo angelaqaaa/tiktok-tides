@@ -665,14 +665,14 @@ class TikTokTidesApp {
     // Emotion actions
     if (action === 'emotion-show-all') {
       const viz = this.vizControllers.emotion;
-      // TODO: Show all emotion groups
-      console.log('TODO: Show all emotion clusters');
+      viz.resetHighlights?.();
+      this.announce('Showing all emotion categories');
     }
 
     if (action === 'emotion-highlight-positive') {
       const viz = this.vizControllers.emotion;
-      // TODO: Highlight positive/hype language
-      console.log('TODO: Highlight positive/hype emotion clusters');
+      viz.highlightPositiveEmotions?.();
+      this.announce('Highlighting positive and hype-oriented language');
     }
 
     if (action === 'emotion-sample') {
