@@ -226,6 +226,24 @@ export class RankingViz extends EventEmitter {
       .text('Reset')
       .on('click', () => this.animatedReset());
 
+    // --- Skip Button ---
+    d3.select(this.container)
+      .append('div')
+      .attr('class', 'viz-skip-button')
+      .style('position', 'absolute')
+      .style('top', '60px')
+      .style('right', '10px')
+      .style('padding', '8px 16px')
+      .style('background', '#2c2c2cff')
+      .style('border', '1px solid #ccc')
+      .style('border-radius', '10px')
+      .style('cursor', 'pointer')
+      .style('font-weight', 'bold')
+      .style('color', 'white')
+      .style('z-index', 2000)
+      .text('Skip')
+      .on('click', () => this.skipRemainingFalls());
+
     const centerGroup = this.svg.append('g')
       .attr(
         'transform',
@@ -508,6 +526,45 @@ export class RankingViz extends EventEmitter {
     audio.play().catch(err => console.error('Audio error:', err));
 
     return audio;
+  }
+
+  skipRemainingFalls() {
+    // stop current audio
+    if (this.currentAudio) {
+      try {
+        this.currentAudio.pause();
+        this.currentAudio.currentTime = 0;
+      } catch (e) { }
+    }
+
+    const pages = d3.select(this.container).selectAll('g.page').nodes();
+    const remainingPages = pages.filter(page => !d3.select(page).datum().coverFallen);
+
+    remainingPages.forEach((pageNode, i) => {
+      const d = d3.select(pageNode).datum();
+      const cover = d3.select(pageNode).select('.cover-group');
+      const rectHeight = 150;
+      const rectWidth = 200;
+      const baseOfPyramid = 100 + 2 * 200 + rectHeight;
+      const groundY = baseOfPyramid + 50;
+
+      setTimeout(() => {
+        const randomTilt = Math.random() * 40 - 20;
+        const randomXShift = Math.random() * 80 - 40;
+        const randomBounce = 1 + Math.random() * 0.05;
+
+        cover.transition()
+          .duration(500)
+          .ease(d3.easeCubicIn)
+          .attr('transform', `
+          translate(${randomXShift}, ${groundY - d.y})
+          rotate(${randomTilt}, ${rectWidth / 2}, ${rectHeight / 2})
+          scale(${randomBounce}, 0.6)
+        `);
+
+        d.coverFallen = true;
+      }, i * 100);
+    });
   }
 
   openPopup(d) {
