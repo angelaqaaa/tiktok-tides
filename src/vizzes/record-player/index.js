@@ -220,8 +220,9 @@ export class RecordPlayerViz {
             this.updateYearSliderUI();
         }
 
+        // Clear all states together synchronously
         this.clearActiveRing({ preserveLocked: false });
-        this.stopSong(true);
+        this.stopSongImmediate();
         this.resetSongInfo();
         this.toggleNotes(false);
         this.setHoverState(false);
@@ -475,9 +476,10 @@ export class RecordPlayerViz {
         if (this.discArea && !this.discArea.dataset.bound) {
             this.discArea.dataset.bound = 'true';
             this.discArea.addEventListener('mouseleave', () => {
+                // Clear all states together synchronously
                 this.stopAllRingRotation();
                 this.clearActiveRing({ preserveLocked: false });
-                this.stopSong(true);
+                this.stopSongImmediate();
                 this.resetSongInfo();
                 this.showIndicator();
                 this.setHoverState(false);
@@ -503,31 +505,33 @@ export class RecordPlayerViz {
 
             ringEl.addEventListener('mouseenter', () => {
                 const index = Number(ringEl.dataset.songIndex);
-                this.activateRing(index, { locked: false, source: 'hover' });
-                this.hideIndicator();
-                this.setHoverState(true);
+                // If there's a locked ring, don't override it
+                if (this.lockedIndex !== null && this.lockedIndex !== index) {
+                    return;
+                }
+                // Immediately activate this ring - all states change together
+                this.activateRingImmediate(index, { locked: false, source: 'hover' });
             });
 
             ringEl.addEventListener('mouseleave', () => {
                 const index = Number(ringEl.dataset.songIndex);
+
+                // If there's a locked ring, restore it
                 if (this.lockedIndex !== null && this.lockedIndex !== index) {
-                    this.activateRing(this.lockedIndex, { locked: true, source: 'tonearm' });
+                    this.activateRingImmediate(this.lockedIndex, { locked: true, source: 'tonearm' });
                     return;
                 }
-                this.stopRingRotation(index);
-                ringEl.classList.remove('is-hovered');
-                ringEl.classList.remove('is-active');
-                if (this.lockedIndex === index) this.lockedIndex = null;
-                if (this.activeIndex === index) this.activeIndex = null;
-                this.stopSong(true);
-                this.resetSongInfo();
-                this.setHoverState(false);
+
+                // Immediately deactivate - all states change together
+                if (this.activeIndex === index) {
+                    this.deactivateRingImmediate(index);
+                }
             });
 
             ringEl.addEventListener('click', () => {
                 const index = Number(ringEl.dataset.songIndex);
                 this.handleFirstGesture();
-                this.activateRing(index, { locked: true, source: 'click' });
+                this.activateRingImmediate(index, { locked: true, source: 'click' });
                 this.hideIndicator();
             });
         });
@@ -588,56 +592,99 @@ export class RecordPlayerViz {
         return this.spinAngles.get(index) || 0;
     }
 
-    activateRing(index, { locked = false, source = 'hover' } = {}) {
+    // Immediate activation - all states change together synchronously
+    activateRingImmediate(index, { locked = false, source = 'hover' } = {}) {
         if (index < 0 || index >= this.data.length) return;
         const ringSel = this.getRingSelection(index);
         if (!ringSel.node()) return;
 
-        if (locked) {
-            if (this.lockedIndex !== index) {
-                if (this.lockedIndex !== null && this.lockedIndex !== index) {
-                    this.stopRingRotation(this.lockedIndex);
-                    const prevLocked = this.getRingSelection(this.lockedIndex);
-                    prevLocked.classed('is-active', false).classed('is-hovered', false);
-                }
-                this.lockedIndex = index;
-            }
-        }
-
-        if (this.activeIndex !== null && this.activeIndex !== index) {
-            const previous = this.getRingSelection(this.activeIndex);
-            if (previous.node() && this.lockedIndex !== this.activeIndex) {
-                this.stopRingRotation(this.activeIndex);
-                previous.classed('is-active', false).classed('is-hovered', false);
-            }
-        }
-
         const isHover = source === 'hover';
 
-        ringSel.classed('is-hovered', isHover);
-        ringSel.classed('is-active', locked || this.lockedIndex === index || !isHover);
+        // STEP 1: Stop ALL previous states immediately (if switching)
+        if (this.activeIndex !== null && this.activeIndex !== index) {
+            const prevRing = this.getRingSelection(this.activeIndex);
+            if (prevRing.node() && this.lockedIndex !== this.activeIndex) {
+                // Stop previous ring rotation
+                this.stopRingRotation(this.activeIndex);
+                // Remove previous ring classes
+                prevRing.classed('is-active', false).classed('is-hovered', false);
+            }
+            // Stop previous audio immediately
+            this.stopSongImmediate();
+        }
 
+        // STEP 2: Update locked state if needed
+        if (locked) {
+            if (this.lockedIndex !== null && this.lockedIndex !== index) {
+                const prevLocked = this.getRingSelection(this.lockedIndex);
+                if (prevLocked.node()) {
+                    this.stopRingRotation(this.lockedIndex);
+                    prevLocked.classed('is-active', false).classed('is-hovered', false);
+                }
+                this.stopSongImmediate();
+            }
+            this.lockedIndex = index;
+        } else if (this.lockedIndex === index) {
+            // Unlocking
+            this.lockedIndex = null;
+        }
+
+        // STEP 3: Set ALL new states together
+        this.activeIndex = index;
+        ringSel.classed('is-hovered', isHover);
+        ringSel.classed('is-active', true);
+
+        // STEP 4: Start rotation
         if (isHover) {
+            this.startRingRotation(index);
             this.setHoverState(true);
-        } else if (!locked && this.lockedIndex !== index) {
+        } else {
+            this.stopRingRotation(index);
             this.setHoverState(false);
         }
 
-        if (isHover) {
-            this.startRingRotation(index);
-        } else if (!locked && this.lockedIndex !== index) {
-            this.stopRingRotation(index);
-        }
-
-        // Update song info display
+        // STEP 5: Update song info
         this.updateSongInfo(index);
 
-        this.playSong(index, { autoplay: isHover || locked });
+        // STEP 6: Start audio playback (with mute state)
+        this.playSongImmediate(index, { autoplay: isHover || locked });
+
+        // STEP 7: Update tonearm
         if (isHover) {
             this.setTonearmToIndex(index, { silent: true });
         } else {
             this.setTonearmToIndex(index, { silent: !locked });
         }
+    }
+
+    // Immediate deactivation - all states reset together synchronously
+    deactivateRingImmediate(index) {
+        if (index < 0 || index >= this.data.length) return;
+        const ringSel = this.getRingSelection(index);
+
+        // STEP 1: Stop ALL states immediately
+        this.stopRingRotation(index);
+        ringSel.classed('is-hovered', false);
+        ringSel.classed('is-active', false);
+
+        // STEP 2: Clear active index
+        if (this.activeIndex === index) {
+            this.activeIndex = null;
+        }
+
+        // STEP 3: Stop audio immediately
+        this.stopSongImmediate();
+
+        // STEP 4: Reset song info
+        this.resetSongInfo();
+
+        // STEP 5: Reset hover state
+        this.setHoverState(false);
+    }
+
+    // Legacy method for backward compatibility
+    activateRing(index, { locked = false, source = 'hover' } = {}) {
+        this.activateRingImmediate(index, { locked, source });
     }
 
     clearActiveRing({ preserveLocked = true } = {}) {
@@ -719,17 +766,27 @@ export class RecordPlayerViz {
         }
     }
 
-    playSong(index, { autoplay = true, force = false } = {}) {
+    // Immediate playback - synchronous state changes
+    playSongImmediate(index, { autoplay = true, force = false } = {}) {
         const song = this.data[index];
 
         if (!song || !song.playUrl) {
-            this.stopSong(true);
+            this.stopSongImmediate();
             return;
         }
 
-        // Update song info display
-        this.updateSongInfo(index);
+        // If same song is already playing, just update mute state
+        if (this.currentAudioIndex === index && this.currentAudio && !this.currentAudio.paused) {
+            this.currentAudio.muted = this.isMuted;
+            return;
+        }
 
+        // Stop any currently playing audio first (synchronously)
+        if (this.currentAudio && this.currentAudioIndex !== index) {
+            this.stopSongImmediate();
+        }
+
+        // Get or create audio object
         let audio = this.audioCache.get(song.playUrl);
         if (!audio) {
             audio = new Audio(song.playUrl);
@@ -739,17 +796,22 @@ export class RecordPlayerViz {
             this.audioCache.set(song.playUrl, audio);
         }
 
+        // Set current audio reference immediately
+        this.currentAudio = audio;
+        this.currentAudioIndex = index;
+
+        // Set mute state immediately
         audio.muted = this.isMuted;
+        audio.currentTime = 0;
 
+        // Handle autoplay unlock logic
         if (autoplay && !force && !this.autoplayUnlocked) {
-            this.currentAudio = audio;
-            this.currentAudioIndex = index;
-
-            audio.currentTime = 0;
             audio.muted = true;
             audio.play().then(() => {
-                audio.muted = this.isMuted;
+                // First play succeeded, now unlock and play for real
+                audio.pause();
                 audio.currentTime = 0;
+                audio.muted = this.isMuted;
                 this.autoplayUnlocked = true;
                 audio.play().then(() => {
                     this.toggleNotes(true);
@@ -757,6 +819,9 @@ export class RecordPlayerViz {
                     this.toggleNotes(false);
                 });
             }).catch(() => {
+                // First play failed, wait for user gesture
+                audio.pause();
+                audio.currentTime = 0;
                 this.pendingAudioIndex = index;
                 this.toggleNotes(false);
                 document.addEventListener('pointerdown', this.handleFirstGesture, { once: true });
@@ -764,22 +829,7 @@ export class RecordPlayerViz {
             return;
         }
 
-        if (this.currentAudioIndex === index && this.currentAudio) {
-            if (autoplay && this.currentAudio.paused) {
-                this.currentAudio.play().catch(() => this.toggleNotes(false));
-            }
-            return;
-        }
-
-        if (this.currentAudio && this.currentAudioIndex !== index) {
-            this.currentAudio.pause();
-            this.currentAudio.currentTime = 0;
-        }
-
-        this.currentAudio = audio;
-        this.currentAudioIndex = index;
-
-        audio.currentTime = 0;
+        // Normal playback - start immediately
         if (autoplay || force) {
             this.toggleNotes(true);
             audio.play().catch(() => {
@@ -793,22 +843,37 @@ export class RecordPlayerViz {
         }
     }
 
+    // Legacy method for backward compatibility
+    playSong(index, { autoplay = true, force = false } = {}) {
+        this.playSongImmediate(index, { autoplay, force });
+    }
 
-    stopSong(force = false) {
-        if (!this.currentAudio) {
-            // Even if no audio, ensure song info is reset if no active song
-            if (this.activeIndex === null && this.lockedIndex === null) {
-                this.resetSongInfo();
-            }
-            return;
+
+    // Immediate stop - synchronous state reset
+    stopSongImmediate() {
+        if (this.currentAudio) {
+            // Stop audio immediately - no async operations
+            this.currentAudio.pause();
+            this.currentAudio.currentTime = 0;
+            this.currentAudio.muted = true;
+
+            // Remove event listeners that might cause issues
+            this.currentAudio.onplay = null;
+            this.currentAudio.onpause = null;
+            this.currentAudio.onended = null;
+
+            this.currentAudio = null;
+            this.currentAudioIndex = null;
         }
-        if (!force && this.lockedIndex !== null) return;
-        this.currentAudio.pause();
-        this.currentAudio.currentTime = 0;
-        this.currentAudio.muted = true; // Ensure it's muted when stopped
-        this.currentAudio = null;
-        this.currentAudioIndex = null;
+
         this.toggleNotes(false);
+    }
+
+    // Legacy method for backward compatibility
+    stopSong(force = false) {
+        if (!force && this.lockedIndex !== null) return;
+        this.stopSongImmediate();
+
         // Reset song info when stopping if no active or locked song
         if (this.activeIndex === null && this.lockedIndex === null) {
             this.resetSongInfo();
@@ -901,16 +966,16 @@ export class RecordPlayerViz {
             }
         }
 
-        // Only update the currently playing audio if there's an active song
-        // Don't resume playback if no song is currently active (hovered/clicked)
+        // Update audio mute state immediately - all states change together
         if (this.currentAudio && this.activeIndex !== null) {
+            // If there's an active song, update its mute state immediately
             this.currentAudio.muted = this.isMuted;
         } else if (this.currentAudio && this.activeIndex === null) {
-            // If no active song but audio exists, stop it and reset song info
-            this.stopSong(true);
+            // If audio is playing but no active index, stop it immediately
+            this.stopSongImmediate();
             this.resetSongInfo();
         } else if (!this.currentAudio && this.activeIndex === null) {
-            // If no audio and no active song, ensure song info is reset
+            // No audio and no active song, just reset info
             this.resetSongInfo();
         }
     }
