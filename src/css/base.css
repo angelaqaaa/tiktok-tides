@@ -1508,6 +1508,36 @@ circle[data-type="bubble"] {
   margin-top: 2px;
 }
 
+.danceability-indicator {
+  width: 50px;
+  height: 400px;
+  left: 0;
+  top: 0;
+}
+
+.indicator-arrow {
+  position: absolute;
+  left: 15px;
+  font-size: 20px;
+  color: #FFD700;
+  width: 20px;
+  text-align: center;
+  transition: top 0.2s ease;
+  transform: translateY(-50%);
+  line-height: 1;
+}
+
+.indicator-line {
+  position: absolute;
+  left: 62px;
+  width: 51px;
+  height: 3px;
+  background-color: #FFD700;
+  transition: top 0.2s ease;
+  z-index: 10;
+  transform: translateY(-50%);
+}
+
 /* Make sure the section container is positioned relative for absolute positioning */
 #section-surge .section-container {
   position: relative;
