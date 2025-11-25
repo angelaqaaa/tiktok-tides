@@ -193,7 +193,7 @@ export class RankingViz extends EventEmitter {
       <path fill="white" d="M12 5V1L7 6l5 5V7c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8z" />
     </svg>
   `)
-      .on('click', () => this.animatedReset());
+      .on('click', () => this.resetAnimation());
 
     // --- Pause / Play Button ---
     const pauseBtn = d3.select(this.container)
@@ -205,7 +205,7 @@ export class RankingViz extends EventEmitter {
       <path class="play-icon" style="display:none" fill="white" d="M8 5v14l11-7z"/>
     </svg>
   `)
-      .on('click', () => this.togglePause());
+      .on('click', () => this.pauseAnimation());
 
     // --- Skip Button ---
     d3.select(this.container)
@@ -216,7 +216,7 @@ export class RankingViz extends EventEmitter {
       <path fill="white" d="M7 6l6 6-6 6V6zm7 0h3v12h-3V6z"/>
     </svg>
   `)
-      .on('click', () => this.skipRemainingFalls());
+      .on('click', () => this.skipAnimation());
 
 
     const centerGroup = this.svg.append('g')
@@ -428,11 +428,11 @@ export class RankingViz extends EventEmitter {
         d3.select(this).style("cursor", "default");
       });
 
-    this.startAutomaticFalling(pages, pyramidData, rectWidth, rectHeight);
+    this.startAnimation(pages, pyramidData, rectWidth, rectHeight);
 
   }
 
-  startAutomaticFalling(pages, pyramidData, rectWidth, rectHeight) {
+  startAnimation(pages, pyramidData, rectWidth, rectHeight) {
     const delayArray = [1000, 1000, 1100, 2000, 2000, 6000];
     let index = 0;
 
@@ -488,6 +488,7 @@ export class RankingViz extends EventEmitter {
       `);
 
       d.coverFallen = true;
+      this.checkAllPagesFallen();
     }, fallDelay);
 
     // Audio fade-out
@@ -504,7 +505,7 @@ export class RankingViz extends EventEmitter {
   }
 
   // --- pause ---
-  togglePause() {
+  pauseAnimation() {
     this.state.animationPaused = !this.state.animationPaused;
 
     const pauseIcon = this.container.querySelector('.pause-icon');
@@ -522,7 +523,7 @@ export class RankingViz extends EventEmitter {
   }
 
   // --- skip ---
-  skipRemainingFalls() {
+  skipAnimation() {
     // stop current audio
     if (this.currentAudio) {
       try {
@@ -557,6 +558,7 @@ export class RankingViz extends EventEmitter {
         `);
 
         d.coverFallen = true;
+        this.checkAllPagesFallen();
       }, i * 100);
     });
   }
@@ -668,7 +670,7 @@ export class RankingViz extends EventEmitter {
   }
 
   // --- reset ---
-  async animatedReset() {
+  async resetAnimation() {
     const pages = d3.select(this.container).selectAll('g.page');
 
     const duration = 600;
@@ -718,5 +720,29 @@ export class RankingViz extends EventEmitter {
 
     // rebuild everything
     this.render();
+  }
+
+  checkAllPagesFallen() {
+    const pages = d3.select(this.container).selectAll('g.page').data();
+    const allFallen = pages.every(d => d.coverFallen);
+
+    const pauseBtn = this.container.querySelector('.viz-btn--pause');
+    const skipBtn = this.container.querySelector('.viz-btn--skip');
+
+    if (allFallen) {
+      // Grey out / disable
+      pauseBtn.style.pointerEvents = 'none';
+      pauseBtn.style.opacity = 0.4;
+
+      skipBtn.style.pointerEvents = 'none';
+      skipBtn.style.opacity = 0.4;
+    } else {
+      // Enable if needed
+      pauseBtn.style.pointerEvents = 'auto';
+      pauseBtn.style.opacity = 1;
+
+      skipBtn.style.pointerEvents = 'auto';
+      skipBtn.style.opacity = 1;
+    }
   }
 }
