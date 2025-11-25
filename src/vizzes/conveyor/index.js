@@ -398,7 +398,7 @@ export class ConveyorViz extends EventEmitter {
       if (feedbackArea) feedbackArea.style.display = 'flex';
       
       if (nextBtn) {
-        nextBtn.style.display = 'inline-block';
+        nextBtn.style.display = 'block';
         // Update button text for last item
         if (this.state.currentIndex >= this.data.length - 1) {
           nextBtn.textContent = 'Finish';
@@ -440,7 +440,7 @@ export class ConveyorViz extends EventEmitter {
         if (feedbackArea) feedbackArea.style.display = 'flex';
         
         if (nextBtn) {
-          nextBtn.style.display = 'inline-block';
+          nextBtn.style.display = 'block';
           // Update button text for last item
           if (this.state.currentIndex >= this.data.length - 1) {
             nextBtn.textContent = 'Finish';
@@ -535,7 +535,7 @@ export class ConveyorViz extends EventEmitter {
     const nextBtn = this.container.querySelector('.next-btn');
     
     if (nextBtn) {
-      nextBtn.style.display = 'inline-block';
+      nextBtn.style.display = 'block';
       
       // Update button text for last item
       if (this.state.currentIndex >= this.data.length - 1) {

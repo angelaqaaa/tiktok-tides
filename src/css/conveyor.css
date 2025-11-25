@@ -807,6 +807,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: flex-end;
   gap: 1rem;
   width: 100%;
 }
@@ -821,6 +822,7 @@
 .feedback-area .next-btn {
   flex: 0 0 auto;
   margin-left: auto;
+  align-self: flex-end;
 }
 
 .feedback-message {
