@@ -41,9 +41,14 @@
     left: 10px;
 }
 
-.viz-btn--skip {
+.viz-btn--pause {
     top: 10px;
     left: 70px;
+}
+
+.viz-btn--skip {
+    top: 10px;
+    left: 130px;
 }
 
 .viz-info-tooltip {

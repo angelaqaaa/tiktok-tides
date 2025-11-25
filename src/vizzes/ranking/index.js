@@ -195,6 +195,17 @@ export class RankingViz extends EventEmitter {
   `)
       .on('click', () => this.animatedReset());
 
+    // --- Pause / Play Button ---
+    const pauseBtn = d3.select(this.container)
+      .append('div')
+      .attr('class', 'viz-btn viz-btn--pause')
+      .html(`
+    <svg viewBox="0 0 24 24">
+      <path class="pause-icon" fill="white" d="M6 4h4v16H6zm8 0h4v16h-4z"/>
+      <path class="play-icon" style="display:none" fill="white" d="M8 5v14l11-7z"/>
+    </svg>
+  `)
+      .on('click', () => this.togglePause());
 
     // --- Skip Button ---
     d3.select(this.container)
@@ -492,6 +503,25 @@ export class RankingViz extends EventEmitter {
     return audio;
   }
 
+  // --- pause ---
+  togglePause() {
+    this.state.animationPaused = !this.state.animationPaused;
+
+    const pauseIcon = this.container.querySelector('.pause-icon');
+    const playIcon = this.container.querySelector('.play-icon');
+    if (this.state.animationPaused) {
+      pauseIcon.style.display = 'none';
+      playIcon.style.display = 'block';
+      if (this.currentAudio) this.currentAudio.pause();
+    } else {
+      pauseIcon.style.display = 'block';
+      playIcon.style.display = 'none';
+      if (this.currentAudio) this.currentAudio.play();
+      this.resumeFalling();
+    }
+  }
+
+  // --- skip ---
   skipRemainingFalls() {
     // stop current audio
     if (this.currentAudio) {
@@ -637,6 +667,7 @@ export class RankingViz extends EventEmitter {
     });
   }
 
+  // --- reset ---
   async animatedReset() {
     const pages = d3.select(this.container).selectAll('g.page');
 
