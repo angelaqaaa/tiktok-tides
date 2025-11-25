@@ -3697,3 +3697,752 @@ circle[data-type="bubble"] {
     height: 16px;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   SCENE 1: HERO (ARRIVAL) - v3 spec 5.1
+   Three-band layout: nav spacer, content band (70vh), bottom band
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.scene-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: linear-gradient(180deg,
+    #050510 0%,
+    #0a0a1a 30%,
+    #0f1525 70%,
+    #1a1a2e 100%
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Hero Background Layers
+   ───────────────────────────────────────────────────────────────────────── */
+.hero-bg-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Starfield with many twinkling stars */
+.hero-bg-stars {
+  background:
+    /* Row 1 - top area */
+    radial-gradient(circle 1.5px at 3% 5%, rgba(255,255,255,0.9) 0%, transparent 100%),
+    radial-gradient(circle 1px at 8% 12%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(circle 2px at 12% 3%, rgba(186,246,240,0.8) 0%, transparent 100%),
+    radial-gradient(circle 1px at 18% 8%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 25% 15%, rgba(255,255,255,0.85) 0%, transparent 100%),
+    radial-gradient(circle 1px at 32% 6%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(circle 2px at 38% 18%, rgba(45,204,211,0.5) 0%, transparent 100%),
+    radial-gradient(circle 1px at 45% 4%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 52% 12%, rgba(255,255,255,0.75) 0%, transparent 100%),
+    radial-gradient(circle 1px at 58% 7%, rgba(186,246,240,0.6) 0%, transparent 100%),
+    radial-gradient(circle 2px at 65% 16%, rgba(255,255,255,0.9) 0%, transparent 100%),
+    radial-gradient(circle 1px at 72% 3%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 78% 11%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(circle 1px at 85% 8%, rgba(241,32,74,0.35) 0%, transparent 100%),
+    radial-gradient(circle 2px at 92% 14%, rgba(255,255,255,0.85) 0%, transparent 100%),
+    radial-gradient(circle 1px at 97% 5%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    /* Row 2 - upper middle */
+    radial-gradient(circle 1px at 5% 22%, rgba(255,255,255,0.75) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 10% 28%, rgba(255,255,255,0.9) 0%, transparent 100%),
+    radial-gradient(circle 1px at 16% 35%, rgba(186,246,240,0.7) 0%, transparent 100%),
+    radial-gradient(circle 2px at 22% 25%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(circle 1px at 28% 32%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 35% 22%, rgba(45,204,211,0.55) 0%, transparent 100%),
+    radial-gradient(circle 1px at 42% 30%, rgba(255,255,255,0.85) 0%, transparent 100%),
+    radial-gradient(circle 2px at 48% 26%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(circle 1px at 55% 35%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 62% 23%, rgba(255,255,255,0.9) 0%, transparent 100%),
+    radial-gradient(circle 1px at 68% 28%, rgba(186,246,240,0.6) 0%, transparent 100%),
+    radial-gradient(circle 2px at 75% 33%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(circle 1px at 82% 24%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 88% 30%, rgba(241,32,74,0.3) 0%, transparent 100%),
+    radial-gradient(circle 1px at 95% 27%, rgba(255,255,255,0.75) 0%, transparent 100%),
+    /* Row 3 - middle */
+    radial-gradient(circle 1.5px at 2% 42%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(circle 1px at 9% 48%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(circle 2px at 15% 40%, rgba(255,255,255,0.9) 0%, transparent 100%),
+    radial-gradient(circle 1px at 21% 52%, rgba(186,246,240,0.7) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 28% 45%, rgba(255,255,255,0.75) 0%, transparent 100%),
+    radial-gradient(circle 1px at 34% 38%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(circle 2px at 40% 50%, rgba(45,204,211,0.5) 0%, transparent 100%),
+    radial-gradient(circle 1px at 47% 42%, rgba(255,255,255,0.85) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 53% 55%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(circle 1px at 60% 46%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(circle 2px at 66% 38%, rgba(255,255,255,0.9) 0%, transparent 100%),
+    radial-gradient(circle 1px at 73% 52%, rgba(186,246,240,0.6) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 80% 44%, rgba(255,255,255,0.75) 0%, transparent 100%),
+    radial-gradient(circle 1px at 86% 50%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(circle 2px at 93% 40%, rgba(255,255,255,0.85) 0%, transparent 100%),
+    /* Row 4 - lower middle */
+    radial-gradient(circle 1px at 4% 62%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 11% 68%, rgba(255,255,255,0.85) 0%, transparent 100%),
+    radial-gradient(circle 1px at 18% 58%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(circle 2px at 24% 65%, rgba(186,246,240,0.75) 0%, transparent 100%),
+    radial-gradient(circle 1px at 31% 72%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 37% 60%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(circle 1px at 44% 68%, rgba(45,204,211,0.45) 0%, transparent 100%),
+    radial-gradient(circle 2px at 50% 58%, rgba(255,255,255,0.9) 0%, transparent 100%),
+    radial-gradient(circle 1px at 57% 66%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 63% 74%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(circle 1px at 70% 62%, rgba(255,255,255,0.75) 0%, transparent 100%),
+    radial-gradient(circle 2px at 77% 70%, rgba(241,32,74,0.25) 0%, transparent 100%),
+    radial-gradient(circle 1px at 83% 58%, rgba(255,255,255,0.85) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 90% 66%, rgba(186,246,240,0.65) 0%, transparent 100%),
+    radial-gradient(circle 1px at 96% 72%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    /* Row 5 - bottom area */
+    radial-gradient(circle 1.5px at 6% 82%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(circle 1px at 13% 88%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(circle 2px at 20% 78%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(circle 1px at 27% 85%, rgba(186,246,240,0.55) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 33% 92%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(circle 1px at 40% 80%, rgba(255,255,255,0.55) 0%, transparent 100%),
+    radial-gradient(circle 2px at 46% 88%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(circle 1px at 54% 82%, rgba(45,204,211,0.4) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 61% 90%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(circle 1px at 67% 78%, rgba(255,255,255,0.65) 0%, transparent 100%),
+    radial-gradient(circle 2px at 74% 86%, rgba(255,255,255,0.55) 0%, transparent 100%),
+    radial-gradient(circle 1px at 81% 92%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 87% 80%, rgba(186,246,240,0.5) 0%, transparent 100%),
+    radial-gradient(circle 1px at 94% 88%, rgba(255,255,255,0.55) 0%, transparent 100%);
+  animation: starsTwinkle 8s ease-in-out infinite alternate;
+}
+
+@keyframes starsTwinkle {
+  0% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* Planet horizon curve at bottom - realistic layered glow effect
+   Inspired by: https://codersblock.com/blog/creating-glow-effects-with-css/
+   Technique: Large circle positioned mostly off-screen, layered box-shadows for atmosphere */
+.hero-bg-horizon {
+  overflow: hidden;
+}
+
+/* The planet body - massive circle with only top edge visible */
+.hero-bg-horizon::before {
+  content: '';
+  position: absolute;
+  /* Size: very large circle, positioned so only ~150px of curve shows */
+  width: 300vw;
+  height: 300vw;
+  min-width: 3000px;
+  min-height: 3000px;
+  bottom: calc(-300vw + 120px);
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+
+  /* Planet surface - dark with subtle terrain hints */
+  background:
+    /* Surface highlight near the edge */
+    radial-gradient(
+      ellipse 100% 8% at 50% 0%,
+      rgba(45, 204, 211, 0.12) 0%,
+      transparent 100%
+    ),
+    /* Main planet body - deep blue-green */
+    radial-gradient(
+      circle at 50% 0%,
+      #0d2f3d 0%,
+      #061a22 30%,
+      #030f14 60%,
+      #010609 100%
+    );
+
+  /* Layered atmospheric glow - the key to realism */
+  box-shadow:
+    /* Inner edge glow - bright cyan line */
+    inset 0 2px 0 0 rgba(45, 204, 211, 0.9),
+    inset 0 4px 8px 0 rgba(45, 204, 211, 0.4),
+    /* Outer atmosphere layers - stacked for depth */
+    0 -1px 0 0 rgba(45, 204, 211, 1),
+    0 -2px 4px 0 rgba(45, 204, 211, 0.9),
+    0 -4px 12px 2px rgba(45, 204, 211, 0.7),
+    0 -8px 30px 4px rgba(45, 204, 211, 0.5),
+    0 -15px 60px 8px rgba(186, 246, 240, 0.4),
+    0 -25px 100px 15px rgba(186, 246, 240, 0.25),
+    0 -40px 150px 25px rgba(45, 204, 211, 0.15),
+    /* Subtle warm accent on far edges */
+    -200px -20px 120px 20px rgba(241, 32, 74, 0.08),
+    200px -20px 120px 20px rgba(241, 32, 74, 0.08);
+}
+
+/* Upper atmosphere haze - adds depth and realism */
+.hero-bg-horizon::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 350px;
+  background:
+    /* Bright glow band near horizon */
+    linear-gradient(
+      to top,
+      rgba(45, 204, 211, 0.25) 0%,
+      rgba(45, 204, 211, 0.15) 15%,
+      rgba(186, 246, 240, 0.08) 35%,
+      rgba(186, 246, 240, 0.03) 55%,
+      transparent 100%
+    );
+  /* Blur for soft atmospheric haze */
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Hero Three-Band Layout
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Top band: Space for fixed navbar */
+.hero-nav-spacer {
+  height: 80px; /* 64px nav + 16px breathing room */
+  flex-shrink: 0;
+}
+
+/* Middle band: Main hero content (fills remaining space ~70vh) */
+.hero-content-band {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--space-6);
+  position: relative;
+  z-index: 1;
+}
+
+.hero-container {
+  display: grid;
+  grid-template-columns: 55% 45%;
+  gap: var(--space-7);
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Hero Text Column (Left 55%)
+   ───────────────────────────────────────────────────────────────────────── */
+.hero-text-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.hero-main-title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg,
+    #2DCCD3 0%,
+    #BAF6F0 30%,
+    #F1204A 70%,
+    #FBEB35 100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: titleShimmer 6s ease-in-out infinite;
+}
+
+@keyframes titleShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.scene-hero .hero-subtitle {
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  color: var(--color-text-secondary);
+  font-weight: 400;
+  margin: 0;
+}
+
+.hero-description {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.hero-description p {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.hero-cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #2DCCD3, #1BA8AE);
+  border: none;
+  border-radius: 12px;
+  color: #033624;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 250ms ease;
+  width: fit-content;
+  margin-top: var(--space-3);
+}
+
+.hero-cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(45, 204, 211, 0.4);
+  background: linear-gradient(135deg, #3DDDE4, #2DCCD3);
+}
+
+.hero-cta-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(45, 204, 211, 0.3);
+}
+
+.hero-cta-button svg {
+  transition: transform 200ms ease;
+}
+
+.hero-cta-button:hover svg {
+  transform: translateX(4px);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Hero Visual Column (Right 45%) - Phone Frame
+   ───────────────────────────────────────────────────────────────────────── */
+.hero-visual-column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-phone-frame {
+  position: relative;
+  width: 280px;
+  height: 560px;
+  background: #0a0a0f;
+  border-radius: 40px;
+  padding: 8px;
+  box-shadow:
+    0 0 0 2px rgba(60, 60, 70, 0.5),
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    inset 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+/* TikTok-style neon border glow */
+.phone-border-glow {
+  position: absolute;
+  inset: -3px;
+  border-radius: 43px;
+  background: linear-gradient(135deg,
+    #2DCCD3 0%,
+    transparent 25%,
+    #F1204A 50%,
+    transparent 75%,
+    #2DCCD3 100%
+  );
+  background-size: 400% 400%;
+  animation: phoneBorderGlow 4s linear infinite;
+  opacity: 0.6;
+  z-index: -1;
+}
+
+@keyframes phoneBorderGlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 400% 50%; }
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  border-radius: 32px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Notch at top */
+.phone-screen::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 24px;
+  background: #0a0a0f;
+  border-radius: 12px;
+  z-index: 10;
+}
+
+.phone-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 40px 8px 8px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.phone-video-card {
+  flex: 1;
+  min-height: 150px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+}
+
+.video-thumbnail {
+  flex: 1;
+  position: relative;
+}
+
+/* Different gradient thumbnails for each card */
+.video-thumbnail--1 {
+  background: linear-gradient(135deg,
+    #2DCCD3 0%,
+    #1a5a5d 50%,
+    #033624 100%
+  );
+}
+
+.video-thumbnail--2 {
+  background: linear-gradient(135deg,
+    #F1204A 0%,
+    #8a1a35 50%,
+    #4A0505 100%
+  );
+}
+
+.video-thumbnail--3 {
+  background: linear-gradient(135deg,
+    #FBEB35 0%,
+    #c4a020 50%,
+    #6d5a10 100%
+  );
+}
+
+/* Shimmer overlay on thumbnails */
+.video-thumbnail::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  animation: thumbnailShimmer 3s ease-in-out infinite;
+}
+
+@keyframes thumbnailShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.video-actions {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.video-action {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.video-action svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Hero Bottom Band
+   ───────────────────────────────────────────────────────────────────────── */
+.hero-bottom-band {
+  padding: var(--space-5) var(--space-6);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-helper-text {
+  font-size: 0.875rem;
+  color: var(--color-text-tertiary);
+  margin: 0;
+  animation: fadeInUp 1s ease 0.5s both;
+}
+
+/* Scroll indicator arrow */
+.hero-scroll-indicator {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-3);
+  animation: scrollBounce 2s ease-in-out infinite;
+}
+
+.hero-scroll-indicator svg {
+  width: 28px;
+  height: 28px;
+  color: rgba(45, 204, 211, 0.7);
+  filter: drop-shadow(0 0 6px rgba(45, 204, 211, 0.4));
+}
+
+@keyframes scrollBounce {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Alien Narrator System - v3 spec 4.1
+   ───────────────────────────────────────────────────────────────────────── */
+.alien-narrator {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+
+/* Show narrator when scene is active */
+.scene-hero.active .alien-narrator--hero,
+[data-scene="cosmos"] .alien-narrator--hero {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.alien-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,
+    rgba(45, 204, 211, 0.2) 0%,
+    rgba(186, 246, 240, 0.1) 100%
+  );
+  border: 2px solid rgba(45, 204, 211, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow:
+    0 0 20px rgba(45, 204, 211, 0.3),
+    0 4px 16px rgba(0, 0, 0, 0.3);
+  animation: alienFloat 3s ease-in-out infinite;
+}
+
+@keyframes alienFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.alien-avatar img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+/* Fallback if image fails to load */
+.alien-avatar--fallback::after {
+  content: '';
+  width: 40px;
+  height: 40px;
+  background: #BAF6F0;
+  border-radius: 50% 50% 45% 45%;
+  position: relative;
+}
+
+.alien-speech-bubble {
+  max-width: 300px;
+  padding: var(--space-4);
+  background: rgba(10, 10, 20, 0.95);
+  border: 1px solid rgba(45, 204, 211, 0.4);
+  border-radius: 16px 16px 16px 4px;
+  box-shadow:
+    0 0 16px rgba(45, 204, 211, 0.15),
+    0 8px 24px rgba(0, 0, 0, 0.4);
+  position: relative;
+  opacity: 0;
+  transform: scale(0.9) translateX(-10px);
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+
+/* Show speech bubble */
+.alien-speech-bubble[data-speech-state="visible"] {
+  opacity: 1;
+  transform: scale(1) translateX(0);
+}
+
+/* Speech bubble tail */
+.alien-speech-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: -8px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 8px 10px 8px 0;
+  border-color: transparent rgba(45, 204, 211, 0.4) transparent transparent;
+}
+
+.alien-speech-text {
+  font-size: 0.9375rem;
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Hero Scene Responsive Styles
+   ───────────────────────────────────────────────────────────────────────── */
+@media (max-width: 992px) {
+  .hero-container {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    text-align: center;
+  }
+
+  .hero-text-column {
+    align-items: center;
+  }
+
+  .hero-visual-column {
+    order: -1; /* Phone above text on tablet */
+  }
+
+  .hero-phone-frame {
+    width: 220px;
+    height: 440px;
+    border-radius: 32px;
+  }
+
+  .phone-screen {
+    border-radius: 26px;
+  }
+
+  .hero-cta-button {
+    margin: var(--space-3) auto 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-nav-spacer {
+    height: 72px; /* 56px nav + 16px */
+  }
+
+  .hero-content-band {
+    padding: 0 var(--space-4);
+  }
+
+  .hero-main-title {
+    font-size: clamp(2rem, 8vw, 2.5rem);
+  }
+
+  .scene-hero .hero-subtitle {
+    font-size: 1.125rem;
+  }
+
+  .hero-phone-frame {
+    width: 180px;
+    height: 360px;
+    border-radius: 28px;
+  }
+
+  .phone-screen {
+    border-radius: 22px;
+  }
+
+  .phone-screen::before {
+    width: 60px;
+    height: 18px;
+  }
+
+  .alien-narrator {
+    bottom: 16px;
+    left: 16px;
+  }
+
+  .alien-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .alien-avatar img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .alien-speech-bubble {
+    max-width: 220px;
+    padding: var(--space-3);
+  }
+
+  .alien-speech-text {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-nav-spacer {
+    height: 64px; /* 48px nav + 16px */
+  }
+
+  .hero-phone-frame {
+    width: 150px;
+    height: 300px;
+    border-radius: 24px;
+  }
+
+  .phone-screen {
+    border-radius: 18px;
+  }
+
+  .hero-bottom-band {
+    padding: var(--space-4);
+  }
+
+  .alien-speech-bubble {
+    max-width: 180px;
+  }
+}

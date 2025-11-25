@@ -205,6 +205,9 @@ class TikTokTidesApp {
     // Initialize starfield
     this.initStarfield();
 
+    // Initialize alien narrator (v3 spec 4.1)
+    this.initAlienNarrator();
+
     // Initialize micro-interactions
     initMicroInteractions();
 
@@ -872,6 +875,83 @@ class TikTokTidesApp {
       star.style.height = `${size}px`;
 
       starfield.appendChild(star);
+    }
+  }
+
+  /**
+   * Initialize alien narrator system per v3 spec 4.1
+   * Shows speech bubble after a delay when user enters a scene
+   */
+  initAlienNarrator() {
+    // Show the hero alien's speech bubble after a delay
+    const heroAlien = document.querySelector('.alien-narrator--hero');
+    if (heroAlien) {
+      const speechBubble = heroAlien.querySelector('.alien-speech-bubble');
+      if (speechBubble) {
+        // Show speech bubble after 1.5 seconds
+        setTimeout(() => {
+          speechBubble.setAttribute('data-speech-state', 'visible');
+        }, 1500);
+
+        // Allow clicking the alien to toggle speech
+        const avatar = heroAlien.querySelector('.alien-avatar');
+        if (avatar) {
+          avatar.style.cursor = 'pointer';
+          avatar.addEventListener('click', () => {
+            const current = speechBubble.getAttribute('data-speech-state');
+            speechBubble.setAttribute('data-speech-state',
+              current === 'visible' ? 'hidden' : 'visible'
+            );
+          });
+        }
+      }
+    }
+
+    // Setup observer for scene-specific alien narrators
+    this.setupAlienSceneObserver();
+  }
+
+  /**
+   * Watch for scene changes to show/hide alien narrators
+   */
+  setupAlienSceneObserver() {
+    // Create mutation observer to watch body's data-scene attribute
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-scene') {
+          const currentScene = document.body.dataset.scene;
+          this.updateAlienNarrator(currentScene);
+        }
+      });
+    });
+
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['data-scene']
+    });
+  }
+
+  /**
+   * Update alien narrator based on current scene
+   */
+  updateAlienNarrator(scene) {
+    // Hide all alien narrators first
+    document.querySelectorAll('.alien-narrator').forEach(narrator => {
+      const speechBubble = narrator.querySelector('.alien-speech-bubble');
+      if (speechBubble) {
+        speechBubble.setAttribute('data-speech-state', 'hidden');
+      }
+    });
+
+    // Show the narrator for the current scene after a delay
+    const sceneNarrator = document.querySelector(`.alien-narrator[data-scene="${scene}"]`);
+    if (sceneNarrator) {
+      const speechBubble = sceneNarrator.querySelector('.alien-speech-bubble');
+      if (speechBubble) {
+        setTimeout(() => {
+          speechBubble.setAttribute('data-speech-state', 'visible');
+        }, 800);
+      }
     }
   }
 
