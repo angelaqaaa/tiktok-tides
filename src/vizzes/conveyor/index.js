@@ -292,8 +292,8 @@ export class ConveyorViz extends EventEmitter {
     const halfBox = boxW / 2;
     const offset = -(this.state.currentIndex * step);
 
-    // Keep the original centering approach but with dynamic values
-    belt.style.transform = `translateX(calc(50% - ${halfBox}px + ${offset}px))`;
+    // Shift cards to the left by subtracting additional offset
+    belt.style.transform = `translateX(calc(50% - ${halfBox}px + ${offset}px - 600px))`;
   }
 
   startConveyor() {

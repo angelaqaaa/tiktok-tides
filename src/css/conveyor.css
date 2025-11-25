@@ -125,10 +125,7 @@
   transform-style: preserve-3d;
 }
 
-.conveyor-belt.active {
-  /* Add subtle vibration when active */
-  animation: belt-vibrate 0.15s ease-in-out infinite alternate;
-}
+/* Removed .conveyor-belt.active animation to prevent overriding translateX positioning */
 
 @keyframes belt-vibrate {
   from {
