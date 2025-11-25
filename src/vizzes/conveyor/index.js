@@ -193,7 +193,7 @@ export class ConveyorViz extends EventEmitter {
 
   createBox(item, index) {
     const box = document.createElement('div');
-    box.className = 'conveyor-box';
+    box.className = 'conveyor-box inactive';
     box.setAttribute('data-index', index);
     box.setAttribute('data-id', item.id);
 
@@ -301,6 +301,10 @@ export class ConveyorViz extends EventEmitter {
   startConveyor() {
     this.state.isPaused = false;
     this.state.isMoving = false;
+
+    // Remove inactive class from all boxes
+    const boxes = this.container.querySelectorAll('.conveyor-box');
+    boxes.forEach(box => box.classList.remove('inactive'));
 
     // Hide start button, show interaction panel
     const startBtn = this.container.querySelector('.start-btn');
