@@ -210,6 +210,7 @@ export class ConveyorViz extends EventEmitter {
     const back = document.createElement('div');
     back.className = 'box-face box-back';
     back.innerHTML = `
+      <div class="box-question-on-back">${item.label}</div>
       <div class="box-answer-label">Answer:</div>
       <div class="box-answer">${item.answer}</div>
       <div class="box-checkmark">✓</div>
@@ -271,29 +272,30 @@ export class ConveyorViz extends EventEmitter {
   }
 
   updateBeltPosition() {
-    const belt = this.container.querySelector('.conveyor-belt');
-    if (!belt) return;
+    const boxes = this.container.querySelectorAll('.conveyor-box');
+    if (!boxes.length) return;
 
-    // Center the current box using actual sizes (responsive-friendly)
-    const currentBox = this.container.querySelector(
-      `.conveyor-box[data-index="${this.state.currentIndex}"]`
-    );
-    if (!currentBox) return;
-
-    // Get live dimensions
-    const styles = window.getComputedStyle(belt);
-    // Flex row gap is exposed as column-gap/gap depending on browser
-    const gapStr = styles.columnGap || styles.gap || '0px';
-    const gap = parseFloat(gapStr) || 0;
-    const boxW = currentBox.getBoundingClientRect().width;
-    const step = boxW + gap; // width of one box plus the gap between boxes
-
-    // Half width of the box for proper centering without hardcoding
-    const halfBox = boxW / 2;
-    const offset = -(this.state.currentIndex * step);
-
-    // Shift cards to the left by subtracting additional offset
-    belt.style.transform = `translateX(calc(50% - ${halfBox}px + ${offset}px - 600px))`;
+    boxes.forEach((box, index) => {
+      const dataIndex = parseInt(box.getAttribute('data-index'));
+      
+      // Position based on state relative to current index
+      if (dataIndex < this.state.currentIndex) {
+        // Completed cards - move to the left
+        box.style.transform = 'translateX(-400px)';
+        box.classList.remove('waiting', 'active-card');
+        box.classList.add('completed-card');
+      } else if (dataIndex === this.state.currentIndex) {
+        // Active card - center position
+        box.style.transform = 'translateX(0)';
+        box.classList.remove('waiting', 'completed-card');
+        box.classList.add('active-card');
+      } else {
+        // Waiting cards - stay on the right
+        box.style.transform = 'translateX(400px)';
+        box.classList.add('waiting');
+        box.classList.remove('active-card', 'completed-card');
+      }
+    });
   }
 
   startConveyor() {
@@ -579,6 +581,21 @@ export class ConveyorViz extends EventEmitter {
     if (currentBox) {
       currentBox.classList.remove('active');
     }
+
+    // Center all cards in a row
+    const boxes = this.container.querySelectorAll('.conveyor-box');
+    const totalCards = boxes.length;
+    const cardWidth = 220; // from CSS
+    const gap = 32; // from CSS
+    const totalWidth = (totalCards * cardWidth) + ((totalCards - 1) * gap);
+    const startOffset = -(totalWidth / 2) + (cardWidth / 2);
+    
+    boxes.forEach((box, index) => {
+      const offset = startOffset + (index * (cardWidth + gap));
+      box.style.transform = `translateX(${offset}px)`;
+      box.classList.remove('waiting', 'active-card', 'completed-card');
+      box.classList.add('final-position');
+    });
 
     const panel = this.container.querySelector('.interaction-panel');
     panel.innerHTML = `
