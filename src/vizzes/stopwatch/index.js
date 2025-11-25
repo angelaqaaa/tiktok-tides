@@ -29,6 +29,7 @@ export class StopwatchViz extends EventEmitter {
     this.paths = null;
     this.buttonRect = null;
     this.crownRect = null;
+    this.labelsG = null; // group for labels above arcs
 
     // scales & layout
     this.angleScale = null;
@@ -147,6 +148,7 @@ export class StopwatchViz extends EventEmitter {
     this.paths = null;
     this.buttonRect = null;
     this.crownRect = null;
+    this.labelsG = null;
     this.mounted = false;
     this.emit(VIZ_EVENTS.EXIT_COMPLETE);
   }
@@ -154,7 +156,7 @@ export class StopwatchViz extends EventEmitter {
   destroy() {
     this.unmount();
     this.data = null;
-       this.rawData = null;
+    this.rawData = null;
     this.state = null;
     this.events.clear();
   }
@@ -227,8 +229,24 @@ export class StopwatchViz extends EventEmitter {
         'The animation only plays when the top button is pressed.'
       );
 
-    // defs for text paths, etc.
+    // defs for gradients, text paths, etc.
     const defs = this.svg.append('defs');
+
+    // Arc fill gradient (shared by all sectors)
+    const arcGradient = defs.append('linearGradient')
+      .attr('id', 'sector-gradient')
+      .attr('x1', '0%')
+      .attr('y1', '0%')
+      .attr('x2', '100%')
+      .attr('y2', '0%');
+
+    arcGradient.append('stop')
+      .attr('offset', '0%')
+      .attr('stop-color', '#2dccd3');
+
+    arcGradient.append('stop')
+      .attr('offset', '100%')
+      .attr('stop-color', '#f1204a');
 
     // Centering group
     this.g = this.svg.append('g')
@@ -242,7 +260,7 @@ export class StopwatchViz extends EventEmitter {
     const sectorMinRadius = Math.max(12, R * 0.12);
 
     // Perimeter arc thickness & store it (THICKER ARCS)
-    const arcThickness = Math.max(10, (sectorMaxRadius - sectorMinRadius) * 0.10);
+    const arcThickness = Math.max(14, (sectorMaxRadius - sectorMinRadius) * 0.16);
 
     // Save geom
     Object.assign(this._geom, {
@@ -330,13 +348,13 @@ export class StopwatchViz extends EventEmitter {
       .range([sectorMinR, sectorMaxR])
       .nice();
 
-    // Colors
-    const color = d3.scaleOrdinal()
-      .domain(this.data.map(d => d[0]))
-      .range(d3.schemeTableau10.concat(d3.schemeSet2).slice(0, this.data.length));
-
-    // Sectors
+    // Sectors group (arcs)
     const sectorsG = this.g.append('g').attr('aria-label', 'sectors');
+
+    // Labels group (above sectors)
+    this.labelsG = this.g.append('g')
+      .attr('class', 'labels-layer')
+      .attr('pointer-events', 'none');
 
     // Create ring-shaped arcs (only perimeter/arc, not full wedge from center)
     const arcFor = outerR => d3.arc()
@@ -349,9 +367,10 @@ export class StopwatchViz extends EventEmitter {
       .data(this.data) // data is ascending by binEnd
       .join('path')
       .attr('class', 'sector')
-      .attr('fill', d => color(d[0]))
+      .attr('fill', 'url(#sector-gradient)')
       .attr('stroke', 'none')
-      .style('opacity', 0.75)
+      // default opacity = hover opacity (fully opaque)
+      .style('opacity', 1)
       // Z-order: longest durations at the bottom, shortest on top
       .sort((a, b) => d3.descending(a[0], b[0])); // larger binEnd first in DOM (drawn underneath)
 
@@ -363,15 +382,21 @@ export class StopwatchViz extends EventEmitter {
       return arcFor(outerR).endAngle(end)(d);
     });
 
-    // DURATION BIN LABELS ALONG ARCS (curved text)
-    const binSizeForLabel = this.binSize || 10;
-    const fmtInt = d3.format('d');
+    // Helper: format playCount in a simplified way (e.g., 6M, 15K)
+    const formatPlayCountShort = (value) => {
+      if (!Number.isFinite(value)) return '';
+      const abs = Math.abs(value);
+      if (abs >= 1e9) return `${Math.round(value / 1e9)}B`;
+      if (abs >= 1e6) return `${Math.round(value / 1e6)}M`;
+      if (abs >= 1e3) return `${Math.round(value / 1e3)}K`;
+      return d3.format(',.0f')(value);
+    };
 
-    const labelGroups = sectorsG.selectAll('g.bin-label-group')
+    // PLAYCOUNT LABELS ALONG ARCS (curved text)
+    const labelGroups = this.labelsG.selectAll('g.bin-label-group')
       .data(this.data)
       .join('g')
-      .attr('class', 'bin-label-group')
-      .attr('pointer-events', 'none');
+      .attr('class', 'bin-label-group');
 
     labelGroups.each((d, i, nodes) => {
       const outerR = this.rScale(d[1]);
@@ -398,9 +423,9 @@ export class StopwatchViz extends EventEmitter {
         .attr('fill', 'none')
         .attr('stroke', 'none');
 
-      const g = d3.select(nodes[i]);
+      const gNode = d3.select(nodes[i]);
 
-      const labelText = g.append('text')
+      const labelText = gNode.append('text')
         .attr('class', 'bin-label')
         .attr('text-anchor', 'middle')
         .attr('alignment-baseline', 'middle');
@@ -410,11 +435,19 @@ export class StopwatchViz extends EventEmitter {
         // Shift towards the start of the arc so it's on the "left" side
         .attr('startOffset', '25%')
         .text(() => {
-          const binEnd = d[0];
-          const binStart = binEnd - binSizeForLabel;
-          return `${fmtInt(binStart)}–${fmtInt(binEnd)}s`;
+          const avgPlayCount = d[1];
+          return formatPlayCountShort(avgPlayCount);
         });
     });
+
+    // Initial label visibility:
+    // - If reduced motion: show immediately (no animations).
+    // - Otherwise: hide; they will fade in after the first animation completes.
+    if (this.options.reducedMotion) {
+      this.labelsG.style('opacity', 1);
+    } else {
+      this.labelsG.style('opacity', 0);
+    }
 
     // Tooltips & hover (only custom HTML tooltip, no SVG <title> on arcs)
     this.paths
@@ -432,6 +465,7 @@ export class StopwatchViz extends EventEmitter {
           )
           .style('left', `${event.clientX}px`)
           .style('top', `${event.clientY - 18}px`);
+        // opacity already 1, but keep transition for consistency
         d3.select(event.currentTarget).transition().duration(120).style('opacity', 1);
       })
       .on('pointermove', (event) => {
@@ -441,7 +475,8 @@ export class StopwatchViz extends EventEmitter {
       })
       .on('pointerleave', (event) => {
         this.tooltip.style('opacity', 0);
-        d3.select(event.currentTarget).transition().duration(120).style('opacity', 0.75);
+        // return to fully opaque instead of semi-transparent
+        d3.select(event.currentTarget).transition().duration(120).style('opacity', 1);
       });
 
     // Center dot
@@ -474,8 +509,14 @@ export class StopwatchViz extends EventEmitter {
 
     const sweepDuration = 300; // ms per sector
     const sweepGap = 40;       // ms between sectors
+    const numArcs = this.paths.size ? this.paths.size() : this.data.length || 0;
 
     const { arcThickness } = this._geom;
+
+    // Hide labels during animation; they'll reappear when all arcs finish.
+    if (this.labelsG) {
+      this.labelsG.interrupt().style('opacity', 0);
+    }
 
     // Use same ring-shaped arcs for animation as in render()
     const arcFor = outerR => d3.arc()
@@ -490,7 +531,8 @@ export class StopwatchViz extends EventEmitter {
     this.paths.interrupt();
     this.paths.attr('d', d => arcFor(this.rScale(d[1])).endAngle(0)(d));
 
-    this.paths.transition()
+    this.paths
+      .transition()
       .delay((d, i) => i * (sweepDuration + sweepGap)) // selection is already longest -> shortest
       .duration(sweepDuration)
       .ease(d3.easeCubicOut)
@@ -510,6 +552,19 @@ export class StopwatchViz extends EventEmitter {
           this.parentNode.appendChild(this);
         }
       });
+
+    // Schedule labels to fade in AFTER the last arc finishes.
+    if (!this.options.reducedMotion && this.labelsG && numArcs > 0) {
+      const totalAnimTime =
+        (numArcs - 1) * (sweepDuration + sweepGap) + sweepDuration;
+
+      this.labelsG
+        .interrupt()
+        .transition()
+        .delay(totalAnimTime + 80) // small buffer so it feels "after" everything
+        .duration(250)
+        .style('opacity', 1);
+    }
 
     if (fromUser) this.emit(VIZ_EVENTS.INTERACTION); // optional signal
   }

@@ -33,15 +33,18 @@ h1{
   text-shadow: 0 2px 10px #00000050;
 }
 
-/* ---------- Legend Panel ---------- */
-.legend-panel{
-  width:min(900px, 92vw);
-  margin: 0 auto 10px;
+/* ---------- Legend Panel (Stopwatch) ---------- */
+#section-ignite .legend-panel{
+  width: 100%;
+  margin: 0;
   border-radius:16px;
   background: radial-gradient(100% 140% at 50% 0%, #1b2030 0%, #151a24 60%, #121620 100%);
   padding:16px 16px 18px;
   box-shadow: 0 10px 30px #00000060 inset, 0 6px 20px #00000055;
   border:1px solid #232b3a;
+
+  /* ensure it only hugs its content height */
+  align-self: center;
 }
 
 .legend-subtitle{
@@ -56,7 +59,7 @@ h1{
   display:flex;
   flex-wrap:wrap;
   gap:10px;
-  justify-content:center;
+  justify-content:flex-start;
   margin-bottom:14px;
 }
 
@@ -101,15 +104,10 @@ h1{
   border-radius:10px;
   outline: 1px solid #2b3240;
   box-shadow: inset 0 2px 8px #00000060, 0 1px 0 #ffffff10;
+  /* Updated to match sector gradient */
   background: linear-gradient(90deg,
-    #2d6cdf 0%,
-    #3ec5ff 10%,
-    #53ffad 25%,
-    #f4ff73 40%,
-    #ffd064 55%,
-    #ff9a4d 70%,
-    #ff5a6b 85%,
-    #8f3cff 100%
+    #2dccd3 0%,
+    #f1204a 100%
   );
 }
 
@@ -121,12 +119,27 @@ h1{
   margin-top:6px;
 }
 
+/* Layout wrapper: legend left, chart right */
+.stopwatch-layout{
+  width: min(1100px, 95vw);
+  margin: 16px auto 32px;
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+  gap: 24px;
+
+  /* center items vertically in the row instead of stretching them */
+  align-items: center;
+}
+
+/* Chart container (right side) */
 #chart{
-  width: min(820px, 95vw);
-  margin: 16px auto 28px;
+  width: 100%;
+  margin: 0;
   aspect-ratio: 1 / 1;
   position: relative;
   padding: 6px; /* safety buffer */
+  border-radius: 24px;
+
 }
 
 .note{
@@ -139,6 +152,13 @@ svg{
   width:100%;
   height:100%;
   display:block;
+}
+
+/* Responsive: stack legend above chart on small screens */
+@media (max-width: 800px){
+  .stopwatch-layout{
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Stopwatch look */
@@ -191,7 +211,7 @@ svg{
 .sector{
   stroke:#00000020;
   stroke-width:1px;
-  opacity:.55;
+  opacity:.55;              /* JS overrides to 1 via inline style */
   mix-blend-mode: lighten;
 }
 
