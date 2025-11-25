@@ -237,10 +237,6 @@ export class ConveyorViz extends EventEmitter {
       <div class="options-grid" role="group" aria-label="Answer choices"></div>
 
       <div class="feedback-area" style="display:none;">
-        <div class="feedback-message"></div>
-        <button class="btn-secondary reveal-btn" aria-label="Reveal the answer">
-          Reveal Answer
-        </button>
         <button class="btn-primary next-btn" style="display:none;" aria-label="Move to next ingredient">
           Next →
         </button>
@@ -268,10 +264,6 @@ export class ConveyorViz extends EventEmitter {
         this.submitGuess(value, target);
       }
     });
-
-    // Reveal button
-    const revealBtn = this.container.querySelector('.reveal-btn');
-    revealBtn?.addEventListener('click', () => this.revealAnswer());
 
     // Next button
     const nextBtn = this.container.querySelector('.next-btn');
@@ -363,13 +355,8 @@ export class ConveyorViz extends EventEmitter {
     const feedbackArea = this.container.querySelector('.feedback-area');
     if (feedbackArea) feedbackArea.style.display = 'none';
 
-    // Reset reveal and next buttons
-    const revealBtn = this.container.querySelector('.reveal-btn');
+    // Reset next button
     const nextBtn = this.container.querySelector('.next-btn');
-    if (revealBtn) {
-      revealBtn.style.display = 'none';
-      revealBtn.disabled = true;
-    }
     if (nextBtn) nextBtn.style.display = 'none';
 
     // Highlight current box
@@ -433,18 +420,37 @@ export class ConveyorViz extends EventEmitter {
       if (this.state.attemptsLeft > 0) {
         // Don't show feedback bar - just let the red button indicate the error
       } else {
-        this.showFeedback(`Out of attempts. You can reveal the answer.`, 'warning');
+        // Don't show feedback message - just highlight the correct answer
         // Disable remaining options
         this.disableAllOptions();
-        // Enable reveal button now that attempts are exhausted
-        const revealBtn = this.container.querySelector('.reveal-btn');
-        if (revealBtn) {
-          revealBtn.style.display = 'inline-block';
-          revealBtn.disabled = false;
-        }
-        // Show feedback area for reveal button
+        
+        // Highlight the correct answer in green
+        const current = this.data[this.state.currentIndex];
+        const allOptions = this.container.querySelectorAll('.option-btn');
+        allOptions.forEach(opt => {
+          if (opt.getAttribute('data-value') === current.answer) {
+            opt.classList.add('correct-answer');
+          }
+        });
+        
+        // Show next button immediately without reveal step
         const feedbackArea = this.container.querySelector('.feedback-area');
-        feedbackArea.style.display = 'block';
+        const nextBtn = this.container.querySelector('.next-btn');
+        
+        if (feedbackArea) feedbackArea.style.display = 'flex';
+        
+        if (nextBtn) {
+          nextBtn.style.display = 'inline-block';
+          // Update button text for last item
+          if (this.state.currentIndex >= this.data.length - 1) {
+            nextBtn.textContent = 'Finish';
+          } else {
+            nextBtn.textContent = 'Next →';
+          }
+        }
+        
+        // Auto-reveal after short delay
+        setTimeout(() => this.revealAnswer(), 1000);
       }
     }
 
@@ -525,11 +531,9 @@ export class ConveyorViz extends EventEmitter {
       }
     }
 
-    // Hide reveal button, show next button
-    const revealBtn = this.container.querySelector('.reveal-btn');
+    // Show next button
     const nextBtn = this.container.querySelector('.next-btn');
     
-    if (revealBtn) revealBtn.style.display = 'none';
     if (nextBtn) {
       nextBtn.style.display = 'inline-block';
       
