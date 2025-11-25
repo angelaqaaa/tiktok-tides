@@ -185,7 +185,7 @@ export class RankingViz extends EventEmitter {
     });
 
     // --- Reset Button ---
-    d3.select(this.container)
+    const resetBtn = d3.select(this.container)
       .append('div')
       .attr('class', 'viz-btn viz-btn--reset')
       .html(`
@@ -195,7 +195,29 @@ export class RankingViz extends EventEmitter {
   `)
       .on('click', () => this.resetAnimation());
 
-    // --- Pause / Play Button ---
+    const tooltip = d3.select(this.container)
+      .append("div")
+      .attr("class", "btn-tip tip-reset")
+      .text("Restart the animation")
+      .style("left", "35px")
+      .style("top", "100px");
+
+    const line = d3.select(this.container)
+      .append("svg")
+      .attr("class", "tooltip-line")
+      .attr("width", "200px")
+      .attr("height", "200px")
+      .append("line")
+      .attr("x1", "35px")
+      .attr("y1", "60px")
+      .attr("x2", "35px")
+      .attr("y2", "100px")
+      .attr("stroke", "white")
+      .attr("stroke-width", 2)
+      .attr("stroke-linecap", "round")
+      .style("opacity", 0.8);
+
+    // --- Pause/Play Button ---
     const pauseBtn = d3.select(this.container)
       .append('div')
       .attr('class', 'viz-btn viz-btn--pause')
@@ -205,10 +227,35 @@ export class RankingViz extends EventEmitter {
       <path class="play-icon" style="display:none" fill="white" d="M8 5v14l11-7z"/>
     </svg>
   `)
-      .on('click', () => this.pauseAnimation());
+      .on('click', () => {
+        this.hideTutorial();
+        this.pauseAnimation();
+      });
+
+    const pauseTooltip = d3.select(this.container)
+      .append("div")
+      .attr("class", "btn-tip tip-pause")
+      .text("Pause or resume the sequence")
+      .style("left", "95px")
+      .style("top", "80px");
+
+    const pauseLine = d3.select(this.container)
+      .append("svg")
+      .attr("class", "tooltip-line")
+      .attr("width", "200px")
+      .attr("height", "200px")
+      .append("line")
+      .attr("x1", "95px")
+      .attr("y1", "50px")
+      .attr("x2", "95px")
+      .attr("y2", "80px")
+      .attr("stroke", "white")
+      .attr("stroke-width", 2)
+      .attr("stroke-linecap", "round")
+      .style("opacity", 0.8);
 
     // --- Skip Button ---
-    d3.select(this.container)
+    const skipBtn = d3.select(this.container)
       .append('div')
       .attr('class', 'viz-btn viz-btn--skip')
       .html(`
@@ -216,8 +263,17 @@ export class RankingViz extends EventEmitter {
       <path fill="white" d="M7 6l6 6-6 6V6zm7 0h3v12h-3V6z"/>
     </svg>
   `)
-      .on('click', () => this.skipAnimation());
+      .on('click', () => {
+        this.hideTutorial();
+        this.skipAnimation();
+      });
 
+    d3.select(this.container)
+      .append("div")
+      .attr("class", "btn-tip tip-skip")
+      .text("Drop all remaining cards")
+      .style("left", "155px")
+      .style("top", "60px");
 
     const centerGroup = this.svg.append('g')
       .attr(
@@ -744,5 +800,19 @@ export class RankingViz extends EventEmitter {
       skipBtn.style.pointerEvents = 'auto';
       skipBtn.style.opacity = 1;
     }
+  }
+
+  hideTutorial() {
+    const tips = this.container.querySelectorAll(".btn-tip");
+    tips.forEach(tip => {
+      tip.style.opacity = 0;
+      setTimeout(() => tip.remove(), 350);
+    });
+
+    const lines = this.container.querySelectorAll(".tooltip-line");
+    lines.forEach(line => {
+      line.style.opacity = 0;
+      setTimeout(() => line.remove(), 350);
+    });
   }
 }

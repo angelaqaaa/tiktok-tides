@@ -133,3 +133,45 @@
     color: #cfe4ff;
     transform: translateX(2px);
 }
+
+.btn-tip {
+    color: #ddd;
+    text-align: center;
+    font-size: 13px;
+    margin-top: 4px;
+    opacity: 1;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+    position: absolute;
+    z-index: 3000;
+}
+
+.tip-reset {
+    left: 10px;
+}
+
+.tip-pause {
+    left: 70px;
+}
+
+.tip-skip {
+    left: 130px;
+}
+
+.btn-tip {
+    margin-top: 8px;
+}
+
+.btn-tip.hide {
+    opacity: 0;
+}
+
+.tooltip-line line {
+    transition: opacity 0.3s ease-in-out;
+}
+
+.tooltip-line {
+    position: absolute;
+    z-index: 1500;
+    pointer-events: none;
+}
