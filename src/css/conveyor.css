@@ -803,15 +803,24 @@
 
 /* Feedback Area */
 .feedback-area {
-  margin-top: 0.0001rem;
+  margin-top: 2rem;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  flex-direction: row;
+  align-items: center;
   gap: 1rem;
+  width: 100%;
+}
+
+.feedback-area .reveal-btn {
+  flex: 0 0 auto;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .feedback-area .next-btn {
-  align-self: flex-end;
+  flex: 0 0 auto;
+  margin-left: auto;
 }
 
 .feedback-message {
@@ -942,6 +951,45 @@
   box-shadow: 
     0 4px 12px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Highlighted reveal button when out of attempts */
+.btn-secondary.reveal-highlighted {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: var(--color-bg);
+  border: 1px solid rgba(0, 255, 224, 0.5);
+  box-shadow: 
+    0 4px 16px rgba(0, 255, 224, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: pulse-reveal 2s ease-in-out infinite;
+  font-weight: 700;
+}
+
+.btn-secondary.reveal-highlighted:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 20px rgba(0, 255, 224, 0.5),
+    0 3px 6px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+@keyframes pulse-reveal {
+  0%, 100% {
+    box-shadow: 
+      0 4px 16px rgba(0, 255, 224, 0.4),
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      0 0 20px rgba(0, 255, 224, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 4px 20px rgba(0, 255, 224, 0.6),
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      0 0 30px rgba(0, 255, 224, 0.5),
+      0 0 60px rgba(0, 255, 224, 0.3);
+  }
 }
 
 /* Completion Message */
