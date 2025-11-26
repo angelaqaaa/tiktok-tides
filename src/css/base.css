@@ -1355,44 +1355,96 @@ circle[data-type="bubble"] {
 /* Planet Visualization Specific Styles */
 .legend {
   position: absolute;
-  left: 300px;
-  top: 45%;
-  transform: translateY(-80px);
+  left: 100px;
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  max-width: 250px;
+  gap: 24px;
+  max-width: 380px;
   z-index: 10;
   pointer-events: none;
 }
 
 .legend-item {
   background: rgba(10, 10, 15, 0.9);
-  padding: 14px 18px;
+  padding: 22px 26px;
   border-radius: 8px;
-  font-size: 0.85rem;
+  font-size: 1.25rem;
   backdrop-filter: blur(10px);
   border: 1px solid var(--color-border-interactive);
   color: var(--color-text-primary);
   pointer-events: auto;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .legend-item strong {
   display: block;
   color: var(--color-accent-cyan);
-  margin-bottom: 4px;
-  font-size: 0.9rem;
+  margin-bottom: 6px;
+  font-size: 1.3rem;
+}
+
+/* Legend tooltips */
+.legend-hoverable,
+.color-legend-hoverable {
+  position: relative;
+  pointer-events: auto;
+  cursor: help;
+}
+
+.legend-tooltip {
+  position: absolute;
+  left: 110%;
+  top: 0;
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--color-accent-cyan);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  width: 320px;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  pointer-events: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.legend-hoverable:hover .legend-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.color-legend-hoverable .legend-tooltip {
+  left: auto;
+  right: auto;
+  top: auto;
+  bottom: 110%;
+  margin-bottom: 8px;
+}
+
+.color-legend-hoverable:hover .legend-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.legend-tooltip strong {
+  color: var(--color-accent-cyan);
+  display: inline;
+  margin-bottom: 0;
 }
 
 .color-legend {
   position: absolute;
-  left: 150px;
+  right: 60px;
   top: 50%;
-  transform: translateY(40px);
-  width: 450px;
+  transform: translateY(-50%);
+  width: 280px;
   background: rgba(10, 10, 15, 0.9);
-  padding: 18px;
+  padding: 26px;
   border-radius: 12px;
   backdrop-filter: blur(10px);
   border: 1px solid var(--color-border-interactive);
@@ -1401,8 +1453,8 @@ circle[data-type="bubble"] {
 }
 
 .color-legend-title {
-  margin-bottom: 12px;
-  font-size: 0.9rem;
+  margin-bottom: 14px;
+  font-size: 1.25rem;
   color: var(--color-text-primary);
 }
 
@@ -1410,51 +1462,80 @@ circle[data-type="bubble"] {
   display: block;
   color: var(--color-accent-magenta);
   margin-bottom: 8px;
+  font-size: 1.3rem;
 }
 
 .color-gradient-container {
-  width: 100%;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .color-gradient-bar {
-  width: 100%;
-  height: 35px;
+  width: 50px;
+  height: 400px;
   border-radius: 6px;
   background: linear-gradient(
-    to right,
-    #FF0000 0%,      /* Red - 0.0 */
-    #FF7F00 15%,     /* Orange - 0.15 */
-    #FFFF00 30%,     /* Yellow - 0.3 */
-    #00FF00 45%,     /* Green - 0.45 */
-    #00FFFF 60%,     /* Cyan - 0.6 */
-    #0000FF 75%,     /* Blue - 0.75 */
-    #8B00FF 90%,     /* Purple - 0.9 */
-    #FF00FF 100%     /* Magenta - 1.0 */
+    to bottom,
+    #fe2858 0%,      /* TikTok pink - 1.0 (high danceability) */
+    #2af0ea 65%,     /* TikTok blue - 0.35 (lower-middle) */
+    #FFFFFF 100%     /* White - 0.0 (low danceability) */
   );
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .color-gradient-labels {
   display: flex;
+  flex-direction: column-reverse;
   justify-content: space-between;
-  margin-top: 8px;
-  font-size: 0.75rem;
-  padding: 0 2px;
+  height: 400px;
+  font-size: 1.15rem;
+  padding: 0;
 }
 
 .color-gradient-labels span {
-  text-align: center;
+  text-align: left;
   color: var(--color-text-primary);
-  flex: 1;
 }
 
 .color-gradient-labels small {
   display: block;
-  font-size: 0.7rem;
+  font-size: 1rem;
   color: var(--color-text-secondary);
   font-style: italic;
   margin-top: 2px;
+}
+
+.danceability-indicator {
+  width: 50px;
+  height: 400px;
+  left: 0;
+  top: 0;
+}
+
+.indicator-arrow {
+  position: absolute;
+  left: 15px;
+  font-size: 20px;
+  color: #FFD700;
+  width: 20px;
+  text-align: center;
+  transition: top 0.2s ease;
+  transform: translateY(-50%);
+  line-height: 1;
+}
+
+.indicator-line {
+  position: absolute;
+  left: 62px;
+  width: 51px;
+  height: 3px;
+  background-color: #FFD700;
+  transition: top 0.2s ease;
+  z-index: 10;
+  transform: translateY(-50%);
 }
 
 /* Make sure the section container is positioned relative for absolute positioning */
@@ -1462,17 +1543,53 @@ circle[data-type="bubble"] {
   position: relative;
 }
 
-/* Responsive: stack legends on mobile */
+/* Responsive: adjust for medium screens */
+@media (max-width: 1400px) {
+  .legend {
+    left: 100px;
+    max-width: 200px;
+  }
+
+  .legend-item {
+    font-size: 0.8rem;
+    padding: 12px 16px;
+  }
+
+  .color-legend {
+    right: 40px;
+    width: 240px;
+    padding: 20px;
+  }
+
+  .color-gradient-bar {
+    width: 40px;
+    height: 300px;
+  }
+
+  .color-gradient-labels {
+    height: 300px;
+    font-size: 0.9rem;
+  }
+
+  .annotation-rail {
+    bottom: var(--space-4);
+  }
+
+  .year-btn {
+    padding: 10px 24px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Responsive: stack legends on tablets */
 @media (max-width: 1024px) {
   .legend {
     left: 10px;
-    right: 10px;
+    right: auto;
     top: 80px;
     transform: none;
-    max-width: calc(100% - 20px);
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+    max-width: calc(50% - 20px);
+    flex-direction: column;
   }
 
   .legend-item {
@@ -1482,13 +1599,144 @@ circle[data-type="bubble"] {
 
   .color-legend {
     left: 10px;
-    right: 10px;
-    bottom: 10px;
-    max-width: calc(100% - 20px);
+    right: auto;
+    top: auto;
+    bottom: 80px;
+    transform: none;
+    width: calc(100% - 20px);
+    max-width: 500px;
   }
 
   .color-legend-title {
     font-size: 0.8rem;
+  }
+
+  .color-gradient-container {
+    flex-direction: row;
+  }
+
+  .color-gradient-bar {
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(
+      to right,
+      #FFFFFF 0%,      /* White - 0.0 (low danceability) */
+      #2af0ea 35%,     /* TikTok blue - 0.35 (lower-middle) */
+      #fe2858 100%     /* TikTok pink - 1.0 (high danceability) */
+    );
+  }
+
+  .color-gradient-labels {
+    flex-direction: row;
+    height: auto;
+    width: 100%;
+    margin-top: 8px;
+    font-size: 0.85rem;
+  }
+
+  .color-gradient-labels span {
+    text-align: center;
+    flex: 1;
+  }
+
+  .annotation-rail {
+    bottom: var(--space-2);
+  }
+
+  .year-selector {
+    gap: 8px;
+  }
+
+  .year-btn {
+    padding: 8px 18px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Responsive: compact layout for mobile */
+@media (max-width: 768px) {
+  .legend {
+    left: 10px;
+    right: 10px;
+    top: 70px;
+    max-width: calc(100% - 20px);
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .legend-item {
+    font-size: 0.7rem;
+    padding: 8px 12px;
+    flex: 1 1 auto;
+    min-width: 120px;
+  }
+
+  .legend-item strong {
+    font-size: 0.75rem;
+  }
+
+  .color-legend {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: auto;
+    bottom: 70px;
+    transform: none;
+    width: calc(100% - 20px);
+    margin: 0;
+    padding: 12px;
+  }
+
+  .color-legend-title {
+    font-size: 0.75rem;
+    margin-bottom: 8px;
+  }
+
+  .color-gradient-container {
+    flex-direction: row;
+  }
+
+  .color-gradient-bar {
+    width: 100%;
+    height: 28px;
+    background: linear-gradient(
+      to right,
+      #FFFFFF 0%,      /* White - 0.0 (low danceability) */
+      #2af0ea 35%,     /* TikTok blue - 0.35 (lower-middle) */
+      #fe2858 100%     /* TikTok pink - 1.0 (high danceability) */
+    );
+  }
+
+  .color-gradient-labels {
+    flex-direction: row;
+    height: auto;
+    width: 100%;
+    margin-top: 6px;
+    font-size: 0.7rem;
+  }
+
+  .color-gradient-labels span {
+    text-align: center;
+    flex: 1;
+  }
+
+  .color-gradient-labels small {
+    font-size: 0.65rem;
+  }
+
+  .annotation-rail {
+    bottom: 10px;
+  }
+
+  .year-selector {
+    gap: 6px;
+    margin-bottom: 0.5rem;
+  }
+
+  .year-btn {
+    padding: 6px 14px;
+    font-size: 0.85rem;
   }
 }
 
@@ -1545,27 +1793,42 @@ circle[data-type="bubble"] {
 /* Year selector buttons in annotation rail */
 .year-selector {
   display: flex;
-  gap: 8px;
+  gap: 14px;
   margin-bottom: 1rem;
   flex-wrap: wrap;
 }
 
 .year-btn {
   font-weight: var(--font-weight-semibold);
-  padding: 8px 20px;
+  padding: 16px 36px;
   background: var(--color-background-secondary);
   color: var(--color-text-primary);
-  border: 1px solid var(--color-border-interactive);
+  border: 2px solid var(--color-border-interactive);
   border-radius: 6px;
   cursor: pointer;
   transition: all var(--duration-micro) var(--easing-standard);
-  font-size: var(--font-size-caption);
+  font-size: 1.2rem;
+  position: relative;
+  animation: pulse-border 3s ease-in-out infinite;
+}
+
+@keyframes pulse-border {
+  0%, 100% {
+    border-color: var(--color-border-interactive);
+    box-shadow: 0 0 0 rgba(0, 255, 224, 0);
+  }
+  50% {
+    border-color: var(--color-accent-cyan);
+    box-shadow: 0 0 15px rgba(0, 255, 224, 0.6);
+  }
 }
 
 .year-btn:hover {
   background: var(--color-background-elevated);
   border-color: var(--color-accent-cyan);
   transform: translateY(-1px);
+  animation: none;
+  box-shadow: 0 0 20px rgba(0, 255, 224, 0.8);
 }
 
 .year-btn.active {
@@ -1573,6 +1836,7 @@ circle[data-type="bubble"] {
   color: var(--color-background-primary);
   border-color: transparent;
   box-shadow: 0 4px 12px rgba(0, 255, 224, 0.3);
+  animation: none;
 }
 
 /* Ingredients Grid */

@@ -644,16 +644,11 @@ class TikTokTidesApp {
     }
 
     setupPlayerIntro() {
-        const startBtn = document.querySelector('[data-player-start]');
-        if (!startBtn) return;
+        // Start button removed - player is now always unlocked
         const playerWrapper = document.querySelector('.record-player-wrapper');
-
-        const startExploring = () => {
-            playerWrapper?.removeAttribute('data-player-locked');
-            startBtn.style.display = 'none';
-        };
-
-        startBtn.addEventListener('click', startExploring);
+        if (playerWrapper) {
+            playerWrapper.removeAttribute('data-player-locked');
+        }
     }
 
     showDetailPanel(data) {
