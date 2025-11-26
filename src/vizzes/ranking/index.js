@@ -24,6 +24,7 @@ export class RankingViz extends EventEmitter {
     this.stopSequence = false;
     this.mainAudio = null;
     this.fallTimes = [1.3, 6.5, 10.7, 13, 19.5, 27.2];
+    this.pageAnimationState = new Map();
   }
 
   async init(selector, options = {}) {
@@ -541,17 +542,31 @@ export class RankingViz extends EventEmitter {
     const randomXShift = Math.random() * 80 - 40;
     const randomBounce = 1 + Math.random() * 0.05;
 
-    cover.transition()
-      .duration(400 + Math.random() * 400)
-      .ease(d3.easeCubicIn)
-      .attr('transform', `
-      translate(${randomXShift}, ${groundY - d.y})
-      rotate(${randomTilt}, ${rectWidth / 2}, ${rectHeight / 2})
-      scale(${randomBounce}, 0.6)
-    `);
+    const finalTransform = `
+    translate(${randomXShift}, ${groundY - d.y})
+    rotate(${randomTilt}, ${rectWidth / 2}, ${rectHeight / 2})
+    scale(${randomBounce}, 0.6)
+  `;
 
-    d.coverFallen = true;
-    this.checkAllPagesFallen();
+    const duration = 400 + Math.random() * 400;
+    const startTime = performance.now();
+
+    this.pageAnimationState.set(d.rank, {
+      startTime,
+      duration,
+      finalTransform,
+      pausedTransform: null
+    });
+
+    cover
+      .transition()
+      .duration(duration)
+      .ease(d3.easeCubicIn)
+      .attr('transform', finalTransform)
+      .on('end', () => {
+        d.coverFallen = true;
+        this.checkAllPagesFallen();
+      });
   }
 
   // --- pause ---
@@ -561,19 +576,66 @@ export class RankingViz extends EventEmitter {
     const pauseIcon = this.container.querySelector('.pause-icon');
     const playIcon = this.container.querySelector('.play-icon');
 
+    // pause
     if (this.state.animationPaused) {
       pauseIcon.style.display = 'none';
       playIcon.style.display = 'block';
 
       this.stopSequence = true;
       if (this.mainAudio) this.mainAudio.pause();
-    } else {
-      pauseIcon.style.display = 'block';
-      playIcon.style.display = 'none';
 
-      this.stopSequence = false;
-      if (this.mainAudio) this.mainAudio.play();
+      const pages = d3.select(this.container).selectAll('g.page').nodes();
+
+      pages.forEach(pageNode => {
+        const d = d3.select(pageNode).datum();
+        const cover = d3.select(pageNode).select('.cover-group');
+
+        if (!this.pageAnimationState.has(d.rank)) return;
+
+        const st = this.pageAnimationState.get(d.rank);
+        if (!st) return;
+
+        cover.interrupt();
+
+        const currentTransform = cover.node().getAttribute('transform');
+
+        const elapsed = performance.now() - st.startTime;
+        st.elapsed = Math.min(elapsed, st.duration);
+        st.remaining = st.duration - st.elapsed;
+
+        st.pausedTransform = currentTransform;
+      });
+
+      return;
     }
+    // ---- resume ----
+    pauseIcon.style.display = 'block';
+    playIcon.style.display = 'none';
+
+    this.stopSequence = false;
+    if (this.mainAudio) this.mainAudio.play();
+
+    const pages = d3.select(this.container).selectAll('g.page').nodes();
+
+    pages.forEach(pageNode => {
+      const d = d3.select(pageNode).datum();
+      const cover = d3.select(pageNode).select('.cover-group');
+
+      const st = this.pageAnimationState.get(d.rank);
+      if (!st || !st.pausedTransform) return;
+
+      cover.attr('transform', st.pausedTransform);
+
+      cover.transition()
+        .duration(st.remaining)
+        .ease(d3.easeCubicIn)
+        .attr('transform', st.finalTransform)
+        .on('end', () => {
+          d.coverFallen = true;
+          st.pausedTransform = null;
+          this.checkAllPagesFallen();
+        });
+    });
   }
 
   // --- skip ---
