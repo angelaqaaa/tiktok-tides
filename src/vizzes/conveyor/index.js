@@ -71,9 +71,9 @@ export class ConveyorViz extends EventEmitter {
       {
         id: 'caption_word',
         label: 'What Word to Include in the Caption ✍️',
-        answer: 'fyp',
+        answer: 'viral',
         hint: 'The emotion bubbles revealed the most popular language—what was it?',
-        options: ['pls', 'linkinbio', 'omg', 'fyp']
+        options: ['pls', 'linkinbio', 'omg', 'viral']
       },
       {
         id: 'community',
