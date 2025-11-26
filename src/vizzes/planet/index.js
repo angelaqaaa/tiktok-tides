@@ -20,6 +20,7 @@ export class PlanetViz extends EventEmitter {
     this.tooltip = null;
     this.animationRunning = true;
     this.startTime = Date.now();
+    this.previousPlanetsData = null;
   }
 
   async init(selector, options = {}) {
@@ -91,14 +92,9 @@ export class PlanetViz extends EventEmitter {
 
   danceabilityToColor(danceability) {
     const colors = [
-      { value: 0.0, color: '#FF0000' },  
-      { value: 0.15, color: '#FF7F00' }, 
-      { value: 0.3, color: '#FFFF00' },  
-      { value: 0.45, color: '#00FF00' }, 
-      { value: 0.6, color: '#00FFFF' },  
-      { value: 0.75, color: '#0000FF' }, 
-      { value: 0.9, color: '#8B00FF' },  
-      { value: 1.0, color: '#FF00FF' }   
+      { value: 0.0, color: '#FFFFFF' },  // White at bottom
+      { value: 0.35, color: '#2af0ea' },  // TikTok blue in lower-middle
+      { value: 1.0, color: '#fe2858' }   // TikTok pink at top
     ];
     
     for (let i = 0; i < colors.length - 1; i++) {
@@ -227,6 +223,18 @@ export class PlanetViz extends EventEmitter {
       .style('pointer-events', 'none')
       .style('z-index', '1000')
       .style('font-size', '0.9rem');
+
+    // Create danceability indicator for legend
+    this.legendIndicator = d3.select('.color-gradient-container').append('div')
+      .attr('class', 'danceability-indicator')
+      .style('position', 'absolute')
+      .style('opacity', 0)
+      .style('pointer-events', 'none')
+      .style('transition', 'all 0.2s ease')
+      .html(`
+        <div class="indicator-arrow">▶</div>
+        <div class="indicator-line"></div>
+      `);
   }
 
   updateVisualization() {
@@ -266,6 +274,12 @@ export class PlanetViz extends EventEmitter {
       };
     });
 
+    // Sort planets by size (songCount) so larger planets render first (in back)
+    const sortedPlanetsData = [...planetsData].sort((a, b) => b.songCount - a.songCount);
+
+    // Store reference to previous year's data for smooth transitions
+    const previousData = this.previousPlanetsData;
+
     const orbits = this.svg.select('#orbits')
       .selectAll('.planet-orbit')
       .data(planetsData, d => d.name);
@@ -293,7 +307,7 @@ export class PlanetViz extends EventEmitter {
 
     const planets = this.svg.select('#planets')
       .selectAll('.planet')
-      .data(planetsData, d => d.name);
+      .data(sortedPlanetsData, d => d.name);
 
     const tooltip = this.tooltip;
     const self = this;
@@ -301,26 +315,75 @@ export class PlanetViz extends EventEmitter {
     const planetsEnter = planets.enter()
       .append('circle')
       .attr('class', 'planet')
-      .attr('cx', centerX)
-      .attr('cy', centerY)
-      .attr('r', 0)
+      .attr('cx', d => {
+        // Check if planet existed in previous year
+        if (previousData) {
+          const prevPlanet = previousData.find(p => p.name === d.name);
+          if (prevPlanet) return prevPlanet.x;
+        }
+        return centerX;
+      })
+      .attr('cy', d => {
+        if (previousData) {
+          const prevPlanet = previousData.find(p => p.name === d.name);
+          if (prevPlanet) return prevPlanet.y;
+        }
+        return centerY;
+      })
+      .attr('r', d => {
+        // Start with previous size if planet existed before
+        if (previousData) {
+          const prevPlanet = previousData.find(p => p.name === d.name);
+          if (prevPlanet) return sizeScale(prevPlanet.songCount);
+        }
+        return 0;
+      })
       .attr('fill', d => this.danceabilityToColor(d.avgDanceability))
       .attr('stroke', '#fff')
       .attr('stroke-width', 2)
+      .attr('opacity', d => {
+        // Returning planets start visible, new planets fade in
+        if (previousData) {
+          const prevPlanet = previousData.find(p => p.name === d.name);
+          if (prevPlanet) return 1;
+        }
+        return 0;
+      });
+
+    // Merge enter and update selections, then set up event handlers
+    const allPlanets = planetsEnter.merge(planets)
       .on('mouseenter', function(event, d) {
-        d3.select(this).attr('data-original-r', sizeScale(d.songCount));
+        const currentRadius = sizeScale(d.songCount);
+        d3.select(this).attr('data-original-r', currentRadius);
         
         d3.select(this)
           .transition()
           .duration(200)
           .attr('stroke-width', 4)
-          .attr('r', sizeScale(d.songCount) * 1.2);
+          .attr('r', currentRadius * 1.2);
         
         tooltip
           .style('display', 'block')
           .transition()
           .duration(200)
           .style('opacity', 1);
+
+        // Show indicator arrow and line on legend
+        const gradientBar = document.querySelector('.color-gradient-bar');
+        if (gradientBar && self.legendIndicator) {
+          const barRect = gradientBar.getBoundingClientRect();
+          const barHeight = barRect.height;
+          // Position from top: 1.0 is at top (0%), 0.0 is at bottom (100%)
+          const position = (1 - d.avgDanceability) * barHeight;
+          
+          const arrow = self.legendIndicator.select('.indicator-arrow');
+          const line = self.legendIndicator.select('.indicator-line');
+          
+          arrow.style('top', `${position}px`);
+          line.style('top', `${position}px`);
+          
+          self.legendIndicator.style('opacity', 1);
+        }
       })
       .on('mousemove', function(event, d) {
         tooltip
@@ -337,13 +400,13 @@ export class PlanetViz extends EventEmitter {
           .style('top', (event.pageY - 15) + 'px');
       })
       .on('mouseleave', function(event, d) {
-        const originalR = d3.select(this).attr('data-original-r') || sizeScale(d.songCount);
+        const currentRadius = sizeScale(d.songCount);
         
         d3.select(this)
           .transition()
           .duration(200)
           .attr('stroke-width', 2)
-          .attr('r', originalR);
+          .attr('r', currentRadius);
         
         tooltip
           .transition()
@@ -352,26 +415,40 @@ export class PlanetViz extends EventEmitter {
           .on('end', function() {
             d3.select(this).style('display', 'none');
           });
+
+        // Hide indicator arrow
+        if (self.legendIndicator) {
+          self.legendIndicator.style('opacity', 0);
+        }
       });
 
-    planetsEnter.merge(planets)
+    // Apply transitions after event handlers are set
+    allPlanets
       .transition()
       .duration(1000)
       .attr('cx', d => d.x)
       .attr('cy', d => d.y)
       .attr('r', d => sizeScale(d.songCount))
-      .attr('fill', d => this.danceabilityToColor(d.avgDanceability));
+      .attr('fill', d => this.danceabilityToColor(d.avgDanceability))
+      .attr('opacity', 1);
 
     planets.exit()
       .transition()
       .duration(500)
+      .attr('opacity', 0)
       .attr('r', 0)
-      .attr('cx', centerX)
-      .attr('cy', centerY)
       .remove();
 
+    // Store current planets data for next year transition
+    this.previousPlanetsData = sortedPlanetsData.map(d => ({
+      name: d.name,
+      x: d.x,
+      y: d.y,
+      songCount: d.songCount
+    }));
+
     if (this.animationRunning && !this.options.reducedMotion) {
-      this.animatePlanets(planetsData, centerX, centerY, sizeScale);
+      this.animatePlanets(sortedPlanetsData, centerX, centerY, sizeScale);
     }
   }
 

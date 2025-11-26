@@ -105,15 +105,26 @@
             <div class="legend-item">
               <strong>Planet Size:</strong> Number of viral songs
             </div>
-            <div class="legend-item">
-              <strong>Distance from Sun:</strong> Average energy
+            <div class="legend-item legend-hoverable">
+              <strong>Distance from Sun (Energy):</strong> Perceived intensity & activity
+              <div style="font-size: 0.85rem; color: #aaa; margin-top: 4px; font-style: italic;">
+                🌙 Close orbits = calm vibes · 🔥 Wider orbits = intense, active tracks
+              </div>
+              <div class="legend-tooltip">
+                <strong>Technical Definition:</strong><br>
+                Energy measures the perceptual intensity and activity of a track. High-energy songs typically feature loudness, speed, fast tempo, and noisy characteristics. Death metal scores high (≈1.0), while soft ballads score low (≈0.0). Based on dynamic range, perceived loudness, timbre, onset rate, and general entropy.
+              </div>
             </div>
           </div>
 
           <!-- Color Gradient Legend -->
-          <div class="color-legend">
+          <div class="color-legend color-legend-hoverable">
             <div class="color-legend-title">
-              <strong>Planet Color:</strong> Average Danceability
+              <strong>Planet Color (Danceability):</strong> Measures how suitable a track is for dancing based on tempo, rhythm stability, beat strength, and overall regularity
+            </div>
+            <div class="legend-tooltip">
+              <strong>Technical Definition:</strong><br>
+              Danceability describes how suitable a track is for dancing based on musical elements including tempo, rhythm stability, beat strength, and overall regularity. Values range from 0.0 (least danceable) to 1.0 (most danceable). Calculated from tempo consistency, beat prominence, and rhythmic patterns.
             </div>
             <div class="color-gradient-container">
               <div class="color-gradient-bar"></div>
@@ -137,7 +148,6 @@
               <button class="year-btn" data-year="2021">2021</button>
               <button class="year-btn" data-year="2022">2022</button>
             </div>
-            <p class="annotation" aria-live="polite">Top artists spawn [PLACEHOLDER_REMIX_COUNT] variations</p>
           </div>
         </div>
       </section>
