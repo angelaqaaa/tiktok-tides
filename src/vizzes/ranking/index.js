@@ -172,7 +172,7 @@ export class RankingViz extends EventEmitter {
 
     <a href="https://www.tiktok.com/discover/pyramid-ranking-trend"
        target="_blank">
-      View the original trend →
+      View the original trend! →
     </a>
   `);
 
