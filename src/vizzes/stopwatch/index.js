@@ -490,7 +490,7 @@ export class StopwatchViz extends EventEmitter {
         .attr('class', 'time-label')
         .attr('x', rLab * Math.cos(a))
         .attr('y', rLab * Math.sin(a))
-        .text(`${sec}s`);
+        .text(`${sec}`);
     });
 
     // Button handlers (click & keyboard)
