@@ -22,6 +22,8 @@ export class RankingViz extends EventEmitter {
 
     this.currentAudio = null;
     this.stopSequence = false;
+    this.mainAudio = null;
+    this.fallTimes = [1.3, 6.5, 10.7, 13, 19.5, 27.2];
   }
 
   async init(selector, options = {}) {
@@ -210,7 +212,7 @@ export class RankingViz extends EventEmitter {
       .attr("height", "200px")
       .append("line")
       .attr("x1", "35px")
-      .attr("y1", "60px")
+      .attr("y1", "70px")
       .attr("x2", "35px")
       .attr("y2", "100px")
       .attr("stroke", "white")
@@ -247,7 +249,7 @@ export class RankingViz extends EventEmitter {
       .attr("height", "200px")
       .append("line")
       .attr("x1", "95px")
-      .attr("y1", "50px")
+      .attr("y1", "70px")
       .attr("x2", "95px")
       .attr("y2", "80px")
       .attr("stroke", "white")
@@ -490,78 +492,66 @@ export class RankingViz extends EventEmitter {
   }
 
   startAnimation(pages, pyramidData, rectWidth, rectHeight) {
-    const delayArray = [1000, 1000, 1100, 2000, 2000, 6000];
-    let index = 0;
+    this.mainAudio = new Audio('/assets/audio/abbylee.mp3');
+    this.mainAudio.volume = 1;
+    this.currentAudio = this.mainAudio;
+    this.stopSequence = false;
 
-    const fallNext = () => {
+    let nextIndex = 0;
+
+    const checkFalls = () => {
       if (this.stopSequence) return;
-      if (index >= pyramidData.length) return;
 
-      const d = pyramidData[index];
-      const page = pages.filter(p => p === d).nodes()[0];
+      const t = this.mainAudio.currentTime;
 
-      const audio = this.triggerFall(
-        d3.select(page),
-        d,
-        index,
-        rectWidth,
-        rectHeight,
-        delayArray[index] || 0
-      );
+      // Trigger all falls whose timestamp has passed
+      while (nextIndex < this.fallTimes.length && t >= this.fallTimes[nextIndex]) {
+        const d = pyramidData[nextIndex];
+        const pageNode = pages.nodes()[nextIndex];
 
-      audio.onended = () => {
-        if (this.stopSequence) return;
-        setTimeout(() => {
-          if (this.stopSequence) return;
-          index++;
-          fallNext();
-        }, 1000);
-      };
+        this.triggerFall(
+          d3.select(pageNode),
+          d,
+          nextIndex,
+          rectWidth,
+          rectHeight,
+          0 // no delay — timing is controlled by audio
+        );
+
+        nextIndex++;
+      }
+
+      // Stop checking if all have fallen
+      if (nextIndex >= this.fallTimes.length) return;
+
+      requestAnimationFrame(checkFalls);
     };
 
-    setTimeout(fallNext, 800);
+    // Start audio and fall loop
+    this.mainAudio.onplay = () => requestAnimationFrame(checkFalls);
+    this.mainAudio.play().catch(err => console.error(err));
   }
 
-  triggerFall(pageSel, d, index, rectWidth, rectHeight, fallDelay = 0) {
+  triggerFall(pageSel, d, index, rectWidth, rectHeight) {
     const cover = pageSel.select('.cover-group');
     const baseOfPyramid = 100 + 2 * 200 + rectHeight;
     const groundY = baseOfPyramid + 50;
 
-    const audioPath = `/assets/audio/ranking${index}.mp3`;
-    const audio = new Audio(audioPath);
-    this.currentAudio = audio;
-    audio.volume = 1;
+    const randomTilt = Math.random() * 40 - 20;
+    const randomXShift = Math.random() * 80 - 40;
+    const randomBounce = 1 + Math.random() * 0.05;
 
-    // schedule fall after fallDelay
-    setTimeout(() => {
-      const randomTilt = Math.random() * 40 - 20;
-      const randomXShift = Math.random() * 80 - 40;
-      const randomBounce = 1 + Math.random() * 0.05;
+    cover.transition()
+      .duration(400 + Math.random() * 400)
+      .ease(d3.easeCubicIn)
+      .attr('transform', `
+      translate(${randomXShift}, ${groundY - d.y})
+      rotate(${randomTilt}, ${rectWidth / 2}, ${rectHeight / 2})
+      scale(${randomBounce}, 0.6)
+    `);
 
-      cover.transition()
-        .duration(400 + Math.random() * 400)
-        .ease(d3.easeCubicIn)
-        .attr('transform', `
-        translate(${randomXShift}, ${groundY - d.y})
-        rotate(${randomTilt}, ${rectWidth / 2}, ${rectHeight / 2})
-        scale(${randomBounce}, 0.6)
-      `);
-
-      d.coverFallen = true;
-      this.checkAllPagesFallen();
-    }, fallDelay);
-
-    // Audio fade-out
-    audio.addEventListener('timeupdate', () => {
-      const fadeStart = audio.duration - 0.5;
-      if (audio.currentTime >= fadeStart && audio.volume > 0) {
-        audio.volume = Math.max(0, audio.volume - 0.05);
-      }
-    });
-
-    audio.play().catch(err => console.error('Audio error:', err));
-
-    return audio;
+    d.coverFallen = true;
+    this.checkAllPagesFallen();
   }
 
   // --- pause ---
@@ -576,26 +566,23 @@ export class RankingViz extends EventEmitter {
       playIcon.style.display = 'block';
 
       this.stopSequence = true;
-      if (this.currentAudio) this.currentAudio.pause();
+      if (this.mainAudio) this.mainAudio.pause();
     } else {
       pauseIcon.style.display = 'block';
       playIcon.style.display = 'none';
 
       this.stopSequence = false;
-      if (this.currentAudio) this.currentAudio.play();
+      if (this.mainAudio) this.mainAudio.play();
     }
   }
-
 
   // --- skip ---
   skipAnimation() {
     this.stopSequence = true;
     // stop current audio
-    if (this.currentAudio) {
-      try {
-        this.currentAudio.pause();
-        this.currentAudio.currentTime = 0;
-      } catch (e) { }
+    if (this.mainAudio) {
+      this.mainAudio.pause();
+      this.mainAudio.currentTime = 0;
     }
 
     const pages = d3.select(this.container).selectAll('g.page').nodes();
@@ -618,10 +605,10 @@ export class RankingViz extends EventEmitter {
           .duration(500)
           .ease(d3.easeCubicIn)
           .attr('transform', `
-          translate(${randomXShift}, ${groundY - d.y})
-          rotate(${randomTilt}, ${rectWidth / 2}, ${rectHeight / 2})
+        translate(${randomXShift}, ${groundY - d.y})
+        rotate(${randomTilt}, ${rectWidth / 2}, ${rectHeight / 2})
           scale(${randomBounce}, 0.6)
-        `);
+      `);
 
         d.coverFallen = true;
         this.checkAllPagesFallen();
@@ -765,30 +752,19 @@ export class RankingViz extends EventEmitter {
   }
 
   resetVizHard() {
-    // kill popup
-    if (this.popup) {
-      this.popup.remove();
-      this.popup = null;
+    if (this.mainAudio) {
+      this.mainAudio.pause();
+      this.mainAudio.currentTime = 0;
     }
-    d3.select(this.container).select('.overlay').remove();
-
-    // stop audio
-    if (this.currentAudio) {
-      try {
-        this.currentAudio.pause();
-        this.currentAudio.currentTime = 0;
-      } catch (e) { }
-    }
+    this.mainAudio = null;
 
     this.stopSequence = false;
     this.state.animationPaused = false;
     this.currentAudio = null;
 
-    // clear viz
     this.container.innerHTML = '';
     this.state.currentStep = 0;
 
-    // rebuild everything
     this.render();
   }
 
