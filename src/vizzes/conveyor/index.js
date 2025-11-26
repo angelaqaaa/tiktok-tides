@@ -15,7 +15,8 @@ export class ConveyorViz extends EventEmitter {
       currentGuess: '',
       score: 0,
       totalAttempts: 0,
-      revealed: false
+      revealed: false,
+      answeredCorrectly: [] // Track which questions were answered correctly
     };
     this.options = { ...DEFAULT_OPTIONS };
     this.mounted = false;
@@ -43,42 +44,42 @@ export class ConveyorViz extends EventEmitter {
         id: 'duration',
         label: 'Ideal Video Duration ⏱️',
         answer: '20-30 seconds',
-        hint: 'Keep it punchy to maximize completion and replays.',
+        hint: 'Check the stopwatch—which duration got the biggest radius?',
         options: ['10-15 seconds', '45-60 seconds', '20-30 seconds', '2-3 minutes']
       },
       {
         id: 'popular_sound',
         label: 'Most Popular Sound to Use 🎵',
         answer: 'Anxiety by Doechii',
-        hint: 'This track topped the TikTok charts recently.',
+        hint: 'Spin back to the vinyl—which track sits on the outermost ring?',
         options: ['Streets by Doja Cat', 'Cold Water by Justin Bieber', 'Anxiety by Doechii', 'Cruel Summer by Taylor Swift']
       },
       {
         id: 'danceability_avg',
         label: 'Average Danceability for Sounds 💃',
         answer: '0.8',
-        hint: 'On a 0–1 scale, higher means more groove.',
+        hint: 'Remember the planet colors? What\'s the typical danceability score?',
         options: ['0.4', '0.6', '0.8', '0.2']
       },
       {
         id: 'energy_avg',
         label: 'Average Energy for Sounds ⚡',
         answer: '0.7',
-        hint: '0–1 scale; think intensity and activity.',
+        hint: 'Think solar system—how far from the sun are most planets orbiting?',
         options: ['0.3', '0.5', '0.7', '0.9']
       },
       {
         id: 'caption_word',
         label: 'What Word to Include in the Caption ✍️',
-        answer: 'fyp',
-        hint: 'A classic tag to boost discoverability.',
-        options: ['pls', 'linkinbio', 'omg', 'fyp']
+        answer: 'viral',
+        hint: 'The emotion bubbles revealed the most popular language—what was it?',
+        options: ['pls', 'linkinbio', 'omg', 'viral']
       },
       {
         id: 'community',
         label: 'Popular TikTok Community 🐾',
         answer: 'pets',
-        hint: 'Content that never goes out of style.',
+        hint: 'Who climbed highest on the pyramid without even trying?',
         options: ['finance', 'origami', 'pets', 'meteorology']
       }
     ];
@@ -150,7 +151,24 @@ export class ConveyorViz extends EventEmitter {
     `;
     this.container.appendChild(header);
 
-    // Create conveyor belt wrapper
+    // Create controls (moved above belt)
+    const controls = document.createElement('div');
+    controls.className = 'conveyor-controls';
+    controls.innerHTML = `
+      <button class="btn-primary start-btn" aria-label="Start conveyor belt">
+        Start Conveyor
+      </button>
+      <button class="btn-secondary restart-btn" aria-label="Restart from beginning" style="display:none;">
+        Restart
+      </button>
+    `;
+    this.container.appendChild(controls);
+
+    // Create interaction panel (moved above belt)
+    const panel = this.createInteractionPanel();
+    this.container.appendChild(panel);
+
+    // Create conveyor belt wrapper (now below controls and panel)
     const beltWrapper = document.createElement('div');
     beltWrapper.className = 'conveyor-belt-wrapper';
     
@@ -169,30 +187,13 @@ export class ConveyorViz extends EventEmitter {
     beltWrapper.appendChild(belt);
     this.container.appendChild(beltWrapper);
 
-    // Create interaction panel
-    const panel = this.createInteractionPanel();
-    this.container.appendChild(panel);
-
-    // Create controls
-    const controls = document.createElement('div');
-    controls.className = 'conveyor-controls';
-    controls.innerHTML = `
-      <button class="btn-primary start-btn" aria-label="Start conveyor belt">
-        Start Conveyor
-      </button>
-      <button class="btn-secondary restart-btn" aria-label="Restart from beginning" style="display:none;">
-        Restart
-      </button>
-    `;
-    this.container.appendChild(controls);
-
     // Position first box at center
     this.updateBeltPosition();
   }
 
   createBox(item, index) {
     const box = document.createElement('div');
-    box.className = 'conveyor-box';
+    box.className = 'conveyor-box inactive';
     box.setAttribute('data-index', index);
     box.setAttribute('data-id', item.id);
 
@@ -209,9 +210,11 @@ export class ConveyorViz extends EventEmitter {
     const back = document.createElement('div');
     back.className = 'box-face box-back';
     back.innerHTML = `
+      <div class="box-question-on-back">${item.label}</div>
       <div class="box-answer-label">Answer:</div>
       <div class="box-answer">${item.answer}</div>
       <div class="box-checkmark">✓</div>
+      <div class="box-xmark">✗</div>
     `;
 
     box.appendChild(front);
@@ -235,10 +238,6 @@ export class ConveyorViz extends EventEmitter {
       <div class="options-grid" role="group" aria-label="Answer choices"></div>
 
       <div class="feedback-area" style="display:none;">
-        <div class="feedback-message"></div>
-        <button class="btn-secondary reveal-btn" aria-label="Reveal the answer">
-          Reveal Answer
-        </button>
         <button class="btn-primary next-btn" style="display:none;" aria-label="Move to next ingredient">
           Next →
         </button>
@@ -267,44 +266,45 @@ export class ConveyorViz extends EventEmitter {
       }
     });
 
-    // Reveal button
-    const revealBtn = this.container.querySelector('.reveal-btn');
-    revealBtn?.addEventListener('click', () => this.revealAnswer());
-
     // Next button
     const nextBtn = this.container.querySelector('.next-btn');
     nextBtn?.addEventListener('click', () => this.moveToNext());
   }
 
   updateBeltPosition() {
-    const belt = this.container.querySelector('.conveyor-belt');
-    if (!belt) return;
+    const boxes = this.container.querySelectorAll('.conveyor-box');
+    if (!boxes.length) return;
 
-    // Center the current box using actual sizes (responsive-friendly)
-    const currentBox = this.container.querySelector(
-      `.conveyor-box[data-index="${this.state.currentIndex}"]`
-    );
-    if (!currentBox) return;
-
-    // Get live dimensions
-    const styles = window.getComputedStyle(belt);
-    // Flex row gap is exposed as column-gap/gap depending on browser
-    const gapStr = styles.columnGap || styles.gap || '0px';
-    const gap = parseFloat(gapStr) || 0;
-    const boxW = currentBox.getBoundingClientRect().width;
-    const step = boxW + gap; // width of one box plus the gap between boxes
-
-    // Half width of the box for proper centering without hardcoding
-    const halfBox = boxW / 2;
-    const offset = -(this.state.currentIndex * step);
-
-    // Keep the original centering approach but with dynamic values
-    belt.style.transform = `translateX(calc(50% - ${halfBox}px + ${offset}px))`;
+    boxes.forEach((box, index) => {
+      const dataIndex = parseInt(box.getAttribute('data-index'));
+      
+      // Position based on state relative to current index
+      if (dataIndex < this.state.currentIndex) {
+        // Completed cards - move to the left
+        box.style.transform = 'translateX(-400px)';
+        box.classList.remove('waiting', 'active-card');
+        box.classList.add('completed-card');
+      } else if (dataIndex === this.state.currentIndex) {
+        // Active card - center position
+        box.style.transform = 'translateX(0)';
+        box.classList.remove('waiting', 'completed-card');
+        box.classList.add('active-card');
+      } else {
+        // Waiting cards - stay on the right
+        box.style.transform = 'translateX(400px)';
+        box.classList.add('waiting');
+        box.classList.remove('active-card', 'completed-card');
+      }
+    });
   }
 
   startConveyor() {
     this.state.isPaused = false;
     this.state.isMoving = false;
+
+    // Remove inactive class from all boxes
+    const boxes = this.container.querySelectorAll('.conveyor-box');
+    boxes.forEach(box => box.classList.remove('inactive'));
 
     // Hide start button, show interaction panel
     const startBtn = this.container.querySelector('.start-btn');
@@ -361,13 +361,8 @@ export class ConveyorViz extends EventEmitter {
     const feedbackArea = this.container.querySelector('.feedback-area');
     if (feedbackArea) feedbackArea.style.display = 'none';
 
-    // Reset reveal and next buttons
-    const revealBtn = this.container.querySelector('.reveal-btn');
+    // Reset next button
     const nextBtn = this.container.querySelector('.next-btn');
-    if (revealBtn) {
-      revealBtn.style.display = 'none';
-      revealBtn.disabled = true;
-    }
     if (nextBtn) nextBtn.style.display = 'none';
 
     // Highlight current box
@@ -396,38 +391,83 @@ export class ConveyorViz extends EventEmitter {
 
     if (isCorrect) {
       this.state.score++;
-      this.showFeedback(`🎉 Correct! "${current.answer}"`, 'correct');
+      // Mark the correct button as green
+      if (btnEl) btnEl.classList.add('correct-answer');
+      
       // Disable all options after correct
       this.disableAllOptions();
+      
+      // Show feedback area and next button immediately
+      const feedbackArea = this.container.querySelector('.feedback-area');
+      const nextBtn = this.container.querySelector('.next-btn');
+      
+      if (feedbackArea) feedbackArea.style.display = 'flex';
+      
+      if (nextBtn) {
+        nextBtn.style.display = 'block';
+        // Update button text for last item
+        if (this.state.currentIndex >= this.data.length - 1) {
+          nextBtn.textContent = 'Finish';
+        } else {
+          nextBtn.textContent = 'Next →';
+        }
+      }
       
       // Auto-reveal after short delay
       setTimeout(() => this.revealAnswer(), 1000);
     } else {
+      // Mark the incorrect button as red
+      if (btnEl) btnEl.classList.add('incorrect-answer');
+      
       this.state.attemptsLeft = Math.max(0, (this.state.attemptsLeft || 1) - 1);
       const attemptsEl = this.container.querySelector('.attempts-remaining');
       if (attemptsEl) attemptsEl.textContent = `Attempts left: ${this.state.attemptsLeft}`;
 
       if (this.state.attemptsLeft > 0) {
-        this.showFeedback(`Not quite! Try again.`, 'incorrect');
+        // Don't show feedback bar - just let the red button indicate the error
       } else {
-        this.showFeedback(`Out of attempts. You can reveal the answer.`, 'warning');
+        // Don't show feedback message - just highlight the correct answer
         // Disable remaining options
         this.disableAllOptions();
-        // Enable reveal button now that attempts are exhausted
-        const revealBtn = this.container.querySelector('.reveal-btn');
-        if (revealBtn) {
-          revealBtn.style.display = 'inline-block';
-          revealBtn.disabled = false;
+        
+        // Highlight the correct answer in green
+        const current = this.data[this.state.currentIndex];
+        const allOptions = this.container.querySelectorAll('.option-btn');
+        allOptions.forEach(opt => {
+          if (opt.getAttribute('data-value') === current.answer) {
+            opt.classList.add('correct-answer');
+          }
+        });
+        
+        // Show next button immediately without reveal step
+        const feedbackArea = this.container.querySelector('.feedback-area');
+        const nextBtn = this.container.querySelector('.next-btn');
+        
+        if (feedbackArea) feedbackArea.style.display = 'flex';
+        
+        if (nextBtn) {
+          nextBtn.style.display = 'block';
+          // Update button text for last item
+          if (this.state.currentIndex >= this.data.length - 1) {
+            nextBtn.textContent = 'Finish';
+          } else {
+            nextBtn.textContent = 'Next →';
+          }
         }
+        
+        // Auto-reveal after short delay
+        setTimeout(() => this.revealAnswer(), 1000);
       }
     }
 
     // Update score
     this.updateScore();
 
-    // Show reveal/next buttons
-    const feedbackArea = this.container.querySelector('.feedback-area');
-    feedbackArea.style.display = 'block';
+    // Show feedback area only when out of attempts
+    if (!isCorrect && this.state.attemptsLeft <= 0) {
+      const feedbackArea = this.container.querySelector('.feedback-area');
+      feedbackArea.style.display = 'block';
+    }
   }
 
   disableAllOptions() {
@@ -483,19 +523,25 @@ export class ConveyorViz extends EventEmitter {
 
     this.state.revealed = true;
 
-    // Flip current box
+    // Track if this was answered correctly
+    this.state.answeredCorrectly[this.state.currentIndex] = lastGuessCorrect;
+
+    // Flip current box and mark as correct or incorrect
     const currentBox = this.container.querySelector(`.conveyor-box[data-index="${this.state.currentIndex}"]`);
     if (currentBox) {
       currentBox.classList.add('flipped');
+      if (lastGuessCorrect) {
+        currentBox.classList.add('correct');
+      } else {
+        currentBox.classList.add('incorrect');
+      }
     }
 
-    // Hide reveal button, show next button
-    const revealBtn = this.container.querySelector('.reveal-btn');
+    // Show next button
     const nextBtn = this.container.querySelector('.next-btn');
     
-    if (revealBtn) revealBtn.style.display = 'none';
     if (nextBtn) {
-      nextBtn.style.display = 'inline-block';
+      nextBtn.style.display = 'block';
       
       // Update button text for last item
       if (this.state.currentIndex >= this.data.length - 1) {
@@ -534,6 +580,27 @@ export class ConveyorViz extends EventEmitter {
   }
 
   finish() {
+    // Remove active class from the last card
+    const currentBox = this.container.querySelector(`.conveyor-box[data-index="${this.state.currentIndex}"]`);
+    if (currentBox) {
+      currentBox.classList.remove('active');
+    }
+
+    // Center all cards in a row
+    const boxes = this.container.querySelectorAll('.conveyor-box');
+    const totalCards = boxes.length;
+    const cardWidth = 220; // from CSS
+    const gap = 32; // from CSS
+    const totalWidth = (totalCards * cardWidth) + ((totalCards - 1) * gap);
+    const startOffset = -(totalWidth / 2) + (cardWidth / 2);
+    
+    boxes.forEach((box, index) => {
+      const offset = startOffset + (index * (cardWidth + gap));
+      box.style.transform = `translateX(${offset}px)`;
+      box.classList.remove('waiting', 'active-card', 'completed-card');
+      box.classList.add('final-position');
+    });
+
     const panel = this.container.querySelector('.interaction-panel');
     panel.innerHTML = `
       <div class="completion-message">
@@ -578,12 +645,13 @@ export class ConveyorViz extends EventEmitter {
       currentGuess: '',
       score: 0,
       totalAttempts: 0,
-      revealed: false
+      revealed: false,
+      answeredCorrectly: []
     };
 
     // Reset all boxes (remove flipped class)
     const boxes = this.container.querySelectorAll('.conveyor-box');
-    boxes.forEach(box => box.classList.remove('flipped', 'active'));
+    boxes.forEach(box => box.classList.remove('flipped', 'active', 'correct', 'incorrect'));
 
     // Re-render
     this.render();

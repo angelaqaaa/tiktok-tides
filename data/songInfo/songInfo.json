@@ -1,0 +1,39 @@
+[
+  {
+    "name": "Anxiety",
+    "description": "A viral track that captured the mood of a generation, blending emotional depth with catchy beats. This song became a TikTok sensation, resonating with millions who found solace in its relatable lyrics and powerful melody.",
+    "albumCover": "/assets/icons/audio-disc.svg"
+  },
+  {
+    "name": "Confess Your Love",
+    "description": "An upbeat romantic anthem that swept across TikTok, inspiring countless dance challenges and love confession videos. Its infectious rhythm and heartfelt message made it a favorite for creators sharing their stories.",
+    "albumCover": "/assets/icons/audio-disc.svg"
+  },
+  {
+    "name": "Coffee",
+    "description": "A smooth, laid-back track perfect for morning routines and cozy content. This song's mellow vibes and relatable theme made it a go-to choice for lifestyle creators and coffee enthusiasts alike.",
+    "albumCover": "/assets/icons/audio-disc.svg"
+  },
+  {
+    "name": "Bad Bih 4 Ya",
+    "description": "A high-energy banger that dominated TikTok's dance scene. With its powerful bass and confident lyrics, this track became the soundtrack for empowerment and self-expression videos.",
+    "albumCover": "/assets/icons/audio-disc.svg"
+  },
+  {
+    "name": "QKThr",
+    "description": "An experimental track that broke boundaries on TikTok, combining unique sounds with viral potential. Its distinctive style attracted creators looking to stand out with innovative content.",
+    "albumCover": "/assets/icons/audio-disc.svg"
+  },
+  {
+    "name": "Sugar On My Tongue",
+    "description": "A sweet, playful song that brought joy to millions of TikTok users. Its catchy hook and fun-loving energy made it perfect for lighthearted content and feel-good moments.",
+    "albumCover": "/assets/icons/audio-disc.svg"
+  },
+  {
+    "name": "Lollipop",
+    "description": "A vibrant, colorful track that lit up TikTok feeds with its energetic beats and playful vibe. This song became synonymous with fun, carefree content and brought smiles to viewers worldwide.",
+    "albumCover": "/assets/icons/audio-disc.svg"
+  }
+]
+
+

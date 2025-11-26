@@ -111,15 +111,26 @@
             <div class="legend-item">
               <strong>Planet Size:</strong> Number of viral songs
             </div>
-            <div class="legend-item">
-              <strong>Distance from Sun:</strong> Average energy
+            <div class="legend-item legend-hoverable">
+              <strong>Distance from Sun (Energy):</strong> Perceived intensity & activity
+              <div style="font-size: 0.85rem; color: #aaa; margin-top: 4px; font-style: italic;">
+                🌙 Close orbits = calm vibes · 🔥 Wider orbits = intense, active tracks
+              </div>
+              <div class="legend-tooltip">
+                <strong>Technical Definition:</strong><br>
+                Energy measures the perceptual intensity and activity of a track. High-energy songs typically feature loudness, speed, fast tempo, and noisy characteristics. Death metal scores high (≈1.0), while soft ballads score low (≈0.0). Based on dynamic range, perceived loudness, timbre, onset rate, and general entropy.
+              </div>
             </div>
           </div>
 
           <!-- Color Gradient Legend -->
-          <div class="color-legend">
+          <div class="color-legend color-legend-hoverable">
             <div class="color-legend-title">
-              <strong>Planet Color:</strong> Average Danceability
+              <strong>Planet Color (Danceability):</strong> Measures how suitable a track is for dancing based on tempo, rhythm stability, beat strength, and overall regularity
+            </div>
+            <div class="legend-tooltip">
+              <strong>Technical Definition:</strong><br>
+              Danceability describes how suitable a track is for dancing based on musical elements including tempo, rhythm stability, beat strength, and overall regularity. Values range from 0.0 (least danceable) to 1.0 (most danceable). Calculated from tempo consistency, beat prominence, and rhythmic patterns.
             </div>
             <div class="color-gradient-container">
               <div class="color-gradient-bar"></div>
@@ -143,7 +154,6 @@
               <button class="year-btn" data-year="2021">2021</button>
               <button class="year-btn" data-year="2022">2022</button>
             </div>
-            <p class="annotation" aria-live="polite">Top artists spawn [PLACEHOLDER_REMIX_COUNT] variations</p>
           </div>
         </div>
       </section>
@@ -154,25 +164,29 @@
         <section class="record-player-section" aria-label="Viral Vinyl: TikTok's most viral sounds">
           <div class="record-player-header">
             <h2 class="record-player-title">Viral Vinyl</h2>
-            <p class="record-player-description">Hear the sounds that shaped TikTok’s For You Page. Hover over the
-              record’s rings to sample each trending sound — the farther out the ring, the louder the hype.</p>
-            <button type="button" class="record-player-start-btn" data-player-start>Start exploring</button>
+            <p class="record-player-description">Hear the popular sound tracks that shape TikTok. Hover over the
+              record's rings to explore each trending sound : the farther out the ring, the more popular the music track(measured by music play counts).
+              <hr><strong> Unmute the audio to hear the sound.</strong> 
+               Slide the year range slider to explore the music tracks from different years.
+            </p>
           </div>
           <div class="record-player-layout" data-player-layout>
-            <div class="record-player-wrapper" data-player-locked>
+            <div class="record-player-wrapper">
+              <!-- Mute Toggle Button - Top Left -->
+              <button class="mute-toggle-button" type="button" aria-label="Toggle mute" data-mute-toggle>
+                <svg class="mute-toggle-button__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+              </button>
               <div class="record-player-base">
                 <div class="record-disc-area">
                   <div class="record-indicator-line record-indicator-line--max" aria-hidden="true">higher popularity
                   </div>
-                  <svg class="record-disc" viewBox="0 0 700 700" role="img"
-                    aria-labelledby="record-disc-title record-disc-desc">
-                    <title id="record-disc-title">Record player visualization of top TikTok songs</title>
-                    <desc id="record-disc-desc">Concentric rings represent songs ordered by popularity from outermost
-                      most popular to innermost least popular.</desc>
+                  <svg class="record-disc" viewBox="0 0 700 700" role="img">
                     <g class="record-rings" data-record-rings></g>
                   </svg>
                   <div class="record-center-cap" aria-hidden="true">
-                    <span class="record-center-year">2019–2025</span>
+                    <span class="record-center-year" data-year-range-display>2020–2025</span>
                   </div>
                 </div>
                 <div class="tonearm" data-tonearm>
@@ -183,6 +197,30 @@
                       </div>
                     </div>
                   </div>
+                </div>
+                <!-- Song Info Screen - Bottom Right -->
+                <div class="song-info-screen" data-song-info-screen>
+                  <div class="song-info-screen__left">
+                    <img class="song-info-screen__album-cover" src="" alt="Album cover" data-album-cover>
+                  </div>
+                  <div class="song-info-screen__right">
+                    <h3 class="song-info-screen__title" data-song-title>No song selected</h3>
+                    <p class="song-info-screen__description" data-song-description>🎧 Play Count: —<br>✨ Author: —</p>
+                  </div>
+                </div>
+                <div class="year-range-control" data-year-range>
+                  <div class="year-range-control__header">
+                    <span class="year-range-control__label">Year Range</span>
+                    <span class="year-range-control__value" data-year-range-label>2020 – 2025</span>
+                  </div>
+                  <div class="year-range-slider" data-year-slider>
+                    <div class="year-range-slider__glow"></div>
+                    <div class="year-range-slider__track"></div>
+                    <div class="year-range-slider__selection" data-year-range-selection></div>
+                    <button class="year-range-slider__handle year-range-slider__handle--start" type="button" aria-label="Select start year" data-year-handle-start></button>
+                    <button class="year-range-slider__handle year-range-slider__handle--end" type="button" aria-label="Select end year" data-year-handle-end></button>
+                  </div>
+                  <div class="year-range-slider__ticks" data-year-slider-ticks></div>
                 </div>
               </div>
               <div class="record-player-notes" aria-hidden="true">
@@ -304,5 +342,7 @@
 
     <!-- Main App -->
     <script type="module" src="/src/js/main.js"></script>
+
+   
   </body>
 </html>
