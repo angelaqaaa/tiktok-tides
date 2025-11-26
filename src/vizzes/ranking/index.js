@@ -21,6 +21,7 @@ export class RankingViz extends EventEmitter {
     this.popup = null;
 
     this.currentAudio = null;
+    this.stopSequence = false;
   }
 
   async init(selector, options = {}) {
@@ -493,6 +494,7 @@ export class RankingViz extends EventEmitter {
     let index = 0;
 
     const fallNext = () => {
+      if (this.stopSequence) return;
       if (index >= pyramidData.length) return;
 
       const d = pyramidData[index];
@@ -508,7 +510,9 @@ export class RankingViz extends EventEmitter {
       );
 
       audio.onended = () => {
+        if (this.stopSequence) return;
         setTimeout(() => {
+          if (this.stopSequence) return;
           index++;
           fallNext();
         }, 1000);
@@ -566,20 +570,26 @@ export class RankingViz extends EventEmitter {
 
     const pauseIcon = this.container.querySelector('.pause-icon');
     const playIcon = this.container.querySelector('.play-icon');
+
     if (this.state.animationPaused) {
       pauseIcon.style.display = 'none';
       playIcon.style.display = 'block';
+
+      this.stopSequence = true;
       if (this.currentAudio) this.currentAudio.pause();
     } else {
       pauseIcon.style.display = 'block';
       playIcon.style.display = 'none';
+
+      this.stopSequence = false;
       if (this.currentAudio) this.currentAudio.play();
-      this.resumeFalling();
     }
   }
 
+
   // --- skip ---
   skipAnimation() {
+    this.stopSequence = true;
     // stop current audio
     if (this.currentAudio) {
       try {
@@ -769,6 +779,10 @@ export class RankingViz extends EventEmitter {
         this.currentAudio.currentTime = 0;
       } catch (e) { }
     }
+
+    this.stopSequence = false;
+    this.state.animationPaused = false;
+    this.currentAudio = null;
 
     // clear viz
     this.container.innerHTML = '';
