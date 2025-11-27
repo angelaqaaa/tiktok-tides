@@ -15,10 +15,10 @@ import { installIllustrations } from '../illustrations/index.js';
 
 // Scene mapping for semantic worlds (v3 spec - 8 scenes)
 const SCENE_MAP = {
-  // V3 scene IDs
+  // V3 scene IDs - each gets unique scene value
   '#scene-hero': 'cosmos',
-  '#scene-music-galaxy': 'orbit',
-  '#scene-viral-sounds': 'orbit',
+  '#scene-music-galaxy': 'galaxy',   // Unique value for new scene
+  '#scene-viral-sounds': 'sounds',   // Unique value for new scene
   '#scene-timing': 'dawn',
   '#scene-trend-pyramid': 'forest',
   '#scene-captions-emotion': 'air',
@@ -26,28 +26,37 @@ const SCENE_MAP = {
   '#scene-wrap-up': 'cosmos',
   // Legacy IDs (for backwards compatibility during transition)
   '#scene-landing': 'cosmos',
-  '#scene-sound-universe': 'orbit',
-  '#scene-top-sounds': 'orbit',
+  '#scene-sound-universe': 'galaxy',
+  '#scene-top-sounds': 'sounds',
   '#scene-duration': 'dawn',
   '#scene-category': 'forest',
   '#scene-emotion': 'air',
   '#scene-summary': 'cosmos'
 };
 
-// Node positions for alien marker on map canvas (using legacy section IDs)
+// Node positions for alien marker on map canvas
 const NODE_POSITIONS = {
+  // V3 scene IDs
+  'scene-hero': { x: '30%', y: '8%' },
+  'scene-music-galaxy': { x: '58%', y: '15%' },
+  'scene-viral-sounds': { x: '78%', y: '28%' },
+  'scene-timing': { x: '72%', y: '45%' },
+  'scene-trend-pyramid': { x: '58%', y: '60%' },
+  'scene-captions-emotion': { x: '42%', y: '72%' },
+  'scene-quiz': { x: '28%', y: '82%' },
+  'scene-wrap-up': { x: '50%', y: '90%' },
+  // Legacy IDs (for backwards compatibility)
   'scene-landing': { x: '30%', y: '8%' },
   'scene-sound-universe': { x: '58%', y: '15%' },
   'scene-top-sounds': { x: '78%', y: '28%' },
   'scene-duration': { x: '72%', y: '45%' },
   'scene-category': { x: '58%', y: '60%' },
   'scene-emotion': { x: '42%', y: '72%' },
-  'scene-quiz': { x: '28%', y: '82%' },
   'scene-summary': { x: '50%', y: '90%' }
 };
 
-// Scene names for keyboard shortcuts
-const SCENE_NAMES = ['cosmos', 'orbit', 'dawn', 'forest', 'air', 'lab'];
+// Scene names for keyboard shortcuts (includes new scene values)
+const SCENE_NAMES = ['cosmos', 'galaxy', 'sounds', 'dawn', 'forest', 'air', 'lab'];
 
 // --- util: tiny debounce (used for stopwatch resize) ------------------------
 function debounce(fn, ms = 150) {
@@ -146,10 +155,10 @@ class TikTokTidesApp {
 
     // Section metadata for transitions (v3 spec)
     this.sectionMeta = {
-      // V3 scene IDs
+      // V3 scene IDs - new scenes use 'bg-galaxy' and 'bg-sounds' (section has own backgrounds)
       'scene-hero': { bg: 'bg-cosmos', name: 'Arrival', scene: 'hero', nodeNum: 1 },
-      'scene-music-galaxy': { bg: 'bg-orbit', name: 'Music Galaxy', scene: 'music-galaxy', nodeNum: 2 },
-      'scene-viral-sounds': { bg: 'bg-orbit', name: 'Viral Sounds', scene: 'viral-sounds', nodeNum: 3 },
+      'scene-music-galaxy': { bg: 'bg-galaxy', name: 'Music Galaxy', scene: 'music-galaxy', nodeNum: 2 },
+      'scene-viral-sounds': { bg: 'bg-sounds', name: 'Viral Sounds', scene: 'viral-sounds', nodeNum: 3 },
       'scene-timing': { bg: 'bg-dawn', name: 'Timing', scene: 'timing', nodeNum: 4 },
       'scene-trend-pyramid': { bg: 'bg-forest', name: 'Trend Pyramid', scene: 'trend-pyramid', nodeNum: 5 },
       'scene-captions-emotion': { bg: 'bg-air', name: 'Captions & Emotion', scene: 'captions-emotion', nodeNum: 6 },
@@ -157,8 +166,8 @@ class TikTokTidesApp {
       'scene-wrap-up': { bg: 'bg-cosmos', name: 'Wrap-up', scene: 'wrap-up', nodeNum: 8 },
       // Legacy IDs (for backwards compatibility)
       'scene-landing': { bg: 'bg-cosmos', name: 'Welcome', scene: 'hero', nodeNum: 1 },
-      'scene-sound-universe': { bg: 'bg-orbit', name: 'Sound Universe', scene: 'music-galaxy', nodeNum: 2 },
-      'scene-top-sounds': { bg: 'bg-orbit', name: 'Top Sounds', scene: 'viral-sounds', nodeNum: 3 },
+      'scene-sound-universe': { bg: 'bg-galaxy', name: 'Sound Universe', scene: 'music-galaxy', nodeNum: 2 },
+      'scene-top-sounds': { bg: 'bg-sounds', name: 'Top Sounds', scene: 'viral-sounds', nodeNum: 3 },
       'scene-duration': { bg: 'bg-dawn', name: 'Duration', scene: 'timing', nodeNum: 4 },
       'scene-category': { bg: 'bg-forest', name: 'Category', scene: 'trend-pyramid', nodeNum: 5 },
       'scene-emotion': { bg: 'bg-air', name: 'Emotion', scene: 'captions-emotion', nodeNum: 6 },
@@ -208,6 +217,9 @@ class TikTokTidesApp {
     // Initialize alien narrator (v3 spec 4.1)
     this.initAlienNarrator();
 
+    // Initialize Music Galaxy scrollytelling (v3 spec 5.2.4)
+    this.setupMusicGalaxyScrollytelling();
+
     // Initialize micro-interactions
     initMicroInteractions();
 
@@ -228,8 +240,35 @@ class TikTokTidesApp {
         const id = '#' + mostVisible.target.id;
         const scene = SCENE_MAP[id];
         if (scene && document.body.dataset.scene !== scene) {
+          const previousScene = document.body.dataset.scene;
           document.body.dataset.scene = scene;
-          console.log('Scene changed to:', scene, '(ratio:', mostVisible.intersectionRatio.toFixed(2), ')');
+          console.log('Scene changed from:', previousScene, '→', scene, '(ratio:', mostVisible.intersectionRatio.toFixed(2), ')');
+
+          // CRITICAL: Explicitly hide Scene 1 alien when leaving hero
+          if (previousScene === 'cosmos' && scene !== 'cosmos') {
+            const heroAlien = document.querySelector('.alien-narrator--hero');
+            if (heroAlien) {
+              console.log('[Scene Transition] Hiding Scene 1 alien');
+              heroAlien.style.display = 'none';
+              heroAlien.style.opacity = '0';
+            }
+          }
+
+          // Show Scene 1 alien when RETURNING to hero (not on initial load)
+          // We know it's a return if previousScene exists and is not 'cosmos'
+          if (scene === 'cosmos' && previousScene && previousScene !== 'cosmos') {
+            const heroAlien = document.querySelector('.alien-narrator--hero');
+            if (heroAlien) {
+              console.log('[Scene Transition] Showing Scene 1 alien (returning)');
+              heroAlien.style.display = 'flex';
+              heroAlien.style.opacity = '1';
+              // Also ensure speech bubble is visible when returning
+              const speechBubble = heroAlien.querySelector('.alien-speech-bubble');
+              if (speechBubble) {
+                speechBubble.setAttribute('data-speech-state', 'visible');
+              }
+            }
+          }
 
           // Update journey map highlighting
           this.updateJourneyMapHighlight(mostVisible.target.id);
@@ -328,6 +367,53 @@ class TikTokTidesApp {
         }
       }, 500);
     }
+
+    // RecordPlayer: Wire up track chips to activate rings
+    if (key === 'recordPlayer') {
+      this.setupTrackChipInteractions(viz);
+    }
+  }
+
+  /**
+   * Wire up track chips (bottom legend) to interact with record player viz
+   */
+  setupTrackChipInteractions(recordPlayerViz) {
+    const trackChips = document.querySelectorAll('.track-chip[data-track-index]');
+
+    trackChips.forEach(chip => {
+      const index = parseInt(chip.dataset.trackIndex, 10);
+      if (isNaN(index)) return;
+
+      // Hover: activate ring temporarily
+      chip.addEventListener('mouseenter', () => {
+        recordPlayerViz.activateRing(index, { locked: false, source: 'hover' });
+        chip.classList.add('active');
+      });
+
+      // Leave: deactivate if not locked
+      chip.addEventListener('mouseleave', () => {
+        const ringNode = recordPlayerViz.getRingNode?.(index);
+        if (ringNode && recordPlayerViz.lockedIndex !== index) {
+          recordPlayerViz.stopRingRotation?.(index);
+          ringNode.classList.remove('is-hovered', 'is-active');
+        }
+        if (recordPlayerViz.lockedIndex !== index) {
+          recordPlayerViz.stopSong?.(true);
+        }
+        chip.classList.remove('active');
+      });
+
+      // Click: lock the ring
+      chip.addEventListener('click', () => {
+        recordPlayerViz.handleFirstGesture?.();
+        recordPlayerViz.activateRing(index, { locked: true, source: 'click' });
+        // Update active state on all chips
+        trackChips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+      });
+    });
+
+    console.log(`[Main] Wired ${trackChips.length} track chips to record player`);
   }
 
   setupScrollObserver() {
@@ -370,8 +456,19 @@ class TikTokTidesApp {
       const vizType = vizContainer.dataset.viz;
       const viz = this.vizControllers[vizType];
       if (viz && !viz.mounted) {
+        console.log(`[Viz] Mounting ${vizType} into`, vizContainer.id || vizContainer.className);
         viz.mount();
         viz.mounted = true;
+      }
+    }
+
+    // Special-case: Music Galaxy planet viz
+    if (sectionId === 'scene-music-galaxy') {
+      const planetViz = this.vizControllers.planets;
+      if (planetViz && !planetViz.mounted) {
+        console.log('[Viz] Mounting planets for Music Galaxy');
+        planetViz.mount();
+        planetViz.mounted = true;
       }
     }
 
@@ -385,6 +482,17 @@ class TikTokTidesApp {
       sw?.update(1);
       setTimeout(() => sw?.update(2), 1600);
       this._stopwatchResize?.();
+    }
+
+    // Special-case: Record player auto-sequence for Scene 3
+    if (sectionId === 'scene-viral-sounds') {
+      const rp = this.vizControllers.recordPlayer;
+      if (rp && !rp.autoSequenceTriggered) {
+        setTimeout(() => {
+          rp.startAutoSequence?.();
+          rp.autoSequenceTriggered = true;
+        }, 500);
+      }
     }
 
     // Live region announcement
@@ -417,29 +525,57 @@ class TikTokTidesApp {
   }
 
   setupNavigation() {
-    // Smooth scroll for nav links
+    // Smooth scroll for nav links (skip empty hrefs)
     document.querySelectorAll('a[href^="#"]').forEach(link => {
       link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (!href || href === '#') return; // Skip empty/invalid hrefs
+
         e.preventDefault();
-        const target = document.querySelector(link.getAttribute('href'));
+        const target = document.querySelector(href);
         if (target) {
-          target.scrollIntoView({
-            behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
-            block: 'start'
-          });
+          // Use fullPage API if available
+          if (window.fullpage_api) {
+            const sectionIndex = Array.from(document.querySelectorAll('.section')).indexOf(target);
+            if (sectionIndex >= 0) {
+              window.fullpage_api.moveTo(sectionIndex + 1);
+            }
+          } else {
+            target.scrollIntoView({
+              behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
+              block: 'start'
+            });
+          }
         }
       });
     });
 
-    // CTA button scroll
+    // CTA button scroll - use fullPage.js API if available, otherwise fallback to scrollIntoView
     document.querySelectorAll('[data-scroll-to]').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        const target = document.querySelector(btn.dataset.scrollTo);
+        const targetSelector = btn.dataset.scrollTo;
+        const target = document.querySelector(targetSelector);
+
         if (target) {
-          target.scrollIntoView({
-            behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
-            block: 'start'
-          });
+          // If fullPage.js is available, use its API for proper navigation
+          if (window.fullpage_api) {
+            // Find the section index (1-based for fullPage)
+            const sections = document.querySelectorAll('.section');
+            let sectionIndex = 1;
+            sections.forEach((section, idx) => {
+              if (section === target || '#' + section.id === targetSelector) {
+                sectionIndex = idx + 1;
+              }
+            });
+            console.log('[CTA Button] Navigating to section', sectionIndex, 'via fullPage API');
+            window.fullpage_api.moveTo(sectionIndex);
+          } else {
+            // Fallback to native scroll
+            target.scrollIntoView({
+              behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
+              block: 'start'
+            });
+          }
         }
       });
     });
@@ -488,6 +624,9 @@ class TikTokTidesApp {
         const targetId = node.dataset.target;
         const target = document.getElementById(targetId);
         if (target) {
+          // Immediately update alien marker position before hiding overlay
+          this.updateAlienMarkerPosition(targetId);
+          this.updateJourneyMapHighlight(targetId);
           journeyOverlay?.setAttribute('aria-hidden', 'true');
           target.scrollIntoView({
             behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
@@ -503,6 +642,9 @@ class TikTokTidesApp {
         const targetId = item.dataset.target;
         const target = document.getElementById(targetId);
         if (target) {
+          // Immediately update alien marker position
+          this.updateAlienMarkerPosition(targetId);
+          this.updateJourneyMapHighlight(targetId);
           journeyOverlay?.setAttribute('aria-hidden', 'true');
           target.scrollIntoView({
             behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
@@ -546,6 +688,9 @@ class TikTokTidesApp {
         const targetId = node.dataset.sceneTarget;
         const target = document.getElementById(targetId);
         if (target) {
+          // Immediately update alien marker position and nav highlight
+          this.updateAlienMarkerPosition(targetId);
+          this.updateJourneyMapHighlight(targetId);
           target.scrollIntoView({
             behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
             block: 'start'
@@ -737,6 +882,9 @@ class TikTokTidesApp {
       viz.resetHighlights?.();
       viz.switchYear(year);
       this.announce(`Showing songs from ${year}`);
+
+      // Show second alien speech bubble when 2022 is selected (per v3 spec 5.2.5)
+      this.updateAlienSpeechForYear(year);
     }
 
     if (action === 'planet-highlight-repeat') {
@@ -935,23 +1083,368 @@ class TikTokTidesApp {
    * Update alien narrator based on current scene
    */
   updateAlienNarrator(scene) {
-    // Hide all alien narrators first
+    // Hide all alien narrators first, EXCEPT the hero alien which is managed by initAlienNarrator
     document.querySelectorAll('.alien-narrator').forEach(narrator => {
+      // Skip hero alien - it's managed separately to avoid flickering
+      if (narrator.classList.contains('alien-narrator--hero')) return;
+
       const speechBubble = narrator.querySelector('.alien-speech-bubble');
       if (speechBubble) {
         speechBubble.setAttribute('data-speech-state', 'hidden');
       }
+      // Reset any animation classes
+      narrator.classList.remove('alien-tapping', 'alien-sliding');
     });
 
     // Show the narrator for the current scene after a delay
     const sceneNarrator = document.querySelector(`.alien-narrator[data-scene="${scene}"]`);
     if (sceneNarrator) {
-      const speechBubble = sceneNarrator.querySelector('.alien-speech-bubble');
-      if (speechBubble) {
-        setTimeout(() => {
-          speechBubble.setAttribute('data-speech-state', 'visible');
-        }, 800);
+      // SKIP auto-speech for Scene 2 (galaxy) - slide handler manages speech bubbles there
+      // SKIP auto-speech for Scene 1 (cosmos) - initAlienNarrator handles the hero alien
+      // This prevents race conditions and flickering
+      if (scene !== 'galaxy' && scene !== 'cosmos') {
+        const speechBubble = sceneNarrator.querySelector('.alien-speech-bubble');
+        if (speechBubble) {
+          setTimeout(() => {
+            speechBubble.setAttribute('data-speech-state', 'visible');
+          }, 1200); // Slightly longer delay for animations to complete
+        }
       }
+
+      // Scene 3: Setup tap/bounce and scroll slide behavior
+      if (scene === 'sounds') {
+        this.setupScene3AlienBehavior(sceneNarrator);
+      }
+    }
+  }
+
+  /**
+   * Update alien speech for year selection in Scene 2 (v3 spec 5.2.5)
+   */
+  updateAlienSpeechForYear(year) {
+    const scene2Alien = document.querySelector('.alien-narrator--scene2');
+    if (!scene2Alien) return;
+
+    const speechBubble = scene2Alien.querySelector('.alien-speech-bubble');
+    const speechText = scene2Alien.querySelector('.alien-speech-text');
+    if (!speechBubble || !speechText) return;
+
+    // Show second speech bubble when 2022 is selected
+    if (year === '2022') {
+      speechText.textContent = 'Look how this artist keeps shining year after year!';
+      speechBubble.setAttribute('data-speech-state', 'visible');
+      // Add pointing animation class
+      scene2Alien.classList.add('alien-pointing');
+    } else {
+      // Revert to first speech
+      speechText.textContent = 'Each planet you see is a creator or artist. I am visiting the busiest ones.';
+      scene2Alien.classList.remove('alien-pointing');
+    }
+  }
+
+  /**
+   * Setup Scene 3 alien tap/bounce and scroll slide behavior (v3 spec 5.3.5)
+   */
+  setupScene3AlienBehavior(alienEl) {
+    // After 4 seconds (autosequence finished), trigger tap/bounce
+    setTimeout(() => {
+      alienEl.classList.add('alien-tapping');
+      // Remove tapping class after animation completes
+      setTimeout(() => {
+        alienEl.classList.remove('alien-tapping');
+      }, 600);
+    }, 4000);
+
+    // Setup scroll listener for slide effect
+    const scene3Section = document.getElementById('scene-viral-sounds');
+    if (!scene3Section) return;
+
+    const handleScroll = () => {
+      const rect = scene3Section.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+
+      // Calculate how much of the section has scrolled past
+      const scrollProgress = Math.max(0, (viewportHeight - rect.top) / (viewportHeight + rect.height));
+
+      // Start sliding when user scrolls past 60% of the section
+      if (scrollProgress > 0.6) {
+        alienEl.classList.add('alien-sliding');
+      } else {
+        alienEl.classList.remove('alien-sliding');
+      }
+    };
+
+    // Add scroll listener
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Store reference for cleanup
+    this._scene3ScrollHandler = handleScroll;
+  }
+
+  /**
+   * Setup Music Galaxy Slide-Based Scrollytelling (v3 spec 5.2.4)
+   * PowerPoint-style slides - scroll wheel changes slides, NO page scrolling
+   * Pattern from STEAMulating Trends (fullPage.js) and Smoking & Lung Cancer
+   */
+  setupMusicGalaxyScrollytelling() {
+    const slides = document.querySelectorAll('.music-galaxy-slide');
+    const annotation = document.querySelector('.music-galaxy-annotation');
+    const primarySpeech = document.querySelector('.alien-speech-bubble--primary');
+    const secondarySpeech = document.querySelector('.alien-speech-bubble--secondary');
+    const alienNarrator = document.querySelector('.alien-narrator--scene2');
+    const planetViz = this.vizControllers.planets;
+
+    if (!slides.length || !planetViz) {
+      console.warn('Music Galaxy slide elements not found');
+      return;
+    }
+
+    // Mount planet viz once
+    if (!planetViz.mounted) {
+      console.log('[Music Galaxy] Mounting planet viz...');
+      planetViz.mount();
+      planetViz.mounted = true;
+
+      // Force update to ensure planets are visible
+      setTimeout(() => {
+        planetViz.updateVisualization?.();
+        console.log('[Music Galaxy] Planets rendered:', planetViz.svg?.select('#planets').selectAll('.planet').size());
+      }, 100);
+    }
+
+    // fullPage.js handles slide transitions via .slide class
+    // We just need to respond to slide changes with viz updates
+
+    // Track active speech bubble timeout to prevent overlaps
+    let speechBubbleTimeout = null;
+
+    // Helper to safely set speech bubble state with debug logging
+    // IMPORTANT: Temporarily disable CSS transitions AND animations to prevent flicker
+    const setSpeechState = (bubble, state, bubbleName) => {
+      if (!bubble) return;
+      const prevState = bubble.getAttribute('data-speech-state');
+      if (prevState === state) {
+        // Already in desired state, don't touch it
+        return;
+      }
+
+      // CRITICAL: Temporarily disable ALL transitions AND animations to prevent flicker
+      const savedTransition = bubble.style.transition;
+      const savedAnimation = bubble.style.animation;
+      bubble.style.transition = 'none';
+      bubble.style.animation = 'none';
+
+      // Set the state
+      bubble.setAttribute('data-speech-state', state);
+
+      // Force reflow to apply state change immediately without transition/animation
+      void bubble.offsetHeight;
+
+      // Re-enable transitions/animations after a brief delay (for future animations)
+      requestAnimationFrame(() => {
+        bubble.style.transition = savedTransition;
+        bubble.style.animation = savedAnimation;
+      });
+
+      console.log(`[Alien Speech] ${bubbleName}: ${prevState} → ${state}`);
+    };
+
+    // Handle slide-specific viz changes
+    const handleSlideChange = (index) => {
+      if (!planetViz.mounted || !planetViz.svg) return;
+
+      console.log('[Music Galaxy] Slide', index + 1, 'active');
+      this.announce(`Music Galaxy: Slide ${index + 1} of 3`);
+
+      // Switch text content in the text overlay based on slide index
+      const textOverlay = document.querySelector('.music-galaxy-text-overlay');
+      if (textOverlay) {
+        const stepContents = textOverlay.querySelectorAll('.step-content[data-slide-step]');
+        stepContents.forEach(content => {
+          const stepIndex = parseInt(content.dataset.slideStep, 10);
+          content.style.display = (stepIndex === index) ? 'block' : 'none';
+        });
+      }
+
+      // Clear any pending speech bubble timeouts to prevent race conditions
+      if (speechBubbleTimeout) {
+        clearTimeout(speechBubbleTimeout);
+        speechBubbleTimeout = null;
+      }
+
+      // NOTE: Each case handles its own speech bubbles to avoid hide-then-show flicker
+
+      switch (index) {
+        case 0: // Slide 1: Baseline 2019
+          planetViz.resetHighlights?.();
+          planetViz.switchYear?.('2019');
+          document.querySelectorAll('.year-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.year === '2019');
+          });
+          // Hide and reset annotation
+          if (annotation) {
+            annotation.setAttribute('aria-hidden', 'true');
+            annotation.style.left = '';
+            annotation.style.top = '';
+          }
+          // Hide secondary ONLY, show primary (don't hide primary first to avoid flicker)
+          setSpeechState(secondarySpeech, 'hidden', 'Secondary');
+          setSpeechState(primarySpeech, 'visible', 'Primary');
+          // Reset alien to bottom-left (default position) and ensure visible
+          if (alienNarrator) {
+            alienNarrator.classList.remove('alien-pointing', 'alien-top-left');
+            alienNarrator.style.left = '';
+            alienNarrator.style.bottom = '';
+            alienNarrator.style.visibility = 'visible'; // Reset after Step 2's hide
+          }
+          break;
+
+        case 1: // Slide 2: 2022 + highlight top artists
+          // Reset any previous highlights (especially from Step 3's repeated artists)
+          planetViz.resetHighlights?.();
+          planetViz.switchYear?.('2022');
+          document.querySelectorAll('.year-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.year === '2022');
+          });
+          setTimeout(() => planetViz.highlightTopArtists?.(), 600);
+
+          // IMMEDIATELY hide primary, then show secondary after delay
+          setSpeechState(primarySpeech, 'hidden', 'Primary');
+          speechBubbleTimeout = setTimeout(() => {
+            setSpeechState(secondarySpeech, 'visible', 'Secondary');
+          }, 800);
+
+          // Alien: HIDE first, position at planet, then show (prevents flickering at default position)
+          if (alienNarrator) {
+            alienNarrator.classList.remove('alien-top-left');
+            // CRITICAL: Use visibility:hidden for IMMEDIATE hiding (no transition delay like opacity)
+            alienNarrator.style.visibility = 'hidden';
+
+            // Wait for planets to highlight, then position and show alien
+            setTimeout(() => {
+              alienNarrator.classList.add('alien-pointing');
+
+              // Get initial position BEFORE showing
+              const pos = planetViz.getTopArtistPosition?.();
+              if (pos) {
+                const vizOverlay = document.querySelector('.music-galaxy-viz-overlay');
+                const overlayRect = vizOverlay?.getBoundingClientRect() || {};
+                // pos.x/y are screen coordinates, convert to overlay-relative
+                const targetLeft = pos.x - overlayRect.left - 60;
+                const targetBottom = overlayRect.bottom - pos.y - 80;
+                alienNarrator.style.left = `${targetLeft}px`;
+                alienNarrator.style.bottom = `${targetBottom}px`;
+              }
+
+              // NOW show the alien (already positioned at planet)
+              alienNarrator.style.visibility = 'visible';
+
+              // Track alien to highlighted planet (follows it as it orbits)
+              const trackAlienToPlanet = () => {
+                if (!alienNarrator.classList.contains('alien-pointing')) return;
+
+                const pos = planetViz.getTopArtistPosition?.();
+                if (pos) {
+                  // Position alien closer to the highlighted planet
+                  const vizOverlay = document.querySelector('.music-galaxy-viz-overlay');
+                  const overlayRect = vizOverlay?.getBoundingClientRect() || {};
+
+                  // pos.x/y are screen coordinates, convert to overlay-relative
+                  const targetLeft = pos.x - overlayRect.left - 125;
+                  const targetBottom = overlayRect.bottom - pos.y - 120;
+
+                  alienNarrator.style.left = `${targetLeft}px`;
+                  alienNarrator.style.bottom = `${targetBottom}px`;
+                }
+
+                // Continue tracking while in pointing state
+                if (alienNarrator.classList.contains('alien-pointing')) {
+                  requestAnimationFrame(trackAlienToPlanet);
+                }
+              };
+
+              trackAlienToPlanet();
+            }, 1200);
+          }
+
+          // Hide and reset annotation
+          if (annotation) {
+            annotation.setAttribute('aria-hidden', 'true');
+            annotation.style.left = '';
+            annotation.style.top = '';
+          }
+          break;
+
+        case 2: // Slide 3: Show repeated artists (sustained influence), annotation, move alien
+          // IMMEDIATELY hide ALL speech bubbles (alien just floats silently)
+          setSpeechState(primarySpeech, 'hidden', 'Primary');
+          setSpeechState(secondarySpeech, 'hidden', 'Secondary');
+
+          // Highlight artists who appear across multiple years (sustained influence)
+          // This gives visualization support for the "sustained influence" narrative
+          setTimeout(() => {
+            planetViz.highlightRepeatedArtists?.();
+            console.log('[Music Galaxy] Step 3: Highlighting repeated viral artists');
+          }, 300);
+
+          // Reposition alien to top-left for this slide and ensure visible
+          if (alienNarrator) {
+            alienNarrator.classList.remove('alien-pointing');
+            alienNarrator.classList.add('alien-top-left'); // CSS will handle positioning
+            alienNarrator.style.left = '';
+            alienNarrator.style.bottom = '';
+            alienNarrator.style.visibility = 'visible'; // Reset after Step 2's hide
+          }
+
+          setTimeout(() => {
+            if (annotation) {
+              annotation.setAttribute('aria-hidden', 'false');
+
+              // Track annotation to top planet position
+              const updateAnnotationPosition = () => {
+                const pos = planetViz.getTopArtistPosition?.();
+                if (pos && annotation) {
+                  const vizOverlay = document.querySelector('.music-galaxy-viz-overlay');
+                  const overlayRect = vizOverlay?.getBoundingClientRect() || {};
+
+                  // pos.x/y are screen coordinates, convert to overlay-relative
+                  const relativeX = pos.x - overlayRect.left;
+                  const relativeY = pos.y - overlayRect.top;
+
+                  // Position annotation near the planet (offset to bottom-left)
+                  annotation.style.left = `${relativeX - 140}px`;
+                  annotation.style.top = `${relativeY + 65}px`;
+                }
+
+                // Continue tracking while annotation is visible
+                if (annotation.getAttribute('aria-hidden') === 'false') {
+                  requestAnimationFrame(updateAnnotationPosition);
+                }
+              };
+
+              updateAnnotationPosition();
+            }
+          }, 400);
+          break;
+      }
+    };
+
+    // Store reference for fullPage.js callback
+    this._musicGalaxySlideHandler = handleSlideChange;
+
+    // Initialize first slide state
+    handleSlideChange(0);
+
+    console.log('[Music Galaxy Slides] Setup complete with', slides.length, 'horizontal slides');
+  }
+
+  /**
+   * Public method called by fullPage.js onSlideLeave callback
+   * Handles horizontal slide transitions in Scene 2
+   */
+  handleMusicGalaxySlide(slideIndex) {
+    if (this._musicGalaxySlideHandler) {
+      this._musicGalaxySlideHandler(slideIndex);
     }
   }
 

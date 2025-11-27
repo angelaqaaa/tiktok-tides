@@ -265,8 +265,8 @@ body[data-scene="dawn"]::before {
       transparent 100%);
 }
 
-/* Orbit (Surge) - Planet system with gravitational center and orbital rings
-   Metaphor: Artists as planets pulling content into their orbit */
+/* Orbit (Surge) - LEGACY: kept for old scene IDs
+   New scenes use section-level backgrounds instead */
 body[data-scene="orbit"]::before {
   background:
     /* Central "sun" - the gravitational center of viral trends */
@@ -277,6 +277,16 @@ body[data-scene="orbit"]::before {
     radial-gradient(ellipse 1400px 900px at 50% 50%, rgba(100, 150, 255, 0.25) 0%, rgba(80, 120, 200, 0.15) 40%, transparent 80%),
     /* Deep space purple */
     radial-gradient(ellipse 1600px 1000px at 50% 50%, rgba(50, 50, 120, 0.40) 0%, rgba(30, 30, 80, 0.28) 60%, transparent 100%);
+}
+
+/* Galaxy (Music Galaxy) - No body background, section handles it */
+body[data-scene="galaxy"]::before {
+  background: transparent;
+}
+
+/* Sounds (Viral Sounds) - No body background, section handles it */
+body[data-scene="sounds"]::before {
+  background: transparent;
 }
 
 /* City - Night sky atmosphere (SVG handles buildings)
@@ -895,67 +905,6 @@ body[data-scene="air"] .scene--bubbles {
   grid-template-columns: 1fr 1fr;
   gap: var(--space-2) var(--space-3);
 }
-
-/* ============================================================================
-   EXPLORE MODE VARIANT - Not used in story mode
-   ============================================================================
-
-   These styles are from Anushka's Planet legend enhancements. They create
-   a large, prominent "explore mode" legend style with oversized typography.
-
-   NOT ACTIVE in current story mode - all scenes use compact legends.
-   Preserved here for potential future explore mode page.
-
-   To activate: add class="explore-mode" to #scene-sound-universe
-
-#scene-sound-universe.explore-mode .legend-item {
-  background: rgba(10, 10, 15, 0.9);
-  padding: 22px 26px;
-  border-radius: 8px;
-  font-size: 1.25rem;
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--color-border-interactive);
-  color: var(--color-text-primary);
-  pointer-events: auto;
-  line-height: 1.6;
-}
-
-#scene-sound-universe.explore-mode .legend-item strong {
-  display: block;
-  color: var(--color-accent-cyan);
-  margin-bottom: 6px;
-  font-size: 1.3rem;
-}
-
-#scene-sound-universe.explore-mode .color-gradient-bar {
-  width: 50px;
-  height: 400px;
-}
-
-#scene-sound-universe.explore-mode .color-gradient-labels {
-  height: 400px;
-  font-size: 1.15rem;
-}
-
-@media (max-width: 1400px) {
-  #scene-sound-universe.explore-mode .legend-item {
-    font-size: 0.8rem;
-    padding: 12px 16px;
-  }
-
-  #scene-sound-universe.explore-mode .color-gradient-bar {
-    width: 40px;
-    height: 300px;
-  }
-
-  #scene-sound-universe.explore-mode .color-gradient-labels {
-    height: 300px;
-    font-size: 0.9rem;
-  }
-}
-
-   End of explore mode variant
-   ============================================================================ */
 
 /* Filter Button - Shared pill styling for layout/view controls (year, emotion sort) */
 .filter-button {
@@ -3158,10 +3107,16 @@ circle[data-type="bubble"] {
   z-index: 1001;
 }
 
-.mini-node:hover::before,
-.mini-node:focus::before {
+.mini-node:hover::before {
   opacity: 1;
   visibility: visible;
+}
+
+/* Hide tooltip on focus/active to prevent persistence after click */
+.mini-node:focus::before,
+.mini-node:active::before {
+  opacity: 0;
+  visibility: hidden;
 }
 
 /* Hover state */
@@ -4244,12 +4199,36 @@ circle[data-type="bubble"] {
   transition: opacity 400ms ease, transform 400ms ease;
 }
 
-/* Show narrator when scene is active */
-.scene-hero.active .alien-narrator--hero,
+/* Show narrator when hero scene is active */
 [data-scene="cosmos"] .alien-narrator--hero {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+}
+
+/* Hide narrator when leaving hero scene (exit downward) */
+body:not([data-scene="cosmos"]) .alien-narrator--hero {
+  opacity: 0 !important;
+  transform: translateY(150px) !important;
+  pointer-events: none !important;
+  transition: opacity 600ms ease, transform 600ms cubic-bezier(0.22, 1, 0.36, 1) !important;
+}
+
+/* CRITICAL: Force hide for ALL non-cosmos scenes - HIGHEST SPECIFICITY */
+body[data-scene="galaxy"] .alien-narrator--hero,
+body[data-scene="sounds"] .alien-narrator--hero,
+body[data-scene="duration"] .alien-narrator--hero,
+body[data-scene="category"] .alien-narrator--hero,
+body[data-scene="emotion"] .alien-narrator--hero,
+body[data-scene="quiz"] .alien-narrator--hero,
+body[data-scene="summary"] .alien-narrator--hero,
+body:not([data-scene="cosmos"]) .alien-narrator--hero {
+  display: none !important; /* Force hide completely */
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translateY(200px) !important;
+  z-index: -1 !important; /* Behind everything */
 }
 
 .alien-avatar {
@@ -4444,5 +4423,2619 @@ circle[data-type="bubble"] {
 
   .alien-speech-bubble {
     max-width: 180px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCENE 2: MUSIC GALAXY (v3 spec Section 5.2)
+   Planet viz showing songs as orbiting planets in a solar system
+   Layout: 65% left (viz), 35% right (narrative)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.scene-music-galaxy {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--color-bg-deep);
+  /* Grid layout set below after slide-scrollytelling styles */
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Music Galaxy Background Layers
+   ───────────────────────────────────────────────────────────────────────── */
+.music-galaxy-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0; /* Behind all content */
+}
+
+/* Backgrounds need to cover the fp-tableCell, not just scene-music-galaxy */
+#scene-music-galaxy .music-galaxy-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Starfield layer - scattered stars across the scene */
+.music-galaxy-bg--stars {
+  background-image:
+    /* Small bright stars */
+    radial-gradient(1px 1px at 10% 15%, rgba(255, 255, 255, 0.9) 50%, transparent),
+    radial-gradient(1px 1px at 25% 8%, rgba(255, 255, 255, 0.7) 50%, transparent),
+    radial-gradient(1px 1px at 40% 22%, rgba(186, 246, 240, 0.8) 50%, transparent),
+    radial-gradient(1.5px 1.5px at 55% 5%, rgba(255, 255, 255, 0.85) 50%, transparent),
+    radial-gradient(1px 1px at 70% 18%, rgba(45, 204, 211, 0.7) 50%, transparent),
+    radial-gradient(1px 1px at 85% 12%, rgba(255, 255, 255, 0.65) 50%, transparent),
+    radial-gradient(1.5px 1.5px at 92% 25%, rgba(186, 246, 240, 0.75) 50%, transparent),
+    /* Mid-section stars */
+    radial-gradient(1px 1px at 5% 45%, rgba(255, 255, 255, 0.8) 50%, transparent),
+    radial-gradient(1px 1px at 18% 52%, rgba(255, 255, 255, 0.6) 50%, transparent),
+    radial-gradient(1.5px 1.5px at 32% 38%, rgba(45, 204, 211, 0.7) 50%, transparent),
+    radial-gradient(1px 1px at 78% 42%, rgba(255, 255, 255, 0.75) 50%, transparent),
+    radial-gradient(1px 1px at 88% 55%, rgba(186, 246, 240, 0.7) 50%, transparent),
+    radial-gradient(1.5px 1.5px at 95% 48%, rgba(255, 255, 255, 0.8) 50%, transparent),
+    /* Bottom stars */
+    radial-gradient(1px 1px at 8% 75%, rgba(255, 255, 255, 0.7) 50%, transparent),
+    radial-gradient(1px 1px at 22% 82%, rgba(45, 204, 211, 0.65) 50%, transparent),
+    radial-gradient(1.5px 1.5px at 38% 68%, rgba(255, 255, 255, 0.8) 50%, transparent),
+    radial-gradient(1px 1px at 52% 78%, rgba(186, 246, 240, 0.7) 50%, transparent),
+    radial-gradient(1px 1px at 68% 85%, rgba(255, 255, 255, 0.65) 50%, transparent),
+    radial-gradient(1.5px 1.5px at 82% 72%, rgba(45, 204, 211, 0.75) 50%, transparent),
+    radial-gradient(1px 1px at 94% 88%, rgba(255, 255, 255, 0.7) 50%, transparent);
+  animation: starTwinkle 4s ease-in-out infinite alternate;
+}
+
+@keyframes starTwinkle {
+  0% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+/* Nebula layer - TikTok-style vibrant glow clouds */
+.music-galaxy-bg--nebula {
+  background:
+    /* Primary TikTok cyan glow - left side */
+    radial-gradient(ellipse 70% 60% at 15% 40%,
+      rgba(0, 242, 234, 0.18) 0%,
+      rgba(0, 242, 234, 0.08) 40%,
+      transparent 70%
+    ),
+    /* TikTok red glow - right side */
+    radial-gradient(ellipse 60% 50% at 85% 60%,
+      rgba(255, 0, 80, 0.15) 0%,
+      rgba(255, 0, 80, 0.05) 45%,
+      transparent 70%
+    ),
+    /* Accent purple-pink in center */
+    radial-gradient(ellipse 50% 45% at 50% 30%,
+      rgba(138, 43, 226, 0.12) 0%,
+      rgba(138, 43, 226, 0.03) 50%,
+      transparent 65%
+    ),
+    /* Shimmer accent top */
+    radial-gradient(ellipse 45% 35% at 70% 15%,
+      rgba(186, 246, 240, 0.08) 0%,
+      transparent 60%
+    );
+  filter: blur(50px);
+  animation: nebulaPulse 8s ease-in-out infinite alternate;
+}
+
+@keyframes nebulaPulse {
+  0% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+/* Distant planets layer - decorative background planets */
+.music-galaxy-bg--planets {
+  background:
+    /* Small distant planet 1 */
+    radial-gradient(circle 12px at 15% 20%,
+      rgba(241, 32, 74, 0.4) 0%,
+      rgba(241, 32, 74, 0.2) 40%,
+      transparent 70%
+    ),
+    /* Small distant planet 2 */
+    radial-gradient(circle 8px at 88% 35%,
+      rgba(45, 204, 211, 0.35) 0%,
+      rgba(45, 204, 211, 0.15) 50%,
+      transparent 70%
+    ),
+    /* Small distant planet 3 */
+    radial-gradient(circle 10px at 92% 75%,
+      rgba(251, 235, 53, 0.3) 0%,
+      rgba(251, 235, 53, 0.1) 50%,
+      transparent 70%
+    );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Music Galaxy Slide-Based Scrollytelling (PowerPoint-style, 2-column)
+   Pattern: Scroll wheel triggers slides, NO page scrolling
+   Layout: 65% viz (left), 35% text slides (right) - v3 spec 5.2.2
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Scene 2 (Music Galaxy) - fullPage.js Horizontal Slides Layout
+   Based on The Pudding's sticky scrollytelling pattern
+   Left 65%: Visualization area | Right 35%: Narrative text
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Section container - fullPage will add fp-section, fp-tableCell wrappers */
+#scene-music-galaxy {
+  position: relative;
+  overflow: hidden;
+}
+
+/* fullPage adds fp-tableCell - make it position relative for our absolute children */
+#scene-music-galaxy .fp-tableCell {
+  position: relative !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Viz Overlay (50% left) - Absolute positioned, persists across ALL slides
+   Adjusted from 65% to 60% to give more space to text panel
+   ───────────────────────────────────────────────────────────────────────── */
+.music-galaxy-viz-overlay {
+  position: absolute !important;
+  left: 0;
+  top: 0;
+  width: 62%;
+  height: 100%;
+  z-index: 50 !important;
+  pointer-events: auto;
+
+  /* Account for nav bar at top */
+  padding-top: calc(64px + var(--space-4));
+  padding-bottom: var(--space-4);
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Planet Visualization Panel - Glassmorphism with animated accents
+   Inspired by modern dashboard design with space-theme integration
+   ───────────────────────────────────────────────────────────────────────── */
+.music-galaxy-viz-overlay #viz-planets {
+  position: absolute;
+  width: 100%;
+  height: 88%;
+
+  /* Glassmorphism base */
+  background: linear-gradient(
+    165deg,
+    rgba(12, 12, 24, 0.75) 0%,
+    rgba(8, 8, 18, 0.85) 50%,
+    rgba(15, 10, 25, 0.8) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  /* Rounded corners for modern feel */
+  border-radius: 24px;
+
+  /* Multi-layer border effect */
+  border: 1px solid transparent;
+  background-clip: padding-box;
+
+  /* Outer glow and depth shadows */
+  box-shadow:
+    /* Outer cosmic glow */
+    0 0 60px rgba(45, 204, 211, 0.08),
+    0 0 100px rgba(138, 43, 226, 0.05),
+    /* Depth shadow */
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    /* Inner highlight */
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 20px rgba(45, 204, 211, 0.03);
+
+  /* Container for pseudo-elements */
+  overflow: hidden;
+}
+
+/* Animated gradient border overlay */
+.music-galaxy-viz-overlay #viz-planets::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(45, 204, 211, 0.5) 0%,
+    rgba(138, 43, 226, 0.3) 25%,
+    rgba(255, 0, 80, 0.2) 50%,
+    rgba(138, 43, 226, 0.3) 75%,
+    rgba(45, 204, 211, 0.5) 100%
+  );
+  background-size: 300% 300%;
+  animation: gradientBorderFlow 8s ease infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Subtle inner light effect */
+.music-galaxy-viz-overlay #viz-planets::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(
+    180deg,
+    rgba(45, 204, 211, 0.08) 0%,
+    rgba(138, 43, 226, 0.04) 40%,
+    transparent 100%
+  );
+  border-radius: 24px 24px 0 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Corner accent decorations */
+.music-galaxy-viz-overlay::before,
+.music-galaxy-viz-overlay::after {
+  content: '';
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  pointer-events: none;
+  z-index: 60;
+}
+
+/* Top-left corner accent */
+.music-galaxy-viz-overlay::before {
+  top: calc(64px + var(--space-4) + 8px);
+  left: calc(var(--space-4) + 8px);
+  border-left: 2px solid rgba(45, 204, 211, 0.4);
+  border-top: 2px solid rgba(45, 204, 211, 0.4);
+  border-radius: 12px 0 0 0;
+  background: linear-gradient(135deg, rgba(45, 204, 211, 0.1) 0%, transparent 50%);
+}
+
+/* Bottom-right corner accent */
+.music-galaxy-viz-overlay::after {
+  bottom: calc(var(--space-4) + 8px);
+  right: calc(var(--space-4) + 8px);
+  border-right: 2px solid rgba(255, 0, 80, 0.3);
+  border-bottom: 2px solid rgba(255, 0, 80, 0.3);
+  border-radius: 0 0 12px 0;
+  background: linear-gradient(-45deg, rgba(255, 0, 80, 0.08) 0%, transparent 50%);
+}
+
+/* Animated gradient border keyframes */
+@keyframes gradientBorderFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Floating particle effect layer (subtle) */
+.music-galaxy-viz-overlay #viz-planets .viz-particle-layer {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255, 255, 255, 0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 20%, rgba(45, 204, 211, 0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 70%, rgba(138, 43, 226, 0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 80%, rgba(255, 0, 80, 0.2) 0%, transparent 100%);
+  animation: particleFloat 20s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes particleFloat {
+  0%, 100% {
+    opacity: 0.5;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(-10px);
+  }
+}
+
+/* Subtle sci-fi grid overlay (adds depth without being distracting) */
+.music-galaxy-viz-overlay #viz-planets .viz-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    /* Horizontal lines */
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 60px,
+      rgba(45, 204, 211, 0.02) 60px,
+      rgba(45, 204, 211, 0.02) 61px
+    ),
+    /* Vertical lines */
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 60px,
+      rgba(45, 204, 211, 0.02) 60px,
+      rgba(45, 204, 211, 0.02) 61px
+    );
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+/* Vignette effect for dramatic focus */
+.music-galaxy-viz-overlay #viz-planets .viz-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 50%,
+    transparent 30%,
+    rgba(0, 0, 0, 0.15) 70%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
+  border-radius: 24px;
+}
+
+/* Scene label badge */
+.music-galaxy-viz-overlay .scene-label-badge {
+  position: absolute;
+  top: 90px;
+  left: 25px;
+  z-index: 15;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   TEXT OVERLAY (right 40%) - Positioned OUTSIDE fullPage slides
+   Adjusted from 35% to 40% to give more space for text content
+   ───────────────────────────────────────────────────────────────────────── */
+.music-galaxy-text-overlay {
+  position: absolute !important;
+  top: 50%;
+  right: 0;
+  width: 38%;
+  transform: translateY(-50%);
+  min-width: 320px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(64px + var(--space-6)) var(--space-4) var(--space-6);
+  z-index: 70 !important;
+  pointer-events: auto;
+}
+
+/* Step content cards inside text overlay */
+.music-galaxy-text-overlay .step-content {
+  width: 88%;
+  max-width: 550px;
+  opacity: 1;
+  visibility: visible;
+  background: linear-gradient(
+    145deg,
+    rgba(15, 15, 25, 0.95) 0%,
+    rgba(10, 10, 18, 0.98) 100%
+  );
+  border: 1px solid rgba(45, 204, 211, 0.3);
+  border-radius: 20px;
+  padding: var(--space-5);
+  backdrop-filter: blur(20px);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(0, 242, 234, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: var(--color-text-primary);
+}
+
+/* Headings in text overlay */
+.music-galaxy-text-overlay .step-heading {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 var(--space-4);
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.music-galaxy-text-overlay .step-subheading {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 700;
+  margin: 0 0 var(--space-3);
+  color: var(--color-glint);
+}
+
+.music-galaxy-text-overlay .step-content p {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: var(--space-3);
+}
+
+.music-galaxy-text-overlay .step-content p:last-child {
+  margin-bottom: 0;
+}
+
+.music-galaxy-text-overlay .step-content p strong {
+  color: var(--color-glint);
+  font-weight: 600;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   fullPage's slide wrappers - invisible, just for navigation tracking
+   ───────────────────────────────────────────────────────────────────────── */
+#scene-music-galaxy .fp-slidesContainer {
+  background: transparent !important;
+  z-index: 1 !important; /* Below overlays */
+  pointer-events: none !important;
+}
+
+#scene-music-galaxy .fp-slides {
+  background: transparent !important;
+}
+
+/* Empty slides - invisible, just for fullPage navigation state */
+#scene-music-galaxy .slide,
+#scene-music-galaxy .fp-slide {
+  width: 100% !important;
+  height: 100% !important;
+  background: transparent !important;
+  pointer-events: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Horizontal Slide Navigation Dots (below text panel)
+   fullPage.js generates .fp-slidesNav - we move it inside text overlay via JS
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* When nav is inside text overlay (moved by JS), use relative positioning */
+.music-galaxy-text-overlay .fp-slidesNav {
+  position: relative !important;
+  bottom: auto !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  margin-top: var(--space-4) !important;
+  z-index: 80 !important;
+  pointer-events: auto !important;
+}
+
+/* Fallback: If nav stays in section (before JS moves it), hide it */
+#scene-music-galaxy > .fp-slidesNav {
+  display: none !important;
+}
+
+.music-galaxy-text-overlay .fp-slidesNav ul,
+#scene-music-galaxy .fp-slidesNav ul {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.music-galaxy-text-overlay .fp-slidesNav ul li,
+#scene-music-galaxy .fp-slidesNav ul li {
+  margin: 0 !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+.music-galaxy-text-overlay .fp-slidesNav ul li a,
+#scene-music-galaxy .fp-slidesNav ul li a {
+  display: block !important;
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+  border: 2px solid rgba(45, 204, 211, 0.4) !important;
+  transition: all 250ms ease !important;
+  cursor: pointer !important;
+}
+
+.music-galaxy-text-overlay .fp-slidesNav ul li a:hover,
+#scene-music-galaxy .fp-slidesNav ul li a:hover {
+  background: rgba(45, 204, 211, 0.4) !important;
+  border-color: rgba(45, 204, 211, 0.7) !important;
+  transform: scale(1.15) !important;
+}
+
+.music-galaxy-text-overlay .fp-slidesNav ul li a.active,
+.music-galaxy-text-overlay .fp-slidesNav ul li.active a,
+#scene-music-galaxy .fp-slidesNav ul li a.active,
+#scene-music-galaxy .fp-slidesNav ul li.active a {
+  background: var(--color-glint, #2DCCD3) !important;
+  border-color: var(--color-glint, #2DCCD3) !important;
+  box-shadow: 0 0 12px rgba(45, 204, 211, 0.6) !important;
+}
+
+/* Hide the inner span that fullPage adds */
+.music-galaxy-text-overlay .fp-slidesNav ul li a span,
+#scene-music-galaxy .fp-slidesNav ul li a span {
+  display: none !important;
+}
+
+/* Viz container */
+.music-galaxy-viz-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.music-galaxy-viz-wrapper .viz-container {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+}
+
+/* Alien narrator positioning for this scene */
+.music-galaxy-alien {
+  position: absolute;
+  bottom: var(--space-4);
+  left: var(--space-4);
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  z-index: 20;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Right Column: Narrative Area (35%)
+   ───────────────────────────────────────────────────────────────────────── */
+.music-galaxy-narrative-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-6) 0;
+}
+
+.music-galaxy-header {
+  margin-bottom: var(--space-4);
+}
+
+.scene-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-glint);
+  margin-bottom: var(--space-2);
+}
+
+.scene-label svg {
+  width: 16px;
+  height: 16px;
+}
+
+.music-galaxy-title,
+.music-galaxy-heading {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 var(--space-4);
+  /* TikTok-style gradient text */
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 50%, #00F2EA 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 6s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.music-galaxy-description {
+  font-size: 1.0625rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.7;
+  margin-bottom: var(--space-5);
+}
+
+.music-galaxy-description p {
+  margin-bottom: var(--space-3);
+}
+
+.music-galaxy-description p:last-child {
+  margin-bottom: 0;
+}
+
+/* Callout box - TikTok style */
+.music-galaxy-callout {
+  position: relative;
+  background: linear-gradient(145deg, rgba(0, 242, 234, 0.08), rgba(255, 0, 80, 0.05));
+  border: 1px solid rgba(0, 242, 234, 0.2);
+  padding: var(--space-4);
+  border-radius: 12px;
+  margin-bottom: var(--space-5);
+  overflow: hidden;
+}
+
+.music-galaxy-callout::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #00F2EA, #FF0050);
+}
+
+.music-galaxy-callout p {
+  margin: 0;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-style: italic;
+}
+
+.callout-stat {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-glint);
+  line-height: 1.2;
+}
+
+.callout-label {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-1);
+}
+
+/* Year switch controls */
+.music-galaxy-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.year-switch-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.year-buttons {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.year-btn {
+  padding: var(--space-2) var(--space-4);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.year-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0, 242, 234, 0.15), rgba(255, 0, 80, 0.1));
+  opacity: 0;
+  transition: opacity 250ms ease;
+}
+
+.year-btn:hover {
+  background: rgba(0, 242, 234, 0.08);
+  border-color: rgba(0, 242, 234, 0.35);
+  color: var(--color-text-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 242, 234, 0.15);
+}
+
+.year-btn:hover::before {
+  opacity: 1;
+}
+
+.year-btn.active,
+.year-btn[aria-pressed="true"] {
+  background: linear-gradient(135deg, #00F2EA, #FF0050);
+  border-color: transparent;
+  color: #000;
+  box-shadow:
+    0 4px 20px rgba(0, 242, 234, 0.4),
+    0 0 30px rgba(255, 0, 80, 0.2);
+  transform: translateY(-1px);
+}
+
+.year-btn.active::before,
+.year-btn[aria-pressed="true"]::before {
+  opacity: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Overlay Steps Article - FOREGROUND layer on top of viz
+   ───────────────────────────────────────────────────────────────────────── */
+.music-galaxy-steps-article {
+  position: relative;
+  padding: 0;
+  max-width: 30rem;
+  margin: 0 auto;
+  z-index: 1; /* FOREGROUND - above viz */
+}
+
+.music-galaxy-step {
+  margin: 0 auto 2rem auto;
+  min-height: 50vh;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 500ms ease;
+}
+
+.music-galaxy-step.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.music-galaxy-step:last-child {
+  margin-bottom: 0;
+}
+
+.step-content {
+  position: relative;
+  z-index: 30; /* Highest - always on top */
+  background: rgba(10, 10, 20, 0.95); /* More opaque to block viz */
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(45, 204, 211, 0.4);
+  border-radius: 16px;
+  padding: var(--space-6);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(45, 204, 211, 0.1) inset;
+  max-width: 550px;
+}
+
+.step-heading {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 var(--space-4);
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.step-subheading {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 700;
+  margin: 0 0 var(--space-3);
+  color: var(--color-glint);
+}
+
+.step-content p {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: var(--space-3);
+}
+
+.step-content p:last-child {
+  margin-bottom: 0;
+}
+
+.step-content p strong {
+  color: var(--color-glint);
+  font-weight: 600;
+}
+
+/* Year controls within step content */
+.music-galaxy-step .music-galaxy-year-controls {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.year-controls-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-2);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Step Indicator Dots (v3 spec 2.4) - On right edge of viz column
+   ───────────────────────────────────────────────────────────────────────── */
+.music-galaxy-viz-background .scene-step-indicators {
+  position: absolute;
+  right: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100; /* Always accessible */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-2);
+}
+
+.scene-step-indicators .step-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px solid rgba(45, 204, 211, 0.4);
+  cursor: pointer;
+  transition: all 300ms ease;
+  position: relative;
+}
+
+.scene-step-indicators .step-dot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: rgba(45, 204, 211, 0.15);
+  opacity: 0;
+  transition: opacity 250ms ease;
+}
+
+.scene-step-indicators .step-dot:hover {
+  border-color: var(--color-glint);
+  transform: scale(1.2);
+}
+
+.scene-step-indicators .step-dot:hover::after {
+  opacity: 1;
+}
+
+.scene-step-indicators .step-dot.active {
+  background: var(--color-glint);
+  border-color: var(--color-glint);
+  box-shadow: 0 0 12px rgba(45, 204, 211, 0.6);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Annotation Callout (appears on step 3, tracks highlighted planet)
+   ───────────────────────────────────────────────────────────────────────── */
+.music-galaxy-annotation {
+  position: absolute;
+  /* Position set dynamically by JS to track planet */
+  max-width: 280px;
+  z-index: 50; /* Above viz, below slides */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  /* NO transform transition - let it move smoothly with planet */
+}
+
+.music-galaxy-annotation[aria-hidden="false"] {
+  opacity: 1;
+}
+
+.annotation-line {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  width: 2px;
+  height: 30px;
+  background: linear-gradient(180deg, rgba(251, 235, 53, 0.3) 0%, rgba(251, 235, 53, 0.85) 100%);
+}
+
+.annotation-content {
+  background: linear-gradient(145deg, rgba(251, 235, 53, 0.28), rgba(251, 235, 53, 0.18));
+  border: 1px solid rgba(251, 235, 53, 0.6);
+  border-radius: 12px;
+  padding: var(--space-4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+}
+
+.annotation-content p {
+  margin: 0 0 var(--space-2);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.annotation-content p:last-child {
+  margin-bottom: 0;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.annotation-content strong {
+  color: var(--color-glow);
+}
+
+/* Step indicator dots */
+.step-indicators {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 200ms ease;
+}
+
+.step-dot.active {
+  background: var(--color-glint);
+  box-shadow: 0 0 8px rgba(45, 204, 211, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCENE 3: VIRAL SOUNDS (v3 spec Section 5.3)
+   Record player showing top trending sounds
+   Layout: Central focus with record left-of-center
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.scene-viral-sounds {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(180deg,
+    var(--color-bg-deep) 0%,
+    rgba(74, 5, 5, 0.3) 50%,
+    var(--color-bg-deep) 100%
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Viral Sounds Background Layers
+   ───────────────────────────────────────────────────────────────────────── */
+.viral-sounds-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Studio wall texture with TikTok-style neon grid */
+.viral-sounds-bg--studio {
+  background:
+    /* Neon grid - TikTok cyan */
+    repeating-linear-gradient(90deg,
+      transparent 0px,
+      transparent 100px,
+      rgba(0, 242, 234, 0.04) 100px,
+      rgba(0, 242, 234, 0.04) 101px
+    ),
+    /* Neon grid - horizontal */
+    repeating-linear-gradient(0deg,
+      transparent 0px,
+      transparent 100px,
+      rgba(255, 0, 80, 0.03) 100px,
+      rgba(255, 0, 80, 0.03) 101px
+    ),
+    /* Centered vinyl glow - dramatic spot behind record */
+    radial-gradient(circle 400px at 40% 50%,
+      rgba(255, 0, 80, 0.12) 0%,
+      rgba(0, 242, 234, 0.06) 40%,
+      transparent 70%
+    ),
+    /* Edge vignette */
+    radial-gradient(ellipse 90% 90% at 50% 50%,
+      transparent 20%,
+      rgba(0, 0, 0, 0.5) 100%
+    );
+}
+
+/* Light beams from above - TikTok neon style */
+.viral-sounds-bg--beams {
+  background:
+    /* Central spotlight - TikTok red glow */
+    radial-gradient(ellipse 50% 40% at 40% 20%,
+      rgba(255, 0, 80, 0.25) 0%,
+      rgba(255, 0, 80, 0.08) 40%,
+      transparent 70%
+    ),
+    /* Side glow - TikTok cyan */
+    radial-gradient(ellipse 40% 35% at 80% 30%,
+      rgba(0, 242, 234, 0.15) 0%,
+      rgba(0, 242, 234, 0.05) 45%,
+      transparent 70%
+    ),
+    /* Bottom ambient */
+    linear-gradient(0deg,
+      rgba(138, 43, 226, 0.08) 0%,
+      transparent 40%
+    );
+  mix-blend-mode: screen;
+  animation: beamsPulse 5s ease-in-out infinite alternate;
+}
+
+@keyframes beamsPulse {
+  0% { opacity: 0.85; }
+  100% { opacity: 1; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Viral Sounds Layout Container
+   ───────────────────────────────────────────────────────────────────────── */
+.viral-sounds-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: calc(64px + var(--space-4)) var(--space-6) var(--space-4);
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* Header area */
+.viral-sounds-header {
+  text-align: center;
+  margin-bottom: var(--space-4);
+}
+
+.viral-sounds-header .scene-label {
+  justify-content: center;
+}
+
+.viral-sounds-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: var(--space-2) 0 0;
+}
+
+/* Main content area - record + text side by side */
+.viral-sounds-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  align-items: center;
+}
+
+/* Record player area - left of center */
+.viral-sounds-record-area {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.viral-sounds-viz-wrapper {
+  width: 100%;
+  max-width: 500px;
+}
+
+.viral-sounds-viz-wrapper .viz-container {
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+/* Alien on hoverboard - positioned near record */
+.viral-sounds-alien {
+  position: absolute;
+  bottom: 0;
+  right: -20px;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  z-index: 20;
+}
+
+.alien-hoverboard {
+  width: 80px;
+  height: 16px;
+  background: linear-gradient(90deg,
+    var(--color-glint) 0%,
+    var(--color-shimmer) 50%,
+    var(--color-glint) 100%
+  );
+  border-radius: 8px;
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow:
+    0 4px 12px rgba(45, 204, 211, 0.4),
+    0 0 20px rgba(45, 204, 211, 0.2);
+  animation: hoverboardFloat 2s ease-in-out infinite;
+}
+
+@keyframes hoverboardFloat {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-4px); }
+}
+
+/* Text panel - right side */
+.viral-sounds-text-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-5);
+  background: rgba(10, 10, 20, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+}
+
+.viral-sounds-narrative {
+  margin-bottom: var(--space-4);
+}
+
+.viral-sounds-narrative h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-3);
+}
+
+.viral-sounds-narrative p {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Stats grid */
+.viral-sounds-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+.stat-item {
+  text-align: center;
+  padding: var(--space-3);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.stat-bullet {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-blaze);
+  display: inline-block;
+  margin-right: var(--space-2);
+}
+
+.stat-text {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-blaze);
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: var(--space-1);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Track Legend Strip - Bottom of scene
+   ───────────────────────────────────────────────────────────────────────── */
+.viral-sounds-track-legend {
+  padding: var(--space-4) 0;
+}
+
+.track-legend-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: var(--space-3);
+  text-align: center;
+}
+
+.track-chips {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.track-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.track-chip:hover {
+  background: rgba(241, 32, 74, 0.1);
+  border-color: rgba(241, 32, 74, 0.3);
+  color: var(--color-text-primary);
+}
+
+.track-chip.active {
+  background: rgba(241, 32, 74, 0.2);
+  border-color: var(--color-blaze);
+  color: var(--color-text-primary);
+}
+
+.track-chip-color {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Scene 2 & 3 Responsive Styles
+   ───────────────────────────────────────────────────────────────────────── */
+@media (max-width: 1200px) {
+  .music-galaxy-container {
+    grid-template-columns: 60% 40%;
+  }
+}
+
+@media (max-width: 992px) {
+  .music-galaxy-container {
+    grid-template-columns: 1fr;
+    padding-top: calc(56px + var(--space-5));
+  }
+
+  .music-galaxy-viz-column {
+    order: 2;
+  }
+
+  .music-galaxy-narrative-column {
+    order: 1;
+    padding: 0;
+    text-align: center;
+  }
+
+  .music-galaxy-legend {
+    position: relative;
+    top: auto;
+    right: auto;
+    margin: 0 auto var(--space-4);
+    width: fit-content;
+  }
+
+  .music-galaxy-alien {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    justify-content: center;
+    margin-top: var(--space-4);
+  }
+
+  .viral-sounds-main {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .viral-sounds-record-area {
+    order: 1;
+  }
+
+  .viral-sounds-text-panel {
+    order: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .music-galaxy-container,
+  .viral-sounds-container {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+
+  .music-galaxy-title,
+  .viral-sounds-title {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+
+  .year-buttons {
+    justify-content: center;
+  }
+
+  .viral-sounds-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .track-chips {
+    gap: var(--space-2);
+  }
+
+  .track-chip {
+    font-size: 0.75rem;
+    padding: var(--space-1) var(--space-2);
+  }
+}
+
+@media (max-width: 480px) {
+  .music-galaxy-description,
+  .viral-sounds-narrative p {
+    font-size: 0.875rem;
+  }
+
+  .callout-stat {
+    font-size: 1.5rem;
+  }
+
+  .legend-items {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Additional Scene 2 & 3 Styles (match HTML class names)
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Scene label badge - Glassmorphism style with animated accent */
+.scene-label-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+
+  /* Glassmorphism background */
+  background: linear-gradient(
+    135deg,
+    rgba(12, 12, 24, 0.8) 0%,
+    rgba(8, 8, 18, 0.85) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  padding: var(--space-2) var(--space-4);
+  border-radius: 24px;
+  margin-bottom: var(--space-4);
+  position: relative;
+  overflow: hidden;
+
+  /* Transparent border for gradient overlay */
+  border: 1px solid transparent;
+
+  /* Depth and glow */
+  box-shadow:
+    0 0 20px rgba(45, 204, 211, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 8px rgba(45, 204, 211, 0.05);
+}
+
+/* Animated gradient border */
+.scene-label-badge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  padding: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(45, 204, 211, 0.6) 0%,
+    rgba(138, 43, 226, 0.4) 33%,
+    rgba(255, 0, 80, 0.4) 66%,
+    rgba(45, 204, 211, 0.6) 100%
+  );
+  background-size: 300% 100%;
+  animation: badgeBorderFlow 4s linear infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Shimmer effect overlay */
+.scene-label-badge::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.08) 40%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.08) 60%,
+    transparent 80%
+  );
+  transform: translateX(-100%);
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+@keyframes badgeBorderFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  50%, 100% { transform: translateX(100%); }
+}
+
+/* Music Galaxy viz area */
+.music-galaxy-viz-area {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Music Galaxy heading */
+.music-galaxy-heading {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.2;
+  margin: 0 0 var(--space-4);
+}
+
+/* Music Galaxy description paragraphs */
+.music-galaxy-description p {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 var(--space-2);
+}
+
+.music-galaxy-description p:last-child {
+  margin-bottom: 0;
+}
+
+/* Music Galaxy callout */
+.music-galaxy-callout {
+  background: rgba(45, 204, 211, 0.08);
+  border-left: 3px solid var(--color-glint);
+  padding: var(--space-4);
+  border-radius: 0 8px 8px 0;
+  margin: var(--space-4) 0;
+}
+
+.music-galaxy-callout p {
+  font-size: 0.9375rem;
+  color: var(--color-text-primary);
+  font-style: italic;
+  margin: 0;
+}
+
+/* Year controls */
+.music-galaxy-year-controls {
+  margin-top: var(--space-4);
+}
+
+.year-controls-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-2);
+}
+
+/* Scene step indicator */
+.scene-step-indicator {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+/* Legend icons for music galaxy */
+.legend-icon {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-icon--distance {
+  background: radial-gradient(circle, var(--color-glint) 30%, transparent 70%);
+  box-shadow: 0 0 6px rgba(45, 204, 211, 0.5);
+}
+
+.legend-icon--color {
+  background: linear-gradient(135deg,
+    var(--color-shimmer) 0%,
+    var(--color-glint) 50%,
+    var(--color-blaze) 100%
+  );
+}
+
+.legend-icon--size {
+  width: 16px;
+  height: 16px;
+  background: rgba(45, 204, 211, 0.6);
+}
+
+.legend-text {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+/* Legend examples */
+.legend-examples {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  padding-top: var(--space-2);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.legend-example {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: 0.6875rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.example-circle {
+  border-radius: 50%;
+}
+
+.example-circle--low {
+  width: 6px;
+  height: 6px;
+  background: rgba(45, 204, 211, 0.4);
+}
+
+.example-circle--mid {
+  width: 8px;
+  height: 8px;
+  background: rgba(45, 204, 211, 0.6);
+}
+
+.example-circle--high {
+  width: 10px;
+  height: 10px;
+  background: var(--color-glint);
+  box-shadow: 0 0 4px rgba(45, 204, 211, 0.5);
+}
+
+/* Viral sounds heading - TikTok gradient style */
+.viral-sounds-heading {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: var(--space-2) 0 0;
+  /* TikTok-style gradient text */
+  background: linear-gradient(135deg, #FF0050 0%, #00F2EA 50%, #FF0050 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 6s ease infinite;
+}
+
+/* Viral sounds text panel paragraphs */
+.viral-sounds-text-panel p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.7;
+  margin: 0 0 var(--space-3);
+}
+
+/* Viral sounds stats - TikTok style */
+.viral-sounds-stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.viral-sounds-stats .stat-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: left;
+  padding: var(--space-3);
+  background: linear-gradient(135deg, rgba(255, 0, 80, 0.1), rgba(0, 242, 234, 0.05));
+  border: 1px solid rgba(255, 0, 80, 0.2);
+  border-radius: 12px;
+  transition: all 250ms ease;
+}
+
+.viral-sounds-stats .stat-item:hover {
+  background: linear-gradient(135deg, rgba(255, 0, 80, 0.15), rgba(0, 242, 234, 0.08));
+  border-color: rgba(255, 0, 80, 0.35);
+  transform: translateX(4px);
+}
+
+.stat-bullet {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF0050, #00F2EA);
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(255, 0, 80, 0.5);
+}
+
+.stat-text {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Track chips styling - TikTok neon style */
+.track-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 242, 234, 0.2);
+  border-radius: 24px;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.track-chip:hover {
+  background: rgba(0, 242, 234, 0.12);
+  border-color: rgba(0, 242, 234, 0.5);
+  color: var(--color-text-primary);
+  transform: translateY(-3px);
+  box-shadow:
+    0 6px 20px rgba(0, 242, 234, 0.2),
+    0 0 15px rgba(255, 0, 80, 0.1);
+}
+
+.track-chip.active {
+  background: linear-gradient(135deg, rgba(255, 0, 80, 0.2), rgba(0, 242, 234, 0.15));
+  border-color: #00F2EA;
+  color: var(--color-text-primary);
+  box-shadow:
+    0 4px 16px rgba(0, 242, 234, 0.3),
+    inset 0 0 20px rgba(0, 242, 234, 0.05);
+}
+
+.chip-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, #FF0050, #00F2EA);
+  color: white;
+  border-radius: 50%;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(255, 0, 80, 0.4);
+}
+
+.chip-name {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chip-plays {
+  font-size: 0.75rem;
+  color: rgba(0, 242, 234, 0.8);
+  font-weight: 600;
+}
+
+/* Record player base styling (if not already styled elsewhere) */
+.record-player-wrapper {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.record-player-base {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.record-disc-area {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.record-disc {
+  width: 100%;
+  height: 100%;
+}
+
+.record-center-cap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle,
+    rgba(241, 32, 74, 0.8) 0%,
+    rgba(241, 32, 74, 0.6) 50%,
+    rgba(74, 5, 5, 0.8) 100%
+  );
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 20px rgba(241, 32, 74, 0.3),
+    inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.record-center-label {
+  font-size: 0.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Alien narrator variants for scenes */
+.alien-narrator--music-galaxy {
+  position: absolute;
+  bottom: var(--space-4);
+  left: var(--space-4);
+}
+
+.alien-narrator--viral-sounds {
+  position: absolute;
+  bottom: var(--space-2);
+  right: 0;
+}
+
+.alien-avatar--on-planet {
+  animation: alienFloat 3s ease-in-out infinite;
+}
+
+.alien-avatar--on-hoverboard {
+  animation: alienFloat 2.5s ease-in-out infinite;
+  position: relative;
+}
+
+/* Hoverboard under alien */
+.alien-avatar--on-hoverboard::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 10px;
+  background: linear-gradient(90deg,
+    var(--color-glint) 0%,
+    var(--color-shimmer) 50%,
+    var(--color-glint) 100%
+  );
+  border-radius: 5px;
+  box-shadow:
+    0 4px 12px rgba(45, 204, 211, 0.4),
+    0 0 20px rgba(45, 204, 211, 0.2);
+}
+
+/* Show narrators when scenes are active - using new scene values */
+.scene-music-galaxy .alien-narrator--scene,
+[data-scene="galaxy"] .alien-narrator--scene {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.scene-viral-sounds .alien-narrator--scene,
+[data-scene="sounds"] .alien-narrator--scene {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .music-galaxy-heading,
+  .viral-sounds-heading {
+    text-align: center;
+  }
+
+  .music-galaxy-description {
+    text-align: center;
+  }
+
+  .music-galaxy-callout {
+    text-align: center;
+    border-left: none;
+    border-top: 3px solid var(--color-glint);
+    border-radius: 8px 8px 0 0;
+  }
+
+  .music-galaxy-year-controls {
+    text-align: center;
+  }
+
+  .year-controls-label {
+    text-align: center;
+  }
+
+  .year-buttons {
+    justify-content: center;
+  }
+
+  .scene-step-indicator {
+    justify-content: center;
+  }
+
+  .track-chips {
+    padding: 0 var(--space-4);
+  }
+}
+
+@media (max-width: 768px) {
+  .scene-label-badge {
+    font-size: 0.625rem;
+  }
+
+  .music-galaxy-heading,
+  .viral-sounds-heading {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+
+  .chip-name {
+    max-width: 80px;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Scene-Level Alien Narrator - TikTok Styled (fixed position within section)
+   ───────────────────────────────────────────────────────────────────────── */
+.alien-narrator--scene {
+  position: absolute;
+  bottom: 32px;
+  left: 32px;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  z-index: 100;
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.alien-narrator--scene .alien-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,
+    rgba(0, 242, 234, 0.25) 0%,
+    rgba(255, 0, 80, 0.15) 100%
+  );
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  animation: alienFloat 3s ease-in-out infinite;
+  cursor: pointer;
+}
+
+/* TikTok-style gradient border on avatar */
+.alien-narrator--scene .alien-avatar::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00F2EA, #FF0050);
+  z-index: -1;
+  animation: borderRotate 4s linear infinite;
+}
+
+@keyframes borderRotate {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* Glow effect behind avatar */
+.alien-narrator--scene .alien-avatar::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(0, 242, 234, 0.3) 0%,
+    rgba(255, 0, 80, 0.15) 50%,
+    transparent 70%
+  );
+  z-index: -2;
+  animation: glowPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  100% { transform: scale(1.1); opacity: 1; }
+}
+
+.alien-narrator--scene .alien-avatar img {
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: rgba(10, 10, 20, 0.8);
+}
+
+.alien-narrator--scene .alien-speech-bubble {
+  max-width: 380px;
+  min-width: 280px;
+  padding: var(--space-4) var(--space-5);
+  background: linear-gradient(145deg, rgba(15, 15, 25, 0.98), rgba(8, 8, 16, 0.95));
+  border: 2px solid rgba(0, 242, 234, 0.45);
+  border-radius: 20px 20px 20px 6px;
+  box-shadow:
+    0 0 25px rgba(0, 242, 234, 0.2),
+    0 0 50px rgba(255, 0, 80, 0.1),
+    0 12px 40px rgba(0, 0, 0, 0.6);
+  position: relative;
+  /* REMOVED: animation: bubbleAppear - was causing flickering due to unconditional animation restart */
+  /* Using transition-based visibility controlled by data-speech-state instead */
+}
+
+@keyframes bubbleAppear {
+  from {
+    opacity: 0;
+    transform: translateX(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.alien-narrator--scene .alien-speech-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: 12px;
+  left: -8px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 8px 10px 8px 0;
+  border-color: transparent rgba(0, 242, 234, 0.35) transparent transparent;
+}
+
+.alien-narrator--scene .alien-speech-text {
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  line-height: 1.7;
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* Scene 2 & 3 need position relative for alien positioning */
+.scene-music-galaxy,
+.scene-viral-sounds {
+  position: relative;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Scene-specific Alien Positioning (v3 spec sections 5.2.5 and 5.3.5)
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Scene 2: Bottom-left with mini-planet (default) */
+.alien-narrator--scene2 {
+  position: absolute; /* Relative to viz overlay */
+  bottom: 80px; /* Moved further down */
+  left: calc(var(--space-6) + 40px); /* Moved further from viz center */
+  flex-direction: column; /* Avatar first (top), planet second (bottom) */
+  align-items: center;
+  gap: 0;
+  z-index: 200; /* Above all content */
+  /* Start hidden */
+  display: none;
+  opacity: 0;
+  transform: translateY(150px);
+  transition: left 600ms cubic-bezier(0.22, 1, 0.36, 1),
+              bottom 600ms cubic-bezier(0.22, 1, 0.36, 1); /* Smooth tracking */
+}
+
+/* ONLY show when Scene 2 (galaxy) is active */
+[data-scene="galaxy"] .alien-narrator--scene2 {
+  display: flex !important; /* Force show */
+  animation: alienEnterFromBelow 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+}
+
+/* CRITICAL: Hide on all other scenes */
+body:not([data-scene="galaxy"]) .alien-narrator--scene2,
+[data-scene="cosmos"] .alien-narrator--scene2,
+[data-scene="sounds"] .alien-narrator--scene2 {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+.alien-narrator--scene2 .alien-avatar {
+  position: relative;
+  z-index: 2;
+  margin-bottom: -30px; /* Overlap onto mini-planet so alien "stands" on it */
+}
+
+/* Float animation only starts after enter animation completes (0.3s delay + 1.2s anim = 1.5s) */
+[data-scene="galaxy"] .alien-narrator--scene2 .alien-avatar {
+  animation: alienFloat 3s ease-in-out 1.5s infinite;
+}
+
+.alien-narrator--scene2 .alien-speech-bubble {
+  position: absolute;
+  left: 130px;
+  bottom: 100px;
+  border-radius: 20px 20px 20px 6px;
+}
+
+/* Secondary speech bubble for Scene 2 (step 2) */
+.alien-narrator--scene2 .alien-speech-bubble--secondary {
+  left: 130px;
+  bottom: 100px;
+  border-radius: 20px 20px 20px 6px;
+}
+
+/* Pointing animation for Scene 2 when slide 2 is active */
+.alien-narrator--scene2.alien-pointing .alien-avatar {
+  animation: alienPointUp 1.5s ease-in-out infinite !important;
+}
+
+@keyframes alienPointUp {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-5px) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-8deg);
+  }
+  75% {
+    transform: translateY(-5px) rotate(-5deg);
+  }
+}
+
+/* Slide 3: Move alien to top-left corner */
+.alien-narrator--scene2.alien-top-left {
+  bottom: auto;
+  top: 150px;
+  left: var(--space-7);
+  transition: all 800ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Enter from below animation for Scene 2 - smooth rise up and land */
+@keyframes alienEnterFromBelow {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-8px);
+  }
+  85% {
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mini-planet visual for Scene 2 */
+.alien-mini-planet {
+  width: 120px;
+  height: 60px;
+  background: radial-gradient(ellipse 100% 80% at 50% 20%,
+    rgba(45, 204, 211, 0.7) 0%,
+    rgba(45, 204, 211, 0.4) 30%,
+    rgba(3, 54, 36, 0.8) 60%,
+    rgba(3, 54, 36, 0.95) 100%
+  );
+  border-radius: 50%;
+  position: relative;
+  z-index: 1;
+  box-shadow:
+    0 6px 25px rgba(45, 204, 211, 0.5),
+    0 0 50px rgba(45, 204, 211, 0.25),
+    inset 0 -12px 25px rgba(0, 0, 0, 0.4),
+    inset 0 4px 10px rgba(255, 255, 255, 0.1);
+  animation: miniPlanetGlow 3s ease-in-out infinite alternate;
+}
+
+.alien-mini-planet::after {
+  content: '';
+  position: absolute;
+  top: 12%;
+  left: 18%;
+  width: 35%;
+  height: 25%;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  filter: blur(5px);
+}
+
+/* Crater details on mini-planet */
+.alien-mini-planet::before {
+  content: '';
+  position: absolute;
+  bottom: 20%;
+  right: 25%;
+  width: 15px;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 50%;
+  box-shadow:
+    -25px -5px 0 5px rgba(0, 0, 0, 0.1),
+    15px 8px 0 3px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes miniPlanetGlow {
+  0% { box-shadow: 0 6px 25px rgba(45, 204, 211, 0.4), 0 0 40px rgba(45, 204, 211, 0.2), inset 0 -12px 25px rgba(0, 0, 0, 0.4); }
+  100% { box-shadow: 0 8px 35px rgba(45, 204, 211, 0.6), 0 0 60px rgba(45, 204, 211, 0.35), inset 0 -12px 25px rgba(0, 0, 0, 0.4); }
+}
+
+/* Scene 3: Lower-right above track legend with floating platform */
+.alien-narrator--scene3 {
+  position: absolute;
+  bottom: 160px;
+  right: 60px;
+  left: auto;
+  flex-direction: column; /* Avatar first (top), platform second (bottom) - matches HTML order */
+  align-items: center;
+  gap: 0;
+  /* Start hidden off-screen - will animate in when scene is active */
+  opacity: 0;
+  transform: translateY(150px);
+  transition: transform 0.5s ease-out, opacity 0.3s ease-out;
+}
+
+/* Animate in when Scene 3 (sounds) is active */
+[data-scene="sounds"] .alien-narrator--scene3 {
+  animation: alienEnterFromBelow 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+}
+
+/* Glide in from bottom-right for Scene 3 */
+@keyframes alienGlideInRight {
+  0% {
+    opacity: 0;
+    transform: translate(80px, 80px);
+  }
+  70% {
+    opacity: 1;
+    transform: translate(-5px, -5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+.alien-narrator--scene3 .alien-avatar {
+  position: relative;
+  z-index: 2;
+  margin-bottom: -15px; /* Overlap onto floating platform so alien "stands" on it */
+}
+
+/* Float animation only starts after enter animation completes (0.3s delay + 1.2s anim = 1.5s) */
+[data-scene="sounds"] .alien-narrator--scene3 .alien-avatar {
+  animation: alienFloat 3s ease-in-out 1.5s infinite;
+}
+
+/* Tap/bounce animation class (added via JS after autosequence) */
+.alien-narrator--scene3.alien-tapping .alien-avatar {
+  animation: alienTapBounce 0.6s ease-in-out;
+}
+
+@keyframes alienTapBounce {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-15px); }
+  50% { transform: translateY(5px); }
+  70% { transform: translateY(-8px); }
+}
+
+/* Slide toward edge on scroll */
+.alien-narrator--scene3.alien-sliding {
+  transform: translateX(100px);
+  opacity: 0.5;
+}
+
+.alien-narrator--scene3 .alien-speech-bubble {
+  position: absolute;
+  right: 110px;
+  bottom: 80px;
+  left: auto;
+  border-radius: 20px 20px 6px 20px;
+}
+
+/* Speech bubble tail points right for Scene 3 */
+.alien-narrator--scene3 .alien-speech-bubble::before {
+  left: auto;
+  right: -10px;
+  border-width: 10px 0 10px 12px;
+  border-color: transparent transparent transparent rgba(0, 242, 234, 0.45);
+}
+
+/* Floating platform visual for Scene 3 */
+.alien-floating-platform {
+  width: 110px;
+  height: 20px;
+  background: linear-gradient(180deg,
+    rgba(255, 0, 80, 0.8) 0%,
+    rgba(0, 242, 234, 0.6) 50%,
+    rgba(255, 0, 80, 0.4) 100%
+  );
+  border-radius: 10px;
+  position: relative;
+  z-index: 1;
+  box-shadow:
+    0 6px 20px rgba(255, 0, 80, 0.5),
+    0 0 40px rgba(0, 242, 234, 0.35),
+    inset 0 3px 6px rgba(255, 255, 255, 0.4),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.3);
+  animation: platformFloat 2s ease-in-out infinite;
+}
+
+/* Neon edge glow on platform */
+.alien-floating-platform::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #00F2EA, #FF0050, #00F2EA);
+  background-size: 200% 100%;
+  z-index: -1;
+  animation: platformNeonGlow 2s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes platformNeonGlow {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+.alien-floating-platform::before {
+  content: '';
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 25px;
+  background: radial-gradient(ellipse at center,
+    rgba(0, 242, 234, 0.35) 0%,
+    rgba(255, 0, 80, 0.15) 50%,
+    transparent 70%
+  );
+  filter: blur(6px);
+}
+
+@keyframes platformFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Hidden state for speech bubbles (controlled by JS) */
+.alien-speech-bubble[data-speech-state="hidden"] {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.9);
+}
+
+.alien-speech-bubble[data-speech-state="visible"] {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Improved Legend Styling for Scene 2 - Glassmorphism with animated accents
+   Matching the viz panel design language
+   ───────────────────────────────────────────────────────────────────────── */
+.music-galaxy-legend {
+  position: absolute;
+  top: 90px;
+  right: 0;
+  z-index: 10;
+  max-width: 200px;
+
+  /* Glassmorphism base matching viz panel */
+  background: linear-gradient(
+    155deg,
+    rgba(12, 12, 24, 0.85) 0%,
+    rgba(8, 8, 18, 0.92) 50%,
+    rgba(15, 10, 25, 0.88) 100%
+  );
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  /* Rounded corners */
+  border-radius: 16px;
+  padding: var(--space-4);
+
+  /* Animated gradient border */
+  border: 1px solid transparent;
+  background-clip: padding-box;
+
+  /* Depth and glow */
+  box-shadow:
+    0 0 30px rgba(45, 204, 211, 0.06),
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 12px rgba(45, 204, 211, 0.02);
+
+  /* For pseudo-element border */
+  overflow: hidden;
+}
+
+/* Animated gradient border for legend */
+.music-galaxy-legend::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(45, 204, 211, 0.4) 0%,
+    rgba(138, 43, 226, 0.25) 50%,
+    rgba(45, 204, 211, 0.4) 100%
+  );
+  background-size: 200% 200%;
+  animation: gradientBorderFlow 6s ease infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Subtle top glow accent */
+.music-galaxy-legend::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(
+    180deg,
+    rgba(45, 204, 211, 0.06) 0%,
+    transparent 100%
+  );
+  border-radius: 16px 16px 0 0;
+  pointer-events: none;
+}
+
+.music-galaxy-legend .legend-section {
+  margin-bottom: var(--space-1);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.music-galaxy-legend .legend-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.music-galaxy-legend .legend-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.music-galaxy-legend .legend-icon-svg {
+  color: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
+}
+
+.music-galaxy-legend .legend-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.02em;
+}
+
+.music-galaxy-legend .legend-energy-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(
+    to right,
+    #00F2EA 0%,
+    #1DE5DD 25%,
+    #5FD4C8 50%,
+    #FF6B8A 75%,
+    #FF0050 100%
+  );
+  box-shadow: 0 2px 8px rgba(0, 242, 234, 0.3);
+}
+
+.music-galaxy-legend .legend-dance-bar {
+  height: 10px;
+  border-radius: 5px;
+  /* Rainbow gradient matching actual viz danceabilityToColor() scale */
+  background: linear-gradient(
+    to right,
+    #FF0000 0%,       /* 0.0 - Red */
+    #FF7F00 15%,      /* 0.15 - Orange */
+    #FFFF00 30%,      /* 0.3 - Yellow */
+    #00FF00 45%,      /* 0.45 - Green */
+    #00FFFF 60%,      /* 0.6 - Cyan */
+    #0000FF 75%,      /* 0.75 - Blue */
+    #8B00FF 90%,      /* 0.9 - Purple */
+    #FF00FF 100%      /* 1.0 - Magenta */
+  );
+  box-shadow:
+    0 2px 12px rgba(0, 255, 255, 0.3),
+    0 0 20px rgba(255, 0, 255, 0.2);
+}
+
+/* New text-only legend style (for Distance = Energy) */
+.music-galaxy-legend .legend-section--text-only {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.music-galaxy-legend .legend-label--primary {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: 0.02em;
+}
+
+.music-galaxy-legend .legend-sublabel {
+  font-size: 0.6875rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+}
+
+.music-galaxy-legend .legend-gradient-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.music-galaxy-legend .legend-gradient-labels span {
+  font-size: 0.625rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+}
+
+.music-galaxy-legend .legend-size-dots {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.music-galaxy-legend .size-dot {
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00F2EA, #FF0050);
+  box-shadow: 0 0 6px rgba(0, 242, 234, 0.4);
+}
+
+.music-galaxy-legend .size-dot--sm {
+  width: 6px;
+  height: 6px;
+}
+
+.music-galaxy-legend .size-dot--md {
+  width: 10px;
+  height: 10px;
+}
+
+.music-galaxy-legend .size-dot--lg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Track chip hover fix
+   ───────────────────────────────────────────────────────────────────────── */
+.track-chip {
+  transition: all 200ms ease;
+  cursor: pointer;
+}
+
+.track-chip:hover {
+  background: rgba(241, 32, 74, 0.15);
+  border-color: rgba(241, 32, 74, 0.4);
+  color: var(--color-text-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(241, 32, 74, 0.2);
+}
+
+.track-chip:active {
+  transform: translateY(0);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Responsive alien positioning
+   ───────────────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .alien-narrator--scene {
+    bottom: 16px;
+    left: 16px;
+  }
+
+  .alien-narrator--scene .alien-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .alien-narrator--scene .alien-avatar img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .alien-narrator--scene .alien-speech-bubble {
+    max-width: 200px;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .alien-narrator--scene .alien-speech-text {
+    font-size: 0.8125rem;
   }
 }

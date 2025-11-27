@@ -8,7 +8,8 @@ const NS = 'http://www.w3.org/2000/svg';
 
 const mounts = {
   forest: { hostId: 'scene-category',   factory: createForestIllustration },
-  city:   { hostId: 'scene-top-sounds', factory: createCityIllustration },
+  // city illustration disabled - scene-top-sounds renamed to scene-viral-sounds with different layout
+  // city:   { hostId: 'scene-viral-sounds', factory: createCityIllustration },
   // air removed
   lab:    { hostId: 'scene-quiz',       factory: createLabIllustration }
 };
@@ -34,7 +35,7 @@ export function installIllustrations() {
 
 function ensureIllustrationHosts() {
   console.log('[Illustrations] Ensuring illustration hosts (sections)...');
-  ['scene-category','scene-top-sounds','scene-quiz'].forEach(id=>{
+  ['scene-category','scene-quiz'].forEach(id=>{
     const host = document.getElementById(id);
     if (!host) {
       console.warn(`[Illustrations] Section #${id} not found!`);

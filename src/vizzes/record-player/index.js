@@ -2,8 +2,8 @@ import * as d3 from 'd3';
 
 const VIEWBOX_SIZE = 700;
 const CENTER = VIEWBOX_SIZE / 2;
-const OUTER_RADIUS = CENTER - 60;
-const INNER_RADIUS = 60;
+const OUTER_RADIUS = CENTER - 30;  // Larger rings (was 60)
+const INNER_RADIUS = 45;           // Smaller center (was 60)
 const ROTATION_SPEED = 360 / 12000; // deg per ms
 
 export class RecordPlayerViz {
@@ -36,6 +36,7 @@ export class RecordPlayerViz {
 
         this.autoplayUnlocked = false;
         this.pendingAudioIndex = null;
+        this.autoSequenceRunning = false;
         this.handleFirstGesture = this.handleFirstGesture.bind(this);
     }
 
@@ -92,9 +93,14 @@ export class RecordPlayerViz {
         const ringStep = (OUTER_RADIUS - INNER_RADIUS) / this.data.length;
         this.radiusScale = (index) => OUTER_RADIUS - (index + 0.75) * ringStep;
 
-        const maxAngle = 30;
-        const minAngle = 0;
-        this.angleScale = d3.scaleLinear().domain([0, this.totalRings - 1]).range([minAngle, maxAngle]);
+        // Tonearm angles: base rotation is -32deg in CSS, we add to it
+        // Outer ring (index 0) needs less rotation, inner ring needs more
+        const baseAngle = -32;  // Base CSS rotation
+        const minOffset = 0;    // Outermost ring
+        const maxOffset = 50;   // Innermost ring
+        this.angleScale = d3.scaleLinear()
+            .domain([0, this.totalRings - 1])
+            .range([baseAngle + minOffset, baseAngle + maxOffset]);
     }
 
     renderRings() {
@@ -311,17 +317,19 @@ export class RecordPlayerViz {
         }
 
         const isHover = source === 'hover';
+        const isAuto = source === 'auto';
 
         ringSel.classed('is-hovered', isHover);
         ringSel.classed('is-active', locked || this.lockedIndex === index || !isHover);
 
-        if (isHover) {
+        if (isHover || isAuto) {
             this.startRingRotation(index);
         } else if (!locked && this.lockedIndex !== index) {
             this.stopRingRotation(index);
         }
 
-        this.playSong(index, { autoplay: isHover || locked });
+        // Enable audio during hover, click, or auto-sequence
+        this.playSong(index, { autoplay: isHover || locked || isAuto });
         if (isHover) {
             this.setTonearmToIndex(index, { silent: true });
         } else {
@@ -346,8 +354,11 @@ export class RecordPlayerViz {
 
     setTonearmToIndex(index, { silent = false } = {}) {
         if (!this.tonearmArm || index == null || index < 0 || index >= this.data.length) return;
+
+        // Use angleScale from setupScales()
         const angle = this.angleScale(index);
-        console.log('angle', angle);
+        console.log(`Ring ${index}, angle ${angle.toFixed(1)}°`);
+
         this.tonearmArm.style.transform = `rotate(${angle}deg)`;
         if (!silent) {
             this.lockedIndex = index;
@@ -533,6 +544,42 @@ export class RecordPlayerViz {
 
         this.stopAllRingRotation();
         this.clearActiveRing({ preserveLocked: false });
+    }
+
+    /**
+     * Auto-sequence: Cycle through top 3 rings when scene enters viewport
+     * Per spec 5.3.4: ~5 seconds total, each ring highlighted for ~1.5s
+     */
+    startAutoSequence() {
+        if (this.autoSequenceRunning) return;
+        this.autoSequenceRunning = true;
+
+        const topRings = [0, 1, 2]; // Top 3 rings
+        const durationPerRing = 1500; // 1.5 seconds each
+        let currentStep = 0;
+
+        const highlightNext = () => {
+            if (currentStep >= topRings.length) {
+                // Sequence complete - emit event
+                this.autoSequenceRunning = false;
+                const event = new CustomEvent('record-player:autosequence-complete', {
+                    detail: { lastIndex: topRings[topRings.length - 1] }
+                });
+                this.container.dispatchEvent(event);
+                // Leave tonearm on top track
+                this.activateRing(0, { locked: false, source: 'auto' });
+                return;
+            }
+
+            const index = topRings[currentStep];
+            this.activateRing(index, { locked: false, source: 'auto' });
+            currentStep++;
+
+            setTimeout(highlightNext, durationPerRing);
+        };
+
+        // Start after small delay
+        setTimeout(highlightNext, 300);
     }
 
     mount() {

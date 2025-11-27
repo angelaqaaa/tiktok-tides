@@ -20,6 +20,9 @@
   <link rel="stylesheet" href="/src/css/stopwatch.css">
   <link rel="stylesheet" href="/src/css/record-player.css">
   <link rel="stylesheet" href="/src/css/conveyor.css">
+
+  <!-- fullPage.js for slide-based scrollytelling -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.26/fullpage.min.css" />
 </head>
 
 <body data-scene="cosmos">
@@ -67,16 +70,16 @@
             <path d="M4 14 L12 18 L20 14" stroke-linecap="round"/>
           </svg>
         </button>
-        <!-- Scene 2: Music Galaxy (Planet) - targets scene-sound-universe -->
-        <button class="mini-node" data-scene-target="scene-sound-universe" aria-label="Scene 2: Music Galaxy" data-tooltip="Music Galaxy">
+        <!-- Scene 2: Music Galaxy (Planet) - targets scene-music-galaxy -->
+        <button class="mini-node" data-scene-target="scene-music-galaxy" aria-label="Scene 2: Music Galaxy" data-tooltip="Music Galaxy">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="12" cy="12" r="5"/>
             <ellipse cx="12" cy="12" rx="10" ry="3" transform="rotate(-20 12 12)"/>
             <circle cx="12" cy="12" r="2" fill="currentColor"/>
           </svg>
         </button>
-        <!-- Scene 3: Viral Sounds (Vinyl Disc) - targets scene-top-sounds -->
-        <button class="mini-node" data-scene-target="scene-top-sounds" aria-label="Scene 3: Viral Sounds" data-tooltip="Viral Sounds">
+        <!-- Scene 3: Viral Sounds (Vinyl Disc) - targets scene-viral-sounds -->
+        <button class="mini-node" data-scene-target="scene-viral-sounds" aria-label="Scene 3: Viral Sounds" data-tooltip="Viral Sounds">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="12" cy="12" r="9"/>
             <circle cx="12" cy="12" r="3"/>
@@ -198,8 +201,8 @@
             <span class="node-label">Arrival</span>
           </button>
 
-          <!-- Node 2: Music Galaxy (Orbit area, center-right) - targets scene-sound-universe -->
-          <button class="map-node" data-node="2" data-target="scene-sound-universe" style="--node-x: 58%; --node-y: 15%;">
+          <!-- Node 2: Music Galaxy (Orbit area, center-right) - targets scene-music-galaxy -->
+          <button class="map-node" data-node="2" data-target="scene-music-galaxy" style="--node-x: 58%; --node-y: 15%;">
             <span class="node-number">2</span>
             <div class="node-icon-wrap">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -210,8 +213,8 @@
             <span class="node-label">Galaxy</span>
           </button>
 
-          <!-- Node 3: Viral Sounds (Record, far right) - targets scene-top-sounds -->
-          <button class="map-node" data-node="3" data-target="scene-top-sounds" style="--node-x: 78%; --node-y: 28%;">
+          <!-- Node 3: Viral Sounds (Record, far right) - targets scene-viral-sounds -->
+          <button class="map-node" data-node="3" data-target="scene-viral-sounds" style="--node-x: 78%; --node-y: 28%;">
             <span class="node-number">3</span>
             <div class="node-icon-wrap">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -298,12 +301,12 @@
           <span class="list-label">Arrival</span>
           <span class="list-desc">Welcome to the viral lab</span>
         </button>
-        <button class="map-list-item" data-target="scene-sound-universe">
+        <button class="map-list-item" data-target="scene-music-galaxy">
           <span class="list-number">2</span>
           <span class="list-label">Music Galaxy</span>
           <span class="list-desc">Artists that orbit virality</span>
         </button>
-        <button class="map-list-item" data-target="scene-top-sounds">
+        <button class="map-list-item" data-target="scene-viral-sounds">
           <span class="list-number">3</span>
           <span class="list-label">Viral Sounds</span>
           <span class="list-desc">A few tracks spin above the rest</span>
@@ -341,6 +344,8 @@
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
   <main id="main-content">
+    <!-- fullPage.js wrapper for slide-snap behavior -->
+    <div id="fullpage" class="fullpage-wrapper">
 
     <!-- ════════════════════════════════════════════════════════════════════════
          SCENE 1 - HERO: "Arrival"
@@ -371,7 +376,7 @@
               <p>Along the way, our alien guide connects each piece into a recipe for virality.</p>
             </div>
 
-            <button class="hero-cta-button" data-scroll-to="#scene-sound-universe">
+            <button class="hero-cta-button" data-scroll-to="#scene-music-galaxy">
               <span>Start the journey</span>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -480,222 +485,263 @@
       </div>
     </section>
 
-    <!-- ========================================
-         SCENE 1A: INGREDIENT 1 - Sound Universe (Planet)
-         ======================================== -->
-    <section id="scene-sound-universe" class="section scene-section bg-orbit" data-scene-id="sound-universe"
-      role="region" aria-labelledby="sound-universe-title">
-      <div class="scene-layer scene--orbits" aria-hidden="true"></div>
+    <!-- ════════════════════════════════════════════════════════════════════════
+         SCENE 2 - MUSIC GALAXY: "Artists that orbit virality"
+         v3 spec 5.2 - Planet visualization with sticky scrollytelling
+         Layout: Sticky viz left, scrolling narrative steps right
+         Background: Starfield + purple-blue nebula + blurred planets
+         ════════════════════════════════════════════════════════════════════════ -->
+    <section id="scene-music-galaxy" class="section" data-scene-id="music-galaxy"
+      role="region" aria-labelledby="music-galaxy-title">
 
-      <div class="scene-container layout-two-column">
-        <div class="scene-content">
-          <!-- Section Header Component -->
-          <div class="section-header">
-            <span class="section-label">Ingredient 1</span>
-            <h2 id="sound-universe-title" class="section-question">What kind of sound do viral videos use?</h2>
+      <!-- Background layers - absolute positioned, persist across slides -->
+      <div class="music-galaxy-bg music-galaxy-bg--stars" aria-hidden="true"></div>
+      <div class="music-galaxy-bg music-galaxy-bg--nebula" aria-hidden="true"></div>
+      <div class="music-galaxy-bg music-galaxy-bg--planets" aria-hidden="true"></div>
+
+      <!-- Fixed viz overlay (65% left side - CSS Grid layout) -->
+      <div class="music-galaxy-viz-overlay">
+        <!-- Scene label (top-left) -->
+        <span class="scene-label-badge">Scene 2 — Music Galaxy</span>
+
+        <!-- Legend panel (top-right) -->
+        <div class="music-galaxy-legend" role="complementary" aria-label="Visualization legend">
+          <div class="legend-section legend-section--text-only">
+            <span class="legend-label legend-label--primary">Distance from sun = Energy level</span>
+            <span class="legend-sublabel">(Low energy near sun)</span>
           </div>
 
-          <div class="section-explanation">
-            <p>
-              Explore a musical universe where songs become planets. Each planet represents
-              an artist, positioned by their sound's energy and colored by danceability.
-            </p>
-          </div>
-
-          <!-- Legend Component (Enhanced with teammate's improvements) -->
-          <div class="legend-panel" role="complementary" aria-label="Visualization legend">
-            <h3 class="legend-title">Reading the chart</h3>
-            <ul class="legend-items" role="list">
-              <li class="legend-item">
-                <span class="legend-marker legend-marker--size"></span>
-                <span class="legend-label"><strong>Planet size:</strong> Number of viral songs</span>
-              </li>
-              <li class="legend-item legend-hoverable">
-                <span class="legend-marker legend-marker--distance"></span>
-                <span class="legend-label">
-                  <strong>Distance from sun:</strong> Energy (perceived intensity & activity)
-                  <div style="font-size: 0.85rem; color: #aaa; margin-top: 4px; font-style: italic;">
-                    Close orbits = calm vibes · Wider orbits = intense, active tracks
-                  </div>
-                </span>
-                <div class="legend-tooltip">
-                  <strong>Technical Definition:</strong><br>
-                  Energy measures the perceptual intensity and activity of a track. High-energy songs typically feature loudness, speed, fast tempo, and noisy characteristics. Death metal scores high (≈1.0), while soft ballads score low (≈0.0). Based on dynamic range, perceived loudness, timbre, onset rate, and general entropy.
-                </div>
-              </li>
-              <li class="legend-item legend-hoverable">
-                <span class="legend-marker legend-marker--color"></span>
-                <span class="legend-label">
-                  <strong>Color:</strong> Danceability (suitability for dancing)
-                </span>
-                <div class="legend-tooltip">
-                  <strong>Technical Definition:</strong><br>
-                  Danceability describes how suitable a track is for dancing based on musical elements including tempo, rhythm stability, beat strength, and overall regularity. Values range from 0.0 (least danceable) to 1.0 (most danceable). Calculated from tempo consistency, beat prominence, and rhythmic patterns.
-                </div>
-              </li>
-            </ul>
-
-            <!-- Compact Color Gradient Scale -->
-            <div class="color-gradient-container">
-              <div class="color-gradient-bar"></div>
-              <div class="color-gradient-labels">
-                <span>1.0 <small>High</small></span>
+          <div class="legend-section">
+            <span class="legend-label legend-label--primary">Color = Danceability</span>
+            <div class="legend-gradient-wrap">
+              <div class="legend-dance-bar"></div>
+              <div class="legend-gradient-labels">
+                <span>0.0</span>
                 <span>0.5</span>
-                <span>0.0 <small>Low</small></span>
+                <span>1.0</span>
               </div>
             </div>
           </div>
 
-          <!-- Guided Steps Component -->
-          <div class="guided-steps" role="complementary" aria-label="Guided exploration">
-            <h3 class="steps-title">Explore the data</h3>
-            <ol class="steps-list" role="list">
-              <li class="step-item">
-                <span class="step-number">1</span>
-                <div class="step-content">
-                  <p class="step-instruction">See which songs are most danceable</p>
-                  <button class="step-button" data-viz-action="planet-highlight-danceability">
-                    Highlight high danceability
-                  </button>
-                </div>
-              </li>
-              <li class="step-item">
-                <span class="step-number">2</span>
-                <div class="step-content">
-                  <p class="step-instruction">Compare trends across years</p>
-                  <div class="year-selector">
-                    <button class="year-btn active" data-year="2019" data-viz-action="planet-year">2019</button>
-                    <button class="year-btn" data-year="2020" data-viz-action="planet-year">2020</button>
-                    <button class="year-btn" data-year="2021" data-viz-action="planet-year">2021</button>
-                    <button class="year-btn" data-year="2022" data-viz-action="planet-year">2022</button>
-                  </div>
-                </div>
-              </li>
-              <li class="step-item">
-                <span class="step-number">3</span>
-                <div class="step-content">
-                  <p class="step-instruction">Find artists who stay viral year after year</p>
-                  <button class="step-button" data-viz-action="planet-highlight-repeat">
-                    Show repeated artists
-                  </button>
-                </div>
-              </li>
-            </ol>
+          <div class="legend-section legend-section--size">
+            <div class="legend-row">
+              <div class="legend-size-dots">
+                <span class="size-dot size-dot--sm"></span>
+                <span class="size-dot size-dot--md"></span>
+                <span class="size-dot size-dot--lg"></span>
+              </div>
+              <span class="legend-label">Size = Track count</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- D3 visualization (middle row - fills remaining space) -->
+        <div id="viz-planets" class="viz-container" data-viz="planets"
+             aria-label="Solar system visualization showing viral artists as orbiting planets"></div>
+
+        <!-- Annotation callout (appears on step 3) -->
+        <div class="music-galaxy-annotation" data-annotation="step-3" aria-hidden="true">
+          <div class="annotation-line"></div>
+          <div class="annotation-content">
+            <p><strong>This artist keeps shining year after year.</strong></p>
+            <p>Multiple tracks from this creator went viral, showing sustained influence on the platform.</p>
+          </div>
+        </div>
+
+        <!-- Alien narrator (persists across slides) -->
+        <div class="alien-narrator alien-narrator--scene alien-narrator--scene2" data-scene="galaxy">
+          <div class="alien-avatar">
+            <img src="/assets/icons/cute-alien-wearing-hoodie-jacket-cartoon-vector-icon-illustration-science-technology-isolated-flat_138676-13026.avif"
+                 alt="" width="64" height="64" loading="lazy"
+                 onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
+          </div>
+          <div class="alien-mini-planet"></div>
+
+          <!-- First speech bubble -->
+          <div class="alien-speech-bubble alien-speech-bubble--primary" data-speech-state="hidden">
+            <p class="alien-speech-text">Each planet you see is a creator or artist. I am visiting the busiest ones.</p>
           </div>
 
-          <!-- Insight Callout (initially hidden) -->
-          <aside class="insight-callout" aria-hidden="true" role="complementary" aria-labelledby="insight-sound-1">
-            <h3 id="insight-sound-1" class="insight-title">What we learned</h3>
-            <p class="insight-text">
-              Most viral sounds cluster in a region with mid-to-high energy and high danceability.
-              Extreme low energy or very low danceability tracks are rare among top sounds.
-            </p>
-          </aside>
+          <!-- Second speech bubble (slide 2) -->
+          <div class="alien-speech-bubble alien-speech-bubble--secondary" data-speech-state="hidden" data-speech-step="2">
+            <p class="alien-speech-text">Look how this artist keeps shining year after year.</p>
+          </div>
+        </div>
+      </div><!-- End viz-overlay -->
+
+      <!-- TEXT OVERLAY (right 35%) - Positioned OUTSIDE fullPage slides, like viz-overlay -->
+      <div class="music-galaxy-text-overlay">
+        <!-- Step 1 content (visible by default) -->
+        <div class="step-content" data-slide-step="0">
+          <h2 id="music-galaxy-title" class="step-heading">Artists that orbit virality</h2>
+          <p>Each planet is an artist whose songs went viral on TikTok.</p>
+          <p>Planets further from the sun have more energetic, intense sounds.</p>
+          <p>More saturated colors represent more danceable tracks.</p>
+          <p>Larger planets have multiple viral tracks in that year.</p>
+
+          <!-- Year controls -->
+          <div class="music-galaxy-year-controls">
+            <span class="year-controls-label">Explore by year:</span>
+            <div class="year-buttons">
+              <button class="year-btn active" data-year="2019" data-viz-action="planet-year">2019</button>
+              <button class="year-btn" data-year="2020" data-viz-action="planet-year">2020</button>
+              <button class="year-btn" data-year="2021" data-viz-action="planet-year">2021</button>
+              <button class="year-btn" data-year="2022" data-viz-action="planet-year">2022</button>
+            </div>
+          </div>
         </div>
 
-        <div class="scene-visual">
-          <div id="viz-planets" class="viz-container" data-viz="planets" aria-label="Solar system visualization of viral songs"></div>
+        <!-- Step 2 content (hidden initially) -->
+        <div class="step-content" data-slide-step="1" style="display: none;">
+          <h3 class="step-subheading">The biggest names</h3>
+          <p>When we look at the most recent year (2022), a few artists clearly dominate the viral landscape.</p>
+          <p>The largest planets represent creators with multiple hit songs that caught fire on TikTok.</p>
+          <p><strong>Watch as the visualization highlights the top artists from 2022.</strong></p>
         </div>
-      </div>
+
+        <!-- Step 3 content (hidden initially) -->
+        <div class="step-content" data-slide-step="2" style="display: none;">
+          <h3 class="step-subheading">Sustained influence</h3>
+          <p>Some artists don't just have one viral moment—they consistently produce tracks that resonate.</p>
+          <p>These repeat viral artists build lasting influence in the TikTok music ecosystem.</p>
+          <p>They understand what sounds, emotions, and rhythms connect with short-video creators.</p>
+        </div>
+      </div><!-- End text-overlay -->
+
+      <!-- HORIZONTAL SLIDES - Empty slides just for fullPage navigation tracking -->
+      <div class="slide music-galaxy-slide" data-slide-index="0"></div>
+      <div class="slide music-galaxy-slide" data-slide-index="1"></div>
+      <div class="slide music-galaxy-slide" data-slide-index="2"></div>
+
     </section>
 
-    <!-- ========================================
-         SCENE 1B: INGREDIENT 1 - Top Sounds (Record Player)
-         ======================================== -->
-    <section id="scene-top-sounds" class="section scene-section bg-orbit" data-scene-id="top-sounds" role="region"
-      aria-labelledby="top-sounds-title">
+    <!-- ════════════════════════════════════════════════════════════════════════
+         SCENE 3 - VIRAL SOUNDS: "A few tracks spin above the rest"
+         v3 spec 5.3 - Record player with top10_music dataset
+         Layout: Central focus with record left-of-center, narrative top-right
+         Background: Dark studio wall, light beams, neon rails
+         ════════════════════════════════════════════════════════════════════════ -->
+    <section id="scene-viral-sounds" class="section scene-viral-sounds" data-scene-id="viral-sounds"
+      role="region" aria-labelledby="viral-sounds-title">
 
-      <div class="scene-container layout-two-column">
-        <div class="scene-content">
-          <div class="section-transition">
-            <p>
-              The sound universe shows the overall landscape. Now let's zoom in on the very
-              top sounds that dominated TikTok's For You Page.
-            </p>
-          </div>
+      <!-- Background layers per v3 spec 3.2.3 -->
+      <div class="viral-sounds-bg viral-sounds-bg--studio" aria-hidden="true"></div>
+      <div class="viral-sounds-bg viral-sounds-bg--beams" aria-hidden="true"></div>
 
-          <h3 id="top-sounds-title" class="section-subquestion">
-            How concentrated is attention on a handful of sounds?
-          </h3>
-
-          <!-- Guided Steps -->
-          <div class="guided-steps" role="complementary" aria-label="Guided exploration">
-            <h3 class="steps-title">Explore the records</h3>
-            <ol class="steps-list" role="list">
-              <li class="step-item">
-                <span class="step-number">1</span>
-                <div class="step-content">
-                  <p class="step-instruction">Rotate through the top viral sounds</p>
-                  <button class="step-button" data-viz-action="record-rotate">
-                    Play next sound
-                  </button>
-                </div>
-              </li>
-              <li class="step-item">
-                <span class="step-number">2</span>
-                <div class="step-content">
-                  <p class="step-instruction">See the dominance of the top three</p>
-                  <button class="step-button" data-viz-action="record-highlight-top3">
-                    Highlight top 3
-                  </button>
-                </div>
-              </li>
-            </ol>
-          </div>
-
-          <!-- Insight Callout -->
-          <aside class="insight-callout" aria-hidden="true" role="complementary" aria-labelledby="insight-sound-2">
-            <h3 id="insight-sound-2" class="insight-title">What we learned</h3>
-            <p class="insight-text">
-              Only a handful of sounds dominate the platform, with the top one or two songs
-              far ahead of the rest. Choosing the right audio can dramatically increase your
-              chances of riding an existing wave.
-            </p>
-          </aside>
+      <div class="viral-sounds-container">
+        <!-- Top area: Scene label and heading -->
+        <div class="viral-sounds-header">
+          <span class="scene-label-badge">Scene 3 — Viral Sounds</span>
+          <h2 id="viral-sounds-title" class="viral-sounds-heading">A few tracks spin above the rest</h2>
         </div>
 
-        <div class="scene-visual">
-          <div class="record-player-container">
-            <section class="record-player-section" aria-label="Viral Vinyl: TikTok's most viral sounds">
-              <div class="record-player-layout" data-player-layout>
-                <div class="record-player-wrapper">
-                  <div class="record-player-base">
-                    <div class="record-disc-area">
-                      <div class="record-indicator-line record-indicator-line--max" aria-hidden="true">
-                        higher popularity
-                      </div>
-                      <svg class="record-disc" viewBox="0 0 700 700" role="img"
-                        aria-labelledby="record-disc-title record-disc-desc">
-                        <title id="record-disc-title">Record player visualization of top TikTok songs</title>
-                        <desc id="record-disc-desc">
-                          Concentric rings represent songs ordered by popularity from outermost
-                          most popular to innermost least popular.
-                        </desc>
-                        <g class="record-rings" data-record-rings></g>
-                      </svg>
-                      <div class="record-center-cap" aria-hidden="true">
-                        <span class="record-center-year">2019–2025</span>
-                      </div>
-                    </div>
-                    <div class="tonearm" data-tonearm>
-                      <div class="tonearm-hinge">
-                        <div class="tonearm-arm" data-tonearm-arm>
-                          <div class="tonearm-back">
-                            <div class="tonearm-head"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+        <!-- Main content: Record (center-left) + Text panel (top-right) -->
+        <div class="viral-sounds-main">
+          <!-- Record visualization (slightly left of center) -->
+          <div class="viral-sounds-record-area record-player-section">
+            <div class="record-player-wrapper">
+              <div class="record-player-base">
+                <div class="record-disc-area">
+                  <svg class="record-disc" viewBox="0 0 700 700" role="img"
+                    aria-labelledby="record-disc-title record-disc-desc">
+                    <title id="record-disc-title">Record player visualization of top TikTok songs</title>
+                    <desc id="record-disc-desc">
+                      Concentric rings represent songs ordered by popularity from outermost
+                      (most popular) to innermost (least popular).
+                    </desc>
+                    <g class="record-rings" data-record-rings></g>
+                  </svg>
+                  <div class="record-center-cap" aria-hidden="true">
+                    <span class="record-center-label">TOP HITS</span>
                   </div>
-                  <div class="record-player-notes" aria-hidden="true">
-                    <span class="note note--cyan">♪</span>
-                    <span class="note note--magenta">♫</span>
-                    <span class="note note--black">♬</span>
+                </div>
+                <div class="tonearm" data-tonearm>
+                  <div class="tonearm-hinge">
+                    <div class="tonearm-arm" data-tonearm-arm>
+                      <div class="tonearm-back">
+                        <div class="tonearm-head"></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </section>
+            </div>
           </div>
+
+          <!-- Side text panel (top-right, 30% width) -->
+          <div class="viral-sounds-text-panel">
+            <p>These seven tracks each amassed tens or hundreds of millions of plays.</p>
+            <p>The widest ring belongs to the most played track in our dataset.</p>
+
+            <!-- Bullet-style callout -->
+            <div class="viral-sounds-stats">
+              <div class="stat-item">
+                <span class="stat-bullet"></span>
+                <span class="stat-text">Top track: ~344 million plays</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-bullet"></span>
+                <span class="stat-text">Second track: ~132 million plays</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Track legend strip (bottom) -->
+        <div class="viral-sounds-track-legend">
+          <div class="track-chips" role="list" aria-label="Track list">
+            <!-- Track chips will be populated by JS or can be static -->
+            <button class="track-chip" data-track-index="0">
+              <span class="chip-rank">1</span>
+              <span class="chip-name">Top Track</span>
+              <span class="chip-plays">344M</span>
+            </button>
+            <button class="track-chip" data-track-index="1">
+              <span class="chip-rank">2</span>
+              <span class="chip-name">Second Track</span>
+              <span class="chip-plays">132M</span>
+            </button>
+            <button class="track-chip" data-track-index="2">
+              <span class="chip-rank">3</span>
+              <span class="chip-name">Third Track</span>
+              <span class="chip-plays">98M</span>
+            </button>
+            <button class="track-chip" data-track-index="3">
+              <span class="chip-rank">4</span>
+              <span class="chip-name">Fourth Track</span>
+              <span class="chip-plays">75M</span>
+            </button>
+            <button class="track-chip" data-track-index="4">
+              <span class="chip-rank">5</span>
+              <span class="chip-name">Fifth Track</span>
+              <span class="chip-plays">62M</span>
+            </button>
+            <button class="track-chip" data-track-index="5">
+              <span class="chip-rank">6</span>
+              <span class="chip-name">Sixth Track</span>
+              <span class="chip-plays">51M</span>
+            </button>
+            <button class="track-chip" data-track-index="6">
+              <span class="chip-rank">7</span>
+              <span class="chip-name">Seventh Track</span>
+              <span class="chip-plays">43M</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alien narrator for Scene 3 (lower-right above track legend per v3 spec 5.3.5) -->
+      <div class="alien-narrator alien-narrator--scene alien-narrator--scene3" data-scene="sounds">
+        <!-- Avatar FIRST so it renders on TOP in column layout -->
+        <div class="alien-avatar">
+          <img src="/assets/icons/cute-alien-wearing-hoodie-jacket-cartoon-vector-icon-illustration-science-technology-isolated-flat_138676-13026.avif"
+               alt="" width="64" height="64" loading="lazy"
+               onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
+        </div>
+        <!-- Floating platform SECOND so it renders BELOW -->
+        <div class="alien-floating-platform"></div>
+        <div class="alien-speech-bubble" data-speech-state="hidden">
+          <p class="alien-speech-text">This outer ring is massive. The top sound alone towers over the rest.</p>
         </div>
       </div>
     </section>
@@ -1089,6 +1135,7 @@
       </div>
     </section>
 
+    </div><!-- End #fullpage -->
   </main>
 
   <!-- Footer -->
@@ -1104,6 +1151,294 @@
 
   <!-- D3.js -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <!-- fullPage.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.26/fullpage.min.js"></script>
+
+  <!-- fullPage.js initialization -->
+  <script>
+    // Scene ID to semantic world mapping (matches main.js SCENE_MAP)
+    const SCENE_ID_MAP = {
+      'hero': 'cosmos',
+      'music-galaxy': 'galaxy',
+      'viral-sounds': 'sounds',
+      'duration': 'dawn',
+      'category': 'forest',
+      'emotion': 'air',
+      'quiz': 'lab',
+      'summary': 'cosmos'
+    };
+
+    // Initialize fullPage.js for slide-snap behavior across entire site
+    // Pattern from STEAMulating Trends and Smoking & Lung Cancer examples
+    var fullPageInstance = new fullpage('#fullpage', {
+      // Core behavior
+      autoScrolling: true,          // Enable slide-snap (no traditional scroll)
+      scrollingSpeed: 1000,          // Smooth 1s transitions between slides
+      fitToSection: true,            // Always snap to full section
+
+      // Horizontal slide navigation (for Scene 2 sub-slides)
+      slidesNavigation: true,        // Show navigation bullets for horizontal slides
+      controlArrows: false,          // Hide left/right arrows (use scroll instead)
+
+      // Navigation
+      navigation: true,              // Show right-side navigation dots
+      navigationPosition: 'right',
+      navigationTooltips: ['Arrival', 'Music Galaxy', 'Viral Sounds', 'Timing', 'Trend Pyramid', 'Captions & Emotion', 'Quiz', 'Wrap-up'],
+      showActiveTooltip: false,
+
+      // Accessibility
+      keyboardScrolling: true,       // Arrow keys navigate slides
+      recordHistory: false,          // Don't update browser history (prevents URL redirect issues)
+      lockAnchors: true,             // Prevent anchors from being added to URL (fixes redirect issue)
+
+      // Callbacks for viz loading and scene transitions
+      onLeave: function(origin, destination, direction) {
+        const sceneId = destination.item.getAttribute('data-scene-id');
+        const sceneName = SCENE_ID_MAP[sceneId] || sceneId;
+
+        const previousScene = document.body.dataset.scene;
+        document.body.dataset.scene = sceneName;
+        console.log('[fullPage] Scene transition:', previousScene, '→', sceneName);
+
+        // CRITICAL: Reset wheel state when entering Scene 2 to prevent skip
+        if (sceneId === 'music-galaxy') {
+          window._scene2TransitionTime = Date.now();
+          console.log('[fullPage] Entering Scene 2 - resetting wheel state');
+        }
+
+        // Explicitly hide Scene 1 alien when leaving
+        if (previousScene === 'cosmos' && sceneName !== 'cosmos') {
+          const heroAlien = document.querySelector('.alien-narrator--hero');
+          if (heroAlien) {
+            console.log('[fullPage] Hiding Scene 1 alien');
+            heroAlien.style.display = 'none';
+            heroAlien.style.opacity = '0';
+          }
+        }
+
+        // Show Scene 1 alien when RETURNING (not on initial load)
+        // previousScene will be set if we're actually navigating, not on initial load
+        if (sceneName === 'cosmos' && previousScene && previousScene !== 'cosmos') {
+          const heroAlien = document.querySelector('.alien-narrator--hero');
+          if (heroAlien) {
+            console.log('[fullPage] Showing Scene 1 alien (returning)');
+            heroAlien.style.display = 'flex';
+            heroAlien.style.opacity = '1';
+            // Also ensure speech bubble is visible when returning
+            const speechBubble = heroAlien.querySelector('.alien-speech-bubble');
+            if (speechBubble) {
+              speechBubble.setAttribute('data-speech-state', 'visible');
+            }
+          }
+        }
+      },
+
+      afterLoad: function(origin, destination, direction) {
+        // Trigger viz mounting when section becomes active
+        const sectionId = destination.item.id;
+        if (window.app && window.app.handleSectionEnter) {
+          window.app.handleSectionEnter(destination.item);
+        }
+
+        // Handle Scene 2 slide positioning based on navigation direction
+        if (sectionId === 'scene-music-galaxy') {
+          setTimeout(() => {
+            if (window.fullpage_api && window.app && window.app.handleMusicGalaxySlide) {
+              // Determine target slide based on direction
+              // direction: 'down' = coming from Scene 1, 'up' = coming from Scene 3
+              // null = initial load or direct navigation
+              let targetSlide = 0; // Default: Step 1
+
+              if (direction === 'up') {
+                // Coming BACK from Scene 3 → go to Step 3 (slide index 2)
+                targetSlide = 2;
+                console.log('[fullPage] Entering Scene 2 from Scene 3 → starting at Step 3');
+              } else {
+                // Coming from Scene 1 or initial load → go to Step 1 (slide index 0)
+                console.log('[fullPage] Entering Scene 2 from Scene 1/initial → starting at Step 1');
+              }
+
+              // Move to the correct slide
+              const currentSlide = window.fullpage_api.getActiveSlide();
+              if (currentSlide && currentSlide.index !== targetSlide) {
+                const sectionIndex = destination.index + 1;
+                window.fullpage_api.silentMoveTo(sectionIndex, targetSlide);
+              }
+
+              // Trigger content update for the target slide
+              window.app.handleMusicGalaxySlide(targetSlide);
+            }
+          }, 300); // Small delay to ensure elements are ready
+        }
+      },
+
+      // Handle horizontal slide transitions (Scene 2 sub-slides)
+      onSlideLeave: function(section, origin, destination, direction) {
+        // Trigger viz changes when navigating Scene 2 horizontal slides
+        const sectionId = section.item.id;
+        if (sectionId === 'scene-music-galaxy' && window.app) {
+          const slideIndex = destination.index;
+          console.log('[fullPage] Scene 2 horizontal slide:', slideIndex + 1, 'of 3');
+
+          // Call the Music Galaxy slide handler
+          if (window.app.handleMusicGalaxySlide) {
+            window.app.handleMusicGalaxySlide(slideIndex);
+          }
+        }
+      },
+
+      afterSlideLoad: function(section, origin, destination, direction) {
+        // After horizontal slide loads
+        const sectionId = section.item.id;
+        if (sectionId === 'scene-music-galaxy' && window.app && window.app.handleMusicGalaxySlide) {
+          window.app.handleMusicGalaxySlide(destination.index);
+        }
+      }
+    });
+
+    // Custom wheel handler for Scene 2 horizontal slide navigation
+    // fullPage.js does NOT auto-navigate horizontal slides on scroll by default
+    // CRITICAL: Use capture: true to intercept BEFORE fullPage's event handlers
+    let wheelCooldown = false;
+    let debugMode = true; // Enable console logging
+
+    // SCROLL SENSITIVITY: Accumulate small deltas, only trigger on threshold
+    let accumulatedDelta = 0;
+    const DELTA_THRESHOLD = 80; // Minimum accumulated delta to trigger slide change
+    let lastWheelTime = 0;
+    const DELTA_RESET_TIME = 200; // Reset accumulated delta after 200ms of no scrolling
+
+    // Wait for fullPage to fully initialize
+    setTimeout(() => {
+      // Debug: Check if fullPage recognized the slides
+      const section = document.querySelector('#scene-music-galaxy');
+      const slides = section ? section.querySelectorAll('.slide') : [];
+      const fpSlides = section ? section.querySelectorAll('.fp-slide') : [];
+      console.log('[fullPage Debug] Scene 2 slides found:', slides.length);
+      console.log('[fullPage Debug] Scene 2 fp-slide wrappers:', fpSlides.length);
+      console.log('[fullPage Debug] fullpage_api available:', !!window.fullpage_api);
+
+      if (window.fullpage_api) {
+        const activeSlide = window.fullpage_api.getActiveSlide();
+        console.log('[fullPage Debug] getActiveSlide():', activeSlide);
+      }
+
+      // Move slide navigation dots into text overlay (so they stay below text panel)
+      const slidesNav = section?.querySelector('.fp-slidesNav');
+      const textOverlay = document.querySelector('.music-galaxy-text-overlay');
+      if (slidesNav && textOverlay) {
+        textOverlay.appendChild(slidesNav);
+        slidesNav.style.display = 'block';
+        console.log('[fullPage] Moved slide nav into text overlay');
+      }
+    }, 1500);
+
+    // Scene transition cooldown - ignore wheel events briefly after entering Scene 2
+    const SCENE_TRANSITION_COOLDOWN = 1200; // ms to wait after scene transition
+
+    document.addEventListener('wheel', function(e) {
+      const now = Date.now();
+
+      if (!window.fullpage_api) {
+        return;
+      }
+
+      // Use fullPage API to get current state
+      const activeSection = window.fullpage_api.getActiveSection();
+      if (!activeSection || !activeSection.item) {
+        return;
+      }
+
+      const sectionId = activeSection.item.id;
+
+      // Only handle wheel in Scene 2 (Music Galaxy)
+      if (sectionId !== 'scene-music-galaxy') {
+        return; // Let fullPage handle other sections normally
+      }
+
+      // Get current slide info FIRST before any decisions
+      const activeSlideData = window.fullpage_api.getActiveSlide();
+      if (!activeSlideData) {
+        return; // No slide data, let fullPage handle
+      }
+
+      const currentSlideIndex = activeSlideData.index;
+      const totalSlides = 3;
+      const scrollingDown = e.deltaY > 0;
+      const scrollingUp = e.deltaY < 0;
+
+      // CRITICAL: At boundary slides, let fullPage handle scene navigation immediately
+      // Do NOT block these events with preventDefault
+      if (currentSlideIndex === totalSlides - 1 && scrollingDown) {
+        // At last slide (3), scrolling down → let fullPage go to Scene 3
+        console.log('[Wheel] At Slide 3, scrolling down → allowing Scene 3');
+        accumulatedDelta = 0;
+        return; // Let event propagate to fullPage
+      }
+
+      if (currentSlideIndex === 0 && scrollingUp) {
+        // At first slide (1), scrolling up → let fullPage go to Scene 1
+        console.log('[Wheel] At Slide 1, scrolling up → allowing Scene 1');
+        accumulatedDelta = 0;
+        return; // Let event propagate to fullPage
+      }
+
+      // CRITICAL: Check if we just entered Scene 2 - ignore wheel events during transition
+      if (window._scene2TransitionTime && (now - window._scene2TransitionTime) < SCENE_TRANSITION_COOLDOWN) {
+        e.preventDefault();
+        e.stopPropagation();
+        accumulatedDelta = 0;
+        if (debugMode) console.log('[Wheel] Scene 2 transition cooldown - ignoring');
+        return;
+      }
+
+      if (wheelCooldown) {
+        e.preventDefault();
+        return;
+      }
+
+      // Reset accumulated delta if too much time has passed
+      if (now - lastWheelTime > DELTA_RESET_TIME) {
+        accumulatedDelta = 0;
+      }
+      lastWheelTime = now;
+
+      // Accumulate delta for slide navigation
+      accumulatedDelta += e.deltaY;
+
+      // Debug: Log accumulated delta
+      if (debugMode && Math.abs(accumulatedDelta) > 30) {
+        console.log('[Wheel] Slide', currentSlideIndex + 1, '| accumulated:', accumulatedDelta.toFixed(0), '| threshold:', DELTA_THRESHOLD);
+      }
+
+      // Not enough scroll yet - block and wait for more
+      if (Math.abs(accumulatedDelta) < DELTA_THRESHOLD) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
+      // Threshold reached - navigate between slides
+      const direction = accumulatedDelta > 0 ? 'down' : 'up';
+      accumulatedDelta = 0;
+
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      wheelCooldown = true;
+
+      if (direction === 'down') {
+        console.log('[Wheel] Moving DOWN to Slide', currentSlideIndex + 2);
+        window.fullpage_api.moveSlideRight();
+      } else {
+        console.log('[Wheel] Moving UP to Slide', currentSlideIndex);
+        window.fullpage_api.moveSlideLeft();
+      }
+
+      setTimeout(() => { wheelCooldown = false; }, 1200);
+    }, { passive: false, capture: true }); // CAPTURE PHASE - runs BEFORE fullPage handlers
+  </script>
 
   <!-- Main App -->
   <script type="module" src="/src/js/main.js"></script>

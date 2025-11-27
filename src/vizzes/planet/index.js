@@ -359,13 +359,17 @@ export class PlanetViz extends EventEmitter {
       });
 
     // Apply transitions after event handlers are set
+    // IMPORTANT: Reset stroke/stroke-width to clear any highlighting from previous steps
     allPlanets
       .transition()
       .duration(1000)
       .attr('cx', d => d.x)
       .attr('cy', d => d.y)
       .attr('r', d => sizeScale(d.songCount))
-      .attr('fill', d => this.danceabilityToColor(d.avgDanceability));
+      .attr('fill', d => this.danceabilityToColor(d.avgDanceability))
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 2)
+      .attr('opacity', 1); // Ensure planets are visible!
 
     planets.exit()
       .transition()
@@ -437,6 +441,41 @@ export class PlanetViz extends EventEmitter {
       .transition()
       .duration(400)
       .attr('opacity', d => top2.includes(d.name) ? 1 : 0.3);
+
+    // Store top artist for annotation tracking
+    this.topArtistName = sorted[0].name;
+  }
+
+  /**
+   * Get current position of top highlighted artist for annotation
+   * Returns screen-relative coordinates (accounts for SVG viewBox transformation)
+   */
+  getTopArtistPosition() {
+    if (!this.topArtistName || !this.svg) return null;
+
+    const planet = this.svg.selectAll('.planet')
+      .filter(d => d.name === this.topArtistName);
+
+    if (planet.empty()) return null;
+
+    const cx = parseFloat(planet.attr('cx'));
+    const cy = parseFloat(planet.attr('cy'));
+
+    // Convert SVG viewBox coordinates to screen coordinates
+    const svgNode = this.svg.node();
+    const point = svgNode.createSVGPoint();
+    point.x = cx;
+    point.y = cy;
+
+    // Apply the transformation matrix to get screen coordinates
+    const ctm = svgNode.getScreenCTM();
+    if (ctm) {
+      const screenPoint = point.matrixTransform(ctm);
+      return { x: screenPoint.x, y: screenPoint.y, name: this.topArtistName };
+    }
+
+    // Fallback to raw SVG coords if transform unavailable
+    return { x: cx, y: cy, name: this.topArtistName };
   }
 
   fadeOrbits() {
