@@ -16,7 +16,9 @@ body {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-body-reg);
   line-height: 1.6;
-  color: var(--color-text-primary); /* Changed from text-secondary for better visibility */
+  color: var(
+    --color-text-primary
+  ); /* Changed from text-secondary for better visibility */
   background: #0a0a0f; /* Dark base - merged from line 201 */
   overflow-x: hidden;
   position: relative;
@@ -36,16 +38,27 @@ body {
 }
 
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
   line-height: 1.2;
   letter-spacing: -0.02em;
 }
 
-h1 { font-size: var(--font-size-h1); }
-h2 { font-size: var(--font-size-h2); }
-h3 { font-size: var(--font-size-h3); }
+h1 {
+  font-size: var(--font-size-h1);
+}
+h2 {
+  font-size: var(--font-size-h2);
+}
+h3 {
+  font-size: var(--font-size-h3);
+}
 
 .hero-title {
   font-size: clamp(3rem, 8vw, 6rem);
@@ -60,7 +73,11 @@ h3 { font-size: var(--font-size-h3); }
 }
 
 .gradient-text {
-  background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-magenta));
+  background: linear-gradient(
+    90deg,
+    var(--color-accent-cyan),
+    var(--color-accent-magenta)
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -158,7 +175,11 @@ h3 { font-size: var(--font-size-h3); }
   top: 0;
   left: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-magenta));
+  background: linear-gradient(
+    90deg,
+    var(--color-accent-cyan),
+    var(--color-accent-magenta)
+  );
   width: 0%;
   z-index: 9999;
   transition: width 100ms ease-out;
@@ -217,22 +238,22 @@ h3 { font-size: var(--font-size-h3); }
 
 /* Semantic Backgrounds - Scene-based */
 :root {
-  --accent-cyan: #00FFE0;
-  --accent-magenta: #FF00E0;
-  --gold: #FFEB3B;
+  --accent-cyan: #00ffe0;
+  --accent-magenta: #ff00e0;
+  --gold: #ffeb3b;
 }
 
 /* Scene Background System - Smooth, Creative Transitions */
 
 /* Fixed scene background layer - smooth cross-fade between scenes */
 body::before {
-  content: '';
+  content: "";
   display: block !important; /* Force display - override any inherited display:none */
   position: fixed;
   inset: 0;
   z-index: 0; /* Changed from -1 to work with section stacking context */
-  transition: opacity 500ms cubic-bezier(0.4, 0.0, 0.2, 1),
-              background 500ms cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: opacity 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    background 500ms cubic-bezier(0.4, 0, 0.2, 1);
   opacity: 1;
   will-change: background;
   pointer-events: none; /* Allow clicks to pass through */
@@ -240,146 +261,382 @@ body::before {
 
 /* Cosmos - Deep space with visible purple */
 body[data-scene="cosmos"]::before {
-  background: radial-gradient(ellipse 1400px 900px at 50% 30%,
+  background: radial-gradient(
+    ellipse 1400px 900px at 50% 30%,
     rgba(40, 40, 80, 0.65) 0%,
-    rgba(30, 30, 60, 0.50) 40%,
+    rgba(30, 30, 60, 0.5) 40%,
     rgba(20, 20, 40, 0.35) 70%,
-    transparent 100%);
+    transparent 100%
+  );
 }
 
 /* Dawn - Sunrise with visible horizon glow and sky gradient
    Metaphor: The spark moment when trends ignite */
 body[data-scene="dawn"]::before {
   background:
-    /* Bright sun on horizon - concentrated glow */
-    radial-gradient(ellipse 800px 300px at 50% 85%, rgba(255, 180, 80, 0.70) 0%, rgba(255, 140, 60, 0.45) 30%, rgba(255, 100, 80, 0.25) 60%, transparent 100%),
+    /* Bright sun on horizon - concentrated glow */ radial-gradient(
+      ellipse 800px 300px at 50% 85%,
+      rgba(255, 180, 80, 0.7) 0%,
+      rgba(255, 140, 60, 0.45) 30%,
+      rgba(255, 100, 80, 0.25) 60%,
+      transparent 100%
+    ),
     /* Warm orange sky spreading from horizon */
-    radial-gradient(ellipse 1600px 700px at 50% 80%, rgba(255, 120, 60, 0.50) 0%, rgba(240, 100, 80, 0.35) 40%, transparent 75%),
+      radial-gradient(
+        ellipse 1600px 700px at 50% 80%,
+        rgba(255, 120, 60, 0.5) 0%,
+        rgba(240, 100, 80, 0.35) 40%,
+        transparent 75%
+      ),
     /* Purple-pink upper atmosphere */
-    radial-gradient(ellipse 2000px 900px at 50% 20%, rgba(180, 80, 140, 0.42) 0%, rgba(140, 60, 120, 0.28) 50%, transparent 85%),
+      radial-gradient(
+        ellipse 2000px 900px at 50% 20%,
+        rgba(180, 80, 140, 0.42) 0%,
+        rgba(140, 60, 120, 0.28) 50%,
+        transparent 85%
+      ),
     /* Deep purple night sky at top */
-    linear-gradient(180deg,
-      rgba(60, 30, 80, 0.55) 0%,
-      rgba(80, 40, 100, 0.45) 20%,
-      rgba(120, 60, 100, 0.35) 50%,
-      transparent 100%);
+      linear-gradient(
+        180deg,
+        rgba(60, 30, 80, 0.55) 0%,
+        rgba(80, 40, 100, 0.45) 20%,
+        rgba(120, 60, 100, 0.35) 50%,
+        transparent 100%
+      );
 }
 
 /* Orbit (Surge) - Planet system with gravitational center and orbital rings
    Metaphor: Artists as planets pulling content into their orbit */
 body[data-scene="orbit"]::before {
   background:
-    /* Central "sun" - the gravitational center of viral trends */
-    radial-gradient(circle 120px at 50% 50%, rgba(255, 200, 100, 0.35) 0%, rgba(255, 150, 80, 0.20) 40%, transparent 100%),
+    /* Central "sun" - the gravitational center of viral trends */ radial-gradient(
+      circle 120px at 50% 50%,
+      rgba(255, 200, 100, 0.35) 0%,
+      rgba(255, 150, 80, 0.2) 40%,
+      transparent 100%
+    ),
     /* Inner orbital glow */
-    radial-gradient(circle 300px at 50% 50%, rgba(255, 100, 150, 0.18) 60%, transparent 100%),
+      radial-gradient(
+        circle 300px at 50% 50%,
+        rgba(255, 100, 150, 0.18) 60%,
+        transparent 100%
+      ),
     /* Outer space nebula */
-    radial-gradient(ellipse 1400px 900px at 50% 50%, rgba(100, 150, 255, 0.25) 0%, rgba(80, 120, 200, 0.15) 40%, transparent 80%),
+      radial-gradient(
+        ellipse 1400px 900px at 50% 50%,
+        rgba(100, 150, 255, 0.25) 0%,
+        rgba(80, 120, 200, 0.15) 40%,
+        transparent 80%
+      ),
     /* Deep space purple */
-    radial-gradient(ellipse 1600px 1000px at 50% 50%, rgba(50, 50, 120, 0.40) 0%, rgba(30, 30, 80, 0.28) 60%, transparent 100%);
+      radial-gradient(
+        ellipse 1600px 1000px at 50% 50%,
+        rgba(50, 50, 120, 0.4) 0%,
+        rgba(30, 30, 80, 0.28) 60%,
+        transparent 100%
+      );
 }
 
 /* City - Night sky atmosphere (SVG handles buildings)
    Metaphor: Communities form like city districts with distinct cultures */
 body[data-scene="city"]::before {
   background:
-    /* Distant city glow on horizon - moderate */
-    radial-gradient(ellipse 1100px 320px at 50% 75%, rgba(255, 140, 60, 0.22) 0%, rgba(255, 120, 65, 0.14) 40%, rgba(255, 100, 50, 0.08) 70%, transparent 90%),
+    /* Distant city glow on horizon - moderate */ radial-gradient(
+      ellipse 1100px 320px at 50% 75%,
+      rgba(255, 140, 60, 0.22) 0%,
+      rgba(255, 120, 65, 0.14) 40%,
+      rgba(255, 100, 50, 0.08) 70%,
+      transparent 90%
+    ),
     /* Many more stars scattered across sky */
-    radial-gradient(circle 3px at 8% 12%, rgba(255, 255, 255, 0.95) 0%, transparent 100%),
-    radial-gradient(circle 2px at 15% 22%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 3px at 22% 8%, rgba(255, 255, 255, 1.0) 0%, transparent 100%),
-    radial-gradient(circle 2px at 28% 32%, rgba(255, 255, 255, 0.75) 0%, transparent 100%),
-    radial-gradient(circle 3px at 35% 15%, rgba(255, 255, 255, 0.9) 0%, transparent 100%),
-    radial-gradient(circle 2px at 42% 28%, rgba(255, 255, 255, 0.85) 0%, transparent 100%),
-    radial-gradient(circle 3px at 48% 18%, rgba(255, 255, 255, 0.95) 0%, transparent 100%),
-    radial-gradient(circle 2px at 55% 38%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
-    radial-gradient(circle 3px at 62% 12%, rgba(255, 255, 255, 1.0) 0%, transparent 100%),
-    radial-gradient(circle 2px at 68% 35%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 3px at 75% 22%, rgba(255, 255, 255, 0.9) 0%, transparent 100%),
-    radial-gradient(circle 2px at 82% 48%, rgba(255, 255, 255, 0.75) 0%, transparent 100%),
-    radial-gradient(circle 2px at 88% 28%, rgba(255, 255, 255, 0.85) 0%, transparent 100%),
-    radial-gradient(circle 3px at 95% 18%, rgba(255, 255, 255, 0.95) 0%, transparent 100%),
-    radial-gradient(circle 2px at 12% 48%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
-    radial-gradient(circle 2px at 18% 58%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 3px at 38% 52%, rgba(255, 255, 255, 0.85) 0%, transparent 100%),
-    radial-gradient(circle 2px at 52% 58%, rgba(255, 255, 255, 0.75) 0%, transparent 100%),
-    radial-gradient(circle 3px at 65% 55%, rgba(255, 255, 255, 0.9) 0%, transparent 100%),
-    radial-gradient(circle 2px at 78% 62%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 2px at 92% 58%, rgba(255, 255, 255, 0.85) 0%, transparent 100%),
+      radial-gradient(
+        circle 3px at 8% 12%,
+        rgba(255, 255, 255, 0.95) 0%,
+        transparent 100%
+      ),
+    radial-gradient(
+      circle 2px at 15% 22%,
+      rgba(255, 255, 255, 0.8) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 3px at 22% 8%,
+      rgba(255, 255, 255, 1) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 2px at 28% 32%,
+      rgba(255, 255, 255, 0.75) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 3px at 35% 15%,
+      rgba(255, 255, 255, 0.9) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 2px at 42% 28%,
+      rgba(255, 255, 255, 0.85) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 3px at 48% 18%,
+      rgba(255, 255, 255, 0.95) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 2px at 55% 38%,
+      rgba(255, 255, 255, 0.7) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 3px at 62% 12%,
+      rgba(255, 255, 255, 1) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 2px at 68% 35%,
+      rgba(255, 255, 255, 0.8) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 3px at 75% 22%,
+      rgba(255, 255, 255, 0.9) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 2px at 82% 48%,
+      rgba(255, 255, 255, 0.75) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 2px at 88% 28%,
+      rgba(255, 255, 255, 0.85) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 3px at 95% 18%,
+      rgba(255, 255, 255, 0.95) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 2px at 12% 48%,
+      rgba(255, 255, 255, 0.7) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 2px at 18% 58%,
+      rgba(255, 255, 255, 0.8) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 3px at 38% 52%,
+      rgba(255, 255, 255, 0.85) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 2px at 52% 58%,
+      rgba(255, 255, 255, 0.75) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 3px at 65% 55%,
+      rgba(255, 255, 255, 0.9) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 2px at 78% 62%,
+      rgba(255, 255, 255, 0.8) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 2px at 92% 58%,
+      rgba(255, 255, 255, 0.85) 0%,
+      transparent 100%
+    ),
     /* Night sky gradient */
-    linear-gradient(180deg,
-      rgba(4, 12, 24, 0.85) 0%,
-      rgba(8, 24, 42, 0.75) 30%,
-      rgba(12, 32, 52, 0.70) 60%,
-      rgba(16, 40, 60, 0.65) 100%);
+      linear-gradient(
+        180deg,
+        rgba(4, 12, 24, 0.85) 0%,
+        rgba(8, 24, 42, 0.75) 30%,
+        rgba(12, 32, 52, 0.7) 60%,
+        rgba(16, 40, 60, 0.65) 100%
+      );
 }
 
 /* Forest - Atmospheric base (SVG handles trees)
    Metaphor: Trends fade like leaves, but forests regrow */
 body[data-scene="forest"]::before {
   background:
-    /* Strong sun rays through trees - more prominent */
-    radial-gradient(ellipse 900px 700px at 30% 70%, rgba(255, 235, 160, 0.35) 0%, rgba(255, 225, 140, 0.18) 40%, transparent 70%),
-    radial-gradient(ellipse 600px 500px at 50% 68%, rgba(255, 240, 180, 0.22) 0%, rgba(255, 230, 160, 0.10) 45%, transparent 65%),
+    /* Strong sun rays through trees - more prominent */ radial-gradient(
+      ellipse 900px 700px at 30% 70%,
+      rgba(255, 235, 160, 0.35) 0%,
+      rgba(255, 225, 140, 0.18) 40%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 600px 500px at 50% 68%,
+      rgba(255, 240, 180, 0.22) 0%,
+      rgba(255, 230, 160, 0.1) 45%,
+      transparent 65%
+    ),
     /* More dappled light patches throughout forest */
-    radial-gradient(circle 350px at 70% 75%, rgba(210, 255, 190, 0.22) 0%, transparent 65%),
-    radial-gradient(circle 280px at 15% 80%, rgba(190, 245, 170, 0.18) 0%, transparent 55%),
-    radial-gradient(circle 220px at 85% 78%, rgba(225, 255, 205, 0.14) 0%, transparent 50%),
-    radial-gradient(circle 200px at 40% 72%, rgba(200, 250, 180, 0.12) 0%, transparent 55%),
-    radial-gradient(circle 180px at 92% 85%, rgba(215, 255, 195, 0.10) 0%, transparent 50%),
+      radial-gradient(
+        circle 350px at 70% 75%,
+        rgba(210, 255, 190, 0.22) 0%,
+        transparent 65%
+      ),
+    radial-gradient(
+      circle 280px at 15% 80%,
+      rgba(190, 245, 170, 0.18) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      circle 220px at 85% 78%,
+      rgba(225, 255, 205, 0.14) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle 200px at 40% 72%,
+      rgba(200, 250, 180, 0.12) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      circle 180px at 92% 85%,
+      rgba(215, 255, 195, 0.1) 0%,
+      transparent 50%
+    ),
     /* Atmospheric depth */
-    linear-gradient(180deg,
-      rgba(25, 60, 35, 0.90) 0%,
-      rgba(18, 50, 28, 0.85) 20%,
-      rgba(25, 65, 38, 0.75) 50%,
-      rgba(32, 80, 48, 0.65) 100%);
+      linear-gradient(
+        180deg,
+        rgba(25, 60, 35, 0.9) 0%,
+        rgba(18, 50, 28, 0.85) 20%,
+        rgba(25, 65, 38, 0.75) 50%,
+        rgba(32, 80, 48, 0.65) 100%
+      );
 }
 
 /* Air (Emotion) - Vibrant multicolor emotional atmosphere */
 body[data-scene="air"]::before {
   background:
-    /* Flowing wave patterns for visual interest */
-    radial-gradient(ellipse 1000px 200px at 0% 40%, rgba(255, 140, 180, 0.15) 0%, rgba(255, 120, 160, 0.08) 50%, transparent 70%),
-    radial-gradient(ellipse 900px 180px at 100% 60%, rgba(160, 200, 255, 0.12) 0%, rgba(140, 180, 235, 0.06) 50%, transparent 65%),
-    radial-gradient(ellipse 1100px 220px at 50% 80%, rgba(180, 255, 200, 0.10) 0%, rgba(160, 235, 180, 0.05) 50%, transparent 60%),
+    /* Flowing wave patterns for visual interest */ radial-gradient(
+      ellipse 1000px 200px at 0% 40%,
+      rgba(255, 140, 180, 0.15) 0%,
+      rgba(255, 120, 160, 0.08) 50%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 900px 180px at 100% 60%,
+      rgba(160, 200, 255, 0.12) 0%,
+      rgba(140, 180, 235, 0.06) 50%,
+      transparent 65%
+    ),
+    radial-gradient(
+      ellipse 1100px 220px at 50% 80%,
+      rgba(180, 255, 200, 0.1) 0%,
+      rgba(160, 235, 180, 0.05) 50%,
+      transparent 60%
+    ),
     /* Concentric rings for depth */
-    radial-gradient(circle 600px at 30% 35%, transparent 30%, rgba(255, 160, 200, 0.08) 35%, transparent 40%),
-    radial-gradient(circle 450px at 70% 50%, transparent 35%, rgba(180, 210, 255, 0.07) 40%, transparent 45%),
+      radial-gradient(
+        circle 600px at 30% 35%,
+        transparent 30%,
+        rgba(255, 160, 200, 0.08) 35%,
+        transparent 40%
+      ),
+    radial-gradient(
+      circle 450px at 70% 50%,
+      transparent 35%,
+      rgba(180, 210, 255, 0.07) 40%,
+      transparent 45%
+    ),
     /* Pink joy */
-    radial-gradient(circle 700px at 20% 30%, rgba(255, 120, 170, 0.32) 0%, rgba(255, 100, 150, 0.18) 50%, transparent 65%),
+      radial-gradient(
+        circle 700px at 20% 30%,
+        rgba(255, 120, 170, 0.32) 0%,
+        rgba(255, 100, 150, 0.18) 50%,
+        transparent 65%
+      ),
     /* Blue calm */
-    radial-gradient(circle 900px at 75% 60%, rgba(120, 170, 255, 0.28) 0%, rgba(100, 150, 230, 0.15) 50%, transparent 65%),
+      radial-gradient(
+        circle 900px at 75% 60%,
+        rgba(120, 170, 255, 0.28) 0%,
+        rgba(100, 150, 230, 0.15) 50%,
+        transparent 65%
+      ),
     /* Green energy */
-    radial-gradient(circle 600px at 50% 80%, rgba(170, 255, 220, 0.25) 0%, rgba(150, 230, 200, 0.12) 50%, transparent 60%),
+      radial-gradient(
+        circle 600px at 50% 80%,
+        rgba(170, 255, 220, 0.25) 0%,
+        rgba(150, 230, 200, 0.12) 50%,
+        transparent 60%
+      ),
     /* Warm glow */
-    radial-gradient(ellipse 1400px 500px at 50% 40%, rgba(255, 200, 120, 0.20) 0%, rgba(255, 180, 100, 0.10) 40%, transparent 70%),
+      radial-gradient(
+        ellipse 1400px 500px at 50% 40%,
+        rgba(255, 200, 120, 0.2) 0%,
+        rgba(255, 180, 100, 0.1) 40%,
+        transparent 70%
+      ),
     /* Base gradient */
-    linear-gradient(135deg,
-      rgba(40, 35, 50, 0.55) 0%,
-      rgba(35, 40, 55, 0.42) 50%,
-      rgba(30, 35, 45, 0.35) 100%);
+      linear-gradient(
+        135deg,
+        rgba(40, 35, 50, 0.55) 0%,
+        rgba(35, 40, 55, 0.42) 50%,
+        rgba(30, 35, 45, 0.35) 100%
+      );
 }
 
 /* Lab - Atmospheric base (SVG handles equipment)
    Metaphor: The formula - recipe ingredients analysis */
 body[data-scene="lab"]::before {
   background:
-    /* Subtle molecular orbital rings - elegant and scientific */
-    radial-gradient(circle 500px at 75% 25%, transparent 35%, rgba(80, 180, 220, 0.04) 37%, transparent 39%),
-    radial-gradient(circle 400px at 75% 25%, transparent 40%, rgba(100, 200, 240, 0.05) 42%, transparent 44%),
-    radial-gradient(circle 300px at 75% 25%, transparent 45%, rgba(120, 220, 255, 0.06) 47%, transparent 49%),
+    /* Subtle molecular orbital rings - elegant and scientific */ radial-gradient(
+      circle 500px at 75% 25%,
+      transparent 35%,
+      rgba(80, 180, 220, 0.04) 37%,
+      transparent 39%
+    ),
+    radial-gradient(
+      circle 400px at 75% 25%,
+      transparent 40%,
+      rgba(100, 200, 240, 0.05) 42%,
+      transparent 44%
+    ),
+    radial-gradient(
+      circle 300px at 75% 25%,
+      transparent 45%,
+      rgba(120, 220, 255, 0.06) 47%,
+      transparent 49%
+    ),
     /* Soft glowing light from lab equipment */
-    radial-gradient(circle 450px at 20% 45%, rgba(80, 200, 240, 0.15) 0%, rgba(60, 180, 220, 0.08) 50%, transparent 70%),
-    radial-gradient(circle 350px at 85% 70%, rgba(100, 220, 200, 0.12) 0%, rgba(80, 200, 180, 0.06) 50%, transparent 65%),
+      radial-gradient(
+        circle 450px at 20% 45%,
+        rgba(80, 200, 240, 0.15) 0%,
+        rgba(60, 180, 220, 0.08) 50%,
+        transparent 70%
+      ),
+    radial-gradient(
+      circle 350px at 85% 70%,
+      rgba(100, 220, 200, 0.12) 0%,
+      rgba(80, 200, 180, 0.06) 50%,
+      transparent 65%
+    ),
     /* Overhead cool lab lighting */
-    radial-gradient(ellipse 800px 400px at 50% 0%, rgba(200, 230, 250, 0.20) 0%, rgba(180, 210, 230, 0.10) 50%, transparent 80%),
+      radial-gradient(
+        ellipse 800px 400px at 50% 0%,
+        rgba(200, 230, 250, 0.2) 0%,
+        rgba(180, 210, 230, 0.1) 50%,
+        transparent 80%
+      ),
     /* Clean scientific atmosphere */
-    linear-gradient(180deg,
-      rgba(15, 40, 55, 0.90) 0%,
-      rgba(18, 50, 65, 0.85) 30%,
-      rgba(20, 55, 70, 0.80) 60%,
-      rgba(22, 60, 75, 0.75) 100%);
+      linear-gradient(
+        180deg,
+        rgba(15, 40, 55, 0.9) 0%,
+        rgba(18, 50, 65, 0.85) 30%,
+        rgba(20, 55, 70, 0.8) 60%,
+        rgba(22, 60, 75, 0.75) 100%
+      );
 }
 
 /* Scene layers - decorative overlays per scene */
@@ -388,26 +645,51 @@ body[data-scene="lab"]::before {
   inset: 0;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 500ms cubic-bezier(0.4, 0.0, 0.2, 1);
+  transition: opacity 500ms cubic-bezier(0.4, 0, 0.2, 1);
   will-change: opacity;
 }
 
 /* Stars - Animated twinkling field */
 body[data-scene="cosmos"] .scene--stars {
   opacity: 0.4;
-  background-image:
-    radial-gradient(2px 2px at 15% 25%, rgba(255, 255, 255, 0.6) 0 2px, transparent 2px),
-    radial-gradient(1px 1px at 55% 65%, rgba(0, 255, 224, 0.4) 0 1px, transparent 1px),
-    radial-gradient(2px 2px at 35% 45%, rgba(255, 255, 255, 0.5) 0 2px, transparent 2px),
-    radial-gradient(1px 1px at 75% 15%, rgba(255, 0, 224, 0.3) 0 1px, transparent 1px),
-    radial-gradient(1px 1px at 90% 80%, rgba(255, 255, 255, 0.4) 0 1px, transparent 1px);
-  background-size: 140px 140px, 180px 180px, 200px 200px, 220px 220px, 160px 160px;
+  background-image: radial-gradient(
+      2px 2px at 15% 25%,
+      rgba(255, 255, 255, 0.6) 0 2px,
+      transparent 2px
+    ),
+    radial-gradient(
+      1px 1px at 55% 65%,
+      rgba(0, 255, 224, 0.4) 0 1px,
+      transparent 1px
+    ),
+    radial-gradient(
+      2px 2px at 35% 45%,
+      rgba(255, 255, 255, 0.5) 0 2px,
+      transparent 2px
+    ),
+    radial-gradient(
+      1px 1px at 75% 15%,
+      rgba(255, 0, 224, 0.3) 0 1px,
+      transparent 1px
+    ),
+    radial-gradient(
+      1px 1px at 90% 80%,
+      rgba(255, 255, 255, 0.4) 0 1px,
+      transparent 1px
+    );
+  background-size: 140px 140px, 180px 180px, 200px 200px, 220px 220px,
+    160px 160px;
   animation: starfield-drift 120s linear infinite;
 }
 
 @keyframes starfield-drift {
-  0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
-  100% { background-position: 140px 140px, -180px 180px, 200px -200px, -220px -220px, 160px 160px; }
+  0% {
+    background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+  }
+  100% {
+    background-position: 140px 140px, -180px 180px, 200px -200px, -220px -220px,
+      160px 160px;
+  }
 }
 
 /* Orbits - Concentric rings representing planetary orbits
@@ -415,34 +697,81 @@ body[data-scene="cosmos"] .scene--stars {
 body[data-scene="orbit"] .scene--orbits {
   opacity: 0.38;
   background-image:
-    /* Innermost orbit - fastest rotation */
-    radial-gradient(circle 250px at 50% 50%, transparent 248px, rgba(100, 180, 255, 0.25) 249px, rgba(100, 180, 255, 0.15) 250px, transparent 251px),
+    /* Innermost orbit - fastest rotation */ radial-gradient(
+      circle 250px at 50% 50%,
+      transparent 248px,
+      rgba(100, 180, 255, 0.25) 249px,
+      rgba(100, 180, 255, 0.15) 250px,
+      transparent 251px
+    ),
     /* Second orbit */
-    radial-gradient(circle 380px at 50% 50%, transparent 378px, rgba(150, 200, 255, 0.20) 379px, rgba(150, 200, 255, 0.12) 380px, transparent 381px),
+      radial-gradient(
+        circle 380px at 50% 50%,
+        transparent 378px,
+        rgba(150, 200, 255, 0.2) 379px,
+        rgba(150, 200, 255, 0.12) 380px,
+        transparent 381px
+      ),
     /* Third orbit */
-    radial-gradient(circle 520px at 50% 50%, transparent 518px, rgba(180, 220, 255, 0.16) 519px, rgba(180, 220, 255, 0.09) 520px, transparent 521px),
+      radial-gradient(
+        circle 520px at 50% 50%,
+        transparent 518px,
+        rgba(180, 220, 255, 0.16) 519px,
+        rgba(180, 220, 255, 0.09) 520px,
+        transparent 521px
+      ),
     /* Outermost orbit - slowest */
-    radial-gradient(circle 680px at 50% 50%, transparent 678px, rgba(200, 230, 255, 0.12) 679px, rgba(200, 230, 255, 0.06) 680px, transparent 681px),
+      radial-gradient(
+        circle 680px at 50% 50%,
+        transparent 678px,
+        rgba(200, 230, 255, 0.12) 679px,
+        rgba(200, 230, 255, 0.06) 680px,
+        transparent 681px
+      ),
     /* Small orbital bodies/satellites scattered */
-    radial-gradient(circle 8px at 35% 40%, rgba(255, 200, 150, 0.4) 0%, transparent 100%),
-    radial-gradient(circle 6px at 65% 55%, rgba(200, 150, 255, 0.35) 0%, transparent 100%),
-    radial-gradient(circle 7px at 45% 65%, rgba(150, 255, 200, 0.3) 0%, transparent 100%),
-    radial-gradient(circle 5px at 58% 38%, rgba(255, 180, 200, 0.35) 0%, transparent 100%);
+      radial-gradient(
+        circle 8px at 35% 40%,
+        rgba(255, 200, 150, 0.4) 0%,
+        transparent 100%
+      ),
+    radial-gradient(
+      circle 6px at 65% 55%,
+      rgba(200, 150, 255, 0.35) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 7px at 45% 65%,
+      rgba(150, 255, 200, 0.3) 0%,
+      transparent 100%
+    ),
+    radial-gradient(
+      circle 5px at 58% 38%,
+      rgba(255, 180, 200, 0.35) 0%,
+      transparent 100%
+    );
   animation: orbital-pulse 8s ease-in-out infinite;
 }
 
 @keyframes orbital-pulse {
-  0%, 100% { opacity: 0.38; }
-  50% { opacity: 0.45; }
+  0%,
+  100% {
+    opacity: 0.38;
+  }
+  50% {
+    opacity: 0.45;
+  }
 }
 
 /* City Grid - Perspective-like converging lines */
 body[data-scene="city"] .scene--grid {
   opacity: 0.3;
-  background:
-    linear-gradient(rgba(0, 255, 224, 0.12) 1px, transparent 1px),
+  background: linear-gradient(rgba(0, 255, 224, 0.12) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 200, 255, 0.08) 1px, transparent 1px),
-    radial-gradient(ellipse at bottom, rgba(100, 200, 255, 0.06) 0%, transparent 50%);
+    radial-gradient(
+      ellipse at bottom,
+      rgba(100, 200, 255, 0.06) 0%,
+      transparent 50%
+    );
   background-size: 40px 40px, 40px 40px, 100% 400px;
   background-position: 0 0, 0 0, center bottom;
 }
@@ -450,41 +779,89 @@ body[data-scene="city"] .scene--grid {
 /* Forest Canopy - Layered organic shapes with light filtering */
 body[data-scene="forest"] .scene--canopy {
   opacity: 0.35;
-  background:
-    radial-gradient(ellipse 800px 250px at 30% 0%, rgba(100, 180, 100, 0.4) 0%, transparent 50%),
-    radial-gradient(ellipse 600px 200px at 70% 0%, rgba(80, 160, 90, 0.35) 0%, transparent 50%),
-    radial-gradient(ellipse 700px 220px at 50% 0%, rgba(90, 170, 95, 0.3) 0%, transparent 50%),
-    linear-gradient(180deg, transparent 0%, rgba(60, 120, 70, 0.15) 30%, transparent 70%);
+  background: radial-gradient(
+      ellipse 800px 250px at 30% 0%,
+      rgba(100, 180, 100, 0.4) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 600px 200px at 70% 0%,
+      rgba(80, 160, 90, 0.35) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 700px 220px at 50% 0%,
+      rgba(90, 170, 95, 0.3) 0%,
+      transparent 50%
+    ),
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(60, 120, 70, 0.15) 30%,
+      transparent 70%
+    );
 }
 
 /* Emotion Orbs - Colorful floating spheres representing different emotions */
 body[data-scene="air"] .scene--bubbles {
   opacity: 0.35;
   background-image:
-    /* Joy - warm yellow/orange */
-    radial-gradient(circle 80px at 25% 35%, rgba(255, 200, 100, 0.20) 20%, rgba(255, 150, 80, 0.08) 50%, transparent 80%),
+    /* Joy - warm yellow/orange */ radial-gradient(
+      circle 80px at 25% 35%,
+      rgba(255, 200, 100, 0.2) 20%,
+      rgba(255, 150, 80, 0.08) 50%,
+      transparent 80%
+    ),
     /* Calm - cool blue */
-    radial-gradient(circle 100px at 70% 60%, rgba(100, 180, 255, 0.18) 20%, rgba(80, 150, 230, 0.06) 50%, transparent 80%),
+      radial-gradient(
+        circle 100px at 70% 60%,
+        rgba(100, 180, 255, 0.18) 20%,
+        rgba(80, 150, 230, 0.06) 50%,
+        transparent 80%
+      ),
     /* Energy - cyan/green */
-    radial-gradient(circle 70px at 15% 75%, rgba(100, 255, 200, 0.16) 20%, rgba(80, 230, 180, 0.05) 50%, transparent 80%),
+      radial-gradient(
+        circle 70px at 15% 75%,
+        rgba(100, 255, 200, 0.16) 20%,
+        rgba(80, 230, 180, 0.05) 50%,
+        transparent 80%
+      ),
     /* Excitement - pink/magenta */
-    radial-gradient(circle 90px at 80% 25%, rgba(255, 100, 180, 0.18) 20%, rgba(230, 80, 150, 0.06) 50%, transparent 80%),
+      radial-gradient(
+        circle 90px at 80% 25%,
+        rgba(255, 100, 180, 0.18) 20%,
+        rgba(230, 80, 150, 0.06) 50%,
+        transparent 80%
+      ),
     /* Subtle background orbs */
-    radial-gradient(circle 60px at 50% 50%, rgba(200, 200, 255, 0.10) 30%, rgba(180, 180, 230, 0.03) 60%, transparent 90%),
-    radial-gradient(circle 50px at 35% 20%, rgba(255, 220, 180, 0.08) 30%, transparent 70%);
-  background-size: 350px 350px, 420px 420px, 300px 300px, 380px 380px, 250px 250px, 220px 220px;
+      radial-gradient(
+        circle 60px at 50% 50%,
+        rgba(200, 200, 255, 0.1) 30%,
+        rgba(180, 180, 230, 0.03) 60%,
+        transparent 90%
+      ),
+    radial-gradient(
+      circle 50px at 35% 20%,
+      rgba(255, 220, 180, 0.08) 30%,
+      transparent 70%
+    );
+  background-size: 350px 350px, 420px 420px, 300px 300px, 380px 380px,
+    250px 250px, 220px 220px;
   animation: emotion-drift 40s ease-in-out infinite;
 }
 
 @keyframes emotion-drift {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
   }
   33% {
-    background-position: 30px 25px, -20px -30px, 35px -15px, -25px 20px, 15px 10px, -10px 8px;
+    background-position: 30px 25px, -20px -30px, 35px -15px, -25px 20px,
+      15px 10px, -10px 8px;
   }
   66% {
-    background-position: -25px 35px, 25px -20px, -30px 25px, 30px -25px, -12px 15px, 12px -10px;
+    background-position: -25px 35px, 25px -20px, -30px 25px, 30px -25px,
+      -12px 15px, 12px -10px;
   }
 }
 
@@ -533,9 +910,11 @@ body[data-scene="air"] .scene--bubbles {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(ellipse at center,
+  background: radial-gradient(
+    ellipse at center,
     var(--color-background-secondary) 0%,
-    var(--color-background-primary) 100%);
+    var(--color-background-primary) 100%
+  );
 }
 
 .starfield {
@@ -557,8 +936,13 @@ body[data-scene="air"] .scene--bubbles {
 }
 
 @keyframes twinkle {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .hero-content {
@@ -582,8 +966,13 @@ body[data-scene="air"] .scene--bubbles {
 }
 
 @keyframes pulse {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(10px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
 }
 
 /* Distinct Layout Patterns */
@@ -780,22 +1169,26 @@ body[data-scene="air"] .scene--bubbles {
 }
 
 .viz-container::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg,
+  background: linear-gradient(
+    90deg,
     transparent,
     var(--color-accent-cyan),
-    transparent);
+    transparent
+  );
   transform: translateX(-100%);
   animation: scan 3s infinite;
 }
 
 @keyframes scan {
-  to { transform: translateX(100%); }
+  to {
+    transform: translateX(100%);
+  }
 }
 
 /* Scroll Steps */
@@ -911,7 +1304,7 @@ body[data-scene="air"] .scene--bubbles {
   border-radius: 8px;
   border: var(--glass-subtle-border);
   padding: var(--space-4);
-  backdrop-filter: blur(var(--glass-subtle-blur));
+  backdrop-filter: blur(var(--glass-frosted-blur));
 }
 
 .legend-panel h3 {
@@ -925,6 +1318,55 @@ body[data-scene="air"] .scene--bubbles {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-2) var(--space-3);
+}
+
+/* Emotion sort button styling */
+.emotion-sort-toggle {
+  width: 20%;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 107, 0.1),
+    rgba(255, 179, 71, 0.1)
+  );
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  border-radius: 0.5rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.emotion-sort-toggle:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 107, 0.2),
+    rgba(255, 179, 71, 0.2)
+  );
+  border-color: rgba(255, 107, 107, 0.5);
+  transform: translateY(-1px);
+}
+
+.emotion-sort-toggle:active {
+  transform: translateY(0);
+}
+
+.emotion-sort-toggle[aria-pressed="true"] {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 107, 107, 0.3),
+    rgba(255, 179, 71, 0.3)
+  );
+  border-color: rgba(255, 107, 107, 0.6);
+  font-weight: 600;
 }
 
 /* Detail Drawer */
@@ -1029,10 +1471,11 @@ body[data-scene="air"] .scene--bubbles {
   /* Match lab bench color and fade to black */
   position: relative;
   z-index: 2;
-  background: linear-gradient(180deg,
-    #0b1116 0%,                     /* Exact lab bench color match */
-    #0b1116 5%,                     /* Hold bench color briefly */
-    rgba(8, 12, 15, 1) 20%,
+  background: linear-gradient(
+    180deg,
+    #0b1116 0%,
+    /* Exact lab bench color match */ #0b1116 5%,
+    /* Hold bench color briefly */ rgba(8, 12, 15, 1) 20%,
     rgba(5, 8, 10, 1) 40%,
     #000000 65%,
     #000000 100%
@@ -1103,13 +1546,22 @@ body[data-scene="air"] .scene--bubbles {
 }
 
 @keyframes float {
-  from { transform: translateY(0); }
-  to { transform: translateY(-20px); }
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-20px);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.05; }
-  50% { opacity: 0.1; }
+  0%,
+  100% {
+    opacity: 0.05;
+  }
+  50% {
+    opacity: 0.1;
+  }
 }
 
 /* Ingredient Cards */
@@ -1126,10 +1578,15 @@ body[data-scene="air"] .scene--bubbles {
 }
 
 .ingredient-card::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, transparent, var(--color-accent-cyan), transparent);
+  background: linear-gradient(
+    135deg,
+    transparent,
+    var(--color-accent-cyan),
+    transparent
+  );
   transform: translateX(-100%);
   transition: transform var(--duration-macro);
   opacity: 0.1;
@@ -1271,7 +1728,11 @@ body[data-scene="air"] .scene--bubbles {
   right: -20%;
   width: 160px;
   height: 2px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 0.9));
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.9)
+  );
   opacity: 0.9;
   transform: translate(0, 0) rotate(-20deg);
   transition: transform 0.4s linear, opacity 0.4s linear;
@@ -1305,8 +1766,13 @@ body[data-scene="air"] .scene--bubbles {
 }
 
 @keyframes audio-pulse {
-  0%, 100% { background: rgba(0, 255, 224, 0.15); }
-  50% { background: rgba(0, 255, 224, 0.25); }
+  0%,
+  100% {
+    background: rgba(0, 255, 224, 0.15);
+  }
+  50% {
+    background: rgba(0, 255, 224, 0.25);
+  }
 }
 
 /* Network edge emphasis when sound is active */
@@ -1832,7 +2298,11 @@ circle[data-type="bubble"] {
 }
 
 .year-btn.active {
-  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-magenta));
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-cyan),
+    var(--color-accent-magenta)
+  );
   color: var(--color-background-primary);
   border-color: transparent;
   box-shadow: 0 4px 12px rgba(0, 255, 224, 0.3);
@@ -2034,7 +2504,11 @@ circle[data-type="bubble"] {
 }
 
 .with-fill {
-  background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-magenta));
+  background: linear-gradient(
+    90deg,
+    var(--color-accent-cyan),
+    var(--color-accent-magenta)
+  );
 }
 
 .without-fill {
@@ -2090,7 +2564,11 @@ circle[data-type="bubble"] {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-magenta));
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-cyan),
+    var(--color-accent-magenta)
+  );
   color: var(--color-background-primary);
 }
 
@@ -2111,7 +2589,11 @@ circle[data-type="bubble"] {
 }
 
 .quiz-prompt {
-  background: linear-gradient(135deg, rgba(0, 255, 224, 0.1), rgba(255, 0, 224, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(0, 255, 224, 0.1),
+    rgba(255, 0, 224, 0.1)
+  );
   padding: var(--space-3);
   border-radius: 8px;
   text-align: center;
@@ -2148,13 +2630,17 @@ circle[data-type="bubble"] {
   height: 400px;
   pointer-events: none;
   opacity: 0;
-  animation: illuFadeIn 800ms cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+  animation: illuFadeIn 800ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
   z-index: 1; /* Above body::before, same layer as scene decorations */
 }
 
 @keyframes illuFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* ──────────────────────────────────────────────────────────────────────
@@ -2205,7 +2691,8 @@ circle[data-type="bubble"] {
 }
 
 @keyframes birdFly {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0) translateY(0);
   }
   25% {
@@ -2232,8 +2719,12 @@ circle[data-type="bubble"] {
 }
 
 @keyframes sway {
-  from { transform: rotate(-1.2deg); }
-  to { transform: rotate(1.2deg); }
+  from {
+    transform: rotate(-1.2deg);
+  }
+  to {
+    transform: rotate(1.2deg);
+  }
 }
 
 /* Easter egg: falling leaf */
@@ -2249,8 +2740,13 @@ circle[data-type="bubble"] {
 }
 
 @keyframes leafFadeOnly {
-  0%, 50% { opacity: 0.8; }
-  100% { opacity: 0; }
+  0%,
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2278,8 +2774,13 @@ circle[data-type="bubble"] {
 }
 
 @keyframes tw {
-  0%, 100% { opacity: 0; }
-  50% { opacity: 0.9; }
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.9;
+  }
 }
 
 .illu-city .city-ground {
@@ -2314,8 +2815,13 @@ circle[data-type="bubble"] {
 }
 
 @keyframes antennaBlinkSlow {
-  0%, 100% { opacity: 0.9; }
-  50% { opacity: 0.3; }
+  0%,
+  100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.3;
+  }
 }
 
 /* Diagonal shooting stars - MORE VISIBLE */
@@ -2325,7 +2831,9 @@ circle[data-type="bubble"] {
 }
 
 @keyframes meteorStreak {
-  0%, 75%, 100% {
+  0%,
+  75%,
+  100% {
     opacity: 0;
     transform: translate(0, 0);
   }
@@ -2344,7 +2852,8 @@ circle[data-type="bubble"] {
 }
 
 @keyframes meteorTrailSparkle {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.4;
     transform: scale(0.8);
   }
@@ -2360,7 +2869,8 @@ circle[data-type="bubble"] {
 }
 
 @keyframes meteorHeadSparkle {
-  0%, 100% {
+  0%,
+  100% {
     filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
   }
   50% {
@@ -2374,7 +2884,8 @@ circle[data-type="bubble"] {
 }
 
 @keyframes meteorGlowSparkle {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.4;
   }
   50% {
@@ -2415,7 +2926,8 @@ circle[data-type="bubble"] {
 }
 
 @keyframes stripeShift {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.08;
     transform: translateX(0);
   }
@@ -2440,12 +2952,12 @@ circle[data-type="bubble"] {
 
 /* Beaker glass with highlight */
 .illu-lab .lab-rim {
-  fill: rgba(255,255,255,0.25);
+  fill: rgba(255, 255, 255, 0.25);
 }
 
 .illu-lab .lab-glass {
-  fill: rgba(255,255,255,0.06);
-  stroke: rgba(160,210,255,0.45);
+  fill: rgba(255, 255, 255, 0.06);
+  stroke: rgba(160, 210, 255, 0.45);
   mask: url(#glassSpec);
 }
 
@@ -2468,7 +2980,8 @@ circle[data-type="bubble"] {
 }
 
 @keyframes flameFlicker {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.85;
   }
   25% {
@@ -2488,7 +3001,8 @@ circle[data-type="bubble"] {
 }
 
 @keyframes stripeGlow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.15;
   }
   50% {
@@ -2503,7 +3017,8 @@ circle[data-type="bubble"] {
 }
 
 @keyframes liquidPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.6;
   }
   50% {
@@ -2517,14 +3032,14 @@ circle[data-type="bubble"] {
 }
 
 @keyframes microBeamPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.3;
   }
   50% {
     opacity: 0.7;
   }
 }
-
 
 /* Molecular structures */
 .illu-lab .lab-molecule {
@@ -2552,7 +3067,8 @@ circle[data-type="bubble"] {
 }
 
 @keyframes moleculeFloat {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg);
   }
   50% {
@@ -2611,8 +3127,13 @@ circle[data-type="bubble"] {
 }
 
 @keyframes beamPulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 /* Energy particles */
@@ -2623,7 +3144,8 @@ circle[data-type="bubble"] {
 }
 
 @keyframes particleDrift {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
     opacity: 0.8;
   }
@@ -2654,7 +3176,8 @@ circle[data-type="bubble"] {
 }
 
 @keyframes spectrumPulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.3;
     transform: scaleY(0.8);
   }
@@ -2679,7 +3202,8 @@ circle[data-type="bubble"] {
 }
 
 @keyframes labShimmer {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.4;
     transform: scaleX(1);
   }
@@ -2715,7 +3239,7 @@ circle[data-type="bubble"] {
    ────────────────────────────────────────────────────────────────────── */
 
 .illu-air {
-  opacity: 1.0; /* Full opacity so elements are visible */
+  opacity: 1; /* Full opacity so elements are visible */
   z-index: 10 !important; /* ABOVE visualization */
   position: absolute !important;
   top: 0 !important; /* At the very top of section */
@@ -2729,7 +3253,8 @@ circle[data-type="bubble"] {
 }
 
 @keyframes floatHeart {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg);
     opacity: 0.7;
   }
@@ -2746,7 +3271,8 @@ circle[data-type="bubble"] {
 }
 
 @keyframes floatNote {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) translateX(0);
   }
   33% {
@@ -2789,7 +3315,8 @@ circle[data-type="bubble"] {
 }
 
 @keyframes leafDrift {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) translateX(0) rotate(0deg);
   }
   25% {
@@ -2812,7 +3339,8 @@ circle[data-type="bubble"] {
 }
 
 @keyframes energyPulse {
-  0%, 100% {
+  0%,
+  100% {
     stroke-dashoffset: 0;
   }
   50% {
@@ -2833,11 +3361,5 @@ circle[data-type="bubble"] {
   }
   .illu-air .air-note {
     opacity: 0.85 !important;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .illu-forest .forest-bird {
-    animation: none;
   }
 }
