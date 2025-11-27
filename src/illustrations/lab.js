@@ -324,38 +324,7 @@ export function createLabIllustration(){
     svg.appendChild(p);
   }
 
-  // 3D Lab bench with gradient and highlights
-  const benchG=document.createElementNS(NS,'g');
-
-  // Main bench surface with gradient for depth - narrower
-  const bench=document.createElementNS(NS,'rect');
-  bench.setAttribute('x','0');
-  bench.setAttribute('y','330');
-  bench.setAttribute('width','1440');
-  bench.setAttribute('height','50');
-  bench.setAttribute('fill','url(#benchGradient)');
-  bench.setAttribute('opacity','0.95');
-  benchG.appendChild(bench);
-
-  // Top edge highlight for 3D effect
-  const topEdge=document.createElementNS(NS,'rect');
-  topEdge.setAttribute('x','0');
-  topEdge.setAttribute('y','330');
-  topEdge.setAttribute('width','1440');
-  topEdge.setAttribute('height','3');
-  topEdge.setAttribute('fill','rgba(100, 150, 180, 0.3)');
-  benchG.appendChild(topEdge);
-
-  // Front face shadow for depth
-  const shadow=document.createElementNS(NS,'rect');
-  shadow.setAttribute('x','0');
-  shadow.setAttribute('y','375');
-  shadow.setAttribute('width','1440');
-  shadow.setAttribute('height','12');
-  shadow.setAttribute('fill','rgba(0, 0, 0, 0.6)');
-  benchG.appendChild(shadow);
-
-  svg.appendChild(benchG);
+  // Lab bench removed - was extending beyond viewBox and causing extra space
 
   return svg;
 }

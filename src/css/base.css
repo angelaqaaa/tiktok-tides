@@ -9563,11 +9563,14 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   width: 100%;
   max-width: 1200px;
   padding: var(--space-4) var(--space-6);
+  padding-bottom: var(--space-8);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-6);
   flex: 1;
+  min-height: 100%;
+  justify-content: flex-start;
 }
 
 /* Scene label badge */
