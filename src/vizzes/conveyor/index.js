@@ -430,6 +430,10 @@ export class ConveyorViz extends EventEmitter {
       // Disable all options after correct
       this.disableAllOptions();
 
+      // Hide hint navigation if it was shown (user got it wrong first, then right)
+      const hintNav = this.container.querySelector('.hint-navigation');
+      if (hintNav) hintNav.style.display = 'none';
+
       // Show feedback area and next button immediately
       const feedbackArea = this.container.querySelector('.feedback-area');
       const nextBtn = this.container.querySelector('.next-btn');
