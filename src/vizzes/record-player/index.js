@@ -92,6 +92,10 @@ export class RecordPlayerViz {
         this.autoSequenceRunning = false;
         this.handleFirstGesture = this.handleFirstGesture.bind(this);
         this.handleMuteToggle = this.handleMuteToggle.bind(this);
+
+        // Debounce hover events to prevent excessive state changes
+        this.hoverDebounceTimer = null;
+        this.hoverDebounceDelay = 50; // 50ms debounce
     }
 
     async init(selector, options = {}) {
@@ -510,12 +514,25 @@ export class RecordPlayerViz {
                 if (this.lockedIndex !== null && this.lockedIndex !== index) {
                     return;
                 }
-                // Immediately activate this ring - all states change together
-                this.activateRingImmediate(index, { locked: false, source: 'hover' });
+                // Debounce hover to prevent excessive state changes
+                if (this.hoverDebounceTimer) {
+                    clearTimeout(this.hoverDebounceTimer);
+                }
+                this.hoverDebounceTimer = setTimeout(() => {
+                    // Immediately activate this ring - all states change together
+                    this.activateRingImmediate(index, { locked: false, source: 'hover' });
+                    this.hoverDebounceTimer = null;
+                }, this.hoverDebounceDelay);
             });
 
             ringEl.addEventListener('mouseleave', () => {
                 const index = Number(ringEl.dataset.songIndex);
+
+                // Clear any pending hover activation
+                if (this.hoverDebounceTimer) {
+                    clearTimeout(this.hoverDebounceTimer);
+                    this.hoverDebounceTimer = null;
+                }
 
                 // If there's a locked ring, restore it
                 if (this.lockedIndex !== null && this.lockedIndex !== index) {
@@ -550,6 +567,7 @@ export class RecordPlayerViz {
         const node = this.getRingNode(index);
         if (!node) return;
         const angle = this.spinAngles.get(index) || 0;
+        // Use transform attribute for SVG (more efficient than style for SVG)
         node.setAttribute('transform', `translate(${CENTER}, ${CENTER}) rotate(${angle})`);
     }
 
@@ -566,6 +584,7 @@ export class RecordPlayerViz {
             state.last = timestamp;
             angle = (angle + delta * ROTATION_SPEED) % 360;
             this.spinAngles.set(index, angle);
+            // Direct transform update for SVG (most efficient)
             node.setAttribute('transform', `translate(${CENTER}, ${CENTER}) rotate(${angle})`);
             state.rafId = requestAnimationFrame(step);
         };
@@ -598,6 +617,11 @@ export class RecordPlayerViz {
         if (index < 0 || index >= this.data.length) return;
         const ringSel = this.getRingSelection(index);
         if (!ringSel.node()) return;
+
+        // Early return if already active and same state
+        if (this.activeIndex === index && this.lockedIndex === (locked ? index : null)) {
+            return;
+        }
 
         const isHover = source === 'hover';
         const isAuto = source === 'auto';
@@ -710,7 +734,6 @@ export class RecordPlayerViz {
 
         // Use angleScale from setupScales()
         const angle = this.angleScale(index);
-        console.log(`Ring ${index}, angle ${angle.toFixed(1)}°`);
 
         this.tonearmArm.style.transform = `rotate(${angle}deg)`;
         if (!silent) {
@@ -807,41 +830,51 @@ export class RecordPlayerViz {
 
         // Set mute state immediately
         audio.muted = this.isMuted;
-        audio.currentTime = 0;
+        // Only reset currentTime if audio is not already playing to avoid stuttering
+        if (audio.paused || audio.currentTime > 0.1) {
+            audio.currentTime = 0;
+        }
 
         // Handle autoplay unlock logic
         if (autoplay && !force && !this.autoplayUnlocked) {
             audio.muted = true;
-            audio.play().then(() => {
-                // First play succeeded, now unlock and play for real
-                audio.pause();
-                audio.currentTime = 0;
-                audio.muted = this.isMuted;
-                this.autoplayUnlocked = true;
+            // Use requestAnimationFrame to avoid blocking
+            requestAnimationFrame(() => {
                 audio.play().then(() => {
-                    this.toggleNotes(true);
+                    // First play succeeded, now unlock and play for real
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audio.muted = this.isMuted;
+                    this.autoplayUnlocked = true;
+                    requestAnimationFrame(() => {
+                        audio.play().then(() => {
+                            this.toggleNotes(true);
+                        }).catch(() => {
+                            this.toggleNotes(false);
+                        });
+                    });
                 }).catch(() => {
+                    // First play failed, wait for user gesture
+                    audio.pause();
+                    audio.currentTime = 0;
+                    this.pendingAudioIndex = index;
                     this.toggleNotes(false);
+                    document.addEventListener('pointerdown', this.handleFirstGesture, { once: true });
                 });
-            }).catch(() => {
-                // First play failed, wait for user gesture
-                audio.pause();
-                audio.currentTime = 0;
-                this.pendingAudioIndex = index;
-                this.toggleNotes(false);
-                document.addEventListener('pointerdown', this.handleFirstGesture, { once: true });
             });
             return;
         }
 
-        // Normal playback - start immediately
+        // Normal playback - start immediately (use requestAnimationFrame to avoid blocking)
         if (autoplay || force) {
             this.toggleNotes(true);
-            audio.play().catch(() => {
-                this.pendingAudioIndex = index;
-                this.toggleNotes(false);
-                this.autoplayUnlocked = false;
-                document.addEventListener('pointerdown', this.handleFirstGesture, { once: true });
+            requestAnimationFrame(() => {
+                audio.play().catch(() => {
+                    this.pendingAudioIndex = index;
+                    this.toggleNotes(false);
+                    this.autoplayUnlocked = false;
+                    document.addEventListener('pointerdown', this.handleFirstGesture, { once: true });
+                });
             });
         } else {
             this.toggleNotes(false);
@@ -1030,6 +1063,11 @@ export class RecordPlayerViz {
     update() { }
 
     destroy() {
+        // Clear debounce timer
+        if (this.hoverDebounceTimer) {
+            clearTimeout(this.hoverDebounceTimer);
+            this.hoverDebounceTimer = null;
+        }
         this.stopSong(true);
         this.stopAllRingRotation();
         window.removeEventListener('resize', this.handleResizeBound);
