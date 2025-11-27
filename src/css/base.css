@@ -9559,7 +9559,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 /* Main quiz container */
 .quiz-container {
   position: relative;
-  z-index: 1;
+  z-index: 10;
   width: 100%;
   max-width: 1200px;
   padding: var(--space-4) var(--space-6);
@@ -9571,6 +9571,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   flex: 1;
   min-height: 100%;
   justify-content: flex-start;
+  background: linear-gradient(180deg, transparent 90%, #0f0f1a 100%);
 }
 
 /* Scene label badge */
@@ -10685,25 +10686,10 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   overflow: hidden !important;
 }
 
-/* Quiz title panel - smaller and compact */
+/* Quiz title panel - original styling */
 .quiz-question-panel {
-  margin-bottom: var(--space-1) !important;
+  margin-bottom: var(--space-3) !important;
   flex-shrink: 0 !important;
-  max-width: none !important;
-  width: auto !important;
-  padding: var(--space-2) var(--space-4) !important;
-}
-
-.quiz-question-panel .quiz-main-title,
-.quiz-question-panel h2 {
-  font-size: 1.25rem !important;
-  margin-bottom: var(--space-1) !important;
-}
-
-.quiz-question-panel .quiz-intro,
-.quiz-question-panel p {
-  font-size: 0.85rem !important;
-  margin-bottom: 0 !important;
 }
 
 #viz-conveyor,
@@ -10752,42 +10738,14 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   flex-shrink: 0 !important;
 }
 
-/* Interaction panel - order 3 (ABOVE boxes), VERY close to quiz-question panel */
+/* Interaction panel - border aligns with conveyor-score border */
 .interaction-panel {
-  position: relative !important;
+  position: absolute !important;
   z-index: 150 !important;
-  width: auto !important;
-  max-width: 700px !important;
-  order: 3 !important;
+  top: var(--space-1) !important; /* Same top as conveyor-score */
+  left: 50% !important;
+  transform: translateX(-50%) !important; /* Center horizontally */
   flex-shrink: 0 !important;
-  margin-top: -80px !important; /* Pull WAY up, very close to quiz panel */
-  margin-bottom: var(--space-3) !important;
-  padding: var(--space-3) var(--space-5) !important;
-  align-self: center !important;
-}
-
-/* Slightly compact interaction panel content */
-.interaction-panel .current-ingredient {
-  margin-bottom: var(--space-2) !important;
-}
-
-.interaction-panel .ingredient-title {
-  font-size: 1.4rem !important;
-  margin-bottom: var(--space-1) !important;
-}
-
-.interaction-panel .ingredient-hint {
-  font-size: 1rem !important;
-}
-
-.interaction-panel .options-grid {
-  gap: 0.6rem !important;
-  margin-top: var(--space-2) !important;
-}
-
-.interaction-panel .option-btn {
-  padding: 0.65rem 1rem !important;
-  font-size: 0.95rem !important;
 }
 
 /* Belt wrapper - order 10 (BOTTOM), boxes sit above belt track */
@@ -10865,28 +10823,45 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   line-height: 1.6 !important;
 }
 
-/* Scene 3 alien - move to BOTTOM LEFT */
+/* Scene 3 alien - bottom left */
 .alien-narrator--scene3.alien-narrator--scene {
   right: auto !important;
   left: 3% !important;
   bottom: 5% !important;
 }
 
-/* Speech bubble to the RIGHT of alien (since alien is on left now) */
+/* Speech bubble ABOVE alien, shifted right to stay in view */
 .alien-narrator--scene3 .alien-speech-bubble {
+  position: absolute !important;
+  bottom: 100% !important; /* Above the alien */
+  left: 0 !important; /* Align to left edge of alien, not centered */
   right: auto !important;
-  left: 100% !important;
+  transform: none !important;
+  margin-bottom: 15px !important;
+  margin-left: 0 !important;
   margin-right: 0 !important;
-  margin-left: 15px !important;
-  max-width: 260px !important;
+  max-width: 220px !important; /* Narrower to fit */
+  min-width: 180px !important;
+  top: auto !important;
 }
 
-/* Speech bubble tail points LEFT */
+/* Speech bubble text - wrap nicely */
+.alien-narrator--scene3 .alien-speech-bubble .alien-speech-text {
+  font-size: 0.85rem !important;
+  line-height: 1.4 !important;
+}
+
+/* Speech bubble tail points DOWN, aligned left */
 .alien-narrator--scene3 .alien-speech-bubble::before {
+  top: auto !important;
+  bottom: -10px !important;
+  left: 20px !important; /* Offset from left edge */
   right: auto !important;
-  left: -10px !important;
-  border-left: none !important;
-  border-right: 10px solid rgba(15, 23, 42, 0.95) !important;
+  transform: rotate(180deg) !important;
+  border-left: 10px solid transparent !important;
+  border-right: 10px solid transparent !important;
+  border-top: 10px solid rgba(15, 23, 42, 0.95) !important;
+  border-bottom: none !important;
 }
 
 /* 4. SCENE 4 TIMING - Move alien/speech bubble to better position */
@@ -10972,11 +10947,218 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   /* NO transform - prevent flying */
 }
 
-/* 8. Quiz scene overall layout fix for fullPage */
+/* 8. Quiz scene overall layout fix for fullPage - fill entire viewport */
 .scene-quiz .fp-overflow {
   overflow: visible !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  background: #0f0f1a !important;
 }
 
 .scene-quiz .fp-section {
   overflow: visible !important;
+  height: 100vh !important;
+  background: #0f0f1a !important;
+}
+
+.scene-quiz .fp-tableCell {
+  height: 100vh !important;
+  min-height: 100vh !important;
+  vertical-align: top !important;
+  background: #0f0f1a !important;
+}
+
+/* Ensure quiz container fills entire viewport height */
+.scene-quiz .quiz-container {
+  min-height: 100vh !important;
+  height: 100vh !important;
+  display: flex;
+  flex-direction: column;
+  background: #0f0f1a !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GLOBAL NO-SCROLL ENFORCEMENT FOR ALL SCENES
+   All scenes must fit within viewport - no internal scrolling
+   Scrolling is ONLY for navigating between scenes (fullPage.js)
+   Exception: Wrap-up scene allows scrolling for credits/references
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Global section constraints */
+.section {
+  overflow: hidden !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  min-height: 100vh !important;
+}
+
+/* fullPage.js wrapper constraints for all sections */
+.section .fp-overflow {
+  overflow: hidden !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+}
+
+.section .fp-tableCell {
+  height: 100vh !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+  vertical-align: top !important;
+}
+
+.section .fp-section {
+  height: 100vh !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+}
+
+/* Scene 1: Hero/Landing - No scroll */
+.scene-hero {
+  overflow: hidden !important;
+}
+
+.scene-hero .hero-content {
+  max-height: calc(100vh - 80px) !important;
+  overflow: hidden !important;
+}
+
+/* Scene 2: Music Galaxy - No scroll */
+#scene-music-galaxy {
+  overflow: hidden !important;
+}
+
+#scene-music-galaxy .fp-overflow,
+#scene-music-galaxy .fp-tableCell {
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
+/* Scene 3: Viral Sounds (Record Player) - No scroll */
+.scene-viral-sounds {
+  overflow: hidden !important;
+}
+
+.scene-viral-sounds .fp-overflow,
+.scene-viral-sounds .fp-tableCell {
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
+/* Scene 4: Duration/Timing (Stopwatch) - No scroll */
+.scene-timing {
+  overflow: hidden !important;
+}
+
+.scene-timing .fp-overflow,
+.scene-timing .fp-tableCell {
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
+.scene-timing .section-container {
+  max-height: calc(100vh - 80px) !important;
+  overflow: hidden !important;
+}
+
+/* Scene 5: Category (Ranking Pyramid) - No scroll */
+.scene-pyramid {
+  overflow: hidden !important;
+}
+
+.scene-pyramid .fp-overflow,
+.scene-pyramid .fp-tableCell {
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
+.scene-pyramid .section-container {
+  max-height: calc(100vh - 80px) !important;
+  overflow: hidden !important;
+}
+
+/* Scene 6: Emotion (Bubbles) - No scroll */
+.scene-emotion {
+  overflow: hidden !important;
+}
+
+.scene-emotion .fp-overflow,
+.scene-emotion .fp-tableCell {
+  overflow: hidden !important;
+  height: 100vh !important;
+}
+
+/* Scene 7: Quiz - No scroll (already has specific overrides above) */
+.scene-quiz {
+  overflow: hidden !important;
+}
+
+/* Scene 8: Wrap-up - EXCEPTION: Allow scrolling */
+.scene-wrapup {
+  overflow: visible !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  max-height: none !important;
+}
+
+.scene-wrapup .fp-overflow {
+  overflow: visible !important;
+  overflow-y: auto !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  max-height: none !important;
+}
+
+.scene-wrapup .fp-tableCell {
+  height: auto !important;
+  min-height: 100vh !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Ensure content containers scale to fit viewport */
+.viz-container {
+  max-height: calc(100vh - 180px) !important;
+  overflow: hidden !important;
+}
+
+/* Text panels should scale within their allocated space */
+.text-column,
+.text-panel,
+.narrative-column {
+  max-height: calc(100vh - 120px) !important;
+  overflow: hidden !important;
+}
+
+/* Ensure SVG visualizations scale properly */
+.viz-container svg {
+  max-height: 100% !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-height: 700px) {
+  .section-container {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .viz-container {
+    max-height: calc(100vh - 140px) !important;
+  }
+
+  .text-column,
+  .text-panel,
+  .narrative-column {
+    max-height: calc(100vh - 100px) !important;
+    font-size: 0.9em !important;
+  }
+
+  h1, .section-question {
+    font-size: 1.5rem !important;
+  }
+
+  h2, .section-subquestion {
+    font-size: 1.1rem !important;
+  }
 }
