@@ -366,6 +366,17 @@ export class RankingViz extends EventEmitter {
     merge.append("feMergeNode").attr("in", "blur2");
     merge.append("feMergeNode").attr("in", "SourceGraphic");
 
+    // Format large numbers for display (e.g., 1.2B, 345M)
+    const formatViews = (n) => {
+      if (n >= 1e9) return (n / 1e9).toFixed(1) + 'B';
+      if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+      if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
+      return String(n);
+    };
+
+    // Calculate max views for comparison indicator
+    const maxCategoryViews = d3.max(pyramidData, d => d.views);
+
     pages.append("g")
       .attr("class", "page-bg")
       .each(function (d) {
@@ -386,13 +397,79 @@ export class RankingViz extends EventEmitter {
 
         g.append("text")
           .attr("x", rectWidth / 2)
-          .attr("y", rectHeight / 2)
+          .attr("y", rectHeight / 2 - 12)
           .attr("text-anchor", "middle")
           .attr("dominant-baseline", "middle")
           .attr("fill", "white")
           .style("font-size", "30px")
           .style("font-weight", "bold")
           .text(d.category);
+
+        // View count indicator showing relative size vs top category
+        // Add text shadow/stroke for better visibility on light backgrounds
+        g.append("text")
+          .attr("class", "category-views-shadow")
+          .attr("x", rectWidth / 2)
+          .attr("y", rectHeight / 2 + 20)
+          .attr("text-anchor", "middle")
+          .attr("dominant-baseline", "middle")
+          .attr("fill", "none")
+          .attr("stroke", "rgba(0, 0, 0, 0.8)")
+          .attr("stroke-width", 4)
+          .style("font-size", "16px")
+          .style("font-weight", "600")
+          .text(formatViews(d.views) + ' views');
+
+        const viewsText = g.append("text")
+          .attr("class", "category-views")
+          .attr("x", rectWidth / 2)
+          .attr("y", rectHeight / 2 + 20)
+          .attr("text-anchor", "middle")
+          .attr("dominant-baseline", "middle")
+          .attr("fill", "#fff")
+          .style("font-size", "16px")
+          .style("font-weight", "600")
+          .style("text-shadow", "0 2px 4px rgba(0,0,0,0.8)")
+          .text(formatViews(d.views) + ' views');
+
+        // Add comparison bar showing relative scale
+        const barWidth = 120;
+        const barHeight = 6;
+        const barY = rectHeight / 2 + 42;
+        const fillRatio = d.views / maxCategoryViews;
+
+        // Background bar
+        g.append("rect")
+          .attr("class", "comparison-bar-bg")
+          .attr("x", (rectWidth - barWidth) / 2)
+          .attr("y", barY)
+          .attr("width", barWidth)
+          .attr("height", barHeight)
+          .attr("rx", barHeight / 2)
+          .attr("fill", "rgba(255, 255, 255, 0.2)");
+
+        // Filled portion (shows relative scale)
+        g.append("rect")
+          .attr("class", "comparison-bar-fill")
+          .attr("x", (rectWidth - barWidth) / 2)
+          .attr("y", barY)
+          .attr("width", barWidth * fillRatio)
+          .attr("height", barHeight)
+          .attr("rx", barHeight / 2)
+          .attr("fill", d.rank === 1 ? "#00F2EA" : "rgba(255, 255, 255, 0.7)");
+
+        // Percentage label for non-top categories
+        if (d.rank > 1) {
+          const pct = Math.round((d.views / maxCategoryViews) * 100);
+          g.append("text")
+            .attr("class", "comparison-pct")
+            .attr("x", rectWidth / 2)
+            .attr("y", barY + barHeight + 14)
+            .attr("text-anchor", "middle")
+            .attr("fill", "rgba(255, 255, 255, 0.7)")
+            .style("font-size", "11px")
+            .text(`${pct}% of top`);
+        }
       });
 
     const paperGrad = defs.append('linearGradient')

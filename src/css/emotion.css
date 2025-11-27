@@ -69,8 +69,8 @@
 
 /* The pill / chip that visually represents the filter */
 .emotion-legend-chip {
-  --checkbox-border: rgba(148, 163, 184, 0.9);
-  --checkbox-bg: rgba(15, 23, 42, 0.02);
+  --checkbox-border: rgba(186, 246, 240, 0.5);
+  --checkbox-bg: rgba(15, 23, 42, 0.6);
 
   display: inline-flex;
   align-items: center;
@@ -85,7 +85,7 @@
   /* larger text for legend chips */
   font-size: 0.95rem; /* was 0.8rem */
   line-height: 1;
-  color: #0f172a;
+  color: #f0f8ff; /* Light color for dark theme */
   transition: background-color 150ms ease-out, border-color 150ms ease-out,
     box-shadow 150ms ease-out, transform 120ms ease-out;
 }
@@ -113,18 +113,18 @@
 
 /* Hover state for the chip */
 .emotion-legend-label-wrapper:hover .emotion-legend-chip {
-  background: rgba(15, 23, 42, 0.04);
-  border-color: rgba(148, 163, 184, 1);
+  background: rgba(45, 204, 211, 0.15);
+  border-color: rgba(186, 246, 240, 0.8);
   transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Checked state – driven by the hidden checkbox */
 .emotion-legend-checkbox:checked + .emotion-legend-chip {
   --checkbox-border: var(--emotion-color, #6366f1);
-  --checkbox-bg: rgba(15, 23, 42, 0.06);
+  --checkbox-bg: rgba(15, 23, 42, 0.8);
 
-  box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.1);
+  box-shadow: 0 0 0 2px var(--emotion-color, #6366f1);
 }
 
 /* Fill the checkmark box with the emotion color when checked */

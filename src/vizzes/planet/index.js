@@ -114,6 +114,11 @@ export class PlanetViz extends EventEmitter {
     this.setupYearButtons();
     this.mounted = true;
     this.emit(VIZ_EVENTS.ENTER_COMPLETE);
+
+    // Notify splash screen that planet viz is ready
+    if (window.markPlanetVizReady) {
+      window.markPlanetVizReady();
+    }
   }
 
   unmount() {
@@ -604,14 +609,72 @@ export class PlanetViz extends EventEmitter {
   }
 
   /**
+   * Highlight planets in the high-energy / medium-danceability "sweet spot"
+   * Only highlights the planets themselves with glowing effect, no band overlay
+   */
+  highlightEnergyBand() {
+    // Define the "sweet spot" criteria:
+    // High energy (0.5 to 0.8) + medium danceability (0.4 to 0.7)
+    const minEnergy = 0.5;
+    const maxEnergy = 0.8;
+    const minDance = 0.4;
+    const maxDance = 0.7;
+
+    // Remove any existing band highlight (from previous impl)
+    this.svg.selectAll('.energy-band-highlight').remove();
+
+    // Get current year's data
+    const data = this.data[this.currentYear] || [];
+
+    // Helper to check if planet is in sweet spot
+    const isInSweetSpot = (planetName) => {
+      const planetData = data.find(p => p.name === planetName);
+      if (!planetData) return false;
+      const energy = planetData.avgEnergy || 0;
+      const dance = planetData.avgDanceability || 0;
+      return (energy >= minEnergy && energy <= maxEnergy) &&
+             (dance >= minDance && dance <= maxDance);
+    };
+
+    // Highlight planets in the sweet spot with glowing effect, dim others
+    this.svg.selectAll('.planet')
+      .transition()
+      .duration(600)
+      .attr('opacity', d => isInSweetSpot(d.name) ? 1 : 0.15)
+      .attr('stroke-width', d => isInSweetSpot(d.name) ? 5 : 2)
+      .attr('stroke', d => isInSweetSpot(d.name) ? '#00F2EA' : '#fff')
+      .style('filter', d => isInSweetSpot(d.name) ?
+        'drop-shadow(0 0 12px rgba(0, 242, 234, 0.8)) drop-shadow(0 0 20px rgba(255, 92, 231, 0.5))' :
+        'none');
+
+    // Keep orbits normal - don't highlight bands
+    this.svg.selectAll('.planet-orbit')
+      .transition()
+      .duration(600)
+      .attr('opacity', 0.15)
+      .attr('stroke', 'var(--color-border-primary)');
+  }
+
+  /**
    * Reset all planet highlights to normal state
    */
   resetHighlights() {
+    // Remove energy band highlight if present
+    this.svg.selectAll('.energy-band-highlight').remove();
+
     this.svg.selectAll('.planet')
       .transition()
       .duration(400)
       .attr('opacity', 1)
       .attr('stroke-width', 2)
-      .attr('stroke', '#fff');
+      .attr('stroke', '#fff')
+      .style('filter', 'none'); // Clear any glow effects
+
+    // Reset orbits
+    this.svg.selectAll('.planet-orbit')
+      .transition()
+      .duration(400)
+      .attr('opacity', 0.3)
+      .attr('stroke', 'var(--color-border-primary)');
   }
 }

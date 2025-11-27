@@ -1333,6 +1333,9 @@ export class EmotionViz extends EventEmitter {
           if (viz.state.sortedView) {
             viz.applySortedLayout();
           }
+
+          // Show insight callout after user interacts with legend
+          viz.showInsightCallout();
         });
       }
     });
@@ -1437,7 +1440,20 @@ export class EmotionViz extends EventEmitter {
       .on("click", (_event, d) => {
         // Open detail drawer on click (Stage 5 requirement)
         this.openDetailDrawer(d);
+
+        // Show insight callout after first interaction
+        this.showInsightCallout();
       });
+  }
+
+  /**
+   * Show the insight callout after user interacts with the visualization
+   */
+  showInsightCallout() {
+    const callout = document.querySelector('.emotion-insight-callout');
+    if (callout && callout.dataset.insightState !== 'visible') {
+      callout.dataset.insightState = 'visible';
+    }
   }
 
   showBubbleDetail(data) {

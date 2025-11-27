@@ -23,7 +23,7 @@ const SCENE_MAP = {
   '#scene-trend-pyramid': 'forest',
   '#scene-captions-emotion': 'air',
   '#scene-quiz': 'lab',
-  '#scene-wrap-up': 'cosmos',
+  '#scene-wrap-up': 'wrapup',
   // Legacy IDs (for backwards compatibility during transition)
   '#scene-landing': 'cosmos',
   '#scene-sound-universe': 'galaxy',
@@ -31,7 +31,7 @@ const SCENE_MAP = {
   '#scene-duration': 'dawn',
   '#scene-category': 'forest',
   '#scene-emotion': 'air',
-  '#scene-summary': 'cosmos'
+  '#scene-summary': 'wrapup'  // Scene 8 gets unique value for alien activation
 };
 
 // Node positions for alien marker on map canvas
@@ -70,8 +70,11 @@ function debounce(fn, ms = 150) {
 /**
  * TASK 0 - Dev-only SceneChip
  * Shows current scene at bottom-left for QA
+ * DISABLED: User requested removal of scene chip display
  */
 function createSceneChip() {
+  // Always return - scene chip disabled by request
+  return;
   const isProd = document.documentElement.dataset.env === 'prod';
   if (isProd) return;
 
@@ -270,9 +273,11 @@ class TikTokTidesApp {
             }
           }
 
-          // Update journey map highlighting
-          this.updateJourneyMapHighlight(mostVisible.target.id);
+          // Update journey map highlighting (inside scene change block for scene-specific updates)
         }
+        // ALWAYS update journey map highlighting when any section is visible
+        // (moved outside scene change condition to fix tracking issue)
+        this.updateJourneyMapHighlight(mostVisible.target.id);
       }
     }, { root: null, rootMargin: '0px', threshold: 0.5 });
 
@@ -368,52 +373,52 @@ class TikTokTidesApp {
       }, 500);
     }
 
-    // RecordPlayer: Wire up track chips to activate rings
-    if (key === 'recordPlayer') {
-      this.setupTrackChipInteractions(viz);
+    // Stopwatch: Timing filter buttons
+    if (key === 'stopwatch') {
+      this.setupTimingFilters(viz);
     }
   }
 
   /**
-   * Wire up track chips (bottom legend) to interact with record player viz
+   * Setup timing icon filter buttons for stopwatch viz
    */
-  setupTrackChipInteractions(recordPlayerViz) {
-    const trackChips = document.querySelectorAll('.track-chip[data-track-index]');
+  setupTimingFilters(viz) {
+    const filterButtons = document.querySelectorAll('[data-timing-filter]');
+    let activeFilter = null;
 
-    trackChips.forEach(chip => {
-      const index = parseInt(chip.dataset.trackIndex, 10);
-      if (isNaN(index)) return;
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.dataset.timingFilter;
 
-      // Hover: activate ring temporarily
-      chip.addEventListener('mouseenter', () => {
-        recordPlayerViz.activateRing(index, { locked: false, source: 'hover' });
-        chip.classList.add('active');
-      });
-
-      // Leave: deactivate if not locked
-      chip.addEventListener('mouseleave', () => {
-        const ringNode = recordPlayerViz.getRingNode?.(index);
-        if (ringNode && recordPlayerViz.lockedIndex !== index) {
-          recordPlayerViz.stopRingRotation?.(index);
-          ringNode.classList.remove('is-hovered', 'is-active');
+        // Toggle off if clicking same filter
+        if (activeFilter === filter) {
+          activeFilter = null;
+          // Reset all highlights
+          viz.resetHighlights?.();
+          filterButtons.forEach(b => b.classList.remove('timing-icon-item--active'));
+          return;
         }
-        if (recordPlayerViz.lockedIndex !== index) {
-          recordPlayerViz.stopSong?.(true);
-        }
-        chip.classList.remove('active');
-      });
 
-      // Click: lock the ring
-      chip.addEventListener('click', () => {
-        recordPlayerViz.handleFirstGesture?.();
-        recordPlayerViz.activateRing(index, { locked: true, source: 'click' });
-        // Update active state on all chips
-        trackChips.forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
+        activeFilter = filter;
+
+        // Update active state
+        filterButtons.forEach(b => b.classList.remove('timing-icon-item--active'));
+        btn.classList.add('timing-icon-item--active');
+
+        // Call appropriate highlight function
+        switch (filter) {
+          case 'short':
+            viz.highlightShortClips?.();
+            break;
+          case 'mid':
+            viz.highlightMidClips?.();
+            break;
+          case 'long':
+            viz.highlightLongClips?.();
+            break;
+        }
       });
     });
-
-    console.log(`[Main] Wired ${trackChips.length} track chips to record player`);
   }
 
   setupScrollObserver() {
@@ -482,6 +487,19 @@ class TikTokTidesApp {
       sw?.update(1);
       setTimeout(() => sw?.update(2), 1600);
       this._stopwatchResize?.();
+
+      // v3 spec: Show callout annotation after highlight sequence
+      const callout = document.querySelector('[data-timing-callout]');
+      if (callout) {
+        // Show callout 2 seconds after entering (after highlight animation)
+        setTimeout(() => {
+          callout.setAttribute('aria-hidden', 'false');
+        }, 2200);
+        // Auto-hide after 4 more seconds
+        setTimeout(() => {
+          callout.setAttribute('aria-hidden', 'true');
+        }, 6200);
+      }
     }
 
     // Special-case: Record player auto-sequence for Scene 3
@@ -628,10 +646,23 @@ class TikTokTidesApp {
           this.updateAlienMarkerPosition(targetId);
           this.updateJourneyMapHighlight(targetId);
           journeyOverlay?.setAttribute('aria-hidden', 'true');
-          target.scrollIntoView({
-            behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
-            block: 'start'
-          });
+
+          // Use fullPage API if available
+          if (window.fullpage_api) {
+            const sections = document.querySelectorAll('.section');
+            let sectionIndex = 1;
+            sections.forEach((section, idx) => {
+              if (section.id === targetId) {
+                sectionIndex = idx + 1;
+              }
+            });
+            window.fullpage_api.moveTo(sectionIndex);
+          } else {
+            target.scrollIntoView({
+              behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
+              block: 'start'
+            });
+          }
         }
       });
     });
@@ -646,10 +677,23 @@ class TikTokTidesApp {
           this.updateAlienMarkerPosition(targetId);
           this.updateJourneyMapHighlight(targetId);
           journeyOverlay?.setAttribute('aria-hidden', 'true');
-          target.scrollIntoView({
-            behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
-            block: 'start'
-          });
+
+          // Use fullPage API if available
+          if (window.fullpage_api) {
+            const sections = document.querySelectorAll('.section');
+            let sectionIndex = 1;
+            sections.forEach((section, idx) => {
+              if (section.id === targetId) {
+                sectionIndex = idx + 1;
+              }
+            });
+            window.fullpage_api.moveTo(sectionIndex);
+          } else {
+            target.scrollIntoView({
+              behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
+              block: 'start'
+            });
+          }
         }
       });
     });
@@ -691,10 +735,24 @@ class TikTokTidesApp {
           // Immediately update alien marker position and nav highlight
           this.updateAlienMarkerPosition(targetId);
           this.updateJourneyMapHighlight(targetId);
-          target.scrollIntoView({
-            behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
-            block: 'start'
-          });
+
+          // Use fullPage API if available for proper navigation
+          if (window.fullpage_api) {
+            const sections = document.querySelectorAll('.section');
+            let sectionIndex = 1;
+            sections.forEach((section, idx) => {
+              if (section.id === targetId) {
+                sectionIndex = idx + 1;
+              }
+            });
+            console.log('[Mini-strip] Navigating to section', sectionIndex, targetId);
+            window.fullpage_api.moveTo(sectionIndex);
+          } else {
+            target.scrollIntoView({
+              behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
+              block: 'start'
+            });
+          }
         }
       });
     });
@@ -1262,7 +1320,7 @@ class TikTokTidesApp {
       if (!planetViz.mounted || !planetViz.svg) return;
 
       console.log('[Music Galaxy] Slide', index + 1, 'active');
-      this.announce(`Music Galaxy: Slide ${index + 1} of 3`);
+      this.announce(`Music Galaxy: Slide ${index + 1} of 4`);
 
       // Switch text content in the text overlay based on slide index
       const textOverlay = document.querySelector('.music-galaxy-text-overlay');
@@ -1383,7 +1441,37 @@ class TikTokTidesApp {
           }
           break;
 
-        case 2: // Slide 3: Show repeated artists (sustained influence), annotation, move alien
+        case 2: // Slide 3: Sweet spot - highlight medium-energy band
+          // Reset previous highlights
+          planetViz.resetHighlights?.();
+
+          // IMMEDIATELY hide ALL speech bubbles for this step
+          setSpeechState(primarySpeech, 'hidden', 'Primary');
+          setSpeechState(secondarySpeech, 'hidden', 'Secondary');
+
+          // Highlight medium-energy band (the "sweet spot")
+          setTimeout(() => {
+            planetViz.highlightEnergyBand?.();
+            console.log('[Music Galaxy] Step 3: Highlighting medium-energy band');
+          }, 300);
+
+          // Hide annotation
+          if (annotation) {
+            annotation.setAttribute('aria-hidden', 'true');
+            annotation.style.left = '';
+            annotation.style.top = '';
+          }
+
+          // Reset alien position
+          if (alienNarrator) {
+            alienNarrator.classList.remove('alien-pointing', 'alien-top-left');
+            alienNarrator.style.left = '';
+            alienNarrator.style.bottom = '';
+            alienNarrator.style.visibility = 'visible';
+          }
+          break;
+
+        case 3: // Slide 4: Sustained influence - repeated artists across years
           // IMMEDIATELY hide ALL speech bubbles (alien just floats silently)
           setSpeechState(primarySpeech, 'hidden', 'Primary');
           setSpeechState(secondarySpeech, 'hidden', 'Secondary');
@@ -1392,7 +1480,7 @@ class TikTokTidesApp {
           // This gives visualization support for the "sustained influence" narrative
           setTimeout(() => {
             planetViz.highlightRepeatedArtists?.();
-            console.log('[Music Galaxy] Step 3: Highlighting repeated viral artists');
+            console.log('[Music Galaxy] Step 4: Highlighting repeated viral artists');
           }, 300);
 
           // Reposition alien to top-left for this slide and ensure visible
@@ -1492,3 +1580,61 @@ document.addEventListener('DOMContentLoaded', () => {
   window.app = new TikTokTidesApp();
   window.app.setupPlayerIntro();
 });
+
+/**
+ * Hide splash screen once app is ready
+ * Called when planet viz is mounted AND fullPage is initialized
+ */
+function hideSplashScreen() {
+  const splash = document.getElementById('tiktok-splash');
+  if (splash && !splash.classList.contains('hidden')) {
+    // Complete the loading bar animation
+    const loaderFill = splash.querySelector('.splash-loader-fill');
+    if (loaderFill) {
+      loaderFill.style.width = '100%';
+    }
+    const loaderText = splash.querySelector('.splash-loader-text');
+    if (loaderText) {
+      loaderText.textContent = 'Ready!';
+    }
+
+    // Short delay for visual feedback, then hide
+    setTimeout(() => {
+      splash.classList.add('hidden');
+      console.log('[Splash] Hidden - app ready');
+    }, 400);
+  }
+}
+
+// Listen for both planet viz ready AND fullPage ready
+let planetReady = false;
+let fullPageReady = false;
+
+function checkAppReady() {
+  if (planetReady && fullPageReady) {
+    hideSplashScreen();
+  }
+}
+
+// Expose for fullPage callback
+window.markFullPageReady = function() {
+  fullPageReady = true;
+  console.log('[Splash] fullPage.js ready');
+  checkAppReady();
+};
+
+// Expose for planet viz callback
+window.markPlanetVizReady = function() {
+  planetReady = true;
+  console.log('[Splash] Planet viz ready');
+  checkAppReady();
+};
+
+// Fallback: hide splash after max timeout (in case something fails)
+setTimeout(() => {
+  const splash = document.getElementById('tiktok-splash');
+  if (splash && !splash.classList.contains('hidden')) {
+    console.log('[Splash] Fallback timeout - hiding anyway');
+    hideSplashScreen();
+  }
+}, 5000); // 5 second max wait

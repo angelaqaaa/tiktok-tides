@@ -187,20 +187,23 @@ export class RankingBubbleChart {
 
 
     // Lab 6-style tooltip
+    // CRITICAL: Do NOT set inline opacity/visibility styles - let CSS .is-visible class handle it
+    // Remove any existing tooltips first to avoid duplicates
+    d3.selectAll('.ranking-bubble-tooltip').remove();
+
     this.tooltip = d3
       .select('body')
       .append('div')
       .attr('class', 'tooltip ranking-bubble-tooltip')
       .attr('id', 'rankingBubbleTooltip')
-      .style('position', 'absolute')     // important for placement
-        .style('pointer-events', 'none')   // ignore mouse events
-      .style('z-index', '9999')          // sit on top of SVG & overlays
-      .style('opacity', 0)
-      .style('width', '300px')          // fixed width
-      .style('max-width', '350px')      // (optional) enforce max
-      .style('white-space', 'normal')   // allow wrapping
-      .style('word-wrap', 'break-word') // break long tokens if needed
-      .style('overflow', 'hidden');     // don't grow forever vertically (optional)
+      // Only set layout styles, NOT visibility-related styles
+      .style('width', '300px')
+      .style('max-width', '350px')
+      .style('white-space', 'normal')
+      .style('word-wrap', 'break-word')
+      .style('overflow', 'hidden');
+
+    console.log('[RankingBubbleChart] Tooltip created and appended to body');
   }
 
   // ---------- DATA LOADING & EXTERNAL HOOKS ----------
@@ -327,11 +330,16 @@ export class RankingBubbleChart {
       }))
       .filter((d) => d.totalViews > 0);
 
-    // Rank by total views and keep top 10
-    // stats.sort((a, b) =>
-    //   d3.descending(a.totalViews, b.totalViews)
-    // );
-    stats = stats.slice(0,25);
+    // Sort by total views descending and keep top 25
+    stats.sort((a, b) => d3.descending(a.totalViews, b.totalViews));
+
+    // Mark top 3 creators for highlighting
+    stats.forEach((d, i) => {
+      d.isTop3 = i < 3;
+      d.rankInCategory = i + 1;
+    });
+
+    stats = stats.slice(0, 25);
 
     // Proportional circle sizes (area ~ views)
     const maxViews =
@@ -418,7 +426,40 @@ export class RankingBubbleChart {
       .attr('class', 'author-circle')
       .attr('r', 0)
       .attr('fill', this.categoryColor)
-      .attr('fill-opacity', 1);
+      .attr('fill-opacity', 1)
+      // Top 3 get a glowing TikTok-style ring
+      .attr('stroke', d => d.isTop3 ? 'url(#bubbleHoverStroke)' : 'none')
+      .attr('stroke-width', d => d.isTop3 ? 4 : 0);
+
+    // Add rank badge for top 3 creators
+    nodesEnter
+      .filter(d => d.isTop3)
+      .append('circle')
+      .attr('class', 'rank-badge')
+      .attr('cx', d => d.r * 0.7)
+      .attr('cy', d => -d.r * 0.7)
+      .attr('r', 14)
+      .attr('fill', d => {
+        if (d.rankInCategory === 1) return '#FFD700'; // Gold
+        if (d.rankInCategory === 2) return '#C0C0C0'; // Silver
+        return '#CD7F32'; // Bronze
+      })
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 2);
+
+    nodesEnter
+      .filter(d => d.isTop3)
+      .append('text')
+      .attr('class', 'rank-badge-text')
+      .attr('x', d => d.r * 0.7)
+      .attr('y', d => -d.r * 0.7)
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'central')
+      .style('font-size', '12px')
+      .style('font-weight', '700')
+      .style('fill', '#000')
+      .style('pointer-events', 'none')
+      .text(d => d.rankInCategory);
 
     nodesEnter
       .append('text')
@@ -497,6 +538,7 @@ export class RankingBubbleChart {
     // TOOLTIP (hover only; clicks handled by RankingViz)
     nodesMerged
       .on('mouseover', (event, d) => {
+        console.log('[BubbleChart] mouseover:', d.author);
         const node = d3.select(event.currentTarget);
 
         // Highlight circle with TikTok aqua
@@ -504,22 +546,36 @@ export class RankingBubbleChart {
             .attr('stroke', 'url(#bubbleHoverStroke)')
             .attr('stroke-width', 5);
 
-        this.tooltip
-          .style('opacity', 1)
-          .html(this.getTooltipHtml(d));
+        // Show tooltip using class for CSS override
+        if (this.tooltip) {
+          this.tooltip
+            .html(this.getTooltipHtml(d))
+            .classed('is-visible', true);
+
+          // Position immediately on mouseover
+          this.moveTooltip(event);
+          console.log('[BubbleChart] Tooltip shown, classes:', this.tooltip.node().className);
+        } else {
+          console.error('[BubbleChart] Tooltip not found!');
+        }
       })
       .on('mousemove', (event) => {
         this.moveTooltip(event);
       })
-      .on('mouseleave', () => {
+      .on('mouseleave', (event, d) => {
+        console.log('[BubbleChart] mouseleave:', d.author);
         const node = d3.select(event.currentTarget);
 
-        // Remove highlight, restore original (no stroke)
+        // Remove highlight, restore original (top 3 keep their gradient stroke)
         node.select('.author-circle')
-          .attr('stroke', null)
-          .attr('stroke-width', null);
-        this.tooltip
-          .style('opacity', 0);
+          .attr('stroke', d.isTop3 ? 'url(#bubbleHoverStroke)' : null)
+          .attr('stroke-width', d.isTop3 ? 4 : null);
+
+        // Hide tooltip using class
+        if (this.tooltip) {
+          this.tooltip.classed('is-visible', false);
+          console.log('[BubbleChart] Tooltip hidden, classes:', this.tooltip.node().className);
+        }
       });
   }
 

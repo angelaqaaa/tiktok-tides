@@ -175,3 +175,32 @@
     z-index: 1500;
     pointer-events: none;
 }
+
+/* Ranking Bubble Chart Tooltip - Override base .tooltip styles from stopwatch.css */
+/* CRITICAL: Use !important to ensure these override ALL other styles */
+.tooltip.ranking-bubble-tooltip {
+    /* Reset ALL inherited styles from .tooltip */
+    position: absolute !important;
+    pointer-events: none !important;
+    z-index: 99999 !important; /* Higher than fullPage.js watermark (9999999 is overkill) */
+    /* Override stopwatch.css styling */
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    transform: none !important; /* CRITICAL: Remove the translate(-50%, -120%) from base .tooltip */
+    white-space: normal !important;
+    font-size: inherit !important;
+    color: inherit !important;
+    /* Start hidden */
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out !important;
+}
+
+/* Visible state - use visibility + opacity for reliable display */
+.tooltip.ranking-bubble-tooltip.is-visible {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
