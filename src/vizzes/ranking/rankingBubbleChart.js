@@ -543,6 +543,14 @@ export class RankingBubbleChart {
 
     const firstLetter =
       d.author && d.author.length ? d.author[0].toUpperCase() : '?';
+    
+    const metrics = [
+    { label: 'Views',    key: 'totalViews',    emoji: '👀' },
+    { label: 'Likes',    key: 'totalLikes',    emoji: '❤️' },
+    { label: 'Comments', key: 'totalComments', emoji: '💬' },
+    { label: 'Shares',   key: 'totalShares',   emoji: '🚀' },
+    { label: 'Saves',    key: 'totalSaves',    emoji: '🔒' }
+  ];
 
     // Build hashtag "chips"
     const hashtags =
@@ -556,7 +564,7 @@ export class RankingBubbleChart {
                   padding: 0.1rem 0.45rem;
                   border-radius: 999px;
                   background: rgba(15, 23, 42, 0.85);
-                  border: 1px solid rgba(148, 163, 184, 0.4);
+                  border: 1px solid rgba(124, 240, 255, 0.5);
                   color: rgba(226, 232, 240, 0.95);
                   white-space: nowrap;
                   margin-right: 0.25rem;
@@ -658,23 +666,26 @@ export class RankingBubbleChart {
           ">
           </div>
 
-          ${['Views', 'Likes', 'Comments', 'Shares', 'Saves']
-            .map((label) => {
-              const key = 'total' + label;
-              const value = fmt(d[key] || 0);
-              return `
-                <div style="
-                  display: flex;
-                  justify-content: space-between;
-                  font-size: 0.85rem;
-                  margin-top: 0.1rem;
-                ">
-                  <span style="color: rgba(148, 163, 184, 0.95);">${label}</span>
-                  <strong style="font-weight: 600;">${value}</strong>
-                </div>
-              `;
-            })
-            .join('')}
+          ${metrics
+          .map(({ label, key, emoji }) => {
+            const value = fmt(d[key] || 0);
+            return `
+              <div style="
+                display: flex;
+                justify-content: space-between;
+                font-size: 0.85rem;
+                margin-top: 0.1rem;
+              ">
+                <span style="color: rgba(148, 163, 184, 0.95); display: flex; align-items: center;">
+                  <span style="margin-right: 0.4rem;">${emoji}</span>
+                  ${label}
+                </span>
+                <strong style="font-weight: 600;">${value}</strong>
+              </div>
+            `;
+          })
+          .join('')}
+
         </div>
 
         <!-- Hashtags -->
@@ -723,44 +734,6 @@ export class RankingBubbleChart {
       </div>
     `;
   }
-
-  // getTooltipHtml(d) {
-  //   const fmt = d3.format(',d');
-  //   return `
-  //     <div class="tooltip-title">@${d.author}</div>
-  //     <div class="tooltip-metric"><span>Views:</span> ${fmt(
-  //       d.totalViews
-  //     )}</div>
-  //     <div class="tooltip-metric"><span>Likes:</span> ${fmt(
-  //       d.totalLikes
-  //     )}</div>
-  //     <div class="tooltip-metric"><span>Comments:</span> ${fmt(
-  //       d.totalComments
-  //     )}</div>
-  //     <div class="tooltip-metric"><span>Shares:</span> ${fmt(
-  //       d.totalShares
-  //     )}</div>
-  //     <div class="tooltip-metric"><span>Saves:</span> ${fmt(
-  //       d.totalSaves
-  //     )}</div>
-  //     ${
-  //       d.hashtags &&
-  //       d.hashtags.length
-  //         ? `<div class="tooltip-list"><span>Hashtags:</span> ${d.hashtags.join(
-  //             ', '
-  //           )}</div>`
-  //         : ''
-  //     }
-  //     ${
-  //       d.sounds &&
-  //       d.sounds.length
-  //         ? `<div class="tooltip-list"><span>Sounds:</span> ${d.sounds.join(
-  //             ', '
-  //           )}</div>`
-  //         : ''
-  //     }
-  //   `;
-  // }
 
   // ---------- LIFECYCLE HELPERS ----------
 

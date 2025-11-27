@@ -108,7 +108,7 @@
     background-position: 0 0;
   }
   to {
-    background-position: 20px 0;
+    background-position: -20px 0;
   }
 }
 
@@ -118,17 +118,13 @@
   padding: 2rem 0;
   height: 100%;
   align-items: center;
+  justify-content: center;
   position: relative; /* Ensure boxes render above the track */
   z-index: 1;
-  transition: transform 600ms cubic-bezier(0.4, 0.0, 0.2, 1);
-  will-change: transform;
   transform-style: preserve-3d;
 }
 
-.conveyor-belt.active {
-  /* Add subtle vibration when active */
-  animation: belt-vibrate 0.15s ease-in-out infinite alternate;
-}
+/* Removed .conveyor-belt.active animation to prevent overriding translateX positioning */
 
 @keyframes belt-vibrate {
   from {
@@ -141,16 +137,61 @@
 
 /* Conveyor Box */
 .conveyor-box {
-  position: relative;
+  position: absolute;
+  left: 50%;
   flex-shrink: 0;
   width: 220px;
   height: 300px;
   perspective: 2000px;
-  transition: transform 300ms ease, filter 300ms ease;
+  transition: transform 600ms cubic-bezier(0.4, 0.0, 0.2, 1), filter 300ms ease;
   transform-style: preserve-3d;
   /* Stronger tilt for more dramatic 3D effect */
-  transform: rotateX(-15deg) rotateY(-8deg) translateZ(0);
+  transform: translateX(400px) rotateX(-15deg) rotateY(-8deg) translateZ(0);
   filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.7)) brightness(0.5) saturate(0.6);
+}
+
+/* Inactive state - greyed out before quiz starts */
+.conveyor-box.inactive {
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5)) brightness(0.3) saturate(0.2) grayscale(0.8) !important;
+  opacity: 0.6;
+  animation: none !important;
+}
+
+.conveyor-box.inactive .box-front {
+  border: 3px solid rgba(100, 100, 130, 0.2) !important;
+  box-shadow: 
+    0 10px 20px rgba(0, 0, 0, 0.4),
+    0 5px 10px rgba(0, 0, 0, 0.3),
+    inset 0 2px 0 rgba(255, 255, 255, 0.05),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Waiting cards (on the right) */
+.conveyor-box.waiting {
+  transform: translateX(400px) rotateX(-15deg) rotateY(-8deg) translateZ(0);
+  filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.7)) brightness(0.5) saturate(0.6);
+}
+
+/* Active card (centered) */
+.conveyor-box.active-card {
+  transform: translateX(0) scale(1.25) translateY(-30px) translateZ(80px) rotateX(0deg) rotateY(0deg);
+  filter: drop-shadow(0 50px 100px rgba(0, 0, 0, 0.9))
+          drop-shadow(0 0 50px rgba(0, 255, 224, 0.45))
+          drop-shadow(0 15px 35px rgba(0, 255, 224, 0.3))
+          brightness(1.1) saturate(1.2);
+  z-index: 10;
+  animation: active-glow 2s ease-in-out infinite;
+}
+
+/* Completed cards (on the left) */
+.conveyor-box.completed-card {
+  transform: translateX(-400px) rotateX(-15deg) rotateY(-8deg) translateZ(0);
+  filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.7)) brightness(0.5) saturate(0.6);
+}
+
+/* Final position (all cards centered in a row) */
+.conveyor-box.final-position {
+  filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.7)) brightness(0.8) saturate(0.8);
 }
 
 .conveyor-box.active {
@@ -463,6 +504,19 @@
   filter: blur(10px);
 }
 
+.box-question-on-back {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+  line-height: 1.3;
+  text-align: center;
+  text-shadow: 
+    0 1px 2px rgba(0, 0, 0, 0.8),
+    0 2px 4px rgba(0, 0, 0, 0.6);
+  opacity: 0.9;
+}
+
 .box-answer-label {
   font-size: 0.8rem;
   font-weight: 600;
@@ -769,6 +823,32 @@
   cursor: not-allowed;
 }
 
+.option-btn.correct-answer {
+  background: rgba(0, 255, 100, 0.25);
+  border-color: rgba(0, 255, 100, 0.6);
+  color: #00ff64;
+  animation: pulse-correct 0.6s ease-in-out;
+}
+
+@keyframes pulse-correct {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.option-btn.incorrect-answer {
+  background: rgba(255, 80, 80, 0.2);
+  border-color: rgba(255, 80, 80, 0.5);
+  color: #ff8080;
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
 .attempts-remaining {
   margin: 0.25rem 0 0 0;
   color: var(--color-text-secondary);
@@ -777,7 +857,26 @@
 
 /* Feedback Area */
 .feedback-area {
-  margin-top: 1.5rem;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  width: 100%;
+}
+
+.feedback-area .reveal-btn {
+  flex: 0 0 auto;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.feedback-area .next-btn {
+  flex: 0 0 auto;
+  margin-left: auto;
+  align-self: flex-end;
 }
 
 .feedback-message {
@@ -908,6 +1007,45 @@
   box-shadow: 
     0 4px 12px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Highlighted reveal button when out of attempts */
+.btn-secondary.reveal-highlighted {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  color: var(--color-bg);
+  border: 1px solid rgba(0, 255, 224, 0.5);
+  box-shadow: 
+    0 4px 16px rgba(0, 255, 224, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  animation: pulse-reveal 2s ease-in-out infinite;
+  font-weight: 700;
+}
+
+.btn-secondary.reveal-highlighted:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 20px rgba(0, 255, 224, 0.5),
+    0 3px 6px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+@keyframes pulse-reveal {
+  0%, 100% {
+    box-shadow: 
+      0 4px 16px rgba(0, 255, 224, 0.4),
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      0 0 20px rgba(0, 255, 224, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 4px 20px rgba(0, 255, 224, 0.6),
+      0 2px 4px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      0 0 30px rgba(0, 255, 224, 0.5),
+      0 0 60px rgba(0, 255, 224, 0.3);
+  }
 }
 
 /* Completion Message */

@@ -971,6 +971,14 @@ class TikTokTidesApp {
     }
   }
 
+  setupPlayerIntro() {
+    // Start button removed - player is now always unlocked
+    const playerWrapper = document.querySelector('.record-player-wrapper');
+    if (playerWrapper) {
+      playerWrapper.removeAttribute('data-player-locked');
+    }
+  }
+
   showDetailPanel(data) {
     const panel = document.querySelector('.detail-panel');
     if (panel) {
@@ -1482,4 +1490,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize main app
   window.app = new TikTokTidesApp();
+  window.app.setupPlayerIntro();
 });
