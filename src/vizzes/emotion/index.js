@@ -1384,24 +1384,8 @@ export class EmotionViz extends EventEmitter {
 
         d.isHovered = true;
 
-        const dx = d.offsetX || 0;
-        const dy = d.offsetY || 0;
-
-        // enlarge slightly
-        if (!this.options.reducedMotion) {
-          g.raise()
-            .transition()
-            .duration(160)
-            .attr(
-              "transform",
-              `translate(${d.x + dx}, ${d.y + dy}) scale(1.08)`
-            );
-        } else {
-          g.raise().attr(
-            "transform",
-            `translate(${d.x + dx}, ${d.y + dy}) scale(1.08)`
-          );
-        }
+        // Just raise to top, NO scale transform (prevents flying)
+        g.raise();
 
         // show side detail, if present
         this.showBubbleDetail(d);
@@ -1410,29 +1394,7 @@ export class EmotionViz extends EventEmitter {
         this.updateHoverLinks(d);
       })
       .on("mouseleave", (event, d) => {
-        const g = d3.select(event.currentTarget);
-
-        const dx = d.offsetX || 0;
-        const dy = d.offsetY || 0;
-
-        // return to original size, then resume float
-        if (!this.options.reducedMotion) {
-          g.transition()
-            .duration(160)
-            .attr(
-              "transform",
-              `translate(${d.x + dx}, ${d.y + dy}) scale(1)`
-            )
-            .on("end", () => {
-              d.isHovered = false;
-            });
-        } else {
-          g.attr(
-            "transform",
-            `translate(${d.x + dx}, ${d.y + dy}) scale(1)`
-          );
-          d.isHovered = false;
-        }
+        d.isHovered = false;
 
         // remove hover connections
         this.clearHoverLinks();
