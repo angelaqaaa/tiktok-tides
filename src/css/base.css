@@ -2487,7 +2487,7 @@ circle[data-type="bubble"] {
   position: sticky;
   top: 100px;
   max-height: calc(100vh - 120px);
-  overflow-y: auto;
+  overflow: hidden; /* No scrolling within scenes */
   padding-right: var(--space-2);
 }
 
@@ -6759,25 +6759,26 @@ body:not([data-scene="cosmos"]) .alien-narrator--hero {
 
 .viral-sounds-record-area--central .record-player-wrapper {
   width: 100%;
-  max-width: min(80vw, 1000px); /* Match record-player.css sizing - thinner */
+  max-width: min(55vw, 800px); /* Smaller to leave room for text panel on right */
   /* Record takes ~70% of available viewport height */
   height: 70vh;
   min-height: 450px;
   max-height: 750px;
   aspect-ratio: 1.5;
   padding: clamp(1.5rem, 3vw, 2.5rem);
-  /* Center with equal margins */
+  /* Shift left to make room for text panel */
   margin: 0 auto;
+  margin-right: 280px; /* Leave space for text panel (~250px + gap) */
 }
 
-/* Text panel as overlay on top-right (v2 spec 5.3.2: ~30% width) */
+/* Text panel as overlay on far right (not covering record player) */
 .viral-sounds-text-panel--overlay {
   position: absolute;
   top: 50%;
-  right: var(--space-5);
+  right: 60px; /* Far right edge - leave space for fullPage navigation dots */
   transform: translateY(-50%); /* Vertically center the panel */
-  width: clamp(220px, 22vw, 300px);
-  max-width: 26%;
+  width: clamp(180px, 18vw, 250px);
+  max-width: 20%;
   padding: var(--space-3);
   background: rgba(10, 10, 20, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -7155,7 +7156,7 @@ body:not([data-scene="cosmos"]) .alien-narrator--hero {
   align-items: center;
   justify-content: flex-start;
   padding-top: calc(64px + var(--space-6));
-  overflow: hidden;
+  overflow: visible; /* Allow fullPage.js scroll events */
 }
 
 /* Background layers - Dawn theme */
@@ -9725,12 +9726,14 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .scene-wrapup {
   position: relative;
   min-height: 100vh;
+  height: auto; /* Allow content to expand */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* Start from top for scrollable content */
   padding: calc(64px + var(--space-4)) var(--space-6) var(--space-6);
-  overflow: hidden;
+  overflow: visible; /* Allow scrolling */
+  overflow-y: auto; /* Enable vertical scroll for long content */
 }
 
 /* Background - v2 dark neutral with glint/blaze gradients */
@@ -10366,12 +10369,14 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .scene-timing {
   padding-top: calc(64px + var(--space-1)) !important;
   padding-bottom: var(--space-1) !important;
-  overflow: hidden !important;
+  overflow: visible !important; /* Allow fullPage.js scroll events */
 }
 
 .timing-header {
   padding: var(--space-1) var(--space-4) !important;
   margin-bottom: var(--space-1) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
 .timing-title {
@@ -10439,16 +10444,18 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .emotion-container {
   display: grid !important;
-  grid-template-columns: 180px 1fr 200px !important;
-  gap: var(--space-4) !important;
+  grid-template-columns: 280px 1fr 180px !important; /* Text | Viz | Controls */
+  gap: var(--space-3) !important;
   width: 100% !important;
-  max-width: calc(100vw - 2 * var(--space-4)) !important;
-  margin: 0 auto !important;
-  padding: 0 !important;
+  max-width: none !important; /* Remove max-width - fill available space */
+  margin: 0 !important;
+  padding: 0 var(--space-4) !important; /* Only horizontal padding */
+  box-sizing: border-box !important;
 }
 
 .emotion-text-column {
-  min-width: 0 !important;
+  min-width: 250px !important;
+  max-width: 320px !important;
 }
 
 .emotion-viz-column {
@@ -10460,7 +10467,13 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 #viz-emotion {
   width: 100% !important;
   min-height: auto !important;
-  height: calc(100vh - 180px) !important;
+  height: calc(100vh - 140px) !important; /* Taller to fill more of viewport */
+  max-height: 700px !important; /* Higher cap for larger screens */
+}
+
+#viz-emotion svg {
+  max-width: 100% !important;
+  max-height: 100% !important;
 }
 
 .emotion-controls-column {
@@ -10878,21 +10891,23 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .scene-pyramid {
   padding-top: calc(64px + var(--space-1)) !important;
   padding-bottom: 0 !important;
-  overflow: hidden !important;
+  overflow: visible !important; /* Allow fullPage.js scroll events */
 }
 
 .pyramid-content {
   padding: var(--space-2) !important;
+  padding-top: 0 !important; /* Move content up */
   gap: var(--space-3) !important;
   max-height: calc(100vh - 70px) !important;
   width: 98% !important;
   max-width: 1800px !important;
+  margin-top: -1rem !important; /* Shift up */
 }
 
 .pyramid-text-column {
   padding: var(--space-2) var(--space-3) !important;
   max-height: calc(100vh - 90px) !important;
-  overflow-y: auto !important;
+  overflow: hidden !important; /* No scrolling - content must fit */
   flex: 1 1 35% !important;
   min-width: 300px !important;
   font-size: 1rem !important;
@@ -11003,7 +11018,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   height: 100vh !important;
   max-height: 100vh !important;
   overflow: hidden !important;
-  vertical-align: top !important;
+  vertical-align: middle !important; /* Keep content vertically centered */
 }
 
 .section .fp-section {
@@ -11012,9 +11027,34 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   overflow: hidden !important;
 }
 
-/* Scene 1: Hero/Landing - No scroll */
+/* Scene 1: Hero/Landing - No scroll, uses own flex column layout */
 .scene-hero {
   overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important; /* Hero has nav spacer at top */
+}
+
+.scene-hero .hero-content-band {
+  flex: 1 !important;
+  display: flex !important;
+  align-items: center !important; /* Center vertically */
+  justify-content: center !important;
+  padding-top: 0 !important;
+}
+
+.scene-hero .hero-container {
+  margin-top: 2rem !important; /* Shift down */
+}
+
+.scene-hero .hero-bottom-band {
+  position: absolute !important;
+  bottom: 20px !important; /* At the bottom of the scene */
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  margin: 0 !important;
+  padding-bottom: 1rem !important;
+  width: 100% !important;
 }
 
 .scene-hero .hero-content {
@@ -11022,9 +11062,13 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   overflow: hidden !important;
 }
 
-/* Scene 2: Music Galaxy - No scroll */
+/* Scene 2: Music Galaxy - No scroll, content fills viewport */
 #scene-music-galaxy {
   overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: stretch !important; /* Allow content to fill width */
 }
 
 #scene-music-galaxy .fp-overflow,
@@ -11033,25 +11077,37 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   height: 100vh !important;
 }
 
-/* Scene 3: Viral Sounds (Record Player) - No scroll */
+/* Scene 3: Viral Sounds (Record Player) - No internal scroll, centered */
 .scene-viral-sounds {
-  overflow: hidden !important;
+  overflow: visible !important; /* Allow fullPage.js scroll events to pass through */
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: stretch !important; /* Allow content to fill width */
 }
 
-.scene-viral-sounds .fp-overflow,
-.scene-viral-sounds .fp-tableCell {
-  overflow: hidden !important;
+.scene-viral-sounds .fp-overflow {
+  overflow: visible !important; /* Allow scroll events */
   height: 100vh !important;
 }
 
-/* Scene 4: Duration/Timing (Stopwatch) - No scroll */
+.scene-viral-sounds .fp-tableCell {
+  overflow: visible !important;
+  height: 100vh !important;
+}
+
+/* Scene 4: Duration/Timing (Stopwatch) - No scroll, centered */
 .scene-timing {
-  overflow: hidden !important;
+  overflow: visible !important; /* Allow fullPage.js scroll events */
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: stretch !important; /* Allow content to fill width */
 }
 
 .scene-timing .fp-overflow,
 .scene-timing .fp-tableCell {
-  overflow: hidden !important;
+  overflow: visible !important; /* Allow scroll events */
   height: 100vh !important;
 }
 
@@ -11060,59 +11116,118 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   overflow: hidden !important;
 }
 
-/* Scene 5: Category (Ranking Pyramid) - No scroll */
+/* Scene 5: Category (Ranking Pyramid) - No scroll, centered both ways */
 .scene-pyramid {
-  overflow: hidden !important;
+  overflow: visible !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important; /* Center horizontally */
 }
 
 .scene-pyramid .fp-overflow,
 .scene-pyramid .fp-tableCell {
-  overflow: hidden !important;
+  overflow: visible !important;
   height: 100vh !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
 }
 
 .scene-pyramid .section-container {
   max-height: calc(100vh - 80px) !important;
   overflow: hidden !important;
+  width: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
 }
 
-/* Scene 6: Emotion (Bubbles) - No scroll */
+.scene-pyramid .pyramid-container {
+  margin: 0 auto !important;
+}
+
+/* Scene 6: Emotion (Bubbles) - No scroll, centered vertically only */
 .scene-emotion {
-  overflow: hidden !important;
+  overflow: visible !important; /* Allow fullPage.js scroll events */
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: stretch !important; /* Allow content to fill full width */
 }
 
 .scene-emotion .fp-overflow,
 .scene-emotion .fp-tableCell {
-  overflow: hidden !important;
+  overflow: visible !important; /* Allow scroll events */
   height: 100vh !important;
 }
 
-/* Scene 7: Quiz - No scroll (already has specific overrides above) */
+/* Ensure emotion container fills full width without empty space */
+.scene-emotion .emotion-container {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 var(--space-4) !important;
+  box-sizing: border-box !important;
+}
+
+/* Scene 7: Quiz - No scroll, top-aligned (already has specific overrides above) */
 .scene-quiz {
   overflow: hidden !important;
 }
 
-/* Scene 8: Wrap-up - EXCEPTION: Allow scrolling */
+/* Scene 8: Wrap-up - EXCEPTION: Allow internal scrolling for long content */
 .scene-wrapup {
-  overflow: visible !important;
-  height: auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: 100vh !important;
   min-height: 100vh !important;
-  max-height: none !important;
+  max-height: 100vh !important;
 }
 
 .scene-wrapup .fp-overflow {
-  overflow: visible !important;
   overflow-y: auto !important;
-  height: auto !important;
+  overflow-x: hidden !important;
+  height: 100vh !important;
   min-height: 100vh !important;
-  max-height: none !important;
+  max-height: 100vh !important;
 }
 
 .scene-wrapup .fp-tableCell {
   height: auto !important;
-  min-height: 100vh !important;
+  min-height: auto !important;
   max-height: none !important;
-  overflow: visible !important;
+  overflow-y: visible !important;
+  overflow-x: hidden !important;
+}
+
+/* Custom scrollbar for wrap-up scene */
+.scene-wrapup::-webkit-scrollbar,
+.scene-wrapup .fp-overflow::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scene-wrapup::-webkit-scrollbar-track,
+.scene-wrapup .fp-overflow::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.scene-wrapup::-webkit-scrollbar-thumb,
+.scene-wrapup .fp-overflow::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.scene-wrapup::-webkit-scrollbar-thumb:hover,
+.scene-wrapup .fp-overflow::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.scene-wrapup .fp-section {
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow-y: auto !important;
 }
 
 /* Ensure content containers scale to fit viewport */
