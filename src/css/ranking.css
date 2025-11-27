@@ -1,0 +1,177 @@
+.viz-btn {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #2c2c2cff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 2000;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+.viz-btn svg {
+    width: 24px;
+    height: 24px;
+    pointer-events: none;
+}
+
+.viz-btn:hover {
+    background: #3e3e3eff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.viz-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.viz-btn--info {
+    top: 10px;
+    right: 10px;
+}
+
+.viz-btn--reset {
+    top: 10px;
+    left: 10px;
+}
+
+.viz-btn--pause {
+    top: 10px;
+    left: 70px;
+}
+
+.viz-btn--skip {
+    top: 10px;
+    left: 130px;
+}
+
+.viz-info-tooltip {
+    position: absolute;
+    top: 70px;
+    right: 10px;
+    width: 260px;
+    padding: 18px 20px;
+
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(14px) saturate(180%);
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.25),
+        0 0 20px rgba(255, 255, 255, 0.12);
+
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px) scale(0.97);
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s cubic-bezier(.18, .89, .32, 1.28);
+
+    z-index: 3000;
+}
+
+.viz-info-tooltip.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0px) scale(1);
+}
+
+.viz-info-tooltip::before {
+    content: "";
+    position: absolute;
+    top: -12px;
+    right: 10px;
+
+    width: 0;
+    height: 0;
+
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 12px solid rgba(255, 255, 255, 0.15);
+
+    backdrop-filter: blur(14px) saturate(180%);
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+
+    filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.22));
+}
+
+.viz-info-tooltip .title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: white;
+    letter-spacing: 0.3px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.viz-info-tooltip .body {
+    font-size: 14px;
+    line-height: 1.55;
+    color: #e7ecf7;
+}
+
+.viz-info-tooltip a {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 13px;
+    padding-left: 2px;
+    color: #9fc9ff;
+    text-decoration: none;
+
+    transition: color 0.25s ease, transform 0.2s ease;
+}
+
+.viz-info-tooltip a:hover {
+    color: #cfe4ff;
+    transform: translateX(2px);
+}
+
+.btn-tip {
+    color: #ddd;
+    text-align: center;
+    font-size: 13px;
+    margin-top: 4px;
+    opacity: 1;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+    position: absolute;
+    z-index: 3000;
+}
+
+.tip-reset {
+    left: 10px;
+}
+
+.tip-pause {
+    left: 70px;
+}
+
+.tip-skip {
+    left: 130px;
+}
+
+.btn-tip {
+    margin-top: 8px;
+}
+
+.btn-tip.hide {
+    opacity: 0;
+}
+
+.tooltip-line line {
+    transition: opacity 0.3s ease-in-out;
+}
+
+.tooltip-line {
+    position: absolute;
+    z-index: 1500;
+    pointer-events: none;
+}

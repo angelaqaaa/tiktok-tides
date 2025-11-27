@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,6 +21,7 @@
     <link rel="stylesheet" href="/src/css/tokens.css">
     <link rel="stylesheet" href="/src/css/base.css">
     <link rel="stylesheet" href="/src/css/stopwatch.css">
+    <link rel="stylesheet" href="/src/css/ranking.css">
   </head>
 
   <body data-scene="cosmos">
@@ -118,7 +120,10 @@
               </div>
               <div class="legend-tooltip">
                 <strong>Technical Definition:</strong><br>
-                Energy measures the perceptual intensity and activity of a track. High-energy songs typically feature loudness, speed, fast tempo, and noisy characteristics. Death metal scores high (≈1.0), while soft ballads score low (≈0.0). Based on dynamic range, perceived loudness, timbre, onset rate, and general entropy.
+                Energy measures the perceptual intensity and activity of a track. High-energy songs typically feature
+                loudness, speed, fast tempo, and noisy characteristics. Death metal scores high (≈1.0), while soft
+                ballads score low (≈0.0). Based on dynamic range, perceived loudness, timbre, onset rate, and general
+                entropy.
               </div>
             </div>
           </div>
@@ -126,11 +131,14 @@
           <!-- Color Gradient Legend -->
           <div class="color-legend color-legend-hoverable">
             <div class="color-legend-title">
-              <strong>Planet Color (Danceability):</strong> Measures how suitable a track is for dancing based on tempo, rhythm stability, beat strength, and overall regularity
+              <strong>Planet Color (Danceability):</strong> Measures how suitable a track is for dancing based on tempo,
+              rhythm stability, beat strength, and overall regularity
             </div>
             <div class="legend-tooltip">
               <strong>Technical Definition:</strong><br>
-              Danceability describes how suitable a track is for dancing based on musical elements including tempo, rhythm stability, beat strength, and overall regularity. Values range from 0.0 (least danceable) to 1.0 (most danceable). Calculated from tempo consistency, beat prominence, and rhythmic patterns.
+              Danceability describes how suitable a track is for dancing based on musical elements including tempo,
+              rhythm stability, beat strength, and overall regularity. Values range from 0.0 (least danceable) to 1.0
+              (most danceable). Calculated from tempo consistency, beat prominence, and rhythmic patterns.
             </div>
             <div class="color-gradient-container">
               <div class="color-gradient-bar"></div>
@@ -165,17 +173,20 @@
           <div class="record-player-header">
             <h2 class="record-player-title">Viral Vinyl</h2>
             <p class="record-player-description">Hear the popular sound tracks that shape TikTok. Hover over the
-              record's rings to explore each trending sound : the farther out the ring, the more popular the music track(measured by music play counts).
-              <hr><strong> Unmute the audio to hear the sound.</strong> 
-               Slide the year range slider to explore the music tracks from different years.
+              record's rings to explore each trending sound : the farther out the ring, the more popular the music
+              track(measured by music play counts).
+              <hr><strong> Unmute the audio to hear the sound.</strong>
+              Slide the year range slider to explore the music tracks from different years.
             </p>
           </div>
           <div class="record-player-layout" data-player-layout>
             <div class="record-player-wrapper">
               <!-- Mute Toggle Button - Top Left -->
               <button class="mute-toggle-button" type="button" aria-label="Toggle mute" data-mute-toggle>
-                <svg class="mute-toggle-button__icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                <svg class="mute-toggle-button__icon" viewBox="0 0 24 24" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
                 </svg>
               </button>
               <div class="record-player-base">
@@ -217,8 +228,10 @@
                     <div class="year-range-slider__glow"></div>
                     <div class="year-range-slider__track"></div>
                     <div class="year-range-slider__selection" data-year-range-selection></div>
-                    <button class="year-range-slider__handle year-range-slider__handle--start" type="button" aria-label="Select start year" data-year-handle-start></button>
-                    <button class="year-range-slider__handle year-range-slider__handle--end" type="button" aria-label="Select end year" data-year-handle-end></button>
+                    <button class="year-range-slider__handle year-range-slider__handle--start" type="button"
+                      aria-label="Select start year" data-year-handle-start></button>
+                    <button class="year-range-slider__handle year-range-slider__handle--end" type="button"
+                      aria-label="Select end year" data-year-handle-end></button>
                   </div>
                   <div class="year-range-slider__ticks" data-year-slider-ticks></div>
                 </div>
@@ -247,8 +260,10 @@
             <p class="lead">From bottom-tier to star performer: which TikTok communities climb their way to viral fame?
               ✨
               <br>
-              Start at the bottom (no shade 👀) and work your way up to see who <i>really</i> earned their spot on the
-              pyramid this week.
+              Start at the bottom (someone has to be there 😬) and work your way up to see who <i>really</i> earned
+              their spot on the
+              pyramid. Tap any card to uncover the star creators holding that spot!
+
             </p>
           </div>
           <div id="viz-ranking" class="viz-container viz-fullbleed" data-viz="ranking"></div>
@@ -256,12 +271,8 @@
       </section>
 
       <!-- Section 5: Emotion (unchanged) -->
-      <section
-        id="section-takeaway"
-        class="section scroll-section bg-neutral"
-        role="region"
-        aria-labelledby="takeaway-title"
-      >
+      <section id="section-takeaway" class="section scroll-section bg-neutral" role="region"
+        aria-labelledby="takeaway-title">
         <div class="scene-layer scene--bubbles" aria-hidden="true"></div>
         <div class="section-container layout-bubble-legend-drawer">
           <div class="section-intro">
@@ -274,11 +285,7 @@
           </div>
 
           <div class="emotion-layout">
-            <div
-              class="legend-panel"
-              role="complementary"
-              aria-label="Emotion categories"
-            >
+            <div class="legend-panel" role="complementary" aria-label="Emotion categories">
               <h3>Emotion Categories</h3>
               <ul class="emotion-legend" role="list"></ul>
               <button class="emotion-sort-toggle" aria-pressed="false">
@@ -287,18 +294,9 @@
             </div>
 
             <div class="viz-and-drawer">
-              <div
-                id="viz-emotion"
-                class="viz-container"
-                data-viz="emotion"
-              ></div>
+              <div id="viz-emotion" class="viz-container" data-viz="emotion"></div>
 
-              <div
-                class="detail-drawer"
-                aria-hidden="true"
-                role="dialog"
-                aria-labelledby="drawer-title"
-              >
+              <div class="detail-drawer" aria-hidden="true" role="dialog" aria-labelledby="drawer-title">
                 <button class="drawer-close" aria-label="Close details">×</button>
                 <h3 id="drawer-title">Emotion Details</h3>
                 <div class="drawer-content">
@@ -343,6 +341,7 @@
     <!-- Main App -->
     <script type="module" src="/src/js/main.js"></script>
 
-   
+
   </body>
+
 </html>
