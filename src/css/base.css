@@ -10654,87 +10654,194 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
    COMPREHENSIVE LAYOUT FIXES - Nov 27 (REVISED)
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* 1. QUIZ SCENE - Score at top left, interaction panel ABOVE belt */
+/* 1. QUIZ SCENE - Compact to fit on one page, no scrolling */
 .scene-quiz {
-  overflow: visible !important;
+  overflow: hidden !important;
+  padding: var(--space-1) !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
 }
 
 .quiz-container {
-  width: 90% !important;
-  max-width: 90vw !important;
-  padding: var(--space-3) !important;
+  width: 98% !important;
+  max-width: 98vw !important;
+  padding: var(--space-1) !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
+  height: calc(100vh - 80px) !important;
+  max-height: calc(100vh - 80px) !important;
+  overflow: hidden !important;
 }
 
-/* Make quiz title smaller to give interaction panel space */
+/* Make quiz title much smaller */
 .quiz-question-panel {
-  margin-bottom: var(--space-2) !important;
+  margin-bottom: 0.25rem !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
 }
 
 .quiz-question-panel h2,
 .quiz-question-panel .quiz-title,
 .quiz-question-panel .quiz-main-title {
-  font-size: 1.2rem !important;
-  margin-bottom: var(--space-1) !important;
+  font-size: 0.95rem !important;
+  margin-bottom: 0.15rem !important;
 }
 
 .quiz-question-panel .quiz-intro {
-  font-size: 0.95rem !important;
+  font-size: 0.8rem !important;
   margin-bottom: 0 !important;
 }
 
 #viz-conveyor {
   width: 100% !important;
-  max-width: 1500px !important;
+  max-width: 100% !important;
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
 }
 
 .conveyor-container {
   position: relative !important;
   width: 100% !important;
-  max-width: 1500px !important;
-  padding: var(--space-3) !important;
+  max-width: 100% !important;
+  padding: 0.5rem !important;
   display: flex !important;
   flex-direction: column !important;
+  flex: 1 !important;
+  overflow: hidden !important;
 }
 
 /* Score label at top LEFT of conveyor-container */
 .conveyor-score {
   position: absolute !important;
-  top: var(--space-2) !important;
-  left: var(--space-2) !important;
+  top: 0.25rem !important;
+  left: 0.5rem !important;
   right: auto !important;
   z-index: 200 !important;
+  font-size: 0.8rem !important;
+  padding: 0.2rem 0.5rem !important;
 }
 
-/* Interaction panel - FULL WIDTH and ABOVE cards */
+/* Conveyor header smaller */
+.conveyor-header {
+  order: 1 !important;
+  margin-bottom: 0.25rem !important;
+  flex-shrink: 0 !important;
+}
+
+.conveyor-header h3 {
+  font-size: 1rem !important;
+  margin: 0 !important;
+}
+
+/* Interaction panel - WIDE, compact, ABOVE belt and boxes */
 .interaction-panel {
   position: relative !important;
   z-index: 150 !important;
   width: 100% !important;
-  max-width: 100% !important;
-  margin-bottom: var(--space-3) !important;
-  order: 2 !important; /* After header/controls */
+  max-width: 1200px !important;
+  margin: 0 auto 0.5rem auto !important;
+  padding: 0.6rem 1.5rem !important;
+  order: 2 !important;
+  flex-shrink: 0 !important;
 }
 
-/* Conveyor controls order */
-.conveyor-header {
-  order: 1 !important;
+.interaction-panel .current-ingredient {
+  margin-bottom: 0.4rem !important;
 }
 
+.interaction-panel .ingredient-title {
+  font-size: 1rem !important;
+  margin-bottom: 0.2rem !important;
+}
+
+.interaction-panel .ingredient-hint {
+  font-size: 0.85rem !important;
+  margin-bottom: 0.2rem !important;
+}
+
+.interaction-panel .options-grid {
+  gap: 0.4rem !important;
+  margin-top: 0.4rem !important;
+}
+
+.interaction-panel .option-btn {
+  padding: 0.4rem 0.6rem !important;
+  font-size: 0.85rem !important;
+}
+
+/* Conveyor controls compact */
 .conveyor-controls {
   order: 2 !important;
   position: relative !important;
   z-index: 150 !important;
+  margin: 0.25rem 0 !important;
+  gap: 0.4rem !important;
+  flex-shrink: 0 !important;
 }
 
-/* Belt BELOW everything else */
+.conveyor-controls .btn-primary,
+.conveyor-controls .btn-secondary {
+  padding: 0.4rem 0.8rem !important;
+  font-size: 0.85rem !important;
+}
+
+/* Belt wrapper - positioned so boxes sit ON TOP of the belt track */
 .conveyor-belt-wrapper {
   position: relative !important;
   z-index: 10 !important;
-  order: 10 !important; /* Last in order */
-  margin-top: var(--space-2) !important;
+  order: 10 !important;
+  margin-top: 0 !important;
+  height: 280px !important; /* Compact height */
+  flex-shrink: 0 !important;
+}
+
+/* Move belt track (::before) to bottom of wrapper */
+.conveyor-belt-wrapper::before {
+  bottom: 40px !important; /* Belt at bottom */
+  height: 50px !important; /* Thinner belt */
+}
+
+.conveyor-belt-wrapper::after {
+  bottom: 40px !important;
+  height: 50px !important;
+}
+
+/* Smaller conveyor boxes - sitting above the belt */
+.conveyor-box {
+  width: 140px !important;
+  height: 180px !important;
+}
+
+.conveyor-box .box-face {
+  padding: 0.75rem !important;
+}
+
+.conveyor-box .box-label {
+  font-size: 0.9rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.conveyor-box .box-hint {
+  font-size: 0.7rem !important;
+}
+
+.conveyor-box .box-number {
+  font-size: 1rem !important;
+}
+
+.conveyor-box .box-icon,
+.conveyor-box .ingredient-icon {
+  font-size: 2.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* Active box slightly smaller scale */
+.conveyor-box.active,
+.conveyor-box.active-card {
+  transform: translateX(0) scale(1.15) translateY(-20px) translateZ(60px) rotateX(0deg) rotateY(0deg) !important;
 }
 
 .trend-card,
@@ -10779,9 +10886,28 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   line-height: 1.6 !important;
 }
 
-/* Scene 3 alien speech bubble - raise it higher */
+/* Scene 3 alien - move to BOTTOM LEFT */
+.alien-narrator--scene3.alien-narrator--scene {
+  right: auto !important;
+  left: 3% !important;
+  bottom: 5% !important;
+}
+
+/* Speech bubble to the RIGHT of alien (since alien is on left now) */
 .alien-narrator--scene3 .alien-speech-bubble {
-  bottom: 120px !important;
+  right: auto !important;
+  left: 100% !important;
+  margin-right: 0 !important;
+  margin-left: 15px !important;
+  max-width: 260px !important;
+}
+
+/* Speech bubble tail points LEFT */
+.alien-narrator--scene3 .alien-speech-bubble::before {
+  right: auto !important;
+  left: -10px !important;
+  border-left: none !important;
+  border-right: 10px solid rgba(15, 23, 42, 0.95) !important;
 }
 
 /* 4. SCENE 4 TIMING - Move alien/speech bubble to better position */
@@ -10794,44 +10920,56 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   max-width: 180px !important;
 }
 
-/* 5. RANKING VIZ - Make columns LARGER to fill space */
+/* 5. RANKING VIZ - Compact to fit on one page without scrolling */
 .scene-pyramid {
-  padding-top: calc(64px + var(--space-2)) !important;
-  padding-bottom: var(--space-2) !important;
+  padding-top: calc(64px + var(--space-1)) !important;
+  padding-bottom: 0 !important;
+  overflow: hidden !important;
 }
 
 .pyramid-content {
-  padding: var(--space-3) !important;
-  gap: var(--space-4) !important;
-  max-height: calc(100vh - 80px) !important;
-  width: 95% !important;
-  max-width: 1600px !important;
+  padding: var(--space-2) !important;
+  gap: var(--space-3) !important;
+  max-height: calc(100vh - 70px) !important;
+  width: 98% !important;
+  max-width: 1800px !important;
 }
 
 .pyramid-text-column {
-  padding: var(--space-3) var(--space-4) !important;
-  max-height: calc(100vh - 100px) !important;
+  padding: var(--space-2) var(--space-3) !important;
+  max-height: calc(100vh - 90px) !important;
   overflow-y: auto !important;
-  flex: 1 1 40% !important;
-  min-width: 350px !important;
-  font-size: 1.1rem !important;
+  flex: 1 1 35% !important;
+  min-width: 300px !important;
+  font-size: 1rem !important;
+}
+
+.pyramid-text-column h2 {
+  font-size: 1.3rem !important;
+  margin-bottom: var(--space-2) !important;
+}
+
+.pyramid-text-column p {
+  font-size: 0.95rem !important;
+  line-height: 1.5 !important;
+  margin-bottom: var(--space-2) !important;
 }
 
 .pyramid-viz-column {
-  max-height: calc(100vh - 100px) !important;
-  flex: 1 1 55% !important;
-  min-width: 500px !important;
+  max-height: calc(100vh - 90px) !important;
+  flex: 1 1 60% !important;
+  min-width: 450px !important;
 }
 
 .pyramid-viz-wrapper {
-  max-width: 800px !important;
+  max-width: 900px !important;
   width: 100% !important;
 }
 
 .pyramid-viz-wrapper .viz-container {
-  min-height: 400px !important;
-  height: calc(100vh - 140px) !important;
-  max-height: 700px !important;
+  min-height: 350px !important;
+  height: calc(100vh - 120px) !important;
+  max-height: 600px !important;
 }
 
 /* 6. EMOTION VIZ - No sizing changes, use natural dimensions */
