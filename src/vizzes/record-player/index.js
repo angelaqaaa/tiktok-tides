@@ -361,8 +361,8 @@ export class RecordPlayerViz {
         const ringCount = Math.max(this.data.length, 1);
         const ringStep = (OUTER_RADIUS - INNER_RADIUS) / ringCount;
         this.radiusScale = (index) => OUTER_RADIUS - (index + 0.75) * ringStep;
-        const maxAngle = 35;
-        const minAngle = 10;
+        const maxAngle = 32;
+        const minAngle = 8;
         const domainEnd = Math.max(ringCount - 1, 1);
         this.angleScale = d3.scaleLinear().domain([0, domainEnd]).range([minAngle, maxAngle]);
     }
