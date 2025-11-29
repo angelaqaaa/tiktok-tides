@@ -1149,6 +1149,7 @@
 .go-to-scene-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   padding: 0.7rem 1.4rem;
   background: linear-gradient(135deg, rgba(255, 200, 0, 0.2) 0%, rgba(255, 150, 0, 0.25) 100%);
@@ -1159,6 +1160,7 @@
   font-size: 1rem;
   cursor: pointer;
   transition: all 180ms ease;
+  margin: 0 auto; /* Center within parent */
 }
 
 .go-to-scene-btn:hover {

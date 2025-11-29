@@ -333,6 +333,10 @@ export class ConveyorViz extends EventEmitter {
     const startBtn = this.container.querySelector('.start-btn');
     startBtn.style.display = 'none';
 
+    // Hide quiz-question-panel to make room for interaction panel
+    const quizPanel = document.querySelector('.quiz-question-panel');
+    if (quizPanel) quizPanel.style.display = 'none';
+
     const panel = this.container.querySelector('.interaction-panel');
     panel.style.display = 'block';
 
@@ -717,6 +721,10 @@ export class ConveyorViz extends EventEmitter {
     // Reset all boxes (remove flipped class)
     const boxes = this.container.querySelectorAll('.conveyor-box');
     boxes.forEach(box => box.classList.remove('flipped', 'active', 'correct', 'incorrect'));
+
+    // Restore quiz-question-panel visibility
+    const quizPanel = document.querySelector('.quiz-question-panel');
+    if (quizPanel) quizPanel.style.display = '';
 
     // Re-render
     this.render();

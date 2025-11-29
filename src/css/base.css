@@ -9577,9 +9577,12 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 /* Scene label badge */
 .scene-quiz .scene-label-badge {
-  align-self: flex-start;
+  position: absolute;
+  top: 70px; /* Below nav bar */
+  left: var(--space-4);
   background: rgba(45, 220, 211, 0.15);
   border: 1px solid rgba(45, 220, 211, 0.3);
+  z-index: 100;
 }
 
 /* Question panel - glassmorphic card */
@@ -9796,10 +9799,11 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 /* Scene label */
 .scene-wrapup .scene-label-badge {
   position: absolute;
-  top: var(--space-4);
+  top: 55px; /* Below nav bar */
   left: var(--space-4);
   background: rgba(45, 220, 211, 0.15);
   border: 1px solid rgba(45, 220, 211, 0.3);
+  z-index: 100;
 }
 
 /* Recipe card header */
@@ -10681,27 +10685,34 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .scene-quiz .fp-overflow,
-.scene-quiz .fp-section,
+.scene-quiz .fp-section {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
 .scene-quiz .fp-tableCell {
   width: 100% !important;
   max-width: 100% !important;
+  padding-top: 60px !important; /* Leave space for nav bar */
+  box-sizing: border-box !important;
 }
 
 .quiz-container {
   width: 100% !important;
   max-width: none !important;
-  padding: var(--space-2) var(--space-4) !important;
+  padding: 70px var(--space-4) var(--space-2) var(--space-4) !important; /* 70px top for nav bar */
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  height: calc(100vh - 70px) !important;
-  max-height: calc(100vh - 70px) !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  box-sizing: border-box !important;
   overflow: hidden !important;
 }
 
 /* Quiz title panel - original styling */
 .quiz-question-panel {
-  margin-bottom: var(--space-3) !important;
+  margin-bottom: var(--space-1) !important; /* Reduced gap to conveyor-container */
   flex-shrink: 0 !important;
 }
 
@@ -10751,11 +10762,11 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   flex-shrink: 0 !important;
 }
 
-/* Interaction panel - border aligns with conveyor-score border */
+/* Interaction panel - at top border of conveyor-container */
 .interaction-panel {
   position: absolute !important;
   z-index: 150 !important;
-  top: var(--space-1) !important; /* Same top as conveyor-score */
+  top: 0 !important; /* At the very top of conveyor-container */
   left: 50% !important;
   transform: translateX(-50%) !important; /* Center horizontally */
   flex-shrink: 0 !important;
@@ -11018,7 +11029,9 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   height: 100vh !important;
   max-height: 100vh !important;
   overflow: hidden !important;
-  vertical-align: middle !important; /* Keep content vertically centered */
+  vertical-align: top !important; /* Align content to top */
+  padding-top: 60px !important; /* Leave space for nav bar */
+  box-sizing: border-box !important;
 }
 
 .section .fp-section {
@@ -11176,58 +11189,128 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   overflow: hidden !important;
 }
 
-/* Scene 8: Wrap-up - EXCEPTION: Allow internal scrolling for long content */
+/* Scene 8: Wrap-up - Two-column layout (Recipe Card + Team Credits side by side) */
 .scene-wrapup {
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
+  overflow: hidden !important;
   height: 100vh !important;
   min-height: 100vh !important;
   max-height: 100vh !important;
 }
 
-.scene-wrapup .fp-overflow {
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  height: 100vh !important;
-  min-height: 100vh !important;
-  max-height: 100vh !important;
-}
-
+.scene-wrapup .fp-overflow,
 .scene-wrapup .fp-tableCell {
-  height: auto !important;
-  min-height: auto !important;
-  max-height: none !important;
-  overflow-y: visible !important;
-  overflow-x: hidden !important;
+  overflow: hidden !important;
+  height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding-top: 50px !important; /* Leave space for nav bar */
+  box-sizing: border-box !important;
 }
 
-/* Custom scrollbar for wrap-up scene */
-.scene-wrapup::-webkit-scrollbar,
-.scene-wrapup .fp-overflow::-webkit-scrollbar {
-  width: 8px;
+/* Background layers */
+.scene-wrapup .wrapup-bg {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
 }
 
-.scene-wrapup::-webkit-scrollbar-track,
-.scene-wrapup .fp-overflow::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+/* Two-column container */
+.wrapup-columns {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  justify-content: center !important;
+  gap: var(--space-4) !important;
+  width: 100% !important;
+  max-width: 1400px !important;
+  height: calc(100vh - 160px) !important;
+  max-height: calc(100vh - 160px) !important;
+  padding: var(--space-2) var(--space-4) !important; /* Reduced top padding */
+  margin-top: var(--space-2) !important; /* Small gap from scene-label-badge */
+  box-sizing: border-box !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
-.scene-wrapup::-webkit-scrollbar-thumb,
-.scene-wrapup .fp-overflow::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
+/* Each column */
+.wrapup-column {
+  flex: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: 0 !important;
 }
 
-.scene-wrapup::-webkit-scrollbar-thumb:hover,
-.scene-wrapup .fp-overflow::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
+/* Recipe card column - slightly wider */
+.wrapup-column--recipe {
+  flex: 1.2 !important;
 }
 
-.scene-wrapup .fp-section {
-  height: auto !important;
-  min-height: 100vh !important;
-  overflow-y: auto !important;
+/* Team credits column */
+.wrapup-column--team {
+  flex: 0.8 !important;
+}
+
+/* Recipe card - fit within column */
+.wrapup-column .recipe-card {
+  max-height: 100% !important;
+  overflow: hidden !important;
+  width: 100% !important;
+}
+
+/* Team credits - fit within column */
+.wrapup-column .team-credits {
+  margin: 0 !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+  width: 100% !important;
+}
+
+/* Make team grid 2 columns to fit */
+.wrapup-column .credits-team {
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: var(--space-2) !important;
+}
+
+/* Smaller team member cards */
+.wrapup-column .team-member {
+  padding: var(--space-2) !important;
+}
+
+.wrapup-column .member-avatar {
+  width: 36px !important;
+  height: 36px !important;
+}
+
+.wrapup-column .member-name {
+  font-size: 0.85rem !important;
+}
+
+.wrapup-column .member-role {
+  font-size: 0.7rem !important;
+}
+
+/* Responsive: stack columns on narrow screens */
+@media (max-width: 1000px) {
+  .wrapup-columns {
+    flex-direction: column !important;
+    gap: var(--space-3) !important;
+    height: auto !important;
+    max-height: calc(100vh - 80px) !important;
+    overflow-y: auto !important;
+  }
+
+  .wrapup-column--recipe,
+  .wrapup-column--team {
+    flex: none !important;
+    width: 100% !important;
+  }
 }
 
 /* Ensure content containers scale to fit viewport */

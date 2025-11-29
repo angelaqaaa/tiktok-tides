@@ -33,22 +33,22 @@
 
 .viz-btn--info {
     top: 10px;
-    right: 10px;
+    right: 50px; /* Moved left from right edge */
 }
 
 .viz-btn--reset {
     top: 10px;
-    left: 10px;
+    left: 6px;
 }
 
 .viz-btn--pause {
     top: 10px;
-    left: 56px;
+    left: 50px;
 }
 
 .viz-btn--skip {
     top: 10px;
-    left: 102px;
+    left: 94px;
 }
 
 .viz-info-tooltip {
@@ -138,7 +138,7 @@
     color: #ddd;
     text-align: center;
     font-size: 12px;
-    top: 52px; /* Position below 36px buttons (10px top + 36px height + 6px gap) */
+    top: 48px; /* Position below buttons - moved higher */
     opacity: 1;
     transition: opacity 0.35s ease;
     pointer-events: none;
@@ -148,18 +148,18 @@
 }
 
 .tip-reset {
-    left: 10px;
-    width: 36px; /* Match button width */
+    left: 6px; /* Moved left */
+    width: 36px;
 }
 
 .tip-pause {
-    left: 56px; /* Align with pause button */
-    width: 36px; /* Match button width */
+    left: 50px; /* Moved left */
+    width: 36px;
 }
 
 .tip-skip {
-    left: 102px; /* Align with skip button */
-    width: 36px; /* Match button width */
+    left: 94px; /* Moved left */
+    width: 36px;
 }
 
 .btn-tip.hide {

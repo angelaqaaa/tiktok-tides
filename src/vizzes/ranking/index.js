@@ -203,8 +203,8 @@ export class RankingViz extends EventEmitter {
       .append("div")
       .attr("class", "btn-tip tip-reset")
       .text("Restart the animation")
-      .style("left", "35px")
-      .style("top", "100px");
+      .style("left", "24px")
+      .style("top", "80px");
 
     const line = d3.select(this.container)
       .append("svg")
@@ -212,10 +212,10 @@ export class RankingViz extends EventEmitter {
       .attr("width", "200px")
       .attr("height", "200px")
       .append("line")
-      .attr("x1", "35px")
-      .attr("y1", "70px")
-      .attr("x2", "35px")
-      .attr("y2", "100px")
+      .attr("x1", "24px")
+      .attr("y1", "46px")
+      .attr("x2", "24px")
+      .attr("y2", "80px")
       .attr("stroke", "white")
       .attr("stroke-width", 2)
       .attr("stroke-linecap", "round")
@@ -240,8 +240,8 @@ export class RankingViz extends EventEmitter {
       .append("div")
       .attr("class", "btn-tip tip-pause")
       .text("Pause or resume the sequence")
-      .style("left", "95px")
-      .style("top", "80px");
+      .style("left", "68px")
+      .style("top", "65px");
 
     const pauseLine = d3.select(this.container)
       .append("svg")
@@ -249,10 +249,10 @@ export class RankingViz extends EventEmitter {
       .attr("width", "200px")
       .attr("height", "200px")
       .append("line")
-      .attr("x1", "95px")
-      .attr("y1", "70px")
-      .attr("x2", "95px")
-      .attr("y2", "80px")
+      .attr("x1", "68px")
+      .attr("y1", "46px")
+      .attr("x2", "68px")
+      .attr("y2", "65px")
       .attr("stroke", "white")
       .attr("stroke-width", 2)
       .attr("stroke-linecap", "round")
@@ -276,8 +276,8 @@ export class RankingViz extends EventEmitter {
       .append("div")
       .attr("class", "btn-tip tip-skip")
       .text("Drop all remaining cards")
-      .style("left", "155px")
-      .style("top", "60px");
+      .style("left", "112px")
+      .style("top", "52px");
 
     const centerGroup = this.svg.append('g')
       .attr(
