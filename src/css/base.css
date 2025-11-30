@@ -251,54 +251,6 @@ h3 { font-size: var(--font-size-h3); }
   top: 0;
 }
 
-/* Navigation */
-.nav-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 64px;
-  background: var(--glass-standard-background);
-  backdrop-filter: blur(var(--glass-standard-blur));
-  border-bottom: var(--glass-standard-border);
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-}
-
-.nav-container {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 var(--space-6);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.nav-title {
-  font-size: var(--font-size-h3);
-  font-weight: var(--font-weight-bold);
-  margin: 0;
-}
-
-.nav-links {
-  display: flex;
-  list-style: none;
-  gap: var(--space-5);
-}
-
-.nav-links a {
-  color: var(--color-text-secondary);
-  text-decoration: none;
-  transition: color var(--duration-micro) var(--easing-standard);
-}
-
-.nav-links a:hover,
-.nav-links a[aria-current="true"] {
-  color: var(--color-accent-cyan);
-}
-
 /* Progress Bar */
 .progress-bar {
   position: fixed;
@@ -323,21 +275,6 @@ h3 { font-size: var(--font-size-h3); }
   z-index: 1; /* Above body::before background layer */
   display: flex;
   flex-direction: column;
-}
-
-/* Legacy section overrides - NOT used with fullPage.js */
-/* All sections are exactly 100vh with fullPage */
-
-/* NOTE: These IDs are from old code - keep for compatibility but override heights */
-#section-ignite,
-#section-fade,
-#section-takeaway,
-#section-conveyor {
-  height: 100vh !important;
-  min-height: 100vh !important;
-  max-height: 100vh !important;
-  padding: var(--space-2) 0;
-  margin: 0;
 }
 
 .section-container {
@@ -974,39 +911,6 @@ body[data-scene="air"] .scene--bubbles {
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.year-btn {
-  padding: 8px 20px;
-  background: linear-gradient(135deg, rgba(45, 204, 211, 0.15), rgba(45, 204, 211, 0.08));
-  border: 1.5px solid rgba(45, 204, 211, 0.4);
-  color: rgba(45, 204, 211, 0.9);
-  cursor: pointer;
-  transition: all 0.2s var(--easing-standard);
-  border-radius: 14px;
-  font-family: var(--font-family-sans);
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.025em;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  position: relative;
-}
-
-.year-btn:hover {
-  background: linear-gradient(135deg, rgba(45, 204, 211, 0.25), rgba(45, 204, 211, 0.15));
-  border-color: rgba(45, 204, 211, 0.6);
-  color: var(--color-accent-cyan);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(45, 204, 211, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-.year-btn.active {
-  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-magenta));
-  color: #000;
-  border-color: var(--color-accent-cyan);
-  box-shadow: 0 0 20px rgba(45, 204, 211, 0.6), 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  font-weight: 700;
-  transform: scale(1.05);
-}
-
 /* Annotation Rail */
 .annotation-rail {
   position: absolute;
@@ -1046,30 +950,6 @@ body[data-scene="air"] .scene--bubbles {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-2) var(--space-3);
-}
-
-/* Filter Button - Shared pill styling for layout/view controls (year, emotion sort) */
-.filter-button {
-  padding: 8px 20px;
-  background: linear-gradient(135deg, rgba(241, 32, 74, 0.15), rgba(241, 32, 74, 0.08));
-  border: 1.5px solid rgba(241, 32, 74, 0.4);
-  color: rgba(241, 32, 74, 0.9);
-  cursor: pointer;
-  transition: all 0.2s var(--easing-standard);
-  border-radius: 14px;
-  font-family: var(--font-family-sans);
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.025em;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-
-.filter-button:hover {
-  background: linear-gradient(135deg, rgba(241, 32, 74, 0.25), rgba(241, 32, 74, 0.15));
-  border-color: rgba(241, 32, 74, 0.65);
-  color: var(--color-accent-magenta);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(241, 32, 74, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 /* Emotion sort toggle pressed state */
@@ -1411,81 +1291,8 @@ circle[data-type="bubble"] {
   font-size: 1.3rem;
 }
 
-/* Compact horizontal danceability gradient for Planet scene */
-.color-gradient-container {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.color-gradient-bar {
-  width: 100%;
-  height: 12px;
-  border-radius: 6px;
-  background: linear-gradient(
-    to bottom,
-    #fe2858 0%,      /* TikTok pink - 1.0 (high danceability) */
-    #2af0ea 65%,     /* TikTok blue - 0.35 (lower-middle) */
-    #FFFFFF 100%     /* White - 0.0 (low danceability) */
-  );
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-.color-gradient-labels {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  padding: 0;
-}
-
-.color-gradient-labels span {
-  color: var(--color-text-secondary);
-  line-height: 1.2;
-}
-
-.color-gradient-labels small {
-  font-size: 0.7rem;
-  color: var(--color-text-disabled);
-  font-style: italic;
-  margin-left: 3px;
-}
-
-.danceability-indicator {
-  width: 50px;
-  height: 400px;
-  left: 0;
-  top: 0;
-}
-
-.indicator-arrow {
-  position: absolute;
-  left: 15px;
-  font-size: 20px;
-  color: #FFD700;
-  width: 20px;
-  text-align: center;
-  transition: top 0.2s ease;
-  transform: translateY(-50%);
-  line-height: 1;
-}
-
-.indicator-line {
-  position: absolute;
-  left: 62px;
-  width: 51px;
-  height: 3px;
-  background-color: #FFD700;
-  transition: top 0.2s ease;
-  z-index: 10;
-  transform: translateY(-50%);
-}
-
-/* Make sure the section container is positioned relative for absolute positioning */
-#section-surge .section-container {
-  position: relative;
-}
+/* Danceability gradient styles - MOVED to planet.css (base definitions) */
+/* Responsive overrides remain here as they mix planet and shared legend styles */
 
 /* Responsive: adjust for medium screens */
 @media (max-width: 1400px) {
@@ -1517,11 +1324,6 @@ circle[data-type="bubble"] {
 
   .annotation-rail {
     bottom: var(--space-4);
-  }
-
-  .year-btn {
-    padding: 10px 24px;
-    font-size: 0.95rem;
   }
 }
 
@@ -1589,11 +1391,6 @@ circle[data-type="bubble"] {
 
   .year-selector {
     gap: 8px;
-  }
-
-  .year-btn {
-    padding: 8px 18px;
-    font-size: 0.9rem;
   }
 }
 
@@ -1677,62 +1474,19 @@ circle[data-type="bubble"] {
     gap: 6px;
     margin-bottom: 0.5rem;
   }
-
-  .year-btn {
-    padding: 6px 14px;
-    font-size: 0.85rem;
-  }
 }
 
-.tooltip-planet {
+/* ========== Shared Tooltip Base ========== */
+/* Minimal base tooltip - viz-specific styles extend this */
+.tooltip {
   position: absolute;
-  background: rgba(0, 0, 0, 0.95);
-  color: white;
-  padding: 12px 16px;
-  border-radius: 8px;
   pointer-events: none;
-  font-size: 0.9rem;
   z-index: 1000;
-  max-width: 280px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  border: 1px solid var(--color-accent-cyan);
-  backdrop-filter: blur(10px);
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
 }
 
-.tooltip-planet strong {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 1.1rem;
-  color: var(--color-accent-cyan);
-  font-weight: var(--font-weight-bold);
-}
-
-.tooltip-planet div {
-  margin: 4px 0;
-  font-size: 0.85rem;
-}
-
-.planet {
-  cursor: pointer;
-  transition: all 0.3s ease;
-  pointer-events: all;
-}
-
-.planet:hover {
-  filter: brightness(1.3);
-}
-
-.planet-orbit {
-  fill: none;
-  stroke: var(--color-border-primary);
-  stroke-width: 1;
-  stroke-dasharray: 5, 5;
-  opacity: 0.3;
-}
-
-.sun {
-  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
-}
+/* Planet tooltip, planet elements, sun - MOVED to planet.css */
 
 /* Year selector buttons in annotation rail */
 /* Duplicate year button styles removed - using compact redesign styles from line 813 */
@@ -2833,33 +2587,6 @@ circle[data-type="bubble"] {
   outline-offset: 2px;
 }
 
-/* CTA Button */
-.cta-button {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-3) var(--space-6);
-  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-magenta));
-  border: none;
-  border-radius: 8px;
-  color: var(--color-background-primary);
-  font-size: var(--font-size-body-lg);
-  font-weight: var(--font-weight-semibold);
-  cursor: pointer;
-  transition: all var(--duration-micro) var(--easing-standard);
-  box-shadow: var(--shadow-glow-cyan);
-}
-
-.cta-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 20px rgba(0, 255, 224, 0.4), var(--shadow-200);
-}
-
-.cta-button:focus {
-  outline: 2px solid var(--color-accent-cyan);
-  outline-offset: 4px;
-}
-
 /* Legend Items Update */
 .legend-items {
   list-style: none;
@@ -3150,11 +2877,6 @@ circle[data-type="bubble"] {
    V3 NAVIGATION SYSTEM
    Based on tiktok-tides-implementation-spec-v3.md Section 2
    ══════════════════════════════════════════════════════════════════════════ */
-
-/* Hide old navigation if still present */
-.nav-header {
-  display: none !important;
-}
 
 /* ─────────────────────────────────────────────────────────────────────────
    TopNavBar - Fixed top navigation bar
@@ -4125,18 +3847,22 @@ circle[data-type="bubble"] {
   margin: 0;
 }
 
-/* CTA Button (Start the journey) */
+/* ==========================================================================
+   Component: Hero CTA Button
+   "Start the journey" button with cyan-teal gradient.
+   Partially tokenized. Remaining hardcoded: #1BA8AE (darker teal), #033624 (text)
+   ========================================================================== */
 .hero-cta-button {
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);
   padding: 14px 28px;
-  background: linear-gradient(135deg, #2DCCD3, #1BA8AE);
+  background: linear-gradient(135deg, var(--color-glint), #1BA8AE);
   border: none;
   border-radius: 12px;
   color: #033624;
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: var(--font-size-body-reg);
+  font-weight: var(--font-weight-semibold);
   cursor: pointer;
   transition: all 250ms ease;
   width: fit-content;
@@ -4146,7 +3872,7 @@ circle[data-type="bubble"] {
 .hero-cta-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(45, 204, 211, 0.4);
-  background: linear-gradient(135deg, #3DDDE4, #2DCCD3);
+  background: linear-gradient(135deg, #3DDDE4, var(--color-glint));
 }
 
 .hero-cta-button:focus {
@@ -6306,6 +6032,12 @@ body:not([data-scene="cosmos"]) .alien-narrator--hero {
   flex-wrap: wrap;
 }
 
+/* ==========================================================================
+   Component: Year Button
+   Canonical definition for year selection buttons. Used in Music Galaxy.
+   Variants: .year-btn.active, .year-btn[aria-pressed="true"]
+   Modifier: .music-galaxy-year-controls--persistent .year-btn (smaller size)
+   ========================================================================== */
 .year-btn {
   padding: var(--space-2) var(--space-4);
   font-size: 0.9375rem;
@@ -6441,6 +6173,7 @@ body:not([data-scene="cosmos"]) .alien-narrator--hero {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Component: Year Controls Label - Canonical definition for "Select Year" labels */
 .year-controls-label {
   display: block;
   font-size: 0.8125rem;
@@ -8490,16 +8223,6 @@ body:not([data-scene="cosmos"]) .alien-narrator--hero {
 .music-galaxy-year-controls--persistent .year-btn {
   padding: var(--space-1) var(--space-3);
   font-size: 0.8125rem;
-}
-
-.year-controls-label {
-  display: block;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--color-text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: var(--space-2);
 }
 
 /* Scene step indicator */

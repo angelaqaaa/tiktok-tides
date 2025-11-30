@@ -212,7 +212,7 @@ export function initMicroInteractions() {
   }
 
   // B) Ranking leaf hint - trigger on first intersection
-  const rankingSection = document.querySelector('#section-fade');
+  const rankingSection = document.querySelector('#scene-category');
   const rankingViz = document.querySelector('#viz-ranking');
   if (rankingSection && rankingViz) {
     const leafHint = new LeafHintEffect(rankingSection);
@@ -242,7 +242,7 @@ export function initMicroInteractions() {
   }
 
   // C) Emotion bubble breathe - trigger on section intersection, not just hover
-  const emotionSection = document.querySelector('#section-takeaway');
+  const emotionSection = document.querySelector('#scene-emotion');
   const emotionViz = document.querySelector('#viz-emotion');
   if (emotionSection && emotionViz) {
     const bubbleBreathe = new BubbleBreatheEffect(emotionViz);

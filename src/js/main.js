@@ -1,9 +1,12 @@
 // Main scrollytelling orchestrator - Redesigned for guided data story
 import '../css/tokens.css';
 import '../css/base.css';
+import '../css/stopwatch.css';
 import '../css/record-player.css';
+import '../css/ranking.css';
 import '../css/conveyor.css';
-import { MotionPatterns } from './motion/patterns.js';
+import '../css/emotion.css';
+import '../css/planet.css';
 import { StopwatchViz } from '../vizzes/stopwatch/index.js';
 import { PlanetViz } from '../vizzes/planet/index.js';
 import { RankingViz } from '../vizzes/ranking/index.js';
@@ -13,45 +16,28 @@ import { ConveyorViz } from '../vizzes/conveyor/index.js';
 import { initMicroInteractions } from './micro-interactions.js';
 import { installIllustrations } from '../illustrations/index.js';
 
-// Scene mapping for semantic worlds (v3 spec - 8 scenes)
+// Scene mapping for semantic worlds (8 scenes)
+// Maps section IDs to scene attribute values for body[data-scene]
 const SCENE_MAP = {
-  // V3 scene IDs - each gets unique scene value
   '#scene-hero': 'cosmos',
-  '#scene-music-galaxy': 'galaxy',   // Unique value for new scene
-  '#scene-viral-sounds': 'sounds',   // Unique value for new scene
-  '#scene-timing': 'dawn',
-  '#scene-trend-pyramid': 'forest',
-  '#scene-captions-emotion': 'air',
-  '#scene-quiz': 'lab',
-  '#scene-wrap-up': 'wrapup',
-  // Legacy IDs (for backwards compatibility during transition)
-  '#scene-landing': 'cosmos',
-  '#scene-sound-universe': 'galaxy',
-  '#scene-top-sounds': 'sounds',
+  '#scene-music-galaxy': 'galaxy',
+  '#scene-viral-sounds': 'sounds',
   '#scene-duration': 'dawn',
   '#scene-category': 'forest',
   '#scene-emotion': 'air',
-  '#scene-summary': 'wrapup'  // Scene 8 gets unique value for alien activation
+  '#scene-quiz': 'lab',
+  '#scene-summary': 'wrapup'
 };
 
 // Node positions for alien marker on map canvas
 const NODE_POSITIONS = {
-  // V3 scene IDs
   'scene-hero': { x: '30%', y: '8%' },
   'scene-music-galaxy': { x: '58%', y: '15%' },
   'scene-viral-sounds': { x: '78%', y: '28%' },
-  'scene-timing': { x: '72%', y: '45%' },
-  'scene-trend-pyramid': { x: '58%', y: '60%' },
-  'scene-captions-emotion': { x: '42%', y: '72%' },
-  'scene-quiz': { x: '28%', y: '82%' },
-  'scene-wrap-up': { x: '50%', y: '90%' },
-  // Legacy IDs (for backwards compatibility)
-  'scene-landing': { x: '30%', y: '8%' },
-  'scene-sound-universe': { x: '58%', y: '15%' },
-  'scene-top-sounds': { x: '78%', y: '28%' },
   'scene-duration': { x: '72%', y: '45%' },
   'scene-category': { x: '58%', y: '60%' },
   'scene-emotion': { x: '42%', y: '72%' },
+  'scene-quiz': { x: '28%', y: '82%' },
   'scene-summary': { x: '50%', y: '90%' }
 };
 
@@ -65,45 +51,6 @@ function debounce(fn, ms = 150) {
     clearTimeout(t);
     t = setTimeout(() => fn(...args), ms);
   };
-}
-
-/**
- * TASK 0 - Dev-only SceneChip
- * Shows current scene at bottom-left for QA
- * DISABLED: User requested removal of scene chip display
- */
-function createSceneChip() {
-  // Always return - scene chip disabled by request
-  return;
-  const isProd = document.documentElement.dataset.env === 'prod';
-  if (isProd) return;
-
-  const chip = document.createElement('div');
-  chip.id = 'scene-chip';
-  chip.style.cssText = `
-    position: fixed;
-    bottom: 8px;
-    left: 8px;
-    padding: 4px 8px;
-    background: rgba(0, 0, 0, 0.7);
-    color: #00FFE0;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    border-radius: 4px;
-    opacity: 0.5;
-    z-index: 10000;
-    pointer-events: none;
-    user-select: none;
-  `;
-  chip.textContent = 'scene: none';
-  document.body.appendChild(chip);
-
-  // Update chip when scene changes
-  const observer = new MutationObserver(() => {
-    const scene = document.body.dataset.scene || 'none';
-    chip.textContent = `scene: ${scene}`;
-  });
-  observer.observe(document.body, { attributes: true, attributeFilter: ['data-scene'] });
 }
 
 /**
@@ -128,8 +75,8 @@ function setupSceneKeyboardQA() {
  */
 function ensureSceneLayers() {
   const needs = {
-    'scene-landing': 'scene--stars',
-    'scene-sound-universe': 'scene--orbits',
+    'scene-hero': 'scene--stars',
+    'scene-music-galaxy': 'scene--orbits',
     'scene-category': 'scene--canopy',
     'scene-emotion': 'scene--bubbles'
   };
@@ -152,29 +99,20 @@ class TikTokTidesApp {
   constructor() {
     this.vizControllers = {};
     this.currentSection = null;
-    this.motion = new MotionPatterns();
     this.liveRegion = document.querySelector('[role="status"]');
     this.audioMuted = true;
 
-    // Section metadata for transitions (v3 spec)
+    // Section metadata for transitions
+    // Maps section IDs to background classes, display names, and node numbers
     this.sectionMeta = {
-      // V3 scene IDs - new scenes use 'bg-galaxy' and 'bg-sounds' (section has own backgrounds)
       'scene-hero': { bg: 'bg-cosmos', name: 'Arrival', scene: 'hero', nodeNum: 1 },
       'scene-music-galaxy': { bg: 'bg-galaxy', name: 'Music Galaxy', scene: 'music-galaxy', nodeNum: 2 },
       'scene-viral-sounds': { bg: 'bg-sounds', name: 'Viral Sounds', scene: 'viral-sounds', nodeNum: 3 },
-      'scene-timing': { bg: 'bg-dawn', name: 'Timing', scene: 'timing', nodeNum: 4 },
-      'scene-trend-pyramid': { bg: 'bg-forest', name: 'Trend Pyramid', scene: 'trend-pyramid', nodeNum: 5 },
-      'scene-captions-emotion': { bg: 'bg-air', name: 'Captions & Emotion', scene: 'captions-emotion', nodeNum: 6 },
+      'scene-duration': { bg: 'bg-dawn', name: 'Duration', scene: 'duration', nodeNum: 4 },
+      'scene-category': { bg: 'bg-forest', name: 'Category', scene: 'category', nodeNum: 5 },
+      'scene-emotion': { bg: 'bg-air', name: 'Emotion', scene: 'emotion', nodeNum: 6 },
       'scene-quiz': { bg: 'bg-lab', name: 'Quiz', scene: 'quiz', nodeNum: 7 },
-      'scene-wrap-up': { bg: 'bg-cosmos', name: 'Wrap-up', scene: 'wrap-up', nodeNum: 8 },
-      // Legacy IDs (for backwards compatibility)
-      'scene-landing': { bg: 'bg-cosmos', name: 'Welcome', scene: 'hero', nodeNum: 1 },
-      'scene-sound-universe': { bg: 'bg-galaxy', name: 'Sound Universe', scene: 'music-galaxy', nodeNum: 2 },
-      'scene-top-sounds': { bg: 'bg-sounds', name: 'Top Sounds', scene: 'viral-sounds', nodeNum: 3 },
-      'scene-duration': { bg: 'bg-dawn', name: 'Duration', scene: 'timing', nodeNum: 4 },
-      'scene-category': { bg: 'bg-forest', name: 'Category', scene: 'trend-pyramid', nodeNum: 5 },
-      'scene-emotion': { bg: 'bg-air', name: 'Emotion', scene: 'captions-emotion', nodeNum: 6 },
-      'scene-summary': { bg: 'bg-cosmos', name: 'Summary', scene: 'wrap-up', nodeNum: 8 }
+      'scene-summary': { bg: 'bg-cosmos', name: 'Summary', scene: 'summary', nodeNum: 8 }
     };
 
     // Insight callout state (track which have been revealed)
@@ -347,20 +285,6 @@ class TikTokTidesApp {
   }
 
   setupVizEvents(key, viz) {
-    // Ranking: Leaf reveal
-    if (key === 'ranking') {
-      viz.on?.('onLeafReveal', (data) => {
-        this.showDetailPanel(data);
-      });
-    }
-
-    // Emotion: Drawer open
-    if (key === 'emotion') {
-      viz.on?.('bubbleClick', (data) => {
-        this.openEmotionDrawer(data);
-      });
-    }
-
     // Conveyor: Quiz completion (detect when completion message is shown)
     if (key === 'conveyor') {
       // Poll for completion message to show insight callout
@@ -1029,48 +953,6 @@ class TikTokTidesApp {
     }
   }
 
-  setupPlayerIntro() {
-    // Start button removed - player is now always unlocked
-    const playerWrapper = document.querySelector('.record-player-wrapper');
-    if (playerWrapper) {
-      playerWrapper.removeAttribute('data-player-locked');
-    }
-  }
-
-  showDetailPanel(data) {
-    const panel = document.querySelector('.detail-panel');
-    if (panel) {
-      const content = panel.querySelector('.detail-content');
-      content.innerHTML = `
-        <h5>${data.community}</h5>
-        <ul>${data.topics.map(t => `<li>${t}</li>`).join('')}</ul>
-      `;
-
-      panel.setAttribute('aria-hidden', 'false');
-    }
-  }
-
-  openEmotionDrawer(data) {
-    const drawer = document.querySelector('.detail-drawer');
-    if (drawer) {
-      const phrases = drawer.querySelector('.example-phrases');
-
-      // Update content
-      phrases.innerHTML = `<p>Example: "${data.word}" in context</p>`;
-
-      drawer.setAttribute('aria-hidden', 'false');
-
-      // Focus management
-      drawer.querySelector('.drawer-close')?.focus();
-
-      // Close button
-      const closeBtn = drawer.querySelector('.drawer-close');
-      closeBtn?.addEventListener('click', () => {
-        drawer.setAttribute('aria-hidden', 'true');
-      });
-    }
-  }
-
   initStarfield() {
     const starfield = document.querySelector('.starfield');
     if (!starfield) return;
@@ -1567,7 +1449,6 @@ class TikTokTidesApp {
 // Initialize app on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   // TASK 0 - Dev-only sanity hooks
-  createSceneChip();
   setupSceneKeyboardQA();
 
   // TASK 1 - Ensure scene layers exist
@@ -1578,7 +1459,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialize main app
   window.app = new TikTokTidesApp();
-  window.app.setupPlayerIntro();
 });
 
 /**

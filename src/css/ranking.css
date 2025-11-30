@@ -176,31 +176,29 @@
     pointer-events: none;
 }
 
-/* Ranking Bubble Chart Tooltip - Override base .tooltip styles from stopwatch.css */
-/* CRITICAL: Use !important to ensure these override ALL other styles */
+/* Ranking Bubble Chart Tooltip - extends base .tooltip from base.css */
+/* Stopwatch tooltip styles excluded via :not(.ranking-bubble-tooltip) selector */
 .tooltip.ranking-bubble-tooltip {
-    /* Reset ALL inherited styles from .tooltip */
-    position: absolute !important;
-    pointer-events: none !important;
-    z-index: 99999 !important; /* Higher than fullPage.js watermark (9999999 is overkill) */
-    /* Override stopwatch.css styling */
-    background: transparent !important;
-    border: none !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    transform: none !important; /* CRITICAL: Remove the translate(-50%, -120%) from base .tooltip */
-    white-space: normal !important;
-    font-size: inherit !important;
-    color: inherit !important;
+    position: absolute;
+    pointer-events: none;
+    z-index: 99999; /* Higher than fullPage.js watermark */
+    background: transparent;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    transform: none;
+    white-space: normal;
+    font-size: inherit;
+    color: inherit;
     /* Start hidden */
-    opacity: 0 !important;
-    visibility: hidden !important;
-    transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out !important;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out;
 }
 
-/* Visible state - use visibility + opacity for reliable display */
+/* Visible state */
 .tooltip.ranking-bubble-tooltip.is-visible {
-    opacity: 1 !important;
-    visibility: visible !important;
+    opacity: 1;
+    visibility: visible;
 }

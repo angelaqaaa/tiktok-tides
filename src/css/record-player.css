@@ -41,36 +41,6 @@
     margin: 0 0 clamp(1rem, 1.5vw, 1.5rem) 0;
 }
 
-.record-player-start-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    padding: 0.85rem 1.8rem;
-    font-size: 1rem;
-    font-weight: var(--font-weight-semibold);
-    border-radius: 999px;
-    border: none;
-    color: #050609;
-    background: linear-gradient(135deg, #00f7ff, #ff5ce7);
-    box-shadow: 0 24px 48px rgba(0, 255, 224, 0.28);
-    cursor: pointer;
-    transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
-    margin-top: 0.5rem;
-}
-
-.record-player-start-btn:hover,
-.record-player-start-btn:focus {
-    transform: translateY(-2px);
-    box-shadow: 0 32px 60px rgba(0, 255, 224, 0.36);
-    filter: saturate(1.2);
-}
-
-.record-player-start-btn:focus-visible {
-    outline: 2px solid rgba(0, 247, 255, 0.6);
-    outline-offset: 4px;
-}
-
 .record-player-layout {
  display: flex;
  align-items: center;

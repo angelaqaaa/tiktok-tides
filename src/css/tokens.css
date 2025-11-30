@@ -19,6 +19,11 @@
   --color-accent-blue: #3B82F6;
   --color-accent-red: #EF4444;
 
+  /* Semantic color roles (used throughout base.css) */
+  --color-glint: #2DCCD3;    /* Subtle highlights, interactive accents */
+  --color-blaze: #F1204A;    /* High energy, alerts, TikTok red */
+  --color-shimmer: #FF00E0;  /* Gradients, transitions (pairs with glint) */
+
   /* Typography */
   --font-family-sans: "Inter", "SF Pro Text", "Segoe UI", system-ui, sans-serif;
   --font-family-mono: "JetBrains Mono", monospace;
