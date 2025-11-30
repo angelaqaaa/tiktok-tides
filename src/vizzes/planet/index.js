@@ -114,6 +114,11 @@ export class PlanetViz extends EventEmitter {
     this.setupYearButtons();
     this.mounted = true;
     this.emit(VIZ_EVENTS.ENTER_COMPLETE);
+
+    // Notify splash screen that planet viz is ready
+    if (window.markPlanetVizReady) {
+      window.markPlanetVizReady();
+    }
   }
 
   unmount() {
@@ -423,6 +428,7 @@ export class PlanetViz extends EventEmitter {
       });
 
     // Apply transitions after event handlers are set
+    // IMPORTANT: Reset stroke/stroke-width to clear any highlighting from previous steps
     allPlanets
       .transition()
       .duration(1000)
@@ -430,6 +436,8 @@ export class PlanetViz extends EventEmitter {
       .attr('cy', d => d.y)
       .attr('r', d => sizeScale(d.songCount))
       .attr('fill', d => this.danceabilityToColor(d.avgDanceability))
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 2)
       .attr('opacity', 1);
 
     planets.exit()
@@ -509,6 +517,41 @@ export class PlanetViz extends EventEmitter {
       .transition()
       .duration(400)
       .attr('opacity', d => top2.includes(d.name) ? 1 : 0.3);
+
+    // Store top artist for annotation tracking
+    this.topArtistName = sorted[0].name;
+  }
+
+  /**
+   * Get current position of top highlighted artist for annotation
+   * Returns screen-relative coordinates (accounts for SVG viewBox transformation)
+   */
+  getTopArtistPosition() {
+    if (!this.topArtistName || !this.svg) return null;
+
+    const planet = this.svg.selectAll('.planet')
+      .filter(d => d.name === this.topArtistName);
+
+    if (planet.empty()) return null;
+
+    const cx = parseFloat(planet.attr('cx'));
+    const cy = parseFloat(planet.attr('cy'));
+
+    // Convert SVG viewBox coordinates to screen coordinates
+    const svgNode = this.svg.node();
+    const point = svgNode.createSVGPoint();
+    point.x = cx;
+    point.y = cy;
+
+    // Apply the transformation matrix to get screen coordinates
+    const ctm = svgNode.getScreenCTM();
+    if (ctm) {
+      const screenPoint = point.matrixTransform(ctm);
+      return { x: screenPoint.x, y: screenPoint.y, name: this.topArtistName };
+    }
+
+    // Fallback to raw SVG coords if transform unavailable
+    return { x: cx, y: cy, name: this.topArtistName };
   }
 
   fadeOrbits() {
@@ -516,5 +559,122 @@ export class PlanetViz extends EventEmitter {
       .transition()
       .duration(600)
       .attr('opacity', 0);
+  }
+
+  /**
+   * Highlight planets with high danceability (above threshold)
+   * Dims planets below the threshold to draw attention to danceable tracks
+   */
+  highlightHighDanceability() {
+    const threshold = 0.65; // Danceability above 0.65 is considered "high"
+
+    this.svg.selectAll('.planet')
+      .transition()
+      .duration(600)
+      .attr('opacity', d => d.avgDanceability >= threshold ? 1 : 0.25)
+      .attr('stroke-width', d => d.avgDanceability >= threshold ? 3 : 2);
+  }
+
+  /**
+   * Highlight artists who appear in multiple years (repeated viral artists)
+   * Identifies artists with songs in 2+ years and highlights them
+   */
+  highlightRepeatedArtists() {
+    // Build map of artist -> years they appear in
+    const artistYears = new Map();
+
+    Object.entries(this.data).forEach(([year, yearData]) => {
+      yearData.forEach(artist => {
+        if (!artistYears.has(artist.name)) {
+          artistYears.set(artist.name, new Set());
+        }
+        artistYears.get(artist.name).add(year);
+      });
+    });
+
+    // Find artists appearing in 2+ years
+    const repeatedArtists = Array.from(artistYears.entries())
+      .filter(([_, years]) => years.size >= 2)
+      .map(([name, _]) => name);
+
+    console.log('Repeated viral artists:', repeatedArtists);
+
+    // Highlight repeated artists
+    this.svg.selectAll('.planet')
+      .transition()
+      .duration(600)
+      .attr('opacity', d => repeatedArtists.includes(d.name) ? 1 : 0.2)
+      .attr('stroke-width', d => repeatedArtists.includes(d.name) ? 4 : 2)
+      .attr('stroke', d => repeatedArtists.includes(d.name) ? '#FBEB35' : '#fff'); // Yellow glow for repeated
+  }
+
+  /**
+   * Highlight planets in the high-energy / medium-danceability "sweet spot"
+   * Only highlights the planets themselves with glowing effect, no band overlay
+   */
+  highlightEnergyBand() {
+    // Define the "sweet spot" criteria:
+    // High energy (0.5 to 0.8) + medium danceability (0.4 to 0.7)
+    const minEnergy = 0.5;
+    const maxEnergy = 0.8;
+    const minDance = 0.4;
+    const maxDance = 0.7;
+
+    // Remove any existing band highlight (from previous impl)
+    this.svg.selectAll('.energy-band-highlight').remove();
+
+    // Get current year's data
+    const data = this.data[this.currentYear] || [];
+
+    // Helper to check if planet is in sweet spot
+    const isInSweetSpot = (planetName) => {
+      const planetData = data.find(p => p.name === planetName);
+      if (!planetData) return false;
+      const energy = planetData.avgEnergy || 0;
+      const dance = planetData.avgDanceability || 0;
+      return (energy >= minEnergy && energy <= maxEnergy) &&
+             (dance >= minDance && dance <= maxDance);
+    };
+
+    // Highlight planets in the sweet spot with glowing effect, dim others
+    this.svg.selectAll('.planet')
+      .transition()
+      .duration(600)
+      .attr('opacity', d => isInSweetSpot(d.name) ? 1 : 0.15)
+      .attr('stroke-width', d => isInSweetSpot(d.name) ? 5 : 2)
+      .attr('stroke', d => isInSweetSpot(d.name) ? '#00F2EA' : '#fff')
+      .style('filter', d => isInSweetSpot(d.name) ?
+        'drop-shadow(0 0 12px rgba(0, 242, 234, 0.8)) drop-shadow(0 0 20px rgba(255, 92, 231, 0.5))' :
+        'none');
+
+    // Keep orbits normal - don't highlight bands
+    this.svg.selectAll('.planet-orbit')
+      .transition()
+      .duration(600)
+      .attr('opacity', 0.15)
+      .attr('stroke', 'var(--color-border-primary)');
+  }
+
+  /**
+   * Reset all planet highlights to normal state
+   */
+  resetHighlights() {
+    // Remove energy band highlight if present
+    this.svg.selectAll('.energy-band-highlight').remove();
+
+    this.svg.selectAll('.planet')
+      .transition()
+      .duration(400)
+      .attr('opacity', 1)
+      .attr('stroke-width', 2)
+      .attr('stroke', '#fff')
+      .style('filter', 'none'); // Clear any glow effects
+
+    // Reset orbits
+    this.svg.selectAll('.planet-orbit')
+      .transition()
+      .duration(400)
+      .attr('opacity', 0.3)
+      .attr('stroke', 'var(--color-border-primary)');
   }
 }

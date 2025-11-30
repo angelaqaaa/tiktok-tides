@@ -33,7 +33,7 @@
  */
 
 /**
- * @typedef {'dataReady'|'enterComplete'|'updateComplete'|'exitComplete'|'error'|'resize'|'stateChange'} UniversalEvent
+ * @typedef {'dataReady'|'enterComplete'|'updateComplete'|'exitComplete'|'error'|'resize'|'stateChange'|'interaction'} UniversalEvent
  */
 
 export const VIZ_EVENTS = {
@@ -43,7 +43,8 @@ export const VIZ_EVENTS = {
   EXIT_COMPLETE: 'exitComplete',
   ERROR: 'error',
   RESIZE: 'resize',
-  STATE_CHANGE: 'stateChange'
+  STATE_CHANGE: 'stateChange',
+  INTERACTION: 'interaction'
 };
 
 export const DEFAULT_OPTIONS = {

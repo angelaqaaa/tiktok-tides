@@ -58,3 +58,5 @@ vite.config.ts.timestamp-*
 *.tmp
 temp/
 tmp/
+
+icon_libraries/

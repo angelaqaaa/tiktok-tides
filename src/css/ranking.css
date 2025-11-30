@@ -1,7 +1,7 @@
 .viz-btn {
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     background: #2c2c2cff;
     display: flex;
@@ -15,8 +15,8 @@
 }
 
 .viz-btn svg {
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
     pointer-events: none;
 }
 
@@ -33,22 +33,22 @@
 
 .viz-btn--info {
     top: 10px;
-    right: 10px;
+    right: 50px; /* Moved left from right edge */
 }
 
 .viz-btn--reset {
     top: 10px;
-    left: 10px;
+    left: 6px;
 }
 
 .viz-btn--pause {
     top: 10px;
-    left: 70px;
+    left: 50px;
 }
 
 .viz-btn--skip {
     top: 10px;
-    left: 130px;
+    left: 94px;
 }
 
 .viz-info-tooltip {
@@ -137,29 +137,29 @@
 .btn-tip {
     color: #ddd;
     text-align: center;
-    font-size: 13px;
-    margin-top: 4px;
+    font-size: 12px;
+    top: 48px; /* Position below buttons - moved higher */
     opacity: 1;
     transition: opacity 0.35s ease;
     pointer-events: none;
     position: absolute;
     z-index: 3000;
+    white-space: nowrap;
 }
 
 .tip-reset {
-    left: 10px;
+    left: 6px; /* Moved left */
+    width: 36px;
 }
 
 .tip-pause {
-    left: 70px;
+    left: 50px; /* Moved left */
+    width: 36px;
 }
 
 .tip-skip {
-    left: 130px;
-}
-
-.btn-tip {
-    margin-top: 8px;
+    left: 94px; /* Moved left */
+    width: 36px;
 }
 
 .btn-tip.hide {
@@ -174,4 +174,31 @@
     position: absolute;
     z-index: 1500;
     pointer-events: none;
+}
+
+/* Ranking Bubble Chart Tooltip - extends base .tooltip from base.css */
+/* Stopwatch tooltip styles excluded via :not(.ranking-bubble-tooltip) selector */
+.tooltip.ranking-bubble-tooltip {
+    position: absolute;
+    pointer-events: none;
+    z-index: 99999; /* Higher than fullPage.js watermark */
+    background: transparent;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    transform: none;
+    white-space: normal;
+    font-size: inherit;
+    color: inherit;
+    /* Start hidden */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out;
+}
+
+/* Visible state */
+.tooltip.ranking-bubble-tooltip.is-visible {
+    opacity: 1;
+    visibility: visible;
 }

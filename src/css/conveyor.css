@@ -52,7 +52,7 @@
   width: 100%;
   height: 600px;
   overflow: visible;
-  margin: 2rem 0 3rem 0;
+  margin: 2rem 0 0 0;
   perspective: 1200px;
 }
 
@@ -1111,6 +1111,144 @@
   }
 }
 
+/* ============================================
+   HINT NAVIGATION - Go to scene for hints
+   ============================================ */
+
+.hint-navigation {
+  margin-top: 1.5rem;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 200, 0, 0.08);
+  border: 1px solid rgba(255, 200, 0, 0.3);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  animation: hint-fade-in 0.3s ease-out;
+}
+
+@keyframes hint-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hint-prompt {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(255, 200, 0, 0.9);
+  text-align: center;
+}
+
+.go-to-scene-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.4rem;
+  background: linear-gradient(135deg, rgba(255, 200, 0, 0.2) 0%, rgba(255, 150, 0, 0.25) 100%);
+  border: 1px solid rgba(255, 200, 0, 0.5);
+  border-radius: 8px;
+  color: #ffc800;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 180ms ease;
+  margin: 0 auto; /* Center within parent */
+}
+
+.go-to-scene-btn:hover {
+  background: linear-gradient(135deg, rgba(255, 200, 0, 0.3) 0%, rgba(255, 150, 0, 0.35) 100%);
+  border-color: rgba(255, 200, 0, 0.7);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 200, 0, 0.25);
+}
+
+.go-to-icon {
+  font-size: 1.2rem;
+}
+
+/* ============================================
+   RETURN TO QUIZ BUTTON (floating in scenes)
+   ============================================ */
+
+.return-to-quiz-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  background: linear-gradient(135deg, var(--color-primary, #00ffe0) 0%, var(--color-accent, #00c8b4) 100%);
+  border: none;
+  border-radius: 50px;
+  color: #0a0a1a;
+  font-weight: 700;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow:
+    0 6px 20px rgba(0, 255, 224, 0.4),
+    0 3px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: all 200ms ease;
+  animation: return-btn-pulse 2s ease-in-out infinite, return-btn-enter 0.4s ease-out;
+}
+
+@keyframes return-btn-enter {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes return-btn-pulse {
+  0%, 100% {
+    box-shadow:
+      0 6px 20px rgba(0, 255, 224, 0.4),
+      0 3px 8px rgba(0, 0, 0, 0.3),
+      0 0 20px rgba(0, 255, 224, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 8px 25px rgba(0, 255, 224, 0.55),
+      0 4px 10px rgba(0, 0, 0, 0.35),
+      0 0 35px rgba(0, 255, 224, 0.5);
+  }
+}
+
+.return-to-quiz-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow:
+    0 10px 30px rgba(0, 255, 224, 0.5),
+    0 5px 12px rgba(0, 0, 0, 0.35),
+    0 0 40px rgba(0, 255, 224, 0.45);
+}
+
+.return-to-quiz-btn:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.return-icon {
+  font-size: 1.3rem;
+}
+
+.return-label {
+  letter-spacing: 0.02em;
+}
+
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   .conveyor-belt,
@@ -1118,7 +1256,9 @@
   .box-face,
   .btn-primary,
   .btn-secondary,
-  .start-btn {
+  .start-btn,
+  .hint-navigation,
+  .return-to-quiz-btn {
     transition: none;
     animation: none;
   }

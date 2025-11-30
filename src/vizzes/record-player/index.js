@@ -89,8 +89,13 @@ export class RecordPlayerViz {
 
         this.autoplayUnlocked = false;
         this.pendingAudioIndex = null;
+        this.autoSequenceRunning = false;
         this.handleFirstGesture = this.handleFirstGesture.bind(this);
         this.handleMuteToggle = this.handleMuteToggle.bind(this);
+
+        // Debounce hover events to prevent excessive state changes
+        this.hoverDebounceTimer = null;
+        this.hoverDebounceDelay = 50; // 50ms debounce
     }
 
     async init(selector, options = {}) {
@@ -360,8 +365,8 @@ export class RecordPlayerViz {
         const ringCount = Math.max(this.data.length, 1);
         const ringStep = (OUTER_RADIUS - INNER_RADIUS) / ringCount;
         this.radiusScale = (index) => OUTER_RADIUS - (index + 0.75) * ringStep;
-        const maxAngle = 35;
-        const minAngle = 10;
+        const maxAngle = 32;
+        const minAngle = 8;
         const domainEnd = Math.max(ringCount - 1, 1);
         this.angleScale = d3.scaleLinear().domain([0, domainEnd]).range([minAngle, maxAngle]);
     }
@@ -509,12 +514,25 @@ export class RecordPlayerViz {
                 if (this.lockedIndex !== null && this.lockedIndex !== index) {
                     return;
                 }
-                // Immediately activate this ring - all states change together
-                this.activateRingImmediate(index, { locked: false, source: 'hover' });
+                // Debounce hover to prevent excessive state changes
+                if (this.hoverDebounceTimer) {
+                    clearTimeout(this.hoverDebounceTimer);
+                }
+                this.hoverDebounceTimer = setTimeout(() => {
+                    // Immediately activate this ring - all states change together
+                    this.activateRingImmediate(index, { locked: false, source: 'hover' });
+                    this.hoverDebounceTimer = null;
+                }, this.hoverDebounceDelay);
             });
 
             ringEl.addEventListener('mouseleave', () => {
                 const index = Number(ringEl.dataset.songIndex);
+
+                // Clear any pending hover activation
+                if (this.hoverDebounceTimer) {
+                    clearTimeout(this.hoverDebounceTimer);
+                    this.hoverDebounceTimer = null;
+                }
 
                 // If there's a locked ring, restore it
                 if (this.lockedIndex !== null && this.lockedIndex !== index) {
@@ -549,6 +567,7 @@ export class RecordPlayerViz {
         const node = this.getRingNode(index);
         if (!node) return;
         const angle = this.spinAngles.get(index) || 0;
+        // Use transform attribute for SVG (more efficient than style for SVG)
         node.setAttribute('transform', `translate(${CENTER}, ${CENTER}) rotate(${angle})`);
     }
 
@@ -565,6 +584,7 @@ export class RecordPlayerViz {
             state.last = timestamp;
             angle = (angle + delta * ROTATION_SPEED) % 360;
             this.spinAngles.set(index, angle);
+            // Direct transform update for SVG (most efficient)
             node.setAttribute('transform', `translate(${CENTER}, ${CENTER}) rotate(${angle})`);
             state.rafId = requestAnimationFrame(step);
         };
@@ -598,7 +618,13 @@ export class RecordPlayerViz {
         const ringSel = this.getRingSelection(index);
         if (!ringSel.node()) return;
 
+        // Early return if already active and same state
+        if (this.activeIndex === index && this.lockedIndex === (locked ? index : null)) {
+            return;
+        }
+
         const isHover = source === 'hover';
+        const isAuto = source === 'auto';
 
         // STEP 1: Stop ALL previous states immediately (if switching)
         if (this.activeIndex !== null && this.activeIndex !== index) {
@@ -705,8 +731,10 @@ export class RecordPlayerViz {
 
     setTonearmToIndex(index, { silent = false } = {}) {
         if (!this.tonearmArm || index == null || index < 0 || index >= this.data.length) return;
+
+        // Use angleScale from setupScales()
         const angle = this.angleScale(index);
-        console.log('angle', angle);
+
         this.tonearmArm.style.transform = `rotate(${angle}deg)`;
         if (!silent) {
             this.lockedIndex = index;
@@ -802,41 +830,51 @@ export class RecordPlayerViz {
 
         // Set mute state immediately
         audio.muted = this.isMuted;
-        audio.currentTime = 0;
+        // Only reset currentTime if audio is not already playing to avoid stuttering
+        if (audio.paused || audio.currentTime > 0.1) {
+            audio.currentTime = 0;
+        }
 
         // Handle autoplay unlock logic
         if (autoplay && !force && !this.autoplayUnlocked) {
             audio.muted = true;
-            audio.play().then(() => {
-                // First play succeeded, now unlock and play for real
-                audio.pause();
-                audio.currentTime = 0;
-                audio.muted = this.isMuted;
-                this.autoplayUnlocked = true;
+            // Use requestAnimationFrame to avoid blocking
+            requestAnimationFrame(() => {
                 audio.play().then(() => {
-                    this.toggleNotes(true);
+                    // First play succeeded, now unlock and play for real
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audio.muted = this.isMuted;
+                    this.autoplayUnlocked = true;
+                    requestAnimationFrame(() => {
+                        audio.play().then(() => {
+                            this.toggleNotes(true);
+                        }).catch(() => {
+                            this.toggleNotes(false);
+                        });
+                    });
                 }).catch(() => {
+                    // First play failed, wait for user gesture
+                    audio.pause();
+                    audio.currentTime = 0;
+                    this.pendingAudioIndex = index;
                     this.toggleNotes(false);
+                    document.addEventListener('pointerdown', this.handleFirstGesture, { once: true });
                 });
-            }).catch(() => {
-                // First play failed, wait for user gesture
-                audio.pause();
-                audio.currentTime = 0;
-                this.pendingAudioIndex = index;
-                this.toggleNotes(false);
-                document.addEventListener('pointerdown', this.handleFirstGesture, { once: true });
             });
             return;
         }
 
-        // Normal playback - start immediately
+        // Normal playback - start immediately (use requestAnimationFrame to avoid blocking)
         if (autoplay || force) {
             this.toggleNotes(true);
-            audio.play().catch(() => {
-                this.pendingAudioIndex = index;
-                this.toggleNotes(false);
-                this.autoplayUnlocked = false;
-                document.addEventListener('pointerdown', this.handleFirstGesture, { once: true });
+            requestAnimationFrame(() => {
+                audio.play().catch(() => {
+                    this.pendingAudioIndex = index;
+                    this.toggleNotes(false);
+                    this.autoplayUnlocked = false;
+                    document.addEventListener('pointerdown', this.handleFirstGesture, { once: true });
+                });
             });
         } else {
             this.toggleNotes(false);
@@ -898,6 +936,126 @@ export class RecordPlayerViz {
         }
     }
 
+    /**
+     * Rotate to the next record in sequence (for guided exploration)
+     * Cycles through records one by one from outermost (top) to innermost
+     */
+    rotateToNextRecord() {
+        // Initialize or increment the rotation index
+        if (this.guidedRotationIndex === undefined) {
+            this.guidedRotationIndex = 0;
+        } else {
+            this.guidedRotationIndex = (this.guidedRotationIndex + 1) % this.data.length;
+        }
+
+        const index = this.guidedRotationIndex;
+
+        // Activate the record
+        this.activateRing(index, { locked: true, source: 'guided' });
+
+        // Start rotation animation
+        this.startRingRotation(index);
+
+        console.log(`[RecordPlayer] Rotated to record ${index + 1}/${this.data.length}: ${this.data[index].name}`);
+    }
+
+    /**
+     * Highlight the top 3 records by adding visual emphasis
+     * Dims records 4-10 to draw attention to the most popular sounds
+     */
+    highlightTop3() {
+        const top3Indices = [0, 1, 2]; // Top 3 are already sorted by playCount
+
+        this.ringsGroup.selectAll('.record-ring').each((d, i, nodes) => {
+            const ringIndex = Number(nodes[i].dataset.songIndex);
+            const isTop3 = top3Indices.includes(ringIndex);
+
+            // Add glow effect to top 3, dim others
+            const ringEl = d3.select(nodes[i]);
+            const arc = ringEl.select('.record-ring-arc');
+            const label = ringEl.select('.record-ring-label');
+
+            if (isTop3) {
+                // Highlight top 3 with cyan glow
+                arc.style('filter', 'drop-shadow(0 0 8px var(--color-accent-cyan))');
+                arc.style('stroke', 'var(--color-accent-cyan)');
+                arc.style('opacity', 1);
+                label.style('opacity', 1);
+                label.style('font-weight', 'bold');
+
+                // Start rotation for visual emphasis
+                this.startRingRotation(ringIndex);
+            } else {
+                // Dim others
+                arc.style('filter', 'none');
+                arc.style('stroke', 'var(--color-border-primary)');
+                arc.style('opacity', 0.3);
+                label.style('opacity', 0.3);
+                label.style('font-weight', 'normal');
+
+                this.stopRingRotation(ringIndex);
+            }
+        });
+
+        console.log('[RecordPlayer] Highlighted top 3 records');
+    }
+
+    /**
+     * Reset all record highlights to normal state
+     */
+    resetHighlights() {
+        this.ringsGroup.selectAll('.record-ring').each((d, i, nodes) => {
+            const ringEl = d3.select(nodes[i]);
+            const arc = ringEl.select('.record-ring-arc');
+            const label = ringEl.select('.record-ring-label');
+
+            arc.style('filter', 'none');
+            arc.style('stroke', 'var(--color-border-primary)');
+            arc.style('opacity', 1);
+            label.style('opacity', 1);
+            label.style('font-weight', 'normal');
+        });
+
+        this.stopAllRingRotation();
+        this.clearActiveRing({ preserveLocked: false });
+    }
+
+    /**
+     * Auto-sequence: Cycle through top 3 rings when scene enters viewport
+     * Per spec 5.3.4: ~5 seconds total, each ring highlighted for ~1.5s
+     */
+    startAutoSequence() {
+        if (this.autoSequenceRunning) return;
+        this.autoSequenceRunning = true;
+
+        const topRings = [0, 1, 2]; // Top 3 rings
+        const durationPerRing = 1500; // 1.5 seconds each
+        let currentStep = 0;
+
+        const highlightNext = () => {
+            if (currentStep >= topRings.length) {
+                // Sequence complete - emit event
+                this.autoSequenceRunning = false;
+                const event = new CustomEvent('record-player:autosequence-complete', {
+                    detail: { lastIndex: topRings[topRings.length - 1] }
+                });
+                this.container.dispatchEvent(event);
+                // Leave tonearm on top track
+                this.activateRing(0, { locked: false, source: 'auto' });
+                return;
+            }
+
+            const index = topRings[currentStep];
+            this.activateRing(index, { locked: false, source: 'auto' });
+            currentStep++;
+
+            setTimeout(highlightNext, durationPerRing);
+        };
+
+        // Start after small delay
+        setTimeout(highlightNext, 300);
+    }
+
     mount() {
         this.mounted = true;
     }
@@ -905,6 +1063,11 @@ export class RecordPlayerViz {
     update() { }
 
     destroy() {
+        // Clear debounce timer
+        if (this.hoverDebounceTimer) {
+            clearTimeout(this.hoverDebounceTimer);
+            this.hoverDebounceTimer = null;
+        }
         this.stopSong(true);
         this.stopAllRingRotation();
         window.removeEventListener('resize', this.handleResizeBound);

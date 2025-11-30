@@ -16,10 +16,21 @@ export class ConveyorViz extends EventEmitter {
       score: 0,
       totalAttempts: 0,
       revealed: false,
-      answeredCorrectly: [] // Track which questions were answered correctly
+      answeredCorrectly: [], // Track which questions were answered correctly
+      visitingScene: null // Track if user is visiting a scene for hints
     };
     this.options = { ...DEFAULT_OPTIONS };
     this.mounted = false;
+
+    // Map quiz question IDs to their corresponding scene sections
+    this.sceneMap = {
+      'duration': { section: 'scene-duration', label: 'Stopwatch' },
+      'popular_sound': { section: 'scene-viral-sounds', label: 'Vinyl Records' },
+      'danceability_avg': { section: 'scene-music-galaxy', label: 'Music Galaxy' },
+      'energy_avg': { section: 'scene-music-galaxy', label: 'Music Galaxy' },
+      'caption_word': { section: 'scene-emotion', label: 'Captions' },
+      'community': { section: 'scene-category', label: 'Ranking Pyramid' }
+    };
   }
 
   async init(selector, options = {}) {
@@ -234,8 +245,16 @@ export class ConveyorViz extends EventEmitter {
         <p class="ingredient-hint"></p>
         <p class="attempts-remaining" aria-live="polite"></p>
       </div>
-      
+
       <div class="options-grid" role="group" aria-label="Answer choices"></div>
+
+      <div class="hint-navigation" style="display:none;">
+        <p class="hint-prompt">Need a hint? Explore the scene where this was covered:</p>
+        <button class="btn-secondary go-to-scene-btn" aria-label="Go to scene for hints">
+          <span class="go-to-icon">&#x21AA;</span>
+          <span class="go-to-label">Visit Scene</span>
+        </button>
+      </div>
 
       <div class="feedback-area" style="display:none;">
         <button class="btn-primary next-btn" style="display:none;" aria-label="Move to next ingredient">
@@ -269,6 +288,10 @@ export class ConveyorViz extends EventEmitter {
     // Next button
     const nextBtn = this.container.querySelector('.next-btn');
     nextBtn?.addEventListener('click', () => this.moveToNext());
+
+    // Go to scene button for hints
+    const goToSceneBtn = this.container.querySelector('.go-to-scene-btn');
+    goToSceneBtn?.addEventListener('click', () => this.navigateToHintScene());
   }
 
   updateBeltPosition() {
@@ -309,6 +332,10 @@ export class ConveyorViz extends EventEmitter {
     // Hide start button, show interaction panel
     const startBtn = this.container.querySelector('.start-btn');
     startBtn.style.display = 'none';
+
+    // Hide quiz-question-panel to make room for interaction panel
+    const quizPanel = document.querySelector('.quiz-question-panel');
+    if (quizPanel) quizPanel.style.display = 'none';
 
     const panel = this.container.querySelector('.interaction-panel');
     panel.style.display = 'block';
@@ -365,6 +392,13 @@ export class ConveyorViz extends EventEmitter {
     const nextBtn = this.container.querySelector('.next-btn');
     if (nextBtn) nextBtn.style.display = 'none';
 
+    // Reset hint navigation
+    const hintNav = this.container.querySelector('.hint-navigation');
+    if (hintNav) hintNav.style.display = 'none';
+
+    // Update the go-to-scene button label for current question
+    this.updateHintNavigationLabel();
+
     // Highlight current box
     const boxes = this.container.querySelectorAll('.conveyor-box');
     boxes.forEach((box, i) => {
@@ -389,20 +423,27 @@ export class ConveyorViz extends EventEmitter {
     const current = this.data[this.state.currentIndex];
     const isCorrect = this.checkAnswer(guess, current.answer);
 
+    // Capture the current index NOW before any async operations
+    const questionIndex = this.state.currentIndex;
+
     if (isCorrect) {
       this.state.score++;
       // Mark the correct button as green
       if (btnEl) btnEl.classList.add('correct-answer');
-      
+
       // Disable all options after correct
       this.disableAllOptions();
-      
+
+      // Hide hint navigation if it was shown (user got it wrong first, then right)
+      const hintNav = this.container.querySelector('.hint-navigation');
+      if (hintNav) hintNav.style.display = 'none';
+
       // Show feedback area and next button immediately
       const feedbackArea = this.container.querySelector('.feedback-area');
       const nextBtn = this.container.querySelector('.next-btn');
-      
+
       if (feedbackArea) feedbackArea.style.display = 'flex';
-      
+
       if (nextBtn) {
         nextBtn.style.display = 'block';
         // Update button text for last item
@@ -412,24 +453,25 @@ export class ConveyorViz extends EventEmitter {
           nextBtn.textContent = 'Next →';
         }
       }
-      
-      // Auto-reveal after short delay
-      setTimeout(() => this.revealAnswer(), 1000);
+
+      // Auto-reveal after short delay - pass captured index
+      setTimeout(() => this.revealAnswer(questionIndex, true), 1000);
     } else {
       // Mark the incorrect button as red
       if (btnEl) btnEl.classList.add('incorrect-answer');
-      
+
       this.state.attemptsLeft = Math.max(0, (this.state.attemptsLeft || 1) - 1);
       const attemptsEl = this.container.querySelector('.attempts-remaining');
       if (attemptsEl) attemptsEl.textContent = `Attempts left: ${this.state.attemptsLeft}`;
 
       if (this.state.attemptsLeft > 0) {
-        // Don't show feedback bar - just let the red button indicate the error
+        // Show hint navigation to help user find the answer
+        this.showHintNavigation();
       } else {
         // Don't show feedback message - just highlight the correct answer
         // Disable remaining options
         this.disableAllOptions();
-        
+
         // Highlight the correct answer in green
         const current = this.data[this.state.currentIndex];
         const allOptions = this.container.querySelectorAll('.option-btn');
@@ -438,13 +480,13 @@ export class ConveyorViz extends EventEmitter {
             opt.classList.add('correct-answer');
           }
         });
-        
+
         // Show next button immediately without reveal step
         const feedbackArea = this.container.querySelector('.feedback-area');
         const nextBtn = this.container.querySelector('.next-btn');
-        
+
         if (feedbackArea) feedbackArea.style.display = 'flex';
-        
+
         if (nextBtn) {
           nextBtn.style.display = 'block';
           // Update button text for last item
@@ -454,9 +496,9 @@ export class ConveyorViz extends EventEmitter {
             nextBtn.textContent = 'Next →';
           }
         }
-        
-        // Auto-reveal after short delay
-        setTimeout(() => this.revealAnswer(), 1000);
+
+        // Auto-reveal after short delay - pass captured index
+        setTimeout(() => this.revealAnswer(questionIndex, false), 1000);
       }
     }
 
@@ -510,44 +552,70 @@ export class ConveyorViz extends EventEmitter {
     }
   }
 
-  revealAnswer() {
-    if (this.state.revealed) return;
+  /**
+   * Reveal the answer for a specific question
+   * @param {number} questionIndex - The index of the question to reveal (captured at guess time)
+   * @param {boolean} wasCorrect - Whether the answer was correct (captured at guess time)
+   */
+  revealAnswer(questionIndex = null, wasCorrect = null) {
+    // Use provided index or fall back to current (for backwards compatibility)
+    const indexToReveal = questionIndex !== null ? questionIndex : this.state.currentIndex;
 
-    // Prevent reveal unless user is out of attempts or already correct
-    const current = this.data[this.state.currentIndex];
-    const lastGuessCorrect = this.checkAnswer(this.state.currentGuess || '', current.answer);
-    if (!lastGuessCorrect && (this.state.attemptsLeft ?? 0) > 0) {
-      this.showFeedback('Take up to 3 attempts before revealing.', 'warning');
+    // Check if this specific question was already revealed
+    if (this.state.answeredCorrectly[indexToReveal] !== undefined) {
+      // Already revealed, just ensure the card is flipped
+      const box = this.container.querySelector(`.conveyor-box[data-index="${indexToReveal}"]`);
+      if (box && !box.classList.contains('flipped')) {
+        box.classList.add('flipped');
+        box.classList.add(this.state.answeredCorrectly[indexToReveal] ? 'correct' : 'incorrect');
+      }
       return;
     }
 
-    this.state.revealed = true;
+    // Determine correctness - use provided value or calculate
+    let isCorrect = wasCorrect;
+    if (isCorrect === null) {
+      const current = this.data[indexToReveal];
+      isCorrect = this.checkAnswer(this.state.currentGuess || '', current.answer);
+      // Prevent reveal if still has attempts and not correct
+      if (!isCorrect && (this.state.attemptsLeft ?? 0) > 0 && indexToReveal === this.state.currentIndex) {
+        this.showFeedback('Take up to 3 attempts before revealing.', 'warning');
+        return;
+      }
+    }
 
-    // Track if this was answered correctly
-    this.state.answeredCorrectly[this.state.currentIndex] = lastGuessCorrect;
+    // Track that this question was answered
+    this.state.answeredCorrectly[indexToReveal] = isCorrect;
 
-    // Flip current box and mark as correct or incorrect
-    const currentBox = this.container.querySelector(`.conveyor-box[data-index="${this.state.currentIndex}"]`);
+    // Mark revealed only if this is the current question
+    if (indexToReveal === this.state.currentIndex) {
+      this.state.revealed = true;
+    }
+
+    // Flip the specific box and mark as correct or incorrect
+    const currentBox = this.container.querySelector(`.conveyor-box[data-index="${indexToReveal}"]`);
     if (currentBox) {
       currentBox.classList.add('flipped');
-      if (lastGuessCorrect) {
+      if (isCorrect) {
         currentBox.classList.add('correct');
       } else {
         currentBox.classList.add('incorrect');
       }
     }
 
-    // Show next button
-    const nextBtn = this.container.querySelector('.next-btn');
-    
-    if (nextBtn) {
-      nextBtn.style.display = 'block';
-      
-      // Update button text for last item
-      if (this.state.currentIndex >= this.data.length - 1) {
-        nextBtn.textContent = 'Finish';
-      } else {
-        nextBtn.textContent = 'Next →';
+    // Show next button (only if we're on the current question)
+    if (indexToReveal === this.state.currentIndex) {
+      const nextBtn = this.container.querySelector('.next-btn');
+
+      if (nextBtn) {
+        nextBtn.style.display = 'block';
+
+        // Update button text for last item
+        if (this.state.currentIndex >= this.data.length - 1) {
+          nextBtn.textContent = 'Finish';
+        } else {
+          nextBtn.textContent = 'Next →';
+        }
       }
     }
   }
@@ -646,15 +714,155 @@ export class ConveyorViz extends EventEmitter {
       score: 0,
       totalAttempts: 0,
       revealed: false,
-      answeredCorrectly: []
+      answeredCorrectly: [],
+      visitingScene: null
     };
 
     // Reset all boxes (remove flipped class)
     const boxes = this.container.querySelectorAll('.conveyor-box');
     boxes.forEach(box => box.classList.remove('flipped', 'active', 'correct', 'incorrect'));
 
+    // Restore quiz-question-panel visibility
+    const quizPanel = document.querySelector('.quiz-question-panel');
+    if (quizPanel) quizPanel.style.display = '';
+
     // Re-render
     this.render();
     this.setupEventListeners();
+  }
+
+  // ============================================
+  // HINT NAVIGATION - Go to scene for hints
+  // ============================================
+
+  /**
+   * Update the hint navigation button label based on current question
+   */
+  updateHintNavigationLabel() {
+    const current = this.data?.[this.state.currentIndex];
+    if (!current) return;
+
+    const sceneInfo = this.sceneMap[current.id];
+    const goToLabel = this.container.querySelector('.go-to-scene-btn .go-to-label');
+    if (goToLabel && sceneInfo) {
+      goToLabel.textContent = `Visit ${sceneInfo.label}`;
+    }
+  }
+
+  /**
+   * Show the hint navigation panel
+   */
+  showHintNavigation() {
+    const hintNav = this.container.querySelector('.hint-navigation');
+    if (hintNav) {
+      hintNav.style.display = 'block';
+    }
+  }
+
+  /**
+   * Navigate to the scene that has hints for the current question
+   */
+  navigateToHintScene() {
+    const current = this.data?.[this.state.currentIndex];
+    if (!current) return;
+
+    const sceneInfo = this.sceneMap[current.id];
+    if (!sceneInfo) return;
+
+    // Store current state so we can return
+    this.state.visitingScene = sceneInfo.section;
+
+    // Get the target section
+    const targetSection = document.getElementById(sceneInfo.section);
+    if (!targetSection) return;
+
+    // Create and show the "Return to Quiz" button in the target scene
+    this.showReturnToQuizButton(targetSection);
+
+    // Scroll to the target section using fullPage.js if available
+    if (window.fullpage_api) {
+      // Find the section index
+      const allSections = document.querySelectorAll('.section');
+      let sectionIndex = 0;
+      allSections.forEach((section, index) => {
+        if (section.id === sceneInfo.section) {
+          sectionIndex = index + 1; // fullPage uses 1-based indexing
+        }
+      });
+      window.fullpage_api.moveTo(sectionIndex);
+    } else {
+      // Fallback: scroll into view
+      targetSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Emit event for analytics/debugging
+    this.emit(VIZ_EVENTS.STATE_CHANGE, {
+      action: 'navigate_to_hint_scene',
+      scene: sceneInfo.section,
+      questionId: current.id
+    });
+  }
+
+  /**
+   * Show a floating "Return to Quiz" button (fixed position, appended to body)
+   */
+  showReturnToQuizButton(targetSection) {
+    // Remove any existing return button
+    const existingBtn = document.querySelector('.return-to-quiz-btn');
+    if (existingBtn) existingBtn.remove();
+
+    // Create the return button
+    const returnBtn = document.createElement('button');
+    returnBtn.className = 'return-to-quiz-btn';
+    returnBtn.innerHTML = `
+      <span class="return-icon">&#x21A9;</span>
+      <span class="return-label">Back to Quiz</span>
+    `;
+    returnBtn.setAttribute('aria-label', 'Return to quiz');
+
+    // Add click handler - bind to this instance
+    const self = this;
+    returnBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      self.returnToQuiz();
+    });
+
+    // Append to body for proper fixed positioning with fullPage.js
+    document.body.appendChild(returnBtn);
+  }
+
+  /**
+   * Return to the quiz from the hint scene
+   */
+  returnToQuiz() {
+    // Remove the return button
+    const returnBtn = document.querySelector('.return-to-quiz-btn');
+    if (returnBtn) returnBtn.remove();
+
+    // Clear visiting state
+    this.state.visitingScene = null;
+
+    // Navigate back to quiz section
+    const quizSection = document.getElementById('scene-quiz');
+    if (!quizSection) return;
+
+    if (window.fullpage_api) {
+      // Find the quiz section index
+      const allSections = document.querySelectorAll('.section');
+      let sectionIndex = 0;
+      allSections.forEach((section, index) => {
+        if (section.id === 'scene-quiz') {
+          sectionIndex = index + 1;
+        }
+      });
+      window.fullpage_api.moveTo(sectionIndex);
+    } else {
+      // Fallback: scroll into view
+      quizSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Emit event
+    this.emit(VIZ_EVENTS.STATE_CHANGE, { action: 'return_to_quiz' });
   }
 }

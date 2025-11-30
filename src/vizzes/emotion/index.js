@@ -1288,6 +1288,7 @@ export class EmotionViz extends EventEmitter {
     const legendPanel = root.querySelector(".emotion-legend");
     if (!legendPanel) return;
 
+    // Interactive checkbox legend without redundant color dots
     legendPanel.innerHTML = "";
     const viz = this;
 
@@ -1307,7 +1308,6 @@ export class EmotionViz extends EventEmitter {
         />
         <span class="emotion-legend-chip" style="--emotion-color:${color}">
           <span class="emotion-legend-checkmark"></span>
-          <span class="emotion-legend-color-dot"></span>
           <span class="emotion-legend-text">${emotion}</span>
         </span>
       </label>
@@ -1333,6 +1333,9 @@ export class EmotionViz extends EventEmitter {
           if (viz.state.sortedView) {
             viz.applySortedLayout();
           }
+
+          // Show insight callout after user interacts with legend
+          viz.showInsightCallout();
         });
       }
     });
@@ -1381,24 +1384,8 @@ export class EmotionViz extends EventEmitter {
 
         d.isHovered = true;
 
-        const dx = d.offsetX || 0;
-        const dy = d.offsetY || 0;
-
-        // enlarge slightly
-        if (!this.options.reducedMotion) {
-          g.raise()
-            .transition()
-            .duration(160)
-            .attr(
-              "transform",
-              `translate(${d.x + dx}, ${d.y + dy}) scale(1.08)`
-            );
-        } else {
-          g.raise().attr(
-            "transform",
-            `translate(${d.x + dx}, ${d.y + dy}) scale(1.08)`
-          );
-        }
+        // Just raise to top, NO scale transform (prevents flying)
+        g.raise();
 
         // show side detail, if present
         this.showBubbleDetail(d);
@@ -1407,35 +1394,28 @@ export class EmotionViz extends EventEmitter {
         this.updateHoverLinks(d);
       })
       .on("mouseleave", (event, d) => {
-        const g = d3.select(event.currentTarget);
-
-        const dx = d.offsetX || 0;
-        const dy = d.offsetY || 0;
-
-        // return to original size, then resume float
-        if (!this.options.reducedMotion) {
-          g.transition()
-            .duration(160)
-            .attr(
-              "transform",
-              `translate(${d.x + dx}, ${d.y + dy}) scale(1)`
-            )
-            .on("end", () => {
-              d.isHovered = false;
-            });
-        } else {
-          g.attr(
-            "transform",
-            `translate(${d.x + dx}, ${d.y + dy}) scale(1)`
-          );
-          d.isHovered = false;
-        }
+        d.isHovered = false;
 
         // remove hover connections
         this.clearHoverLinks();
-      });
+      })
+      .on("click", (_event, d) => {
+        // Open detail drawer on click (Stage 5 requirement)
+        this.openDetailDrawer(d);
 
-    // no click handler: clicking does nothing now
+        // Show insight callout after first interaction
+        this.showInsightCallout();
+      });
+  }
+
+  /**
+   * Show the insight callout after user interacts with the visualization
+   */
+  showInsightCallout() {
+    const callout = document.querySelector('.emotion-insight-callout');
+    if (callout && callout.dataset.insightState !== 'visible') {
+      callout.dataset.insightState = 'visible';
+    }
   }
 
   showBubbleDetail(data) {
@@ -1484,6 +1464,39 @@ export class EmotionViz extends EventEmitter {
       .transition()
       .duration(400)
       .attr("opacity", (d) => (d.count >= threshold ? 1 : 0.25));
+  }
+
+  /**
+   * Highlight positive and hype-oriented emotion bubbles.
+   * Dims neutral, negative, and disappointment emotions.
+   * For Stage 5 guided interaction.
+   */
+  highlightPositiveEmotions() {
+    if (!this.svg || !this.data) return;
+
+    const positiveEmotions = new Set(['joy', 'excitement', 'hope']);
+
+    this.svg
+      .selectAll(".word-bubble")
+      .transition()
+      .duration(600)
+      .attr("opacity", (d) => positiveEmotions.has(d.emotion) ? 1 : 0.25)
+      .attr("stroke-width", (d) => positiveEmotions.has(d.emotion) ? 2 : 1);
+  }
+
+  /**
+   * Reset all bubble highlights to default state.
+   * Restores full opacity and default stroke width.
+   */
+  resetHighlights() {
+    if (!this.svg || !this.data) return;
+
+    this.svg
+      .selectAll(".word-bubble")
+      .transition()
+      .duration(400)
+      .attr("opacity", 1)
+      .attr("stroke-width", 1);
   }
 
   emphasizeOutlines() {

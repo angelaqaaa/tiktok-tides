@@ -1,16 +1,11 @@
 // src/illustrations/index.js
 import { createForestIllustration } from './forest.js';
-import { createCityIllustration }   from './city.js';
-import { createLabIllustration, installLabParallax }    from './lab.js';
-// Air SVG removed - too simple/flat
-
+import { createLabIllustration, installLabParallax } from './lab.js';
 const NS = 'http://www.w3.org/2000/svg';
 
 const mounts = {
-  forest: { hostId: 'section-fade',        factory: createForestIllustration },
-  city:   { hostId: 'section-spillover',   factory: createCityIllustration },
-  // air removed
-  lab:    { hostId: 'section-ingredients', factory: createLabIllustration }
+  forest: { hostId: 'scene-category',   factory: createForestIllustration },
+  lab:    { hostId: 'scene-quiz',       factory: createLabIllustration }
 };
 
 let current = { scene: null, node: null };
@@ -34,7 +29,7 @@ export function installIllustrations() {
 
 function ensureIllustrationHosts() {
   console.log('[Illustrations] Ensuring illustration hosts (sections)...');
-  ['section-fade','section-spillover','section-takeaway','section-ingredients'].forEach(id=>{
+  ['scene-category','scene-quiz'].forEach(id=>{
     const host = document.getElementById(id);
     if (!host) {
       console.warn(`[Illustrations] Section #${id} not found!`);
@@ -151,43 +146,6 @@ function attachEasterEggs(scene, svg) {
 
       svg.appendChild(leaf);
       setTimeout(() => leaf.remove(), 2000);
-    });
-  }
-
-  if (scene === 'city') {
-    // Add hot zone
-    const hotZone = document.createElementNS(NS, 'rect');
-    hotZone.setAttribute('x', '0');
-    hotZone.setAttribute('y', '0');
-    hotZone.setAttribute('width', '1440');
-    hotZone.setAttribute('height', '360');
-    hotZone.setAttribute('fill', 'transparent');
-    hotZone.style.pointerEvents = 'auto';
-    svg.appendChild(hotZone);
-
-    const buildings = svg.querySelectorAll('.bldg');
-
-    // Hover to show beacon on building tops
-    hotZone.addEventListener('mouseenter', () => {
-      const picks = Array.from(buildings)
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 2);
-
-      picks.forEach(b => {
-        const x = parseFloat(b.getAttribute('x')) + 20;
-        const y = parseFloat(b.getAttribute('y')) - 5;
-
-        const beacon = document.createElementNS(NS, 'circle');
-        beacon.setAttribute('cx', String(x));
-        beacon.setAttribute('cy', String(y));
-        beacon.setAttribute('r', '8');
-        beacon.setAttribute('fill', 'rgba(255, 230, 150, 0.6)');
-        beacon.setAttribute('class', 'city-beacon');
-        beacon.style.animation = 'beaconPulse 600ms ease-in-out forwards';
-
-        svg.appendChild(beacon);
-        setTimeout(() => beacon.remove(), 600);
-      });
     });
   }
 

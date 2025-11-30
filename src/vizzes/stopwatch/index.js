@@ -624,6 +624,41 @@ export class StopwatchViz extends EventEmitter {
     console.log('Velocity metrics overlay (placeholder)');
   }
 
+  /**
+   * Highlight short clips (<15 seconds)
+   * For guided exploration of duration bands
+   */
+  highlightShortClips() {
+    this.highlightDurationRange(0, 15);
+    console.log('[Stopwatch] Highlighting short clips (<15s)');
+  }
+
+  /**
+   * Highlight mid-length clips (15-30 seconds)
+   * This is the "sweet spot" for engagement in the dataset
+   */
+  highlightMidClips() {
+    this.highlightDurationRange(15, 30);
+    console.log('[Stopwatch] Highlighting mid-length clips (15-30s)');
+  }
+
+  /**
+   * Highlight long clips (>30 seconds)
+   * Shows less common longer-form content
+   */
+  highlightLongClips() {
+    this.highlightDurationRange(30, Infinity);
+    console.log('[Stopwatch] Highlighting long clips (>30s)');
+  }
+
+  /**
+   * Reset all duration highlights to show full dataset
+   */
+  resetHighlights() {
+    this.highlightDurationRange(-Infinity, Infinity);
+    console.log('[Stopwatch] Reset all highlights');
+  }
+
   playGlowSweep() {
     // Optional special effect for transitions (kept from legacy API)
     if (!this.g || this.options.reducedMotion) return;

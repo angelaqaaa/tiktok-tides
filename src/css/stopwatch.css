@@ -34,7 +34,7 @@ h1{
 }
 
 /* ---------- Legend Panel (Stopwatch) ---------- */
-#section-ignite .legend-panel{
+#scene-duration .legend-panel{
   width: 100%;
   margin: 0;
   border-radius:16px;
@@ -217,9 +217,9 @@ svg{
 
 .center-dot{ fill:#e6e7ea; }
 
-.tooltip{
-  position:absolute;
-  pointer-events:none;
+/* Stopwatch tooltip - extends base .tooltip from base.css */
+/* Scoped to avoid affecting other tooltips (e.g., ranking-bubble-tooltip) */
+.tooltip:not(.ranking-bubble-tooltip) {
   background:#161a22;
   color:#e6e7ea;
   border:1px solid #2b3240;
@@ -227,7 +227,6 @@ svg{
   border-radius:8px;
   font-size:12px;
   box-shadow:0 4px 16px #00000040;
-  opacity:0;
   transition:opacity .12s ease-in-out, transform .12s ease-in-out;
   transform: translate(-50%, -120%);
   white-space:nowrap;

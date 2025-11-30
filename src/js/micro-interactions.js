@@ -48,55 +48,7 @@ export class CometEffect {
 }
 
 /**
- * B) Community - Audio tray jiggle + network edge emphasis
- * Tray item hover: cassette rotates, network gets subtle highlight
- */
-export class AudioTrayEffect {
-  constructor(trayContainer, networkContainer) {
-    this.tray = trayContainer;
-    this.network = networkContainer;
-    this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    this.init();
-  }
-
-  init() {
-    if (!this.tray) return;
-
-    const items = this.tray.querySelectorAll('.audio-item');
-    items.forEach(item => {
-      item.addEventListener('mouseenter', () => this.onHover(item));
-      item.addEventListener('mouseleave', () => this.onLeave(item));
-    });
-  }
-
-  onHover(item) {
-    // Rotate cassette icon slightly
-    const icon = item.querySelector('.sound-icon');
-    if (icon && !this.prefersReducedMotion) {
-      icon.style.transition = 'transform 200ms cubic-bezier(0.4, 0.0, 0.2, 1)';
-      icon.style.transform = 'rotate(-5deg)';
-    }
-
-    // Emphasize network edges
-    if (this.network) {
-      this.network.classList.add('sound-active');
-    }
-  }
-
-  onLeave(item) {
-    const icon = item.querySelector('.sound-icon');
-    if (icon && !this.prefersReducedMotion) {
-      icon.style.transform = 'rotate(0deg)';
-    }
-
-    if (this.network) {
-      this.network.classList.remove('sound-active');
-    }
-  }
-}
-
-/**
- * C) Ranking - Gentle leaf hint on first enter
+ * B) Ranking - Gentle leaf hint on first enter
  * First time section enters: 2 decorative leaves drop and settle
  * Reduced-motion: fade-in only
  */
@@ -161,7 +113,7 @@ export class LeafHintEffect {
 }
 
 /**
- * D) Emotion - Bubble "breathe while inviting"
+ * C) Emotion - Bubble "breathe while inviting"
  * Nearest 3 bubbles to cursor scale 1.03× for 150ms
  * Reduced-motion: outline brightness pulse only
  */
@@ -259,16 +211,8 @@ export function initMicroInteractions() {
     console.log('[MicroInteraction] Planets comet ready - click anywhere in viz');
   }
 
-  // B) Community audio tray - ensure hover works even without viz events
-  const audioTray = document.querySelector('.audio-tray');
-  const networkContainer = document.querySelector('#viz-community');
-  if (audioTray && networkContainer) {
-    new AudioTrayEffect(audioTray, networkContainer);
-    console.log('[MicroInteraction] Audio tray effects ready');
-  }
-
-  // C) Ranking leaf hint - trigger on first intersection
-  const rankingSection = document.querySelector('#section-fade');
+  // B) Ranking leaf hint - trigger on first intersection
+  const rankingSection = document.querySelector('#scene-category');
   const rankingViz = document.querySelector('#viz-ranking');
   if (rankingSection && rankingViz) {
     const leafHint = new LeafHintEffect(rankingSection);
@@ -297,8 +241,8 @@ export function initMicroInteractions() {
     }, { once: true });
   }
 
-  // D) Emotion bubble breathe - trigger on section intersection, not just hover
-  const emotionSection = document.querySelector('#section-takeaway');
+  // C) Emotion bubble breathe - trigger on section intersection, not just hover
+  const emotionSection = document.querySelector('#scene-emotion');
   const emotionViz = document.querySelector('#viz-emotion');
   if (emotionSection && emotionViz) {
     const bubbleBreathe = new BubbleBreatheEffect(emotionViz);
