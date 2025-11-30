@@ -1,6 +1,8 @@
 // Main scrollytelling orchestrator - Redesigned for guided data story
 import '../css/tokens.css';
 import '../css/base.css';
+import '../css/navigation.css';
+import '../css/hero.css';
 import '../css/stopwatch.css';
 import '../css/record-player.css';
 import '../css/ranking.css';

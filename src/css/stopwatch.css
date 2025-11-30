@@ -1,37 +1,8 @@
-:root{
-  --bg:#0f1115;
-  --fg:#e6e7ea;
-  --muted:#aeb3bd;
-  --card:#171a22;
-  --chip:#1e2330;
-  --chipText:#e9ecf4;
-  --accent:#8fb3ff;
-}
-
-*{ box-sizing: border-box; }
-
-html, body{
-  margin:0;
-  height:100%;
-  background:var(--bg);
-  color:var(--fg);
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-}
-
-header{ padding:18px 20px 0; }
-
-h1{
-  margin:0 0 12px;
-  font-weight:800;
-  font-size: clamp(28px, 5vw, 44px);
-  letter-spacing:.5px;
-  text-align:center;
-  background: linear-gradient(180deg, #ffd76a, #ffb03a 60%, #f08b2b);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  text-shadow: 0 2px 10px #00000050;
-}
+/* ═══════════════════════════════════════════════════════════════════════════
+   STOPWATCH VISUALIZATION - Duration Scene
+   All styles scoped to #scene-duration or stopwatch-specific classes
+   Global styles removed - base.css handles resets, typography, and body styling
+   ═══════════════════════════════════════════════════════════════════════════ */
 
 /* ---------- Legend Panel (Stopwatch) ---------- */
 #scene-duration .legend-panel{
@@ -70,7 +41,7 @@ h1{
   padding:8px 12px;
   background: linear-gradient(180deg, #222738, #1a1f2b);
   border:1px solid #2a3346;
-  color:var(--chipText);
+  color: #e9ecf4;
   border-radius:999px;
   box-shadow: 0 2px 10px #00000050;
   font-size:13px;
@@ -86,7 +57,7 @@ h1{
 }
 
 .legend-gradient{
-  background: var(--card);
+  background: #171a22;
   border:1px solid #232b3a;
   border-radius:12px;
   padding:12px 14px 10px;
@@ -144,7 +115,7 @@ h1{
 
 .note{
   text-align:center;
-  color:var(--muted);
+  color: #aeb3bd;
   margin: 0 12px 32px;
 }
 
