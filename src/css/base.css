@@ -344,20 +344,6 @@ body[data-scene="dawn"]::before {
       transparent 100%);
 }
 
-/* Orbit (Surge) - LEGACY: kept for old scene IDs
-   New scenes use section-level backgrounds instead */
-body[data-scene="orbit"]::before {
-  background:
-    /* Central "sun" - the gravitational center of viral trends */
-    radial-gradient(circle 120px at 50% 50%, rgba(255, 200, 100, 0.35) 0%, rgba(255, 150, 80, 0.20) 40%, transparent 100%),
-    /* Inner orbital glow */
-    radial-gradient(circle 300px at 50% 50%, rgba(255, 100, 150, 0.18) 60%, transparent 100%),
-    /* Outer space nebula */
-    radial-gradient(ellipse 1400px 900px at 50% 50%, rgba(100, 150, 255, 0.25) 0%, rgba(80, 120, 200, 0.15) 40%, transparent 80%),
-    /* Deep space purple */
-    radial-gradient(ellipse 1600px 1000px at 50% 50%, rgba(50, 50, 120, 0.40) 0%, rgba(30, 30, 80, 0.28) 60%, transparent 100%);
-}
-
 /* Galaxy (Music Galaxy) - No body background, section handles it */
 body[data-scene="galaxy"]::before {
   background: transparent;
@@ -366,42 +352,6 @@ body[data-scene="galaxy"]::before {
 /* Sounds (Viral Sounds) - No body background, section handles it */
 body[data-scene="sounds"]::before {
   background: transparent;
-}
-
-/* City - Night sky atmosphere (SVG handles buildings)
-   Metaphor: Communities form like city districts with distinct cultures */
-body[data-scene="city"]::before {
-  background:
-    /* Distant city glow on horizon - moderate */
-    radial-gradient(ellipse 1100px 320px at 50% 75%, rgba(255, 140, 60, 0.22) 0%, rgba(255, 120, 65, 0.14) 40%, rgba(255, 100, 50, 0.08) 70%, transparent 90%),
-    /* Many more stars scattered across sky */
-    radial-gradient(circle 3px at 8% 12%, rgba(255, 255, 255, 0.95) 0%, transparent 100%),
-    radial-gradient(circle 2px at 15% 22%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 3px at 22% 8%, rgba(255, 255, 255, 1.0) 0%, transparent 100%),
-    radial-gradient(circle 2px at 28% 32%, rgba(255, 255, 255, 0.75) 0%, transparent 100%),
-    radial-gradient(circle 3px at 35% 15%, rgba(255, 255, 255, 0.9) 0%, transparent 100%),
-    radial-gradient(circle 2px at 42% 28%, rgba(255, 255, 255, 0.85) 0%, transparent 100%),
-    radial-gradient(circle 3px at 48% 18%, rgba(255, 255, 255, 0.95) 0%, transparent 100%),
-    radial-gradient(circle 2px at 55% 38%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
-    radial-gradient(circle 3px at 62% 12%, rgba(255, 255, 255, 1.0) 0%, transparent 100%),
-    radial-gradient(circle 2px at 68% 35%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 3px at 75% 22%, rgba(255, 255, 255, 0.9) 0%, transparent 100%),
-    radial-gradient(circle 2px at 82% 48%, rgba(255, 255, 255, 0.75) 0%, transparent 100%),
-    radial-gradient(circle 2px at 88% 28%, rgba(255, 255, 255, 0.85) 0%, transparent 100%),
-    radial-gradient(circle 3px at 95% 18%, rgba(255, 255, 255, 0.95) 0%, transparent 100%),
-    radial-gradient(circle 2px at 12% 48%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
-    radial-gradient(circle 2px at 18% 58%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 3px at 38% 52%, rgba(255, 255, 255, 0.85) 0%, transparent 100%),
-    radial-gradient(circle 2px at 52% 58%, rgba(255, 255, 255, 0.75) 0%, transparent 100%),
-    radial-gradient(circle 3px at 65% 55%, rgba(255, 255, 255, 0.9) 0%, transparent 100%),
-    radial-gradient(circle 2px at 78% 62%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 2px at 92% 58%, rgba(255, 255, 255, 0.85) 0%, transparent 100%),
-    /* Night sky gradient */
-    linear-gradient(180deg,
-      rgba(4, 12, 24, 0.85) 0%,
-      rgba(8, 24, 42, 0.75) 30%,
-      rgba(12, 32, 52, 0.70) 60%,
-      rgba(16, 40, 60, 0.65) 100%);
 }
 
 /* Forest - Atmospheric base (SVG handles trees)
@@ -496,43 +446,6 @@ body[data-scene="cosmos"] .scene--stars {
 @keyframes starfield-drift {
   0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
   100% { background-position: 140px 140px, -180px 180px, 200px -200px, -220px -220px, 160px 160px; }
-}
-
-/* Orbits - Concentric rings representing planetary orbits
-   Metaphor: Artists' gravitational pull creates orbit paths for content */
-body[data-scene="orbit"] .scene--orbits {
-  opacity: 0.38;
-  background-image:
-    /* Innermost orbit - fastest rotation */
-    radial-gradient(circle 250px at 50% 50%, transparent 248px, rgba(100, 180, 255, 0.25) 249px, rgba(100, 180, 255, 0.15) 250px, transparent 251px),
-    /* Second orbit */
-    radial-gradient(circle 380px at 50% 50%, transparent 378px, rgba(150, 200, 255, 0.20) 379px, rgba(150, 200, 255, 0.12) 380px, transparent 381px),
-    /* Third orbit */
-    radial-gradient(circle 520px at 50% 50%, transparent 518px, rgba(180, 220, 255, 0.16) 519px, rgba(180, 220, 255, 0.09) 520px, transparent 521px),
-    /* Outermost orbit - slowest */
-    radial-gradient(circle 680px at 50% 50%, transparent 678px, rgba(200, 230, 255, 0.12) 679px, rgba(200, 230, 255, 0.06) 680px, transparent 681px),
-    /* Small orbital bodies/satellites scattered */
-    radial-gradient(circle 8px at 35% 40%, rgba(255, 200, 150, 0.4) 0%, transparent 100%),
-    radial-gradient(circle 6px at 65% 55%, rgba(200, 150, 255, 0.35) 0%, transparent 100%),
-    radial-gradient(circle 7px at 45% 65%, rgba(150, 255, 200, 0.3) 0%, transparent 100%),
-    radial-gradient(circle 5px at 58% 38%, rgba(255, 180, 200, 0.35) 0%, transparent 100%);
-  animation: orbital-pulse 8s ease-in-out infinite;
-}
-
-@keyframes orbital-pulse {
-  0%, 100% { opacity: 0.38; }
-  50% { opacity: 0.45; }
-}
-
-/* City Grid - Perspective-like converging lines */
-body[data-scene="city"] .scene--grid {
-  opacity: 0.3;
-  background:
-    linear-gradient(rgba(0, 255, 224, 0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 200, 255, 0.08) 1px, transparent 1px),
-    radial-gradient(ellipse at bottom, rgba(100, 200, 255, 0.06) 0%, transparent 50%);
-  background-size: 40px 40px, 40px 40px, 100% 400px;
-  background-position: 0 0, 0 0, center bottom;
 }
 
 /* Forest Canopy - Layered organic shapes with light filtering */
@@ -1613,148 +1526,6 @@ circle[data-type="bubble"] {
 @media (prefers-reduced-motion: reduce) {
   .pine.sway {
     animation: none;
-  }
-}
-
-/* ──────────────────────────────────────────────────────────────────────
-   CITY
-   ────────────────────────────────────────────────────────────────────── */
-
-.illu-city .bldg {
-  fill: #0e1722;
-  opacity: 0.9;
-}
-
-.illu-city .win {
-  fill: #f7f3c8;
-  opacity: 0;
-}
-
-.illu-city .twinkle {
-  animation: tw 2.4s ease-in-out infinite;
-}
-
-@keyframes tw {
-  0%, 100% { opacity: 0; }
-  50% { opacity: 0.9; }
-}
-
-.illu-city .city-ground {
-  fill: #0a0d12;
-}
-
-/* Easter egg: beacon pulse */
-@keyframes beaconPulse {
-  0% {
-    opacity: 0;
-    transform: scale(0.5);
-  }
-  50% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.5);
-  }
-}
-
-.illu-city .city-antenna {
-  stroke: #3a4a52;
-  stroke-width: 2;
-  opacity: 0.8;
-}
-
-.illu-city .city-antenna-light {
-  fill: #ff3030;
-  opacity: 0.9;
-  animation: antennaBlinkSlow 2s ease-in-out infinite;
-}
-
-@keyframes antennaBlinkSlow {
-  0%, 100% { opacity: 0.9; }
-  50% { opacity: 0.3; }
-}
-
-/* Diagonal shooting stars - MORE VISIBLE */
-.illu-city .city-meteor {
-  opacity: 0;
-  animation: meteorStreak 4s ease-out infinite; /* Faster cycle */
-}
-
-@keyframes meteorStreak {
-  0%, 75%, 100% {
-    opacity: 0;
-    transform: translate(0, 0);
-  }
-  3% {
-    opacity: 1;
-  }
-  25% {
-    opacity: 0;
-    transform: translate(150px, 100px); /* Longer diagonal streak */
-  }
-}
-
-/* Sparkling effect for meteor trail points */
-.illu-city .meteor-trail-sparkle {
-  animation: meteorTrailSparkle 0.8s ease-in-out infinite;
-}
-
-@keyframes meteorTrailSparkle {
-  0%, 100% {
-    opacity: 0.4;
-    transform: scale(0.8);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.6);
-  }
-}
-
-/* Sparkling effect for meteor head */
-.illu-city .meteor-head-sparkle {
-  animation: meteorHeadSparkle 1s ease-in-out infinite;
-}
-
-@keyframes meteorHeadSparkle {
-  0%, 100% {
-    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
-  }
-  50% {
-    filter: drop-shadow(0 0 12px rgba(255, 255, 255, 1));
-  }
-}
-
-/* White pulse for meteor glow */
-.illu-city .meteor-glow-sparkle {
-  animation: meteorGlowSparkle 1.5s ease-in-out infinite;
-}
-
-@keyframes meteorGlowSparkle {
-  0%, 100% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 0.9;
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9));
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .illu-city .twinkle,
-  .illu-city .city-neon,
-  .illu-city .city-antenna-light,
-  .illu-city .city-meteor,
-  .illu-city .meteor-trail-sparkle,
-  .illu-city .meteor-head-sparkle,
-  .illu-city .meteor-glow-sparkle {
-    animation: none;
-  }
-  .illu-city .twinkle {
-    opacity: 0.5;
-  }
-  .illu-city .city-meteor {
-    opacity: 0;
   }
 }
 
