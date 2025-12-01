@@ -95,7 +95,7 @@ export class RecordPlayerViz {
 
         // Debounce hover events to prevent excessive state changes
         this.hoverDebounceTimer = null;
-        this.hoverDebounceDelay = 50; // 50ms debounce
+        this.hoverDebounceDelay = 0; // No delay for maximum responsiveness
     }
 
     async init(selector, options = {}) {
@@ -232,7 +232,18 @@ export class RecordPlayerViz {
         this.totalRings = Math.max(this.data.length, 1);
         this.setupScales();
         this.renderRings({ animate });
-        this.bindRingEvents();
+
+        // Clear bound flags before rebinding to ensure fresh event bindings
+        const ringNodes = this.container.querySelectorAll('.record-ring');
+        ringNodes.forEach((ringEl) => {
+            ringEl.dataset.bound = 'false';
+        });
+
+        // Use requestAnimationFrame to ensure DOM is updated before binding events
+        requestAnimationFrame(() => {
+            this.bindRingEvents();
+        });
+
         this.updateYearRangeLabel();
         if (!skipSliderUpdate) {
             this.updateYearSliderUI();
@@ -245,11 +256,7 @@ export class RecordPlayerViz {
         this.toggleNotes(false);
         this.setHoverState(false);
 
-        // Ensure tonearm is reset to default position (not pointing at any ring)
-        if (this.tonearmArm) {
-            // Reset to default CSS position (rotate(-32deg) from CSS)
-            this.tonearmArm.style.transform = 'rotate(-32deg)';
-        }
+        // Don't reset tonearm position when updating year range - keep it in current position
     }
 
     initializeYearSlider() {
@@ -384,7 +391,7 @@ export class RecordPlayerViz {
         const ringCount = Math.max(this.data.length, 1);
         const ringStep = (OUTER_RADIUS - INNER_RADIUS) / ringCount;
         this.radiusScale = (index) => OUTER_RADIUS - (index + 0.75) * ringStep;
-        const maxAngle = 33;
+        const maxAngle = 32;
         const minAngle = 6;
         const domainEnd = Math.max(ringCount - 1, 1);
         this.angleScale = d3.scaleLinear().domain([0, domainEnd]).range([minAngle, maxAngle]);
@@ -527,46 +534,25 @@ export class RecordPlayerViz {
             if (ringEl.dataset.bound === 'true') return;
             ringEl.dataset.bound = 'true';
 
+            const index = Number(ringEl.dataset.songIndex);
+            if (isNaN(index) || index < 0 || index >= this.data.length) return;
+
             ringEl.addEventListener('mouseenter', () => {
-                const index = Number(ringEl.dataset.songIndex);
-                // If there's a locked ring, don't override it
-                if (this.lockedIndex !== null && this.lockedIndex !== index) {
-                    return;
-                }
-                // Debounce hover to prevent excessive state changes
-                if (this.hoverDebounceTimer) {
-                    clearTimeout(this.hoverDebounceTimer);
-                }
-                this.hoverDebounceTimer = setTimeout(() => {
-                    // Immediately activate this ring - all states change together
-                    this.activateRingImmediate(index, { locked: false, source: 'hover' });
-                    this.hoverDebounceTimer = null;
-                }, this.hoverDebounceDelay);
+                if (this.lockedIndex !== null && this.lockedIndex !== index) return;
+                this.activateRingImmediate(index, { locked: false, source: 'hover' });
             });
 
             ringEl.addEventListener('mouseleave', () => {
-                const index = Number(ringEl.dataset.songIndex);
-
-                // Clear any pending hover activation
-                if (this.hoverDebounceTimer) {
-                    clearTimeout(this.hoverDebounceTimer);
-                    this.hoverDebounceTimer = null;
-                }
-
-                // If there's a locked ring, restore it
                 if (this.lockedIndex !== null && this.lockedIndex !== index) {
                     this.activateRingImmediate(this.lockedIndex, { locked: true, source: 'tonearm' });
                     return;
                 }
-
-                // Immediately deactivate - all states change together
                 if (this.activeIndex === index) {
                     this.deactivateRingImmediate(index);
                 }
             });
 
             ringEl.addEventListener('click', () => {
-                const index = Number(ringEl.dataset.songIndex);
                 this.handleFirstGesture();
                 this.activateRingImmediate(index, { locked: true, source: 'click' });
                 this.hideIndicator();
