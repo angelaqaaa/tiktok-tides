@@ -58,15 +58,18 @@
 
 html {
   scroll-behavior: smooth;
-  background: #0a0a0f; /* Ensure base dark background */
+  background: #0a0a0f;
+  /* Ensure base dark background */
 }
 
 body {
   font-family: var(--font-family-sans);
   font-size: var(--font-size-body-reg);
   line-height: 1.6;
-  color: var(--color-text-primary); /* Changed from text-secondary for better visibility */
-  background: #0a0a0f; /* Dark base - merged from line 201 */
+  color: var(--color-text-primary);
+  /* Changed from text-secondary for better visibility */
+  background: #0a0a0f;
+  /* Dark base - merged from line 201 */
   overflow-x: hidden;
   position: relative;
   /* UFO custom cursor - using smaller size for better usability */
@@ -74,12 +77,19 @@ body {
 }
 
 /* UFO cursor for clickable elements */
-a, button, [role="button"], .clickable, input[type="button"], input[type="submit"] {
+a,
+button,
+[role="button"],
+.clickable,
+input[type="button"],
+input[type="submit"] {
   cursor: url('/assets/UFO.png'), pointer;
 }
 
 /* Fallback: ensure cursor works on all elements */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   cursor: inherit;
 }
 
@@ -138,19 +148,51 @@ a, button, [role="button"], .clickable, input[type="button"], input[type="submit
 }
 
 @keyframes splashGlitchCyan {
-  0%, 100% { transform: translate(0, 0); }
-  20% { transform: translate(-2px, 1px); }
-  40% { transform: translate(2px, -1px); }
-  60% { transform: translate(-1px, 2px); }
-  80% { transform: translate(1px, -2px); }
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  20% {
+    transform: translate(-2px, 1px);
+  }
+
+  40% {
+    transform: translate(2px, -1px);
+  }
+
+  60% {
+    transform: translate(-1px, 2px);
+  }
+
+  80% {
+    transform: translate(1px, -2px);
+  }
 }
 
 @keyframes splashGlitchPink {
-  0%, 100% { transform: translate(0, 0); }
-  20% { transform: translate(2px, -1px); }
-  40% { transform: translate(-2px, 1px); }
-  60% { transform: translate(1px, -2px); }
-  80% { transform: translate(-1px, 2px); }
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  20% {
+    transform: translate(2px, -1px);
+  }
+
+  40% {
+    transform: translate(-2px, 1px);
+  }
+
+  60% {
+    transform: translate(1px, -2px);
+  }
+
+  80% {
+    transform: translate(-1px, 2px);
+  }
 }
 
 .splash-logo-text {
@@ -204,11 +246,25 @@ a, button, [role="button"], .clickable, input[type="button"], input[type="submit
 }
 
 @keyframes splashLoaderFill {
-  0% { width: 0%; }
-  20% { width: 30%; }
-  50% { width: 60%; }
-  80% { width: 85%; }
-  100% { width: 95%; }
+  0% {
+    width: 0%;
+  }
+
+  20% {
+    width: 30%;
+  }
+
+  50% {
+    width: 60%;
+  }
+
+  80% {
+    width: 85%;
+  }
+
+  100% {
+    width: 95%;
+  }
 }
 
 .splash-loader-text {
@@ -232,16 +288,29 @@ a, button, [role="button"], .clickable, input[type="button"], input[type="submit
 }
 
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
   line-height: 1.2;
   letter-spacing: -0.02em;
 }
 
-h1 { font-size: var(--font-size-h1); }
-h2 { font-size: var(--font-size-h2); }
-h3 { font-size: var(--font-size-h3); }
+h1 {
+  font-size: var(--font-size-h1);
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+}
 
 .hero-title {
   font-size: clamp(3rem, 8vw, 6rem);
@@ -314,14 +383,21 @@ h3 { font-size: var(--font-size-h3); }
 
 /* Sections - Exactly viewport height for fullPage.js */
 .section {
-  height: 100vh;        /* Exact viewport height - fullPage.js handles scrolling */
-  max-height: 100vh;    /* Prevent content from extending beyond */
-  min-height: 100vh;    /* Ensure minimum */
-  overflow: visible;    /* Allow tooltips etc to overflow */
+  height: 100vh;
+  /* Exact viewport height - fullPage.js handles scrolling */
+  max-height: 100vh;
+  /* Prevent content from extending beyond */
+  min-height: 100vh;
+  /* Ensure minimum */
+  overflow: visible;
+  /* Allow tooltips etc to overflow */
   position: relative;
-  padding: var(--space-2) 0; /* Minimal padding to maximize content space */
-  background: transparent; /* Let scene backgrounds show through */
-  z-index: 1; /* Above body::before background layer */
+  padding: var(--space-2) 0;
+  /* Minimal padding to maximize content space */
+  background: transparent;
+  /* Let scene backgrounds show through */
+  z-index: 1;
+  /* Above body::before background layer */
   display: flex;
   flex-direction: column;
 }
@@ -355,24 +431,27 @@ h3 { font-size: var(--font-size-h3); }
 /* Fixed scene background layer - smooth cross-fade between scenes */
 body::before {
   content: '';
-  display: block !important; /* Force display - override any inherited display:none */
+  display: block !important;
+  /* Force display - override any inherited display:none */
   position: fixed;
   inset: 0;
-  z-index: 0; /* Changed from -1 to work with section stacking context */
+  z-index: 0;
+  /* Changed from -1 to work with section stacking context */
   transition: opacity 500ms cubic-bezier(0.4, 0.0, 0.2, 1),
-              background 500ms cubic-bezier(0.4, 0.0, 0.2, 1);
+    background 500ms cubic-bezier(0.4, 0.0, 0.2, 1);
   opacity: 1;
   will-change: background;
-  pointer-events: none; /* Allow clicks to pass through */
+  pointer-events: none;
+  /* Allow clicks to pass through */
 }
 
 /* Cosmos - Deep space with visible purple */
 body[data-scene="cosmos"]::before {
   background: radial-gradient(ellipse 1400px 900px at 50% 30%,
-    rgba(40, 40, 80, 0.65) 0%,
-    rgba(30, 30, 60, 0.50) 40%,
-    rgba(20, 20, 40, 0.35) 70%,
-    transparent 100%);
+      rgba(40, 40, 80, 0.65) 0%,
+      rgba(30, 30, 60, 0.50) 40%,
+      rgba(20, 20, 40, 0.35) 70%,
+      transparent 100%);
 }
 
 /* Dawn - Sunrise with visible horizon glow and sky gradient
@@ -493,8 +572,13 @@ body[data-scene="cosmos"] .scene--stars {
 }
 
 @keyframes starfield-drift {
-  0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0; }
-  100% { background-position: 140px 140px, -180px 180px, 200px -200px, -220px -220px, 160px 160px; }
+  0% {
+    background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+  }
+
+  100% {
+    background-position: 140px 140px, -180px 180px, 200px -200px, -220px -220px, 160px 160px;
+  }
 }
 
 /* Forest Canopy - Layered organic shapes with light filtering */
@@ -527,12 +611,16 @@ body[data-scene="air"] .scene--bubbles {
 }
 
 @keyframes emotion-drift {
-  0%, 100% {
+
+  0%,
+  100% {
     background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
   }
+
   33% {
     background-position: 30px 25px, -20px -30px, 35px -15px, -25px 20px, 15px 10px, -10px 8px;
   }
+
   66% {
     background-position: -25px 35px, 25px -20px, -30px 25px, 30px -25px, -12px 15px, 12px -10px;
   }
@@ -542,12 +630,15 @@ body[data-scene="air"] .scene--bubbles {
   .scene-layer {
     animation: none !important;
   }
+
   body[data-scene="cosmos"] .scene--stars {
     animation: none;
   }
+
   body[data-scene="air"] .scene--bubbles {
     animation: none;
   }
+
   body::before {
     transition: opacity 200ms ease, background 200ms ease;
   }
@@ -578,15 +669,17 @@ body[data-scene="air"] .scene--bubbles {
   right: 0;
   height: 2px;
   background: linear-gradient(90deg,
-    transparent,
-    var(--color-accent-cyan),
-    transparent);
+      transparent,
+      var(--color-accent-cyan),
+      transparent);
   transform: translateX(-100%);
   animation: scan 3s infinite;
 }
 
 @keyframes scan {
-  to { transform: translateX(100%); }
+  to {
+    transform: translateX(100%);
+  }
 }
 
 /* Year Selector */
@@ -646,20 +739,23 @@ body[data-scene="air"] .scene--bubbles {
   text-align: center;
   padding: var(--space-5) 0;
   padding-bottom: var(--space-5);
-  border-top: none; /* No border - seamless merge with lab bench */
-  margin-top: -5px !important; /* Eliminate gap completely */
+  border-top: none;
+  /* No border - seamless merge with lab bench */
+  margin-top: -5px !important;
+  /* Eliminate gap completely */
   color: var(--color-text-secondary);
   /* Match lab bench color and fade to black */
   position: relative;
   z-index: 2;
   background: linear-gradient(180deg,
-    #0b1116 0%,                     /* Exact lab bench color match */
-    #0b1116 5%,                     /* Hold bench color briefly */
-    rgba(8, 12, 15, 1) 20%,
-    rgba(5, 8, 10, 1) 40%,
-    #000000 65%,
-    #000000 100%
-  );
+      #0b1116 0%,
+      /* Exact lab bench color match */
+      #0b1116 5%,
+      /* Hold bench color briefly */
+      rgba(8, 12, 15, 1) 20%,
+      rgba(5, 8, 10, 1) 40%,
+      #000000 65%,
+      #000000 100%);
 }
 
 .site-footer a {
@@ -897,12 +993,18 @@ circle[data-type="bubble"] {
   pointer-events: none;
   opacity: 0;
   animation: illuFadeIn 800ms cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
-  z-index: 1; /* Above body::before, same layer as scene decorations */
+  z-index: 1;
+  /* Above body::before, same layer as scene decorations */
 }
 
 @keyframes illuFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* ──────────────────────────────────────────────────────────────────────
@@ -911,36 +1013,44 @@ circle[data-type="bubble"] {
 
 .illu-forest .forest-ridge {
   /* Use gradient from SVG for 3D depth effect */
-  opacity: 0.85; /* Increased from 0.6 for visibility */
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.15)); /* Subtle shadow */
+  opacity: 0.85;
+  /* Increased from 0.6 for visibility */
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.15));
+  /* Subtle shadow */
 }
 
 .illu-forest .forest-ground {
   fill: #0b1f17;
-  opacity: 0.9; /* Increased for more solidity */
+  opacity: 0.9;
+  /* Increased for more solidity */
 }
 
 .illu-forest .forest-bush {
   /* Use gradient from SVG for 3D depth */
-  opacity: 0.85; /* Increased for definition */
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15)); /* Subtle shadow */
+  opacity: 0.85;
+  /* Increased for definition */
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.15));
+  /* Subtle shadow */
 }
 
 .illu-forest .leaf {
   /* Use gradient from SVG for 3D lighting effect */
-  stroke: rgba(20, 100, 70, 0.6); /* Stronger stroke for depth */
+  stroke: rgba(20, 100, 70, 0.6);
+  /* Stronger stroke for depth */
   stroke-width: 0.8;
 }
 
 .illu-forest .trunk {
   /* Use gradient from SVG for cylindrical 3D effect */
   stroke: #2a3632;
-  stroke-width: 1.5; /* Thicker outline for definition */
+  stroke-width: 1.5;
+  /* Thicker outline for definition */
 }
 
 .illu-forest .forest-cloud {
   fill: #d0e0d8;
-  opacity: 0.45; /* Slightly more visible */
+  opacity: 0.45;
+  /* Slightly more visible */
 }
 
 .illu-forest .forest-bird {
@@ -948,20 +1058,26 @@ circle[data-type="bubble"] {
   stroke: #1a3a2a;
   stroke-width: 1.5;
   stroke-linecap: round;
-  opacity: 0.7; /* More visible */
+  opacity: 0.7;
+  /* More visible */
   animation: birdFly 6s ease-in-out infinite;
 }
 
 @keyframes birdFly {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateX(0) translateY(0);
   }
+
   25% {
     transform: translateX(40px) translateY(-15px);
   }
+
   50% {
     transform: translateX(80px) translateY(-5px);
   }
+
   75% {
     transform: translateX(120px) translateY(-20px);
   }
@@ -969,19 +1085,27 @@ circle[data-type="bubble"] {
 
 .illu-forest .forest-mountains {
   /* Use gradient from SVG for 3D depth effect */
-  opacity: 0.75; /* Increased from 0.4 for much better visibility */
-  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2)); /* Moderate shadow */
+  opacity: 0.75;
+  /* Increased from 0.4 for much better visibility */
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.2));
+  /* Moderate shadow */
 }
 
 .pine.sway {
   transform-origin: 50% 100%;
   animation: sway 4.5s ease-in-out infinite alternate;
-  filter: drop-shadow(1px 2px 3px rgba(0, 0, 0, 0.2)); /* Subtle shadow */
+  filter: drop-shadow(1px 2px 3px rgba(0, 0, 0, 0.2));
+  /* Subtle shadow */
 }
 
 @keyframes sway {
-  from { transform: rotate(-1.2deg); }
-  to { transform: rotate(1.2deg); }
+  from {
+    transform: rotate(-1.2deg);
+  }
+
+  to {
+    transform: rotate(1.2deg);
+  }
 }
 
 /* Easter egg: falling leaf */
@@ -990,6 +1114,7 @@ circle[data-type="bubble"] {
     transform: translateY(0) rotate(0deg);
     opacity: 0.8;
   }
+
   to {
     transform: translateY(40px) rotate(180deg);
     opacity: 0;
@@ -997,8 +1122,15 @@ circle[data-type="bubble"] {
 }
 
 @keyframes leafFadeOnly {
-  0%, 50% { opacity: 0.8; }
-  100% { opacity: 0; }
+
+  0%,
+  50% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1021,10 +1153,13 @@ circle[data-type="bubble"] {
 }
 
 @keyframes stripeShift {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.08;
     transform: translateX(0);
   }
+
   50% {
     opacity: 0.15;
     transform: translateX(1px);
@@ -1046,12 +1181,12 @@ circle[data-type="bubble"] {
 
 /* Beaker glass with highlight */
 .illu-lab .lab-rim {
-  fill: rgba(255,255,255,0.25);
+  fill: rgba(255, 255, 255, 0.25);
 }
 
 .illu-lab .lab-glass {
-  fill: rgba(255,255,255,0.06);
-  stroke: rgba(160,210,255,0.45);
+  fill: rgba(255, 255, 255, 0.06);
+  stroke: rgba(160, 210, 255, 0.45);
   mask: url(#glassSpec);
 }
 
@@ -1074,15 +1209,20 @@ circle[data-type="bubble"] {
 }
 
 @keyframes flameFlicker {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.85;
   }
+
   25% {
     opacity: 0.95;
   }
+
   50% {
     opacity: 0.75;
   }
+
   75% {
     opacity: 0.9;
   }
@@ -1094,9 +1234,12 @@ circle[data-type="bubble"] {
 }
 
 @keyframes stripeGlow {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.15;
   }
+
   50% {
     opacity: 0.35;
     fill: rgba(0, 255, 180, 0.35);
@@ -1109,9 +1252,12 @@ circle[data-type="bubble"] {
 }
 
 @keyframes liquidPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.6;
   }
+
   50% {
     opacity: 0.9;
   }
@@ -1123,9 +1269,12 @@ circle[data-type="bubble"] {
 }
 
 @keyframes microBeamPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.3;
   }
+
   50% {
     opacity: 0.7;
   }
@@ -1158,9 +1307,12 @@ circle[data-type="bubble"] {
 }
 
 @keyframes moleculeFloat {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg);
   }
+
   50% {
     transform: translateY(-15px) rotate(5deg);
   }
@@ -1217,8 +1369,15 @@ circle[data-type="bubble"] {
 }
 
 @keyframes beamPulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.7; }
+
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
 }
 
 /* Energy particles */
@@ -1229,10 +1388,13 @@ circle[data-type="bubble"] {
 }
 
 @keyframes particleDrift {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
     opacity: 0.8;
   }
+
   50% {
     transform: translateY(-20px);
     opacity: 0.4;
@@ -1260,10 +1422,13 @@ circle[data-type="bubble"] {
 }
 
 @keyframes spectrumPulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.3;
     transform: scaleY(0.8);
   }
+
   50% {
     opacity: 0.9;
     transform: scaleY(1.1);
@@ -1275,9 +1440,11 @@ circle[data-type="bubble"] {
     transform: translateY(0);
     opacity: 0;
   }
+
   20% {
     opacity: 0.95;
   }
+
   to {
     transform: translateY(-80px);
     opacity: 0;
@@ -1285,10 +1452,13 @@ circle[data-type="bubble"] {
 }
 
 @keyframes labShimmer {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.4;
     transform: scaleX(1);
   }
+
   50% {
     opacity: 0.7;
     transform: scaleX(1.1);
@@ -1296,6 +1466,7 @@ circle[data-type="bubble"] {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .illu-lab .lab-bubble,
   .illu-lab .lab-flame,
   .illu-lab .lab-tile-v,
@@ -1305,12 +1476,15 @@ circle[data-type="bubble"] {
   .illu-lab .lab-spectrum {
     animation: none;
   }
+
   .illu-lab .lab-bubble {
     opacity: 0.5;
   }
+
   .illu-lab .lab-flame {
     opacity: 0.7;
   }
+
   .illu-lab .lab-tile-v {
     opacity: 0.08;
   }
@@ -1502,7 +1676,7 @@ circle[data-type="bubble"] {
 
 .legend-marker--color {
   background: linear-gradient(90deg,
-    #FF0000, #FF7F00, #FFFF00, #00FF00, #00FFFF, #0000FF, #8B00FF);
+      #FF0000, #FF7F00, #FFFF00, #00FF00, #00FFFF, #0000FF, #8B00FF);
 }
 
 .legend-marker--arc,
@@ -1681,14 +1855,16 @@ circle[data-type="bubble"] {
 
 .scene-viral-sounds {
   position: relative;
-  height: 100vh;           /* Exact viewport height for fullPage.js */
-  max-height: 100vh;       /* Prevent overflow */
-  overflow: hidden;        /* Hide any overflow */
+  height: 100vh;
+  /* Exact viewport height for fullPage.js */
+  max-height: 100vh;
+  /* Prevent overflow */
+  overflow: hidden;
+  /* Hide any overflow */
   background: linear-gradient(180deg,
-    var(--color-bg-deep) 0%,
-    rgba(74, 5, 5, 0.3) 50%,
-    var(--color-bg-deep) 100%
-  );
+      var(--color-bg-deep) 0%,
+      rgba(74, 5, 5, 0.3) 50%,
+      var(--color-bg-deep) 100%);
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -1708,26 +1884,22 @@ circle[data-type="bubble"] {
       transparent 0px,
       transparent 100px,
       rgba(0, 242, 234, 0.04) 100px,
-      rgba(0, 242, 234, 0.04) 101px
-    ),
+      rgba(0, 242, 234, 0.04) 101px),
     /* Neon grid - horizontal */
     repeating-linear-gradient(0deg,
       transparent 0px,
       transparent 100px,
       rgba(255, 0, 80, 0.03) 100px,
-      rgba(255, 0, 80, 0.03) 101px
-    ),
+      rgba(255, 0, 80, 0.03) 101px),
     /* Centered vinyl glow - dramatic spot behind record */
     radial-gradient(circle 400px at 40% 50%,
       rgba(255, 0, 80, 0.12) 0%,
       rgba(0, 242, 234, 0.06) 40%,
-      transparent 70%
-    ),
+      transparent 70%),
     /* Edge vignette */
     radial-gradient(ellipse 90% 90% at 50% 50%,
       transparent 20%,
-      rgba(0, 0, 0, 0.5) 100%
-    );
+      rgba(0, 0, 0, 0.5) 100%);
 }
 
 /* Light beams from above - TikTok neon style */
@@ -1737,26 +1909,28 @@ circle[data-type="bubble"] {
     radial-gradient(ellipse 50% 40% at 40% 20%,
       rgba(255, 0, 80, 0.25) 0%,
       rgba(255, 0, 80, 0.08) 40%,
-      transparent 70%
-    ),
+      transparent 70%),
     /* Side glow - TikTok cyan */
     radial-gradient(ellipse 40% 35% at 80% 30%,
       rgba(0, 242, 234, 0.15) 0%,
       rgba(0, 242, 234, 0.05) 45%,
-      transparent 70%
-    ),
+      transparent 70%),
     /* Bottom ambient */
     linear-gradient(0deg,
       rgba(138, 43, 226, 0.08) 0%,
-      transparent 40%
-    );
+      transparent 40%);
   mix-blend-mode: screen;
   animation: beamsPulse 5s ease-in-out infinite alternate;
 }
 
 @keyframes beamsPulse {
-  0% { opacity: 0.85; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0.85;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -1767,9 +1941,12 @@ circle[data-type="bubble"] {
   z-index: 1;
   display: flex;
   flex-direction: column;
-  height: 100vh;            /* Exact viewport height for fullPage.js */
-  max-height: 100vh;        /* Prevent overflow */
-  overflow: hidden;         /* Hide any overflow */
+  height: 100vh;
+  /* Exact viewport height for fullPage.js */
+  max-height: 100vh;
+  /* Prevent overflow */
+  overflow: hidden;
+  /* Hide any overflow */
   padding: calc(56px + var(--space-2)) var(--space-6) var(--space-2);
   max-width: 100%;
   margin: 0 auto;
@@ -1796,7 +1973,8 @@ circle[data-type="bubble"] {
 .viral-sounds-main {
   flex: 1;
   display: grid;
-  grid-template-columns: 2fr 1fr;  /* Give record player 2/3 of the space */
+  grid-template-columns: 2fr 1fr;
+  /* Give record player 2/3 of the space */
   gap: var(--space-4);
   align-items: start;
   padding: var(--space-4);
@@ -1810,7 +1988,8 @@ circle[data-type="bubble"] {
    ───────────────────────────────────────────────────────────────────────── */
 .viral-sounds-container--central {
   position: relative;
-  padding-top: calc(56px + var(--space-2)); /* Compact top padding */
+  padding-top: calc(56px + var(--space-2));
+  /* Compact top padding */
   padding-bottom: var(--space-2);
 }
 
@@ -1822,7 +2001,8 @@ circle[data-type="bubble"] {
 
 .viral-sounds-container--central .viral-sounds-heading {
   font-size: clamp(1.5rem, 3vw, 2rem);
-  margin: var(--space-3) 0 0; /* More margin to push title lower */
+  margin: var(--space-3) 0 0;
+  /* More margin to push title lower */
 }
 
 .viral-sounds-main--central {
@@ -1832,7 +2012,8 @@ circle[data-type="bubble"] {
   flex: 1;
   padding: 0;
   position: relative;
-  height: calc(100vh - 120px); /* Fit within viewport */
+  height: calc(100vh - 120px);
+  /* Fit within viewport */
   max-height: calc(100vh - 120px);
   overflow: hidden;
 }
@@ -1851,13 +2032,15 @@ circle[data-type="bubble"] {
 
 .viral-sounds-record-area--central .record-player-layout {
   width: 100%;
-  max-width: none; /* Remove max-width constraint */
+  max-width: none;
+  /* Remove max-width constraint */
   justify-content: center;
 }
 
 .viral-sounds-record-area--central .record-player-wrapper {
   width: 100%;
-  max-width: min(55vw, 800px); /* Smaller to leave room for text panel on right */
+  max-width: min(55vw, 800px);
+  /* Smaller to leave room for text panel on right */
   /* Record takes ~70% of available viewport height */
   height: 70vh;
   min-height: 450px;
@@ -1866,15 +2049,18 @@ circle[data-type="bubble"] {
   padding: clamp(1.5rem, 3vw, 2.5rem);
   /* Shift left to make room for text panel */
   margin: 0 auto;
-  margin-right: 280px; /* Leave space for text panel (~250px + gap) */
+  margin-right: 280px;
+  /* Leave space for text panel (~250px + gap) */
 }
 
 /* Text panel as overlay on far right (not covering record player) */
 .viral-sounds-text-panel--overlay {
   position: absolute;
   top: 50%;
-  right: 60px; /* Far right edge - leave space for fullPage navigation dots */
-  transform: translateY(-50%); /* Vertically center the panel */
+  right: 60px;
+  /* Far right edge - leave space for fullPage navigation dots */
+  transform: translateY(-50%);
+  /* Vertically center the panel */
   width: clamp(180px, 18vw, 250px);
   max-width: 20%;
   padding: var(--space-3);
@@ -1980,12 +2166,14 @@ circle[data-type="bubble"] {
 /* Ensure record player layout fills the available space */
 .viral-sounds-record-area .record-player-layout {
   width: 100%;
-  max-width: min(85vw, 1100px); /* Match record-player.css sizing */
+  max-width: min(85vw, 1100px);
+  /* Match record-player.css sizing */
 }
 
 .viral-sounds-record-area .record-player-wrapper {
   width: 100%;
-  max-width: min(80vw, 1000px); /* Match record-player.css sizing - thinner */
+  max-width: min(80vw, 1000px);
+  /* Match record-player.css sizing - thinner */
   aspect-ratio: 1.5;
   margin: 0 auto;
 }
@@ -2015,10 +2203,9 @@ circle[data-type="bubble"] {
   width: 80px;
   height: 16px;
   background: linear-gradient(90deg,
-    var(--color-glint) 0%,
-    var(--color-shimmer) 50%,
-    var(--color-glint) 100%
-  );
+      var(--color-glint) 0%,
+      var(--color-shimmer) 50%,
+      var(--color-glint) 100%);
   border-radius: 8px;
   position: absolute;
   bottom: -20px;
@@ -2031,8 +2218,15 @@ circle[data-type="bubble"] {
 }
 
 @keyframes hoverboardFloat {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-4px); }
+
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-4px);
+  }
 }
 
 /* Text panel - right side */
@@ -2141,6 +2335,7 @@ circle[data-type="bubble"] {
 }
 
 @media (max-width: 768px) {
+
   .music-galaxy-container,
   .viral-sounds-container {
     padding-left: var(--space-4);
@@ -2158,6 +2353,7 @@ circle[data-type="bubble"] {
 }
 
 @media (max-width: 480px) {
+
   .music-galaxy-description,
   .viral-sounds-narrative p {
     font-size: 0.875rem;
@@ -2188,7 +2384,8 @@ circle[data-type="bubble"] {
   align-items: center;
   justify-content: flex-start;
   padding-top: calc(64px + var(--space-6));
-  overflow: visible; /* Allow fullPage.js scroll events */
+  overflow: visible;
+  /* Allow fullPage.js scroll events */
 }
 
 /* Background layers - Dawn theme */
@@ -2200,27 +2397,23 @@ circle[data-type="bubble"] {
 
 .timing-bg--gradient {
   /* Dawn gradient: deep blue top → warm yellow/orange bottom */
-  background: linear-gradient(
-    180deg,
-    #0a1628 0%,
-    #1a2d4a 25%,
-    #3a4a6a 45%,
-    #7a6b5a 65%,
-    #c9a86c 80%,
-    #e8c88a 90%,
-    #f5dfa4 100%
-  );
+  background: linear-gradient(180deg,
+      #0a1628 0%,
+      #1a2d4a 25%,
+      #3a4a6a 45%,
+      #7a6b5a 65%,
+      #c9a86c 80%,
+      #e8c88a 90%,
+      #f5dfa4 100%);
   z-index: 0;
 }
 
 .timing-bg--glow {
   /* Soft radial glow behind stopwatch */
-  background: radial-gradient(
-    ellipse 60% 50% at 50% 70%,
-    rgba(251, 235, 53, 0.15) 0%,
-    rgba(251, 235, 53, 0.05) 40%,
-    transparent 70%
-  );
+  background: radial-gradient(ellipse 60% 50% at 50% 70%,
+      rgba(251, 235, 53, 0.15) 0%,
+      rgba(251, 235, 53, 0.05) 40%,
+      transparent 70%);
   z-index: 1;
 }
 
@@ -2443,7 +2636,8 @@ circle[data-type="bubble"] {
   top: 35%;
   z-index: 100;
   display: flex;
-  flex-direction: row; /* Changed to row for side-by-side layout */
+  flex-direction: row;
+  /* Changed to row for side-by-side layout */
   align-items: center;
   gap: var(--space-2);
   opacity: 0;
@@ -2470,7 +2664,8 @@ circle[data-type="bubble"] {
 }
 
 .alien-narrator--timing .alien-speech-bubble {
-  position: relative; /* Changed from absolute for natural flow */
+  position: relative;
+  /* Changed from absolute for natural flow */
   width: max-content;
   max-width: 200px;
   padding: var(--space-3);
@@ -2479,13 +2674,15 @@ circle[data-type="bubble"] {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   opacity: 0;
   transition: opacity 400ms ease, transform 400ms ease;
-  margin-left: var(--space-2); /* Small gap between alien and bubble */
+  margin-left: var(--space-2);
+  /* Small gap between alien and bubble */
 }
 
 .alien-narrator--timing .alien-speech-bubble::before {
   content: '';
   position: absolute;
-  left: -12px; /* Pointer connects to left edge */
+  left: -12px;
+  /* Pointer connects to left edge */
   top: 50%;
   transform: translateY(-50%);
   border: 8px solid transparent;
@@ -2522,7 +2719,8 @@ circle[data-type="bubble"] {
   }
 
   .timing-callout {
-    display: none; /* Hide on mobile, info is in legend */
+    display: none;
+    /* Hide on mobile, info is in legend */
   }
 }
 
@@ -2605,14 +2803,12 @@ circle[data-type="bubble"] {
 
 .pyramid-bg--sky {
   /* Deep green/teal forest sky */
-  background: linear-gradient(
-    180deg,
-    #0a1a12 0%,
-    #0d2a1c 30%,
-    #1a4a3a 60%,
-    #2a5a4a 80%,
-    #3a6a5a 100%
-  );
+  background: linear-gradient(180deg,
+      #0a1a12 0%,
+      #0d2a1c 30%,
+      #1a4a3a 60%,
+      #2a5a4a 80%,
+      #3a6a5a 100%);
   z-index: 0;
 }
 
@@ -2933,14 +3129,12 @@ circle[data-type="bubble"] {
 
 .emotion-bg--dark {
   /* Dark gradient matching v2 spec: deep navy to dark purple */
-  background: linear-gradient(
-    180deg,
-    #0a0a1a 0%,
-    #0d1020 25%,
-    #12152d 50%,
-    #1a1a35 75%,
-    #0d0d1a 100%
-  );
+  background: linear-gradient(180deg,
+      #0a0a1a 0%,
+      #0d1020 25%,
+      #12152d 50%,
+      #1a1a35 75%,
+      #0d0d1a 100%);
   z-index: 0;
 }
 
@@ -2960,10 +3154,23 @@ circle[data-type="bubble"] {
 }
 
 @keyframes floatParticles {
-  0%, 100% { transform: translateY(0) translateX(0); }
-  25% { transform: translateY(-10px) translateX(5px); }
-  50% { transform: translateY(-5px) translateX(-5px); }
-  75% { transform: translateY(-15px) translateX(3px); }
+
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+
+  25% {
+    transform: translateY(-10px) translateX(5px);
+  }
+
+  50% {
+    transform: translateY(-5px) translateX(-5px);
+  }
+
+  75% {
+    transform: translateY(-15px) translateX(3px);
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -3059,10 +3266,9 @@ circle[data-type="bubble"] {
 
 .legend-icon--color {
   background: linear-gradient(135deg,
-    var(--color-shimmer) 0%,
-    var(--color-glint) 50%,
-    var(--color-blaze) 100%
-  );
+      var(--color-shimmer) 0%,
+      var(--color-glint) 50%,
+      var(--color-blaze) 100%);
 }
 
 .legend-icon--size {
@@ -3173,10 +3379,9 @@ circle[data-type="bubble"] {
   width: 60px;
   height: 10px;
   background: linear-gradient(90deg,
-    var(--color-glint) 0%,
-    var(--color-shimmer) 50%,
-    var(--color-glint) 100%
-  );
+      var(--color-glint) 0%,
+      var(--color-shimmer) 50%,
+      var(--color-glint) 100%);
   border-radius: 5px;
   box-shadow:
     0 4px 12px rgba(45, 204, 211, 0.4),
@@ -3198,6 +3403,7 @@ circle[data-type="bubble"] {
 
 /* Responsive adjustments */
 @media (max-width: 992px) {
+
   .music-galaxy-heading,
   .viral-sounds-heading {
     text-align: center;
@@ -3266,24 +3472,31 @@ circle[data-type="bubble"] {
 
 /* Scene 2: Bottom-left with mini-planet (default) */
 .alien-narrator--scene2 {
-  position: absolute; /* Relative to viz overlay */
-  bottom: 80px; /* Moved further down */
-  left: calc(var(--space-6) + 40px); /* Moved further from viz center */
-  flex-direction: column; /* Avatar first (top), planet second (bottom) */
+  position: absolute;
+  /* Relative to viz overlay */
+  bottom: 80px;
+  /* Moved further down */
+  left: calc(var(--space-6) + 40px);
+  /* Moved further from viz center */
+  flex-direction: column;
+  /* Avatar first (top), planet second (bottom) */
   align-items: center;
   gap: 0;
-  z-index: 200; /* Above all content */
+  z-index: 200;
+  /* Above all content */
   /* Start hidden */
   display: none;
   opacity: 0;
   transform: translateY(150px);
   transition: left 600ms cubic-bezier(0.22, 1, 0.36, 1),
-              bottom 600ms cubic-bezier(0.22, 1, 0.36, 1); /* Smooth tracking */
+    bottom 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  /* Smooth tracking */
 }
 
 /* ONLY show when Scene 2 (galaxy) is active */
 [data-scene="galaxy"] .alien-narrator--scene2 {
-  display: flex !important; /* Force show */
+  display: flex !important;
+  /* Force show */
   animation: alienEnterFromBelow 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
 }
 
@@ -3298,7 +3511,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .alien-narrator--scene2 .alien-avatar {
   position: relative;
   z-index: 2;
-  margin-bottom: -30px; /* Overlap onto mini-planet so alien "stands" on it */
+  margin-bottom: -30px;
+  /* Overlap onto mini-planet so alien "stands" on it */
 }
 
 /* Float animation only starts after enter animation completes (0.3s delay + 1.2s anim = 1.5s) */
@@ -3318,7 +3532,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   left: 130px;
   bottom: 100px;
   border-radius: 20px 20px 20px 6px;
-  display: none !important; /* Hide secondary bubble to prevent overlap */
+  display: none !important;
+  /* Hide secondary bubble to prevent overlap */
 }
 
 /* Only show primary bubble */
@@ -3348,11 +3563,14 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 /* Scene 3: Bottom-right as DJ (v3 spec) */
 .alien-narrator--scene3.alien-narrator--scene {
   position: absolute !important;
-  bottom: 8% !important; /* Near bottom of screen */
-  right: 5% !important; /* Bottom right corner */
+  bottom: 8% !important;
+  /* Near bottom of screen */
+  right: 5% !important;
+  /* Bottom right corner */
   left: auto !important;
   transform: translateY(150px);
-  flex-direction: column; /* Avatar first (top), platform second (bottom) - matches HTML order */
+  flex-direction: column;
+  /* Avatar first (top), platform second (bottom) - matches HTML order */
   align-items: center;
   gap: 0;
   /* Start hidden off-screen - will animate in when scene is active */
@@ -3371,13 +3589,16 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
     opacity: 0;
     transform: translateY(100px);
   }
+
   70% {
     opacity: 1;
     transform: translateY(-8px);
   }
+
   85% {
     transform: translateY(4px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -3387,7 +3608,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .alien-narrator--scene3 .alien-avatar {
   position: relative;
   z-index: 2;
-  margin-bottom: -15px; /* Overlap onto floating platform so alien "stands" on it */
+  margin-bottom: -15px;
+  /* Overlap onto floating platform so alien "stands" on it */
 }
 
 /* Float animation only starts after enter animation completes (0.3s delay + 1.2s anim = 1.5s) */
@@ -3410,7 +3632,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .alien-narrator--scene3 .alien-speech-bubble {
   position: absolute;
-  right: 100%; /* To the left of the alien */
+  right: 100%;
+  /* To the left of the alien */
   top: 50%;
   transform: translateY(-50%);
   margin-right: 15px;
@@ -3447,12 +3670,10 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   max-width: 200px;
 
   /* Glassmorphism base matching viz panel */
-  background: linear-gradient(
-    155deg,
-    rgba(12, 12, 24, 0.85) 0%,
-    rgba(8, 8, 18, 0.92) 50%,
-    rgba(15, 10, 25, 0.88) 100%
-  );
+  background: linear-gradient(155deg,
+      rgba(12, 12, 24, 0.85) 0%,
+      rgba(8, 8, 18, 0.92) 50%,
+      rgba(15, 10, 25, 0.88) 100%);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 
@@ -3483,12 +3704,10 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   inset: 0;
   border-radius: 16px;
   padding: 1px;
-  background: linear-gradient(
-    135deg,
-    rgba(45, 204, 211, 0.4) 0%,
-    rgba(138, 43, 226, 0.25) 50%,
-    rgba(45, 204, 211, 0.4) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(45, 204, 211, 0.4) 0%,
+      rgba(138, 43, 226, 0.25) 50%,
+      rgba(45, 204, 211, 0.4) 100%);
   background-size: 200% 200%;
   animation: gradientBorderFlow 6s ease infinite;
   -webkit-mask:
@@ -3511,11 +3730,9 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   left: 0;
   right: 0;
   height: 40px;
-  background: linear-gradient(
-    180deg,
-    rgba(45, 204, 211, 0.06) 0%,
-    transparent 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(45, 204, 211, 0.06) 0%,
+      transparent 100%);
   border-radius: 16px 16px 0 0;
   pointer-events: none;
 }
@@ -3553,14 +3770,12 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .music-galaxy-legend .legend-energy-bar {
   height: 8px;
   border-radius: 4px;
-  background: linear-gradient(
-    to right,
-    #00F2EA 0%,
-    #1DE5DD 25%,
-    #5FD4C8 50%,
-    #FF6B8A 75%,
-    #FF0050 100%
-  );
+  background: linear-gradient(to right,
+      #00F2EA 0%,
+      #1DE5DD 25%,
+      #5FD4C8 50%,
+      #FF6B8A 75%,
+      #FF0050 100%);
   box-shadow: 0 2px 8px rgba(0, 242, 234, 0.3);
 }
 
@@ -3569,12 +3784,14 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   border-radius: 5px;
   /* Gradient matching actual viz danceabilityToColor() scale:
      0.0 = White, 0.35 = TikTok blue (#2af0ea), 1.0 = TikTok pink (#fe2858) */
-  background: linear-gradient(
-    to right,
-    #FFFFFF 0%,       /* 0.0 - White (low danceability) */
-    #2af0ea 35%,      /* 0.35 - TikTok blue */
-    #fe2858 100%      /* 1.0 - TikTok pink (high danceability) */
-  );
+  background: linear-gradient(to right,
+      #FFFFFF 0%,
+      /* 0.0 - White (low danceability) */
+      #2af0ea 35%,
+      /* 0.35 - TikTok blue */
+      #fe2858 100%
+      /* 1.0 - TikTok pink (high danceability) */
+    );
   box-shadow:
     0 2px 12px rgba(42, 240, 234, 0.4),
     0 0 20px rgba(254, 40, 88, 0.3);
@@ -3671,15 +3888,13 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
     linear-gradient(0deg,
       rgba(15, 25, 35, 0.9) 0%,
       rgba(15, 25, 35, 0.5) 5%,
-      transparent 15%
-    ),
+      transparent 15%),
     /* Main gradient - deep lab purple to dark */
     linear-gradient(180deg,
       #1a0a2e 0%,
       #2d1b4e 30%,
       #1a1a2e 60%,
-      #0f0f1a 100%
-    );
+      #0f0f1a 100%);
 }
 
 /* Lab equipment decorations */
@@ -3703,8 +3918,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
       rgba(45, 220, 211, 0.05) 20%,
       transparent 40%,
       rgba(241, 32, 74, 0.05) 60%,
-      transparent 80%
-    );
+      transparent 80%);
 }
 
 /* Floating bubbles animation */
@@ -3720,10 +3934,13 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 @keyframes bubbleFloat {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
     opacity: 0.8;
   }
+
   50% {
     transform: translateY(-15px);
     opacity: 1;
@@ -3751,7 +3968,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 /* Scene label badge */
 .scene-quiz .scene-label-badge {
   position: absolute;
-  top: 70px; /* Below nav bar */
+  top: 70px;
+  /* Below nav bar */
   left: var(--space-4);
   background: rgba(45, 220, 211, 0.15);
   border: 1px solid rgba(45, 220, 211, 0.3);
@@ -3830,12 +4048,11 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   width: 80%;
   height: 25%;
   background: linear-gradient(90deg,
-    rgba(45, 220, 211, 0.4) 0%,
-    rgba(45, 220, 211, 0.2) 45%,
-    transparent 50%,
-    rgba(45, 220, 211, 0.2) 55%,
-    rgba(45, 220, 211, 0.4) 100%
-  );
+      rgba(45, 220, 211, 0.4) 0%,
+      rgba(45, 220, 211, 0.2) 45%,
+      transparent 50%,
+      rgba(45, 220, 211, 0.2) 55%,
+      rgba(45, 220, 211, 0.4) 100%);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -3853,9 +4070,12 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 @keyframes labAlienFloat {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-8px);
   }
@@ -3903,14 +4123,18 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .scene-wrapup {
   position: relative;
   min-height: 100vh;
-  height: auto; /* Allow content to expand */
+  height: auto;
+  /* Allow content to expand */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Start from top for scrollable content */
+  justify-content: flex-start;
+  /* Start from top for scrollable content */
   padding: calc(64px + var(--space-4)) var(--space-6) var(--space-6);
-  overflow: visible; /* Allow scrolling */
-  overflow-y: auto; /* Enable vertical scroll for long content */
+  overflow: visible;
+  /* Allow scrolling */
+  overflow-y: auto;
+  /* Enable vertical scroll for long content */
 }
 
 /* Background - v2 dark neutral with glint/blaze gradients */
@@ -3928,8 +4152,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
       #050508 0%,
       #080a10 30%,
       #0a0c12 60%,
-      #050508 100%
-    );
+      #050508 100%);
 }
 
 .wrapup-bg--glow {
@@ -3964,6 +4187,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
     opacity: 0;
     transform: translateY(30px) scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -3973,7 +4197,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 /* Scene label */
 .scene-wrapup .scene-label-badge {
   position: absolute;
-  top: 55px; /* Below nav bar */
+  top: 55px;
+  /* Below nav bar */
   left: var(--space-4);
   background: rgba(45, 220, 211, 0.15);
   border: 1px solid rgba(45, 220, 211, 0.3);
@@ -4139,7 +4364,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   line-height: 1.6;
 }
 
-.recipe-closing p + p {
+.recipe-closing p+p {
   margin-top: var(--space-2);
 }
 
@@ -4331,7 +4556,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .scene-timing {
   padding-top: calc(64px + var(--space-1)) !important;
   padding-bottom: var(--space-1) !important;
-  overflow: visible !important; /* Allow fullPage.js scroll events */
+  overflow: visible !important;
+  /* Allow fullPage.js scroll events */
 }
 
 .timing-header {
@@ -4406,12 +4632,15 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .emotion-container {
   display: grid !important;
-  grid-template-columns: 280px 1fr 180px !important; /* Text | Viz | Controls */
+  grid-template-columns: 280px 1fr 180px !important;
+  /* Text | Viz | Controls */
   gap: var(--space-3) !important;
   width: 100% !important;
-  max-width: none !important; /* Remove max-width - fill available space */
+  max-width: none !important;
+  /* Remove max-width - fill available space */
   margin: 0 !important;
-  padding: 0 var(--space-4) !important; /* Only horizontal padding */
+  padding: 0 var(--space-4) !important;
+  /* Only horizontal padding */
   box-sizing: border-box !important;
 }
 
@@ -4429,8 +4658,10 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 #viz-emotion {
   width: 100% !important;
   min-height: auto !important;
-  height: calc(100vh - 140px) !important; /* Taller to fill more of viewport */
-  max-height: 700px !important; /* Higher cap for larger screens */
+  height: calc(100vh - 140px) !important;
+  /* Taller to fill more of viewport */
+  max-height: 700px !important;
+  /* Higher cap for larger screens */
 }
 
 #viz-emotion svg {
@@ -4510,11 +4741,13 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
    SCENE 2 - Move alien lower in step 4
    ───────────────────────────────────────────────────────────────────────── */
 .alien-narrator--scene2 {
-  bottom: 20px !important; /* Even lower to avoid content cutoff */
+  bottom: 20px !important;
+  /* Even lower to avoid content cutoff */
 }
 
 .alien-narrator--scene2 .alien-speech-bubble {
-  bottom: 80px !important; /* Lower speech bubble too */
+  bottom: 80px !important;
+  /* Lower speech bubble too */
 }
 
 /* When in top-left mode, keep normal positioning */
@@ -4569,8 +4802,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   }
 
   .member-avatar {
-    width: 48px;
-    height: 48px;
+    width: 150px;
+    height: 150px;
   }
 
   .avatar-initial {
@@ -4651,14 +4884,16 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .scene-quiz .fp-tableCell {
   width: 100% !important;
   max-width: 100% !important;
-  padding-top: 60px !important; /* Leave space for nav bar */
+  padding-top: 60px !important;
+  /* Leave space for nav bar */
   box-sizing: border-box !important;
 }
 
 .quiz-container {
   width: 100% !important;
   max-width: none !important;
-  padding: 70px var(--space-4) var(--space-2) var(--space-4) !important; /* 70px top for nav bar */
+  padding: 70px var(--space-4) var(--space-2) var(--space-4) !important;
+  /* 70px top for nav bar */
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -4670,7 +4905,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 /* Quiz title panel - original styling */
 .quiz-question-panel {
-  margin-bottom: var(--space-1) !important; /* Reduced gap to conveyor-container */
+  margin-bottom: var(--space-1) !important;
+  /* Reduced gap to conveyor-container */
   flex-shrink: 0 !important;
 }
 
@@ -4724,9 +4960,11 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .interaction-panel {
   position: absolute !important;
   z-index: 150 !important;
-  top: 0 !important; /* At the very top of conveyor-container */
+  top: 0 !important;
+  /* At the very top of conveyor-container */
   left: 50% !important;
-  transform: translateX(-50%) !important; /* Center horizontally */
+  transform: translateX(-50%) !important;
+  /* Center horizontally */
   flex-shrink: 0 !important;
 }
 
@@ -4735,14 +4973,17 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   position: relative !important;
   z-index: 10 !important;
   order: 10 !important;
-  margin-top: auto !important; /* Push to bottom */
-  height: 320px !important; /* Reduced height to fit */
+  margin-top: auto !important;
+  /* Push to bottom */
+  height: 320px !important;
+  /* Reduced height to fit */
   flex-shrink: 0 !important;
 }
 
 /* Belt track at very bottom of wrapper */
 .conveyor-belt-wrapper::before {
-  bottom: 0 !important; /* Belt at very bottom */
+  bottom: 0 !important;
+  /* Belt at very bottom */
   height: 60px !important;
 }
 
@@ -4759,8 +5000,10 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 /* Position boxes above the belt track */
 .conveyor-belt {
-  align-items: flex-end !important; /* Align boxes to bottom */
-  padding-bottom: 70px !important; /* Space for belt track */
+  align-items: flex-end !important;
+  /* Align boxes to bottom */
+  padding-bottom: 70px !important;
+  /* Space for belt track */
 }
 
 .trend-card,
@@ -4770,11 +5013,13 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 /* 2. SCENE 2 - Move alien and speech bubble MUCH lower */
 .alien-narrator--scene2 {
-  bottom: 5px !important; /* Very bottom */
+  bottom: 5px !important;
+  /* Very bottom */
 }
 
 .alien-narrator--scene2 .alien-speech-bubble {
-  bottom: 40px !important; /* Much lower */
+  bottom: 40px !important;
+  /* Much lower */
   left: 100px !important;
 }
 
@@ -4815,14 +5060,17 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 /* Speech bubble ABOVE alien, shifted right to stay in view */
 .alien-narrator--scene3 .alien-speech-bubble {
   position: absolute !important;
-  bottom: 100% !important; /* Above the alien */
-  left: 0 !important; /* Align to left edge of alien, not centered */
+  bottom: 100% !important;
+  /* Above the alien */
+  left: 0 !important;
+  /* Align to left edge of alien, not centered */
   right: auto !important;
   transform: none !important;
   margin-bottom: 15px !important;
   margin-left: 0 !important;
   margin-right: 0 !important;
-  max-width: 220px !important; /* Narrower to fit */
+  max-width: 220px !important;
+  /* Narrower to fit */
   min-width: 180px !important;
   top: auto !important;
 }
@@ -4837,7 +5085,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .alien-narrator--scene3 .alien-speech-bubble::before {
   top: auto !important;
   bottom: -10px !important;
-  left: 20px !important; /* Offset from left edge */
+  left: 20px !important;
+  /* Offset from left edge */
   right: auto !important;
   transform: rotate(180deg) !important;
   border-left: 10px solid transparent !important;
@@ -4860,23 +5109,27 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .scene-pyramid {
   padding-top: calc(64px + var(--space-1)) !important;
   padding-bottom: 0 !important;
-  overflow: visible !important; /* Allow fullPage.js scroll events */
+  overflow: visible !important;
+  /* Allow fullPage.js scroll events */
 }
 
 .pyramid-content {
   padding: var(--space-2) !important;
-  padding-top: 0 !important; /* Move content up */
+  padding-top: 0 !important;
+  /* Move content up */
   gap: var(--space-3) !important;
   max-height: calc(100vh - 70px) !important;
   width: 98% !important;
   max-width: 1800px !important;
-  margin-top: -1rem !important; /* Shift up */
+  margin-top: -1rem !important;
+  /* Shift up */
 }
 
 .pyramid-text-column {
   padding: var(--space-2) var(--space-3) !important;
   max-height: calc(100vh - 90px) !important;
-  overflow: hidden !important; /* No scrolling - content must fit */
+  overflow: hidden !important;
+  /* No scrolling - content must fit */
   flex: 1 1 35% !important;
   min-width: 300px !important;
   font-size: 1rem !important;
@@ -4987,8 +5240,10 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   height: 100vh !important;
   max-height: 100vh !important;
   overflow: hidden !important;
-  vertical-align: top !important; /* Align content to top */
-  padding-top: 60px !important; /* Leave space for nav bar */
+  vertical-align: top !important;
+  /* Align content to top */
+  padding-top: 60px !important;
+  /* Leave space for nav bar */
   box-sizing: border-box !important;
 }
 
@@ -5003,24 +5258,28 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   overflow: hidden !important;
   display: flex !important;
   flex-direction: column !important;
-  justify-content: flex-start !important; /* Hero has nav spacer at top */
+  justify-content: flex-start !important;
+  /* Hero has nav spacer at top */
 }
 
 .scene-hero .hero-content-band {
   flex: 1 !important;
   display: flex !important;
-  align-items: center !important; /* Center vertically */
+  align-items: center !important;
+  /* Center vertically */
   justify-content: center !important;
   padding-top: 0 !important;
 }
 
 .scene-hero .hero-container {
-  margin-top: 2rem !important; /* Shift down */
+  margin-top: 2rem !important;
+  /* Shift down */
 }
 
 .scene-hero .hero-bottom-band {
   position: absolute !important;
-  bottom: 20px !important; /* At the bottom of the scene */
+  bottom: 20px !important;
+  /* At the bottom of the scene */
   left: 50% !important;
   transform: translateX(-50%) !important;
   margin: 0 !important;
@@ -5039,7 +5298,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   display: flex !important;
   flex-direction: column !important;
   justify-content: center !important;
-  align-items: stretch !important; /* Allow content to fill width */
+  align-items: stretch !important;
+  /* Allow content to fill width */
 }
 
 #scene-music-galaxy .fp-overflow,
@@ -5050,15 +5310,18 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 /* Scene 3: Viral Sounds (Record Player) - No internal scroll, centered */
 .scene-viral-sounds {
-  overflow: visible !important; /* Allow fullPage.js scroll events to pass through */
+  overflow: visible !important;
+  /* Allow fullPage.js scroll events to pass through */
   display: flex !important;
   flex-direction: column !important;
   justify-content: center !important;
-  align-items: stretch !important; /* Allow content to fill width */
+  align-items: stretch !important;
+  /* Allow content to fill width */
 }
 
 .scene-viral-sounds .fp-overflow {
-  overflow: visible !important; /* Allow scroll events */
+  overflow: visible !important;
+  /* Allow scroll events */
   height: 100vh !important;
 }
 
@@ -5069,16 +5332,19 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 /* Scene 4: Duration/Timing (Stopwatch) - No scroll, centered */
 .scene-timing {
-  overflow: visible !important; /* Allow fullPage.js scroll events */
+  overflow: visible !important;
+  /* Allow fullPage.js scroll events */
   display: flex !important;
   flex-direction: column !important;
   justify-content: center !important;
-  align-items: stretch !important; /* Allow content to fill width */
+  align-items: stretch !important;
+  /* Allow content to fill width */
 }
 
 .scene-timing .fp-overflow,
 .scene-timing .fp-tableCell {
-  overflow: visible !important; /* Allow scroll events */
+  overflow: visible !important;
+  /* Allow scroll events */
   height: 100vh !important;
 }
 
@@ -5093,7 +5359,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   display: flex !important;
   flex-direction: column !important;
   justify-content: center !important;
-  align-items: center !important; /* Center horizontally */
+  align-items: center !important;
+  /* Center horizontally */
 }
 
 .scene-pyramid .fp-overflow,
@@ -5120,16 +5387,19 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 /* Scene 6: Emotion (Bubbles) - No scroll, centered vertically only */
 .scene-emotion {
-  overflow: visible !important; /* Allow fullPage.js scroll events */
+  overflow: visible !important;
+  /* Allow fullPage.js scroll events */
   display: flex !important;
   flex-direction: column !important;
   justify-content: center !important;
-  align-items: stretch !important; /* Allow content to fill full width */
+  align-items: stretch !important;
+  /* Allow content to fill full width */
 }
 
 .scene-emotion .fp-overflow,
 .scene-emotion .fp-tableCell {
-  overflow: visible !important; /* Allow scroll events */
+  overflow: visible !important;
+  /* Allow scroll events */
   height: 100vh !important;
 }
 
@@ -5163,7 +5433,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   flex-direction: column !important;
   align-items: center !important;
   justify-content: flex-start !important;
-  padding-top: 50px !important; /* Leave space for nav bar */
+  padding-top: 50px !important;
+  /* Leave space for nav bar */
   box-sizing: border-box !important;
 }
 
@@ -5189,8 +5460,10 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   max-width: 1400px !important;
   height: calc(100vh - 160px) !important;
   max-height: calc(100vh - 160px) !important;
-  padding: var(--space-2) var(--space-4) !important; /* Reduced top padding */
-  margin-top: var(--space-2) !important; /* Small gap from scene-label-badge */
+  padding: var(--space-2) var(--space-4) !important;
+  /* Reduced top padding */
+  margin-top: var(--space-2) !important;
+  /* Small gap from scene-label-badge */
   box-sizing: border-box !important;
   position: relative !important;
   z-index: 1 !important;
@@ -5242,8 +5515,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .wrapup-column .member-avatar {
-  width: 36px !important;
-  height: 36px !important;
+  width: 150px !important;
+  height: 150px !important;
 }
 
 .wrapup-column .member-name {
@@ -5310,11 +5583,13 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
     font-size: 0.9em !important;
   }
 
-  h1, .section-question {
+  h1,
+  .section-question {
     font-size: 1.5rem !important;
   }
 
-  h2, .section-subquestion {
+  h2,
+  .section-subquestion {
     font-size: 1.1rem !important;
   }
 }
