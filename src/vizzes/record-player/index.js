@@ -139,7 +139,20 @@ export class RecordPlayerViz {
         this.initializeMuteButton(); // Set initial mute button state
         this.resetSongInfo(); // Set default "no song" state
         document.addEventListener('pointerdown', this.handleFirstGesture, { once: true });
-        this.setTonearmToIndex(0, { silent: true });
+
+        // Ensure all states are cleared and tonearm is at default position
+        // Use setTimeout to ensure rings are rendered before clearing
+        setTimeout(() => {
+            this.clearActiveRing({ preserveLocked: false });
+            this.stopSongImmediate();
+            // Reset activeIndex and lockedIndex to null
+            this.activeIndex = null;
+            this.lockedIndex = null;
+            if (this.tonearmArm) {
+                // Reset to default CSS position (rotate(-32deg) from CSS)
+                this.tonearmArm.style.transform = 'rotate(-1.5deg)';
+            }
+        }, 100);
     }
 
     async loadData() {
@@ -231,6 +244,12 @@ export class RecordPlayerViz {
         this.resetSongInfo();
         this.toggleNotes(false);
         this.setHoverState(false);
+
+        // Ensure tonearm is reset to default position (not pointing at any ring)
+        if (this.tonearmArm) {
+            // Reset to default CSS position (rotate(-32deg) from CSS)
+            this.tonearmArm.style.transform = 'rotate(-32deg)';
+        }
     }
 
     initializeYearSlider() {
@@ -1025,6 +1044,12 @@ export class RecordPlayerViz {
      * Per spec 5.3.4: ~5 seconds total, each ring highlighted for ~1.5s
      */
     startAutoSequence() {
+        // Disabled: Don't auto-activate any rings on page load
+        // This prevents the outermost ring (anxiety) from being automatically triggered
+        return;
+
+        // Original code commented out to prevent auto-activation
+        /*
         if (this.autoSequenceRunning) return;
         this.autoSequenceRunning = true;
 
@@ -1040,8 +1065,12 @@ export class RecordPlayerViz {
                     detail: { lastIndex: topRings[topRings.length - 1] }
                 });
                 this.container.dispatchEvent(event);
-                // Leave tonearm on top track
-                this.activateRing(0, { locked: false, source: 'auto' });
+                // Don't leave tonearm on top track - let user interact instead
+                // this.activateRing(0, { locked: false, source: 'auto' });
+                // Clear all states after sequence
+                this.clearActiveRing({ preserveLocked: false });
+                this.stopSongImmediate();
+                this.resetSongInfo();
                 return;
             }
 
@@ -1054,6 +1083,7 @@ export class RecordPlayerViz {
 
         // Start after small delay
         setTimeout(highlightNext, 300);
+        */
     }
 
     mount() {

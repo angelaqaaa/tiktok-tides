@@ -57,8 +57,8 @@
   position: relative;
   display: grid;
   place-items: center;
-  width: 100%;
-  max-width: min(80vw, 1000px); /* Thinner wrapper */
+  width: 75vw; /* 3/4 of viewport width */
+  max-width: min(75vw, 1000px);
   aspect-ratio: 1.5; /* More square for compact layout */
   padding: clamp(1.5rem, 3vw, 2.5rem);
   border-radius: clamp(1.8rem, 3vw, 2.8rem);
@@ -66,7 +66,8 @@
   box-shadow: 0 40px 80px rgba(7, 8, 14, 0.65), inset 0 2px 8px rgba(255, 255, 255, 0.04), inset 0 -10px 20px rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(94, 102, 140, 0.24);
   overflow: visible;
-  margin: 0 auto;
+  margin: 0;
+  margin-left: clamp(2rem, 4vw, 4rem); /* Left margin to move it left */
 } 
 
 .record-player-base { position: relative;
@@ -546,11 +547,11 @@
 /* Song Info Screen - Bottom right area */
 .song-info-screen {
     position: absolute;
-    bottom: clamp(1rem, 2vw, 2rem);
-    right: clamp(1rem, 2vw, 2rem);
+    bottom: clamp(2rem, 3vw, 4rem); /* Moved down - reduced bottom value */
+    right: 0vw;
     left: auto;
     transform: none;
-    width: clamp(220px, 26vw, 340px);
+    width: clamp(110px, 10vw, 170px);
     height: clamp(90px, 11vw, 140px);
     border-radius: clamp(0.6rem, 1vw, 1rem);
     background: linear-gradient(158deg, rgba(20, 22, 35, 0.98) -8%, rgba(8, 9, 18, 0.99) 92%);
@@ -558,7 +559,7 @@
     border: 1px solid rgba(94, 102, 140, 0.2);
     display: flex;
     overflow: hidden;
-    z-index: 10;
+    z-index: 3; /* Lower than tonearm (z-index: 4) so tonearm is not covered */
 }
 
 .song-info-screen__left {
