@@ -1,0 +1,141 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   TEAM CREDITS SECTION - Professional and Creative Design
+   Extracted from base.css for better organization
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.team-credits {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 900px;
+  margin-top: var(--space-6);
+  padding: var(--space-6);
+  background: rgba(20, 20, 35, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(45, 220, 211, 0.2);
+  text-align: center;
+  animation: cardFadeIn 0.8s ease-out 0.3s backwards;
+}
+
+.credits-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.credits-ufo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 15px rgba(45, 220, 211, 0.5));
+  animation: ufoHover 3s ease-in-out infinite;
+}
+
+@keyframes ufoHover {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+.credits-title {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.credits-team {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.team-member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.team-member:hover {
+  background: rgba(45, 220, 211, 0.08);
+  border-color: rgba(45, 220, 211, 0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(45, 220, 211, 0.15);
+}
+
+.member-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(45, 220, 211, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.team-member:hover .member-avatar {
+  transform: scale(1.1);
+}
+
+.avatar-initial {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.member-name {
+  font-size: var(--font-size-body-reg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.member-role {
+  font-size: var(--font-size-body-sm);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.credits-course {
+  font-size: var(--font-size-body-sm);
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: var(--space-4);
+  font-style: italic;
+}
+
+.credits-github {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: var(--font-size-body-sm);
+  transition: all 0.3s ease;
+}
+
+.credits-github:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--color-text-primary);
+  transform: translateY(-2px);
+}
+
+.credits-github svg {
+  flex-shrink: 0;
+}

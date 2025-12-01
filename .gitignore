@@ -59,4 +59,6 @@ vite.config.ts.timestamp-*
 temp/
 tmp/
 
+# Downloaded/reference materials (not part of build)
 icon_libraries/
+examples/

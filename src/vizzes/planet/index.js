@@ -554,13 +554,6 @@ export class PlanetViz extends EventEmitter {
     return { x: cx, y: cy, name: this.topArtistName };
   }
 
-  fadeOrbits() {
-    this.svg.selectAll('.planet-orbit')
-      .transition()
-      .duration(600)
-      .attr('opacity', 0);
-  }
-
   /**
    * Highlight planets with high danceability (above threshold)
    * Dims planets below the threshold to draw attention to danceable tracks

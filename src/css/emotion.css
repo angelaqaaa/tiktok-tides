@@ -1,3 +1,19 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   EMOTION.CSS - Caption Analysis Visualization
+   Scene 6: Word bubbles showing emotional language patterns
+
+   Sections:
+   - Word Bubble Base Styles
+   - Semantic Links
+   - Category Legend
+   - Tooltip Styling
+   - Animations & Transitions
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Word Bubble Base Styles
+   ───────────────────────────────────────────────────────────────────────────── */
+
 /* Group: whole bubble */
 .word-bubble {
   cursor: pointer;
@@ -39,7 +55,13 @@
   filter: drop-shadow(0 0 3px rgba(45, 220, 211, 0.5));
 }
 
-/* Legend styling */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Emotion Filters - Interactive Filter Chips (NOT a passive legend)
+
+   These are interactive checkboxes styled as chips.
+   Not using design-system.css legend because this is a control UI.
+   The user clicks these to filter the word bubbles visualization.
+   ═══════════════════════════════════════════════════════════════════════════ */
 .emotion-legend {
   list-style: none;
   padding: 0;
@@ -158,31 +180,9 @@
   outline-offset: 2px;
 }
 
-/* ====== NEW LAYOUT FOR LEGEND + SORT LEFT OF VIZ ====== */
-
-.emotion-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-/* Left column: legend + sort */
-.legend-panel {
-  padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
-  background: rgba(15, 23, 42, 0.3);
-  border: 1px solid rgba(148, 163, 184, 0.3);
-  max-width: 260px;
-}
-
-/* Right column: viz + drawer */
-.viz-and-drawer {
-  position: relative;
-  flex: 1 1 auto;
-}
-
-/* Sort toggle button styling */
+/* ─────────────────────────────────────────────────────────────────────────────
+   Sort Toggle Button
+   ───────────────────────────────────────────────────────────────────────────── */
 .emotion-sort-toggle {
   margin-top: 1rem;
   display: inline-flex;
@@ -218,18 +218,272 @@
   box-shadow: 0 0 0 1px rgba(167, 243, 208, 0.4);
 }
 
-/* Two-column layout on medium+ screens */
-@media (min-width: 768px) {
-  .emotion-layout {
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCENE 6 LAYOUT - Emotion Scene Structure
+   Migrated from base.css for better organization
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Main container - 3-column layout */
+.emotion-container {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 1200px;
+  padding: calc(64px + var(--space-4)) var(--space-4) var(--space-4);
+  min-height: 100vh;
+  align-items: center;
+}
+
+/* Left column: Text content */
+.emotion-text-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.emotion-title {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 800;
+  color: #f0f8ff;
+  line-height: 1.3;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.emotion-paragraphs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.emotion-paragraphs p {
+  font-size: 0.9375rem;
+  color: #baf6f0;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Guided interaction prompt */
+.emotion-guided-step {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  background: rgba(45, 204, 211, 0.15);
+  border-radius: 8px;
+  border-left: 3px solid #2dccd3;
+}
+
+.emotion-guided-step .guided-prompt {
+  font-size: 0.875rem;
+  color: #baf6f0;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Insight callout - hidden by default, shown after user interaction */
+.emotion-insight-callout {
+  margin-top: var(--space-4);
+  padding: var(--space-3);
+  background: rgba(251, 235, 53, 0.15);
+  border-radius: 8px;
+  border-left: 3px solid #fbeb35;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+}
+
+.emotion-insight-callout[data-insight-state="visible"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.emotion-insight-callout .insight-text {
+  font-size: 0.875rem;
+  color: #fbeb35;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Center column: Visualization */
+.emotion-viz-column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emotion-viz-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.emotion-viz-wrapper .viz-container {
+  width: 100%;
+  min-height: 400px;
+  background: rgba(15, 23, 42, 0.4);
+  border-radius: 16px;
+  border: 1px solid rgba(45, 204, 211, 0.3);
+}
+
+/* Right column: Controls and Legend */
+.emotion-controls-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.emotion-filter-panel,
+.emotion-legend-panel {
+  padding: var(--space-3);
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  border: 1px solid rgba(45, 204, 211, 0.3);
+}
+
+.filter-panel-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #baf6f0;
+  margin: 0 0 var(--space-3);
+}
+
+/* Legend hint text */
+.legend-hint {
+  font-size: 0.75rem;
+  color: rgba(186, 246, 240, 0.7);
+  margin: 0 0 var(--space-2);
+}
+
+/* Sort panel styling for dark theme */
+.emotion-sort-panel {
+  padding: var(--space-3);
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  border: 1px solid rgba(45, 204, 211, 0.3);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Alien narrator for emotion scene
+   ───────────────────────────────────────────────────────────────────────── */
+.alien-narrator--emotion {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.alien-hanging-bubble {
+  margin-bottom: -10px;
+}
+
+.alien-narrator--emotion .alien-avatar {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+/* Show alien when scene is active */
+[data-scene="air"] .alien-narrator--emotion .alien-avatar {
+  opacity: 1;
+  transform: translateY(0);
+  animation: alienFloat 3s ease-in-out 1s infinite;
+}
+
+[data-scene="air"] .alien-narrator--emotion .alien-speech-bubble[data-speech-state="visible"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.alien-narrator--emotion .alien-speech-bubble {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  width: max-content;
+  max-width: 240px;
+  padding: var(--space-3);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transition: opacity 400ms ease, transform 400ms ease;
+  margin-top: var(--space-2);
+}
+
+.alien-narrator--emotion .alien-speech-bubble::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-bottom-color: rgba(255, 255, 255, 0.95);
+}
+
+.alien-narrator--emotion .alien-speech-text {
+  font-size: 0.8125rem;
+  color: #1a1a2e;
+  line-height: 1.5;
+  margin: 0;
+  text-align: center;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Responsive adjustments for Scene 6
+   ───────────────────────────────────────────────────────────────────────── */
+@media (max-width: 992px) {
+  .emotion-container {
+    grid-template-columns: 1fr;
+    padding-top: calc(56px + var(--space-4));
+  }
+
+  .emotion-text-column {
+    text-align: center;
+  }
+
+  .emotion-controls-column {
     flex-direction: row;
-    align-items: flex-start;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
-  .legend-panel {
-    flex: 0 0 240px;
+  .emotion-filter-panel,
+  .emotion-legend-panel {
+    flex: 1;
+    min-width: 200px;
+    max-width: 300px;
   }
 
-  .viz-and-drawer {
-    flex: 1 1 auto;
+  .alien-narrator--emotion {
+    top: 15%;
+  }
+}
+
+@media (max-width: 768px) {
+  .emotion-title {
+    font-size: 1.25rem;
+  }
+
+  .emotion-filter-panel,
+  .emotion-legend-panel {
+    min-width: 150px;
+  }
+
+  .alien-narrator--emotion {
+    top: 10%;
+  }
+
+  .alien-narrator--emotion .alien-speech-bubble {
+    max-width: 200px;
   }
 }
