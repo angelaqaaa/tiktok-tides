@@ -695,20 +695,8 @@ body[data-scene="air"] .scene--bubbles {
   margin-top: var(--space-3);
 }
 
-/* Legend Panel */
-.legend-panel {
-  background: var(--glass-subtle-background);
-  border-radius: 8px;
-  border: var(--glass-subtle-border);
-  padding: var(--space-4);
-  backdrop-filter: blur(var(--glass-subtle-blur));
-  max-width: 510px;
-}
-
-.legend-panel h3 {
-  font-size: var(--font-size-label);
-  margin-bottom: var(--space-3);
-}
+/* Legend Panel - BASE MOVED TO design-system.css */
+/* Scene-specific legend variants remain below */
 
 .emotion-legend {
   list-style: none;
@@ -3746,97 +3734,7 @@ circle[data-type="bubble"] {
    Additional Scene 2 & 3 Styles (match HTML class names)
    ───────────────────────────────────────────────────────────────────────── */
 
-/* Scene label badge - Glassmorphism style with animated accent */
-.scene-label-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.95);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-
-  /* Glassmorphism background */
-  background: linear-gradient(
-    135deg,
-    rgba(12, 12, 24, 0.8) 0%,
-    rgba(8, 8, 18, 0.85) 100%
-  );
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-
-  padding: var(--space-2) var(--space-4);
-  border-radius: 24px;
-  margin-bottom: var(--space-4);
-  position: relative;
-  overflow: hidden;
-
-  /* Transparent border for gradient overlay */
-  border: 1px solid transparent;
-
-  /* Depth and glow */
-  box-shadow:
-    0 0 20px rgba(45, 204, 211, 0.1),
-    0 4px 16px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    inset 0 0 8px rgba(45, 204, 211, 0.05);
-}
-
-/* Animated gradient border */
-.scene-label-badge::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 24px;
-  padding: 1px;
-  background: linear-gradient(
-    90deg,
-    rgba(45, 204, 211, 0.6) 0%,
-    rgba(138, 43, 226, 0.4) 33%,
-    rgba(255, 0, 80, 0.4) 66%,
-    rgba(45, 204, 211, 0.6) 100%
-  );
-  background-size: 300% 100%;
-  animation: badgeBorderFlow 4s linear infinite;
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-/* Shimmer effect overlay */
-.scene-label-badge::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    110deg,
-    transparent 20%,
-    rgba(255, 255, 255, 0.08) 40%,
-    rgba(255, 255, 255, 0.12) 50%,
-    rgba(255, 255, 255, 0.08) 60%,
-    transparent 80%
-  );
-  transform: translateX(-100%);
-  animation: shimmer 4s ease-in-out infinite;
-}
-
-@keyframes badgeBorderFlow {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 300% 50%; }
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  50%, 100% { transform: translateX(100%); }
-}
+/* Scene label badge - MOVED TO design-system.css */
 
 /* Music Galaxy viz area */
 .music-galaxy-viz-area {
@@ -4190,9 +4088,7 @@ circle[data-type="bubble"] {
 }
 
 @media (max-width: 768px) {
-  .scene-label-badge {
-    font-size: 0.625rem;
-  }
+  /* .scene-label-badge responsive rule moved to design-system.css */
 
   .music-galaxy-heading,
   .viral-sounds-heading {
@@ -4202,130 +4098,16 @@ circle[data-type="bubble"] {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Scene-Level Alien Narrator - TikTok Styled (fixed position within section)
+   Base Alien Narrator Styles - MOVED TO alien-narrator.css
+   The following styles are now consolidated in src/css/alien-narrator.css:
+   - .alien-narrator--scene base container
+   - .alien-avatar with TikTok gradient border
+   - .alien-speech-bubble and speech text
+   - All keyframe animations (alienFloat, borderRotate, glowPulse, bubbleAppear)
+   - Speech bubble visibility states
+   - Scene-specific visibility rules
+   - Mini-planet and floating-platform accessories
    ───────────────────────────────────────────────────────────────────────── */
-.alien-narrator--scene {
-  position: absolute;
-  bottom: 32px;
-  left: 32px;
-  display: flex;
-  align-items: flex-end;
-  gap: var(--space-3);
-  z-index: 100;
-  pointer-events: auto;
-  opacity: 1;
-}
-
-.alien-narrator--scene .alien-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: linear-gradient(135deg,
-    rgba(0, 242, 234, 0.25) 0%,
-    rgba(255, 0, 80, 0.15) 100%
-  );
-  border: 3px solid transparent;
-  background-clip: padding-box;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: visible;
-  animation: alienFloat 3s ease-in-out infinite;
-  cursor: pointer;
-}
-
-/* TikTok-style gradient border on avatar */
-.alien-narrator--scene .alien-avatar::before {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #00F2EA, #FF0050);
-  z-index: -1;
-  animation: borderRotate 4s linear infinite;
-}
-
-@keyframes borderRotate {
-  0% { filter: hue-rotate(0deg); }
-  100% { filter: hue-rotate(360deg); }
-}
-
-/* Glow effect behind avatar */
-.alien-narrator--scene .alien-avatar::after {
-  content: '';
-  position: absolute;
-  inset: -12px;
-  border-radius: 50%;
-  background: radial-gradient(circle,
-    rgba(0, 242, 234, 0.3) 0%,
-    rgba(255, 0, 80, 0.15) 50%,
-    transparent 70%
-  );
-  z-index: -2;
-  animation: glowPulse 2s ease-in-out infinite alternate;
-}
-
-@keyframes glowPulse {
-  0% { transform: scale(0.9); opacity: 0.6; }
-  100% { transform: scale(1.1); opacity: 1; }
-}
-
-.alien-narrator--scene .alien-avatar img {
-  width: 68px;
-  height: 68px;
-  object-fit: contain;
-  border-radius: 50%;
-  background: rgba(10, 10, 20, 0.8);
-}
-
-.alien-narrator--scene .alien-speech-bubble {
-  max-width: 380px;
-  min-width: 280px;
-  padding: var(--space-4) var(--space-5);
-  background: linear-gradient(145deg, rgba(15, 15, 25, 0.98), rgba(8, 8, 16, 0.95));
-  border: 2px solid rgba(0, 242, 234, 0.45);
-  border-radius: 20px 20px 20px 6px;
-  box-shadow:
-    0 0 25px rgba(0, 242, 234, 0.2),
-    0 0 50px rgba(255, 0, 80, 0.1),
-    0 12px 40px rgba(0, 0, 0, 0.6);
-  position: relative;
-  /* REMOVED: animation: bubbleAppear - was causing flickering due to unconditional animation restart */
-  /* Using transition-based visibility controlled by data-speech-state instead */
-}
-
-@keyframes bubbleAppear {
-  from {
-    opacity: 0;
-    transform: translateX(-10px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-}
-
-.alien-narrator--scene .alien-speech-bubble::before {
-  content: '';
-  position: absolute;
-  bottom: 12px;
-  left: -8px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 8px 10px 8px 0;
-  border-color: transparent rgba(0, 242, 234, 0.35) transparent transparent;
-}
-
-.alien-narrator--scene .alien-speech-text {
-  font-size: 1rem;
-  color: var(--color-text-primary);
-  line-height: 1.7;
-  margin: 0;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-}
 
 /* Scene 2 & 3 need position relative for alien positioning */
 .scene-music-galaxy,
@@ -4404,20 +4186,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   animation: alienPointUp 1.5s ease-in-out infinite !important;
 }
 
-@keyframes alienPointUp {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  25% {
-    transform: translateY(-5px) rotate(-5deg);
-  }
-  50% {
-    transform: translateY(-8px) rotate(-8deg);
-  }
-  75% {
-    transform: translateY(-5px) rotate(-5deg);
-  }
-}
+/* @keyframes alienPointUp - MOVED TO alien-narrator.css */
 
 /* Slide 3: Move alien to top-left corner */
 .alien-narrator--scene2.alien-top-left {
@@ -4427,77 +4196,9 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   transition: all 800ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Enter from below animation for Scene 2 - smooth rise up and land */
-@keyframes alienEnterFromBelow {
-  0% {
-    opacity: 0;
-    transform: translateY(100px);
-  }
-  70% {
-    opacity: 1;
-    transform: translateY(-8px);
-  }
-  85% {
-    transform: translateY(4px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* @keyframes alienEnterFromBelow - MOVED TO alien-narrator.css */
 
-/* Mini-planet visual for Scene 2 */
-.alien-mini-planet {
-  width: 120px;
-  height: 60px;
-  background: radial-gradient(ellipse 100% 80% at 50% 20%,
-    rgba(45, 204, 211, 0.7) 0%,
-    rgba(45, 204, 211, 0.4) 30%,
-    rgba(3, 54, 36, 0.8) 60%,
-    rgba(3, 54, 36, 0.95) 100%
-  );
-  border-radius: 50%;
-  position: relative;
-  z-index: 1;
-  box-shadow:
-    0 6px 25px rgba(45, 204, 211, 0.5),
-    0 0 50px rgba(45, 204, 211, 0.25),
-    inset 0 -12px 25px rgba(0, 0, 0, 0.4),
-    inset 0 4px 10px rgba(255, 255, 255, 0.1);
-  animation: miniPlanetGlow 3s ease-in-out infinite alternate;
-}
-
-.alien-mini-planet::after {
-  content: '';
-  position: absolute;
-  top: 12%;
-  left: 18%;
-  width: 35%;
-  height: 25%;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  filter: blur(5px);
-}
-
-/* Crater details on mini-planet */
-.alien-mini-planet::before {
-  content: '';
-  position: absolute;
-  bottom: 20%;
-  right: 25%;
-  width: 15px;
-  height: 10px;
-  background: rgba(0, 0, 0, 0.15);
-  border-radius: 50%;
-  box-shadow:
-    -25px -5px 0 5px rgba(0, 0, 0, 0.1),
-    15px 8px 0 3px rgba(0, 0, 0, 0.1);
-}
-
-@keyframes miniPlanetGlow {
-  0% { box-shadow: 0 6px 25px rgba(45, 204, 211, 0.4), 0 0 40px rgba(45, 204, 211, 0.2), inset 0 -12px 25px rgba(0, 0, 0, 0.4); }
-  100% { box-shadow: 0 8px 35px rgba(45, 204, 211, 0.6), 0 0 60px rgba(45, 204, 211, 0.35), inset 0 -12px 25px rgba(0, 0, 0, 0.4); }
-}
+/* .alien-mini-planet and @keyframes miniPlanetGlow - MOVED TO alien-narrator.css */
 
 /* Scene 3: Bottom-right as DJ (v3 spec) */
 .alien-narrator--scene3.alien-narrator--scene {
@@ -4554,12 +4255,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   animation: alienTapBounce 0.6s ease-in-out;
 }
 
-@keyframes alienTapBounce {
-  0%, 100% { transform: translateY(0); }
-  30% { transform: translateY(-15px); }
-  50% { transform: translateY(5px); }
-  70% { transform: translateY(-8px); }
-}
+/* @keyframes alienTapBounce - MOVED TO alien-narrator.css */
 
 /* Slide toward edge on scroll */
 .alien-narrator--scene3.alien-sliding {
@@ -4590,78 +4286,9 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   border-color: transparent transparent transparent rgba(0, 242, 234, 0.45);
 }
 
-/* Floating platform visual for Scene 3 */
-.alien-floating-platform {
-  width: 110px;
-  height: 20px;
-  background: linear-gradient(180deg,
-    rgba(255, 0, 80, 0.8) 0%,
-    rgba(0, 242, 234, 0.6) 50%,
-    rgba(255, 0, 80, 0.4) 100%
-  );
-  border-radius: 10px;
-  position: relative;
-  z-index: 1;
-  box-shadow:
-    0 6px 20px rgba(255, 0, 80, 0.5),
-    0 0 40px rgba(0, 242, 234, 0.35),
-    inset 0 3px 6px rgba(255, 255, 255, 0.4),
-    inset 0 -3px 6px rgba(0, 0, 0, 0.3);
-  animation: platformFloat 2s ease-in-out infinite;
-}
+/* .alien-floating-platform, @keyframes platformFloat, platformNeonGlow - MOVED TO alien-narrator.css */
 
-/* Neon edge glow on platform */
-.alien-floating-platform::after {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: 12px;
-  background: linear-gradient(90deg, #00F2EA, #FF0050, #00F2EA);
-  background-size: 200% 100%;
-  z-index: -1;
-  animation: platformNeonGlow 2s linear infinite;
-  opacity: 0.6;
-}
-
-@keyframes platformNeonGlow {
-  0% { background-position: 0% 0%; }
-  100% { background-position: 200% 0%; }
-}
-
-.alien-floating-platform::before {
-  content: '';
-  position: absolute;
-  bottom: -25px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 70%;
-  height: 25px;
-  background: radial-gradient(ellipse at center,
-    rgba(0, 242, 234, 0.35) 0%,
-    rgba(255, 0, 80, 0.15) 50%,
-    transparent 70%
-  );
-  filter: blur(6px);
-}
-
-@keyframes platformFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-
-/* Hidden state for speech bubbles (controlled by JS) */
-.alien-speech-bubble[data-speech-state="hidden"] {
-  opacity: 0;
-  pointer-events: none;
-  transform: scale(0.9);
-}
-
-.alien-speech-bubble[data-speech-state="visible"] {
-  opacity: 1;
-  pointer-events: auto;
-  transform: scale(1);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
+/* .alien-speech-bubble[data-speech-state] states - MOVED TO alien-narrator.css */
 
 /* ─────────────────────────────────────────────────────────────────────────
    Improved Legend Styling for Scene 2 - Glassmorphism with animated accents
@@ -5566,34 +5193,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   transform: scale(1) translateY(0);
 }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   Step Dot Indicators for scrolling scenes
-   ───────────────────────────────────────────────────────────────────────── */
-.step-dots {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  position: absolute;
-  left: var(--space-4);
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.step-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--color-muse, #EDD4B2);
-  opacity: 0.4;
-  transition: all 0.3s ease;
-}
-
-.step-dot.active {
-  background: var(--color-blaze, #F1204A);
-  opacity: 1;
-  transform: scale(1.25);
-  box-shadow: 0 0 8px rgba(241, 32, 74, 0.5);
-}
+/* Step Dot Indicators - MOVED TO design-system.css */
 
 /* ─────────────────────────────────────────────────────────────────────────
    Responsive adjustments for new features
@@ -5609,146 +5209,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   TEAM CREDITS SECTION - Professional and Creative Design
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.team-credits {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: 900px;
-  margin-top: var(--space-6);
-  padding: var(--space-6);
-  background: rgba(20, 20, 35, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: var(--radius-lg);
-  border: 1px solid rgba(45, 220, 211, 0.2);
-  text-align: center;
-  animation: cardFadeIn 0.8s ease-out 0.3s backwards;
-}
-
-.credits-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-4);
-  margin-bottom: var(--space-5);
-}
-
-.credits-ufo {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 15px rgba(45, 220, 211, 0.5));
-  animation: ufoHover 3s ease-in-out infinite;
-}
-
-@keyframes ufoHover {
-  0%, 100% { transform: translateY(0) rotate(-5deg); }
-  50% { transform: translateY(-10px) rotate(5deg); }
-}
-
-.credits-title {
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  font-weight: 600;
-  color: var(--color-text-primary);
-  letter-spacing: 0.02em;
-  margin: 0;
-}
-
-.credits-team {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: var(--space-4);
-  margin-bottom: var(--space-5);
-}
-
-.team-member {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-4);
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.3s ease;
-}
-
-.team-member:hover {
-  background: rgba(45, 220, 211, 0.08);
-  border-color: rgba(45, 220, 211, 0.3);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(45, 220, 211, 0.15);
-}
-
-.member-avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #2DCCD3, #F1204A);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 16px rgba(45, 220, 211, 0.3);
-  transition: transform 0.3s ease;
-}
-
-.team-member:hover .member-avatar {
-  transform: scale(1.1);
-}
-
-.avatar-initial {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: white;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.member-name {
-  font-size: var(--font-size-body-reg);
-  font-weight: 600;
-  color: var(--color-text-primary);
-}
-
-.member-role {
-  font-size: var(--font-size-body-sm);
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.credits-course {
-  font-size: var(--font-size-body-sm);
-  color: rgba(255, 255, 255, 0.5);
-  margin-bottom: var(--space-4);
-  font-style: italic;
-}
-
-.credits-github {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 9999px;
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: none;
-  font-size: var(--font-size-body-sm);
-  transition: all 0.3s ease;
-}
-
-.credits-github:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: var(--color-text-primary);
-  transform: translateY(-2px);
-}
-
-.credits-github svg {
-  flex-shrink: 0;
-}
+/* Team Credits section extracted to src/css/credits.css */
 
 /* ═══════════════════════════════════════════════════════════════════════════
    LAYOUT FIXES

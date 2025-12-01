@@ -1,5 +1,7 @@
 // Main scrollytelling orchestrator - Redesigned for guided data story
 import '../css/tokens.css';
+import '../css/design-system.css';
+import '../css/alien-narrator.css';
 import '../css/base.css';
 import '../css/navigation.css';
 import '../css/hero.css';
@@ -9,6 +11,8 @@ import '../css/ranking.css';
 import '../css/conveyor.css';
 import '../css/emotion.css';
 import '../css/planet.css';
+import '../css/music-galaxy.css';
+import '../css/credits.css';
 import { StopwatchViz } from '../vizzes/stopwatch/index.js';
 import { PlanetViz } from '../vizzes/planet/index.js';
 import { RankingViz } from '../vizzes/ranking/index.js';
@@ -461,10 +465,16 @@ class TikTokTidesApp {
   }
 
   updateNavigation(sectionId) {
-    // Update nav links aria-current
-    document.querySelectorAll('.nav-links a').forEach(link => {
-      const href = link.getAttribute('href');
-      link.setAttribute('aria-current', href === `#${sectionId}` ? 'true' : 'false');
+    // Update v3 mini-strip navigation active states
+    document.querySelectorAll('.mini-node[data-target]').forEach(node => {
+      const target = node.getAttribute('data-target');
+      node.classList.toggle('active', target === sectionId);
+    });
+
+    // Update v3 journey map navigation active states
+    document.querySelectorAll('.map-node[data-target]').forEach(node => {
+      const target = node.getAttribute('data-target');
+      node.classList.toggle('active', target === sectionId);
     });
   }
 
@@ -779,8 +789,9 @@ class TikTokTidesApp {
     document.addEventListener('keydown', (e) => {
       // Number keys jump to sections
       const sections = [
-        'scene-landing',
-        'scene-sound-universe',
+        'scene-hero',
+        'scene-music-galaxy',
+        'scene-viral-sounds',
         'scene-duration',
         'scene-category',
         'scene-emotion',

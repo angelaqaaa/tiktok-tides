@@ -1,0 +1,262 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   DESIGN SYSTEM - Shared UI Components
+   TikTok Tides Project
+
+   This file contains reusable UI components used across multiple scenes.
+   Extracted from base.css during cleanup to reduce duplication.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Scene Label Badge
+   Glassmorphism badge with animated gradient border and shimmer effect.
+   Used in: Scene 2 (Music Galaxy), Scene 7 (Quiz), Scene 8 (Wrap-up)
+   ───────────────────────────────────────────────────────────────────────────── */
+.scene-label-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+
+  /* Glassmorphism background */
+  background: linear-gradient(
+    135deg,
+    rgba(12, 12, 24, 0.8) 0%,
+    rgba(8, 8, 18, 0.85) 100%
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  padding: var(--space-2) var(--space-4);
+  border-radius: 24px;
+  margin-bottom: var(--space-4);
+  position: relative;
+  overflow: hidden;
+
+  /* Transparent border for gradient overlay */
+  border: 1px solid transparent;
+
+  /* Depth and glow */
+  box-shadow:
+    0 0 20px rgba(45, 204, 211, 0.1),
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 8px rgba(45, 204, 211, 0.05);
+}
+
+/* Animated gradient border */
+.scene-label-badge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  padding: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(45, 204, 211, 0.6) 0%,
+    rgba(138, 43, 226, 0.4) 33%,
+    rgba(255, 0, 80, 0.4) 66%,
+    rgba(45, 204, 211, 0.6) 100%
+  );
+  background-size: 300% 100%;
+  animation: badgeBorderFlow 4s linear infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Shimmer effect overlay */
+.scene-label-badge::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.08) 40%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.08) 60%,
+    transparent 80%
+  );
+  transform: translateX(-100%);
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+@keyframes badgeBorderFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  50%, 100% { transform: translateX(100%); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .scene-label-badge {
+    font-size: 0.625rem;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Step Indicators
+   Navigation dots for scrolling/stepping through content.
+   Used in: Scene 2 (Music Galaxy slides), various step-based sections
+   Scene-specific variants extend these base classes.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Container for step dots - default vertical layout */
+.step-dots {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  position: absolute;
+  left: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Horizontal variant */
+.step-dots--horizontal,
+.step-indicators {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-2);
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+}
+
+/* Individual step dot */
+.step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.step-dot:hover {
+  background: rgba(45, 204, 211, 0.4);
+  transform: scale(1.2);
+}
+
+/* Active state - default uses blaze color */
+.step-dot.active {
+  background: var(--color-blaze, #F1204A);
+  opacity: 1;
+  transform: scale(1.25);
+  box-shadow: 0 0 8px rgba(241, 32, 74, 0.5);
+}
+
+/* Glint color variant (for Music Galaxy and other cyan-themed scenes) */
+.step-dot--glint.active,
+.step-indicators .step-dot.active {
+  background: var(--color-glint, #2DCCD3);
+  box-shadow: 0 0 8px rgba(45, 204, 211, 0.5);
+}
+
+/* Size variants */
+.step-dot--lg {
+  width: 12px;
+  height: 12px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Legend Panel
+   Glassmorphism panel for displaying visualization legends.
+   Used in: Scene 2 (Music Galaxy), Scene 4 (Timing), Scene 5 (Pyramid), Scene 6 (Emotion)
+   Scene-specific variants extend this base class.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Base legend panel - glassmorphism card */
+.legend-panel {
+  background: var(--glass-subtle-background, rgba(12, 12, 24, 0.85));
+  border-radius: var(--radius-md, 8px);
+  border: var(--glass-subtle-border, 1px solid rgba(255, 255, 255, 0.1));
+  padding: var(--space-4);
+  backdrop-filter: blur(var(--glass-subtle-blur, 16px));
+  -webkit-backdrop-filter: blur(var(--glass-subtle-blur, 16px));
+  max-width: 510px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.legend-panel h3 {
+  font-size: var(--font-size-label, 0.75rem);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: var(--space-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Legend row - for inline label + value */
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.legend-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.02em;
+}
+
+/* Legend dot - colored indicator */
+.legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Legend gradient bar - for continuous scales */
+.legend-gradient-bar {
+  height: 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Legend section divider */
+.legend-section {
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.legend-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+/* Inline legend - horizontal layout */
+.legend-inline {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.legend-item-inline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.85);
+}

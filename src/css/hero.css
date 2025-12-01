@@ -1076,14 +1076,15 @@
   object-fit: contain;
   position: absolute;
   bottom: 20%;
-  left: calc(50% - 110px); /* Offset to account for action bar on right */
+  left: 50%;
   transform: translateX(-50%);
   z-index: 5;
   filter: drop-shadow(0 0 30px rgba(45, 204, 211, 0.5));
-  animation: alienFloat 4s ease-in-out infinite;
+  animation: tiktokAlienFloat 4s ease-in-out infinite;
 }
 
-@keyframes alienFloat {
+/* Hero-specific alien float animation (includes translateX for centering) */
+@keyframes tiktokAlienFloat {
   0%, 100% {
     transform: translateX(-50%) translateY(0) scale(1);
   }
@@ -1523,10 +1524,7 @@ body:not([data-scene="cosmos"]) .alien-narrator--hero {
   animation: alienFloat 3s ease-in-out infinite;
 }
 
-@keyframes alienFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
+/* @keyframes alienFloat - now defined in alien-narrator.css */
 
 .alien-avatar img {
   width: 64px;
