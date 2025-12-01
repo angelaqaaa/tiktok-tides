@@ -3817,6 +3817,11 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   font-style: italic;
 }
 
+.music-galaxy-legend .legend-gradient-wrap {
+  position: relative;
+  padding-bottom: 24px;
+}
+
 .music-galaxy-legend .legend-gradient-labels {
   display: flex;
   justify-content: space-between;
@@ -3854,6 +3859,22 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .music-galaxy-legend .size-dot--lg {
   width: 14px;
   height: 14px;
+}
+
+/* Danceability indicator arrow (appears on hover) */
+.danceability-indicator {
+  transform: translateX(-50%);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+  animation: pulse-arrow 1s ease-in-out infinite;
+}
+
+@keyframes pulse-arrow {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-2px);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════

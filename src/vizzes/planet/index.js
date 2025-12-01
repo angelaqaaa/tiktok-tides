@@ -229,17 +229,18 @@ export class PlanetViz extends EventEmitter {
       .style('z-index', '1000')
       .style('font-size', '0.9rem');
 
-    // Create danceability indicator for legend
-    this.legendIndicator = d3.select('.color-gradient-container').append('div')
+    // Create danceability indicator for legend (upward-pointing arrow below gradient)
+    this.legendIndicator = d3.select('.legend-gradient-wrap').append('div')
       .attr('class', 'danceability-indicator')
       .style('position', 'absolute')
+      .style('bottom', '-20px')
       .style('opacity', 0)
       .style('pointer-events', 'none')
       .style('transition', 'all 0.2s ease')
-      .html(`
-        <div class="indicator-arrow">▶</div>
-        <div class="indicator-line"></div>
-      `);
+      .style('font-size', '16px')
+      .style('color', '#00F2EA')
+      .style('text-shadow', '0 0 8px rgba(0, 242, 234, 0.8)')
+      .text('▲');
   }
 
   updateVisualization() {
@@ -373,21 +374,18 @@ export class PlanetViz extends EventEmitter {
           .duration(200)
           .style('opacity', 1);
 
-        // Show indicator arrow and line on legend
-        const gradientBar = document.querySelector('.color-gradient-bar');
+        // Show indicator arrow on legend
+        const gradientBar = document.querySelector('.legend-dance-bar');
         if (gradientBar && self.legendIndicator) {
           const barRect = gradientBar.getBoundingClientRect();
-          const barHeight = barRect.height;
-          // Position from top: 1.0 is at top (0%), 0.0 is at bottom (100%)
-          const position = (1 - d.avgDanceability) * barHeight;
+          const barWidth = barRect.width;
+          // Position from left: 0.0 is at left (0%), 1.0 is at right (100%)
+          // Gradient goes: White (0.0) -> Blue (0.35) -> Pink (1.0)
+          const position = d.avgDanceability * barWidth;
           
-          const arrow = self.legendIndicator.select('.indicator-arrow');
-          const line = self.legendIndicator.select('.indicator-line');
-          
-          arrow.style('top', `${position}px`);
-          line.style('top', `${position}px`);
-          
-          self.legendIndicator.style('opacity', 1);
+          self.legendIndicator
+            .style('left', `${position}px`)
+            .style('opacity', 1);
         }
       })
       .on('mousemove', function(event, d) {
