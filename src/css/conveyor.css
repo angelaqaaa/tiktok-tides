@@ -1043,6 +1043,11 @@
   margin: 1rem 0 0 0;
 }
 
+/* Add spacing above the restart button in the completion box */
+.completion-message .restart-btn {
+  margin-top: 1rem;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .conveyor-container {

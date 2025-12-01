@@ -673,13 +673,14 @@ export class ConveyorViz extends EventEmitter {
         <h3>🎊 Complete!</h3>
         <p class="final-score">Your Score: ${this.state.score}/${this.data ? this.data.length : 0}</p>
         <p class="score-message">${this.getScoreMessage()}</p>
+        <button class="btn btn--secondary restart-btn" aria-label="Restart from beginning">Restart</button>
       </div>
     `;
 
-    // Show restart button
-    const restartBtn = this.container.querySelector('.restart-btn');
-    if (restartBtn) {
-      restartBtn.style.display = 'inline-block';
+    // Hide the controls area restart button if present (we use the one in completion box)
+    const controlsRestartBtn = this.container.querySelector('.conveyor-controls .restart-btn');
+    if (controlsRestartBtn) {
+      controlsRestartBtn.style.display = 'none';
     }
   }
 
