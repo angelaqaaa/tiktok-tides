@@ -20,7 +20,6 @@ import { EmotionViz } from '../vizzes/emotion/index.js';
 import { RecordPlayerViz } from '../vizzes/record-player/index.js';
 import { ConveyorViz } from '../vizzes/conveyor/index.js';
 import { initMicroInteractions } from './micro-interactions.js';
-import { installIllustrations } from '../illustrations/index.js';
 
 // Scene mapping for semantic worlds (8 scenes)
 // Maps section IDs to scene attribute values for body[data-scene]
@@ -1395,9 +1394,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // TASK 1 - Ensure scene layers exist
   ensureSceneLayers();
-
-  // Initialize scene illustrations
-  installIllustrations();
 
   // Initialize main app
   window.app = new TikTokTidesApp();

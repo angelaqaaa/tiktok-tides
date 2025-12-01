@@ -2,37 +2,37 @@
    BASE.CSS - Global Styles & Scene Layouts
    ═══════════════════════════════════════════════════════════════════════════════
 
-   TABLE OF CONTENTS (Updated Dec 2025 - After Consolidation)
+   TABLE OF CONTENTS (Updated Dec 2025 - Session A Cleanup)
    ─────────────────────────────────────────────────────────────
    GLOBAL STYLES
    1.  Reset & Base Styles ................... line ~52
    2.  TikTok Splash/Loading Screen .......... line ~88
-   3.  Reduced Motion ........................ line ~220
-   4.  Accessibility ......................... line ~275
+   3.  Reduced Motion ........................ line ~223
+   4.  Accessibility ......................... line ~277
    5.  Progress Bar .......................... line ~305
    6.  Scene Background System ............... line ~355
 
    LAYOUT & COMPONENTS
-   7.  Viz Containers ........................ line ~571
-   8.  Shared Component Responsive ........... line ~772
-   9.  Scene Illustrations (SVG overlays) .... line ~795
-   10. Reusable Component Styles ............. line ~1230
-   11. Summary Content Styling ............... line ~1420
+   7.  Viz Containers ........................ line ~592
+   8.  Shared Component Responsive ........... line ~794
+   9.  Scene Illustrations (SVG overlays) .... line ~816
+   10. Reusable Component Styles ............. line ~1257
+   11. Summary Content Styling ............... line ~1441
 
    SCENE-SPECIFIC LAYOUTS
-   12. Scene 3: Viral Sounds ................. line ~1568
-   13. Scene 4: Timing (Stopwatch) ........... line ~2069
-   14. Scene 5: Trend Pyramid (Ranking) ...... line ~2478
-   15. Scene 6: Emotion (Captions) ........... line ~2806
-   16. Scene 7: Quiz Lab ..................... line ~3541
-   17. Scene 8: Wrap-Up Recipe Card .......... line ~3802
+   12. Scene 3: Viral Sounds ................. line ~1589
+   13. Scene 4: Timing (Stopwatch) ........... line ~2090
+   14. Scene 5: Trend Pyramid (Ranking) ...... line ~2501
+   15. Scene 6: Emotion (Captions) ........... line ~2831
+   16. Scene 7: Quiz Lab ..................... line ~3566
+   17. Scene 8: Wrap-Up Recipe Card .......... line ~3827
 
    FIXES & OVERRIDES
-   18. V3 Missing Features ................... line ~4144
-   19. Layout Fixes .......................... line ~4216
-   20. Timing Icon Buttons ................... line ~4480
-   21. Comprehensive Layout Fixes ............ line ~4517
-   22. No-Scroll Enforcement ................. line ~4849
+   18. V3 Missing Features ................... line ~4169
+   19. Layout Fixes .......................... line ~4241
+   20. Timing Icon Buttons ................... line ~4505
+   21. Comprehensive Layout Fixes ............ line ~4542
+   22. No-Scroll Enforcement ................. line ~4874
 
    EXTRACTED TO SEPARATE FILES:
    - Hero section: hero.css
@@ -245,35 +245,6 @@ h1 { font-size: var(--font-size-h1); }
 h2 { font-size: var(--font-size-h2); }
 h3 { font-size: var(--font-size-h3); }
 
-.hero-title {
-  font-size: clamp(3rem, 8vw, 6rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-}
-
-.lead {
-  font-size: var(--font-size-body-lg);
-  color: var(--color-text-primary);
-  margin-bottom: var(--space-4);
-}
-
-.gradient-text {
-  background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-magenta));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.highlight-cyan {
-  color: var(--color-accent-cyan);
-  font-weight: var(--font-weight-semibold);
-}
-
-.highlight-magenta {
-  color: var(--color-accent-magenta);
-  font-weight: var(--font-weight-semibold);
-}
-
 /* Accessibility */
 .sr-only {
   position: absolute;
@@ -379,8 +350,26 @@ body::before {
 body[data-scene="cosmos"]::before,
 body[data-scene="galaxy"]::before,
 body[data-scene="sounds"]::before {
-  /* DEBUG: Bright red to test visibility - REMOVE AFTER TESTING */
-  background: red !important;
+  background:
+    /* Subtle purple nebula glow at center-top */
+    radial-gradient(ellipse 1200px 800px at 50% 25%,
+      rgba(60, 40, 100, 0.5) 0%,
+      rgba(40, 30, 80, 0.35) 40%,
+      transparent 70%
+    ),
+    /* Secondary cyan nebula accent */
+    radial-gradient(ellipse 900px 600px at 70% 60%,
+      rgba(45, 204, 211, 0.12) 0%,
+      rgba(45, 204, 211, 0.05) 50%,
+      transparent 70%
+    ),
+    /* Base deep navy gradient */
+    linear-gradient(180deg,
+      #050510 0%,
+      #0a0a1a 30%,
+      #0f1525 70%,
+      #1a1a2e 100%
+    );
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
@@ -2065,39 +2054,6 @@ circle[data-type="bubble"] {
   overflow: visible; /* Allow fullPage.js scroll events */
 }
 
-/* Background layers - Dawn theme */
-.timing-bg {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.timing-bg--gradient {
-  /* Dawn gradient: deep blue top → warm yellow/orange bottom */
-  background: linear-gradient(
-    180deg,
-    #0a1628 0%,
-    #1a2d4a 25%,
-    #3a4a6a 45%,
-    #7a6b5a 65%,
-    #c9a86c 80%,
-    #e8c88a 90%,
-    #f5dfa4 100%
-  );
-  z-index: 0;
-}
-
-.timing-bg--glow {
-  /* Soft radial glow behind stopwatch */
-  background: radial-gradient(
-    ellipse 60% 50% at 50% 70%,
-    rgba(251, 235, 53, 0.15) 0%,
-    rgba(251, 235, 53, 0.05) 40%,
-    transparent 70%
-  );
-  z-index: 1;
-}
-
 /* Top half: Narrative header */
 .timing-header {
   position: relative;
@@ -2328,15 +2284,17 @@ circle[data-type="bubble"] {
 }
 
 /* Show alien when scene is active */
-[data-scene="dawn"] .alien-narrator--timing {
-  opacity: 1;
-  transform: translateY(0);
+body[data-scene="dawn"] .alien-narrator--timing {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
   animation: alienFloat 3s ease-in-out 1.5s infinite;
 }
 
-[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble[data-speech-state="visible"] {
-  opacity: 1;
-  transform: translateX(0);
+body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateX(0) !important;
 }
 
 /* Make the alien avatar the positioning context */
@@ -2350,9 +2308,11 @@ circle[data-type="bubble"] {
   width: max-content;
   max-width: 200px;
   padding: var(--space-3);
-  background: rgba(255, 255, 255, 0.95);
+  /* White/light per redesign spec section 0.2 */
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
+  border: 2px solid rgba(45, 204, 211, 0.4);
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
   opacity: 0;
   transition: opacity 400ms ease, transform 400ms ease;
   margin-left: var(--space-2); /* Small gap between alien and bubble */
@@ -2365,14 +2325,14 @@ circle[data-type="bubble"] {
   top: 50%;
   transform: translateY(-50%);
   border: 8px solid transparent;
-  border-right-color: rgba(255, 255, 255, 0.95);
+  border-right-color: rgba(255, 255, 255, 0.98); /* Match white background */
   border-right-width: 8px;
 }
 
 .alien-narrator--timing .alien-speech-text {
-  font-size: 0.8125rem;
-  color: #1a1a2e;
-  line-height: 1.5;
+  font-size: 0.875rem;
+  color: #1a1a2e; /* Dark text for white background */
+  line-height: 1.6;
   margin: 0;
 }
 
@@ -2470,37 +2430,6 @@ circle[data-type="bubble"] {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-}
-
-/* Background layers - Forest theme */
-.pyramid-bg {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.pyramid-bg--sky {
-  /* Deep green/teal forest sky */
-  background: linear-gradient(
-    180deg,
-    #0a1a12 0%,
-    #0d2a1c 30%,
-    #1a4a3a 60%,
-    #2a5a4a 80%,
-    #3a6a5a 100%
-  );
-  z-index: 0;
-}
-
-.pyramid-bg--trees {
-  /* Tree silhouettes along bottom */
-  background:
-    linear-gradient(transparent 60%, rgba(10, 26, 18, 0.8) 100%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100'%3E%3Cpath d='M0 100 L10 40 L20 100 M15 100 L30 30 L45 100 M40 100 L55 25 L70 100 M65 100 L80 35 L95 100 M90 100 L105 20 L120 100 M115 100 L130 40 L145 100 M140 100 L155 30 L170 100 M165 100 L180 45 L195 100' fill='%230a1a12' stroke='none'/%3E%3C/svg%3E");
-  background-position: bottom;
-  background-repeat: repeat-x;
-  background-size: 400px auto;
-  z-index: 1;
 }
 
 /* Main container - split layout */
@@ -2695,9 +2624,11 @@ circle[data-type="bubble"] {
   width: max-content;
   max-width: 200px;
   padding: var(--space-3);
-  background: rgba(255, 255, 255, 0.95);
+  /* White/light per redesign spec section 0.2 */
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
+  border: 2px solid rgba(45, 204, 211, 0.4);
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
   opacity: 0;
   transform: translateY(10px);
   transition: opacity 400ms ease, transform 400ms ease;
@@ -2709,13 +2640,13 @@ circle[data-type="bubble"] {
   left: -8px;
   bottom: 20px;
   border: 8px solid transparent;
-  border-right-color: rgba(255, 255, 255, 0.95);
+  border-right-color: rgba(255, 255, 255, 0.98); /* Match white background */
 }
 
 .alien-narrator--pyramid .alien-speech-text {
-  font-size: 0.8125rem;
-  color: #1a1a2e;
-  line-height: 1.5;
+  font-size: 0.875rem;
+  color: #1a1a2e; /* Dark text for white background */
+  line-height: 1.6;
   margin: 0;
 }
 
@@ -2803,48 +2734,6 @@ circle[data-type="bubble"] {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-}
-
-/* Background layers - Dark theme (v2 spec) */
-.emotion-bg {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.emotion-bg--dark {
-  /* Dark gradient matching v2 spec: deep navy to dark purple */
-  background: linear-gradient(
-    180deg,
-    #0a0a1a 0%,
-    #0d1020 25%,
-    #12152d 50%,
-    #1a1a35 75%,
-    #0d0d1a 100%
-  );
-  z-index: 0;
-}
-
-.emotion-bg--particles {
-  /* Subtle floating particles - glint and shimmer colors */
-  background-image:
-    radial-gradient(circle 2px at 15% 20%, rgba(45, 204, 211, 0.4), transparent),
-    radial-gradient(circle 3px at 85% 15%, rgba(186, 246, 240, 0.3), transparent),
-    radial-gradient(circle 2px at 75% 70%, rgba(45, 204, 211, 0.35), transparent),
-    radial-gradient(circle 1px at 25% 80%, rgba(186, 246, 240, 0.25), transparent),
-    radial-gradient(circle 2px at 60% 40%, rgba(241, 32, 74, 0.2), transparent),
-    radial-gradient(circle 1px at 40% 60%, rgba(237, 187, 232, 0.2), transparent),
-    radial-gradient(circle 2px at 90% 50%, rgba(45, 204, 211, 0.3), transparent),
-    radial-gradient(circle 1px at 10% 55%, rgba(186, 246, 240, 0.25), transparent);
-  animation: floatParticles 25s ease-in-out infinite;
-  z-index: 1;
-}
-
-@keyframes floatParticles {
-  0%, 100% { transform: translateY(0) translateX(0); }
-  25% { transform: translateY(-10px) translateX(5px); }
-  50% { transform: translateY(-5px) translateX(-5px); }
-  75% { transform: translateY(-15px) translateX(3px); }
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -3545,79 +3434,6 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   overflow: hidden;
 }
 
-/* Background layers - Lab theme */
-.quiz-bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.quiz-bg--lab {
-  background:
-    /* Lab counters at bottom - dark teal/slate */
-    linear-gradient(0deg,
-      rgba(15, 25, 35, 0.9) 0%,
-      rgba(15, 25, 35, 0.5) 5%,
-      transparent 15%
-    ),
-    /* Main gradient - deep lab purple to dark */
-    linear-gradient(180deg,
-      #1a0a2e 0%,
-      #2d1b4e 30%,
-      #1a1a2e 60%,
-      #0f0f1a 100%
-    );
-}
-
-/* Lab equipment decorations */
-.quiz-bg--lab::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 120px;
-  background:
-    /* Beakers silhouette */
-    radial-gradient(ellipse 40px 60px at 10% 100%, rgba(45, 220, 211, 0.15) 0%, transparent 70%),
-    radial-gradient(ellipse 30px 50px at 15% 100%, rgba(45, 220, 211, 0.1) 0%, transparent 70%),
-    /* Test tubes */
-    radial-gradient(ellipse 20px 70px at 85% 100%, rgba(241, 32, 74, 0.12) 0%, transparent 70%),
-    radial-gradient(ellipse 20px 65px at 90% 100%, rgba(251, 235, 53, 0.1) 0%, transparent 70%),
-    /* Pipes */
-    linear-gradient(90deg,
-      transparent 0%,
-      rgba(45, 220, 211, 0.05) 20%,
-      transparent 40%,
-      rgba(241, 32, 74, 0.05) 60%,
-      transparent 80%
-    );
-}
-
-/* Floating bubbles animation */
-.quiz-bg--bubbles {
-  background-image:
-    radial-gradient(circle 6px at 15% 30%, rgba(45, 220, 211, 0.3) 0%, transparent 100%),
-    radial-gradient(circle 4px at 25% 60%, rgba(251, 235, 53, 0.25) 0%, transparent 100%),
-    radial-gradient(circle 8px at 75% 25%, rgba(241, 32, 74, 0.2) 0%, transparent 100%),
-    radial-gradient(circle 5px at 85% 55%, rgba(45, 220, 211, 0.25) 0%, transparent 100%),
-    radial-gradient(circle 3px at 40% 80%, rgba(237, 187, 232, 0.3) 0%, transparent 100%),
-    radial-gradient(circle 7px at 60% 15%, rgba(186, 246, 240, 0.2) 0%, transparent 100%);
-  animation: bubbleFloat 8s ease-in-out infinite;
-}
-
-@keyframes bubbleFloat {
-  0%, 100% {
-    transform: translateY(0);
-    opacity: 0.8;
-  }
-  50% {
-    transform: translateY(-15px);
-    opacity: 1;
-  }
-}
-
 /* Main quiz container */
 .quiz-container {
   position: relative;
@@ -3729,8 +3545,14 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .alien-narrator--quiz .alien-speech-bubble {
-  background: rgba(26, 10, 46, 0.9);
-  border-color: rgba(45, 220, 211, 0.4);
+  /* White/light per redesign spec section 0.2 */
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
+  border: 2px solid rgba(45, 204, 211, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.alien-narrator--quiz .alien-speech-text {
+  color: #1a1a2e; /* Dark text for white background */
 }
 
 /* Activate alien on scene enter */
@@ -3799,33 +3621,6 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   padding: calc(64px + var(--space-4)) var(--space-6) var(--space-6);
   overflow: visible; /* Allow scrolling */
   overflow-y: auto; /* Enable vertical scroll for long content */
-}
-
-/* Background - v2 dark neutral with glint/blaze gradients */
-.wrapup-bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.wrapup-bg--gradient {
-  /* v2 spec: very dark neutral close to black */
-  background:
-    linear-gradient(180deg,
-      #050508 0%,
-      #080a10 30%,
-      #0a0c12 60%,
-      #050508 100%
-    );
-}
-
-.wrapup-bg--glow {
-  /* v2 spec: soft gradients with low opacity glint (TikTok blue) and blaze (TikTok pink) */
-  background:
-    radial-gradient(ellipse 70% 50% at 50% 40%, rgba(45, 204, 211, 0.08) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 40% at 25% 70%, rgba(241, 32, 74, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 75% 60%, rgba(186, 246, 240, 0.04) 0%, transparent 60%);
 }
 
 /* Recipe card container - v2 dark theme with glint accent */
@@ -4047,8 +3842,14 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .alien-narrator--wrapup .alien-speech-bubble {
-  background: rgba(26, 10, 46, 0.9);
-  border-color: rgba(45, 220, 211, 0.4);
+  /* White/light per redesign spec section 0.2 */
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
+  border: 2px solid rgba(45, 204, 211, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.alien-narrator--wrapup .alien-speech-text {
+  color: #1a1a2e; /* Dark text for white background */
 }
 
 /* Activate alien on scene enter */

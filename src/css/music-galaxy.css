@@ -13,9 +13,9 @@
    6.  Text Overlay (Right 40%) .............. line ~400
    7.  fullPage Slide Wrappers ............... line ~475
    8.  Narrative Column ...................... line ~600
-   9.  Overlay Steps Article ................. line ~785
-   10. Step Indicator Dots ................... line ~880
-   11. Annotation Callout .................... line ~930
+   9.  Year Controls Label ................... line ~783
+   10. Step Indicator Dots ................... line ~795
+   11. Annotation Callout .................... line ~845
 
    ═══════════════════════════════════════════════════════════════════════════ */
 
@@ -778,90 +778,6 @@
 .year-btn.active::before,
 .year-btn[aria-pressed="true"]::before {
   opacity: 0;
-}
-
-/* ─────────────────────────────────────────────────────────────────────────
-   Overlay Steps Article - FOREGROUND layer on top of viz
-   ───────────────────────────────────────────────────────────────────────── */
-.music-galaxy-steps-article {
-  position: relative;
-  padding: 0;
-  max-width: 30rem;
-  margin: 0 auto;
-  z-index: 1; /* FOREGROUND - above viz */
-}
-
-.music-galaxy-step {
-  margin: 0 auto 2rem auto;
-  min-height: 50vh;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 500ms ease;
-}
-
-.music-galaxy-step.is-active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.music-galaxy-step:last-child {
-  margin-bottom: 0;
-}
-
-.step-content {
-  position: relative;
-  z-index: 30; /* Highest - always on top */
-  background: rgba(10, 10, 20, 0.95); /* More opaque to block viz */
-  backdrop-filter: blur(var(--glass-frosted-blur));
-  border: 1px solid rgba(45, 204, 211, 0.4);
-  border-radius: var(--radius-xl);
-  padding: var(--space-6);
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(45, 204, 211, 0.1) inset;
-  max-width: 550px;
-}
-
-.step-heading {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
-  font-weight: 800;
-  line-height: 1.15;
-  margin: 0 0 var(--space-4);
-  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.step-subheading {
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
-  font-weight: 700;
-  margin: 0 0 var(--space-3);
-  color: var(--color-glint);
-}
-
-.step-content p {
-  font-size: 1.0625rem;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.85);
-  margin-bottom: var(--space-3);
-}
-
-.step-content p:last-child {
-  margin-bottom: 0;
-}
-
-.step-content p strong {
-  color: var(--color-glint);
-  font-weight: 600;
-}
-
-/* Year controls within step content */
-.music-galaxy-step .music-galaxy-year-controls {
-  margin-top: var(--space-4);
-  padding-top: var(--space-4);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Component: Year Controls Label - Canonical definition for "Select Year" labels */
