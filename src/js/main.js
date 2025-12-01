@@ -158,9 +158,6 @@ class TikTokTidesApp {
     // Setup guided step buttons
     this.setupGuidedSteps();
 
-    // Initialize starfield
-    this.initStarfield();
-
     // Initialize alien narrator (v3 spec 4.1)
     this.initAlienNarrator();
 
@@ -963,27 +960,6 @@ class TikTokTidesApp {
     if (callout) {
       callout.setAttribute('aria-hidden', 'false');
       this.insightRevealed[sectionId] = true;
-    }
-  }
-
-  initStarfield() {
-    const starfield = document.querySelector('.starfield');
-    if (!starfield) return;
-
-    const starCount = 100;
-
-    for (let i = 0; i < starCount; i++) {
-      const star = document.createElement('div');
-      star.className = 'star';
-      star.style.left = `${Math.random() * 100}%`;
-      star.style.top = `${Math.random() * 100}%`;
-      star.style.animationDelay = `${Math.random() * 5}s`;
-
-      const size = Math.random() * 3 + 1;
-      star.style.width = `${size}px`;
-      star.style.height = `${size}px`;
-
-      starfield.appendChild(star);
     }
   }
 
