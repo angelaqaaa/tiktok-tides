@@ -1,4 +1,23 @@
-/* Record Player */
+/* ═══════════════════════════════════════════════════════════════════════════
+   RECORD-PLAYER.CSS - Viral Sounds Visualization
+   Scene 3: Record player with concentric genre rings
+
+   TABLE OF CONTENTS
+   ─────────────────
+   1. Container & Layout .............. line ~15
+   2. Wrapper & Base .................. line ~60
+   3. Disc Area & Rings ............... line ~220
+   4. Ring Interactions ............... line ~280
+   5. Center Cap & Year ............... line ~290
+   6. Floating Notes Animation ........ line ~400
+   7. Responsive (max-width: 720px) ... line ~425
+   8. Player Lock State ............... line ~540
+   9. Song Info Screen ................ line ~550
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   1. Container & Layout
+   ───────────────────────────────────────────────────────────────────────────── */
 .record-player-section { margin-top: var(--space-6);
     min-height: clamp(400px, 60vh, 700px);
     width: 100%;

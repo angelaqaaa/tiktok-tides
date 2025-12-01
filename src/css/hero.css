@@ -1,4 +1,24 @@
-/* Hero Scene and TikTok Phone Mockup - Extracted from base.css */
+/* ══════════════════════════════════════════════════════════════════════════
+   HERO.CSS - Hero Scene and TikTok Phone Mockup
+   Extracted from base.css during cleanup
+   ══════════════════════════════════════════════════════════════════════════
+
+   TABLE OF CONTENTS
+   ─────────────────
+   1.  Scene Base Styles ..................... line ~25
+   2.  Background Layers (Starfield) ......... line ~45
+   3.  Three-Band Layout ..................... line ~225
+   4.  Hero Text Column (Left 55%) ........... line ~255
+   5.  Hero Visual Column (Right 45%) ........ line ~380
+   6.  Phone Frame (TikTok mockup) ........... line ~390
+   7.  Phone Action Icons .................... line ~420
+   8.  Phone Mockup Speech Bubbles ........... line ~705
+   9.  Authentic TikTok UI ................... line ~885
+   10. Hero Bottom Band ...................... line ~1435
+   11. Alien Narrator (Hero position) ........ line ~1490
+   12. Responsive Styles ..................... line ~1615
+
+   ══════════════════════════════════════════════════════════════════════════ */
 
 /* ══════════════════════════════════════════════════════════════════════════
    SCENE 1: HERO (ARRIVAL) - v3 spec 5.1
@@ -243,11 +263,12 @@
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.03em;
+  /* Gradient uses glint → light-mint → blaze → yellow for shimmer effect */
   background: linear-gradient(135deg,
-    #2DCCD3 0%,
+    var(--color-glint) 0%,
     #BAF6F0 30%,
-    #F1204A 70%,
-    #FBEB35 100%
+    var(--color-blaze) 70%,
+    var(--color-accent-yellow) 100%
   );
   background-size: 200% 200%;
   -webkit-background-clip: text;
@@ -284,6 +305,12 @@
 /* ==========================================================================
    Component: Hero CTA Button
    "Start the journey" button with cyan-teal gradient.
+
+   Similar to design-system.css .btn--primary but kept separate because:
+   - Hero-specific SVG arrow animation on hover (lines 337-342)
+   - Custom padding for hero context (14px 28px)
+   - No shimmer effect (cleaner for hero scene)
+
    Partially tokenized. Remaining hardcoded: #1BA8AE (darker teal), #033624 (text)
    ========================================================================== */
 .hero-cta-button {
@@ -534,7 +561,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2DCCD3, #F1204A);
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
   border: 2px solid #fff;
 }
 
@@ -679,7 +706,16 @@
   z-index: 2;
 }
 
-/* Speech bubble in phone clip */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Phone Mockup Speech Bubbles - Intentional Variants
+
+   These are NOT duplicates of alien-narrator.css speech bubbles.
+   They are specialized for phone UI mockup context:
+   - .clip-speech-bubble: White compact bubble for video clip overlay
+   - .tiktok-speech-bubble: TikTok comment-style UI with avatar
+
+   DO NOT consolidate with alien-narrator.css - different design intent.
+   ═══════════════════════════════════════════════════════════════════════════ */
 .clip-speech-bubble {
   position: absolute;
   top: 12%;
@@ -732,30 +768,6 @@
   align-items: center;
   justify-content: center;
   pointer-events: none;
-}
-
-.clip-play-icon {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  opacity: 0.7;
-  animation: playPulse 2s ease-in-out infinite;
-}
-
-.clip-play-icon svg {
-  width: 28px;
-  height: 28px;
-  margin-left: 4px; /* Center the play triangle visually */
-}
-
-@keyframes playPulse {
-  0%, 100% { transform: scale(1); opacity: 0.7; }
-  50% { transform: scale(1.1); opacity: 0.9; }
 }
 
 /* Bottom content area */

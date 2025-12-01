@@ -1,4 +1,25 @@
 /* ═══════════════════════════════════════════════════════════════════════════
+   MUSIC-GALAXY.CSS - Scene 2: Music Galaxy Planet Visualization
+   Extracted from base.css during cleanup
+   ═══════════════════════════════════════════════════════════════════════════
+
+   TABLE OF CONTENTS
+   ─────────────────
+   1.  Scene Base Styles ..................... line ~25
+   2.  Background Layers (Starfield) ......... line ~35
+   3.  Slide-Based Scrollytelling Setup ...... line ~145
+   4.  Viz Overlay (Left 60%) ................ line ~170
+   5.  Planet Visualization Panel ............ line ~190
+   6.  Text Overlay (Right 40%) .............. line ~400
+   7.  fullPage Slide Wrappers ............... line ~475
+   8.  Narrative Column ...................... line ~600
+   9.  Overlay Steps Article ................. line ~785
+   10. Step Indicator Dots ................... line ~880
+   11. Annotation Callout .................... line ~930
+
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
    SCENE 2: MUSIC GALAXY (v3 spec Section 5.2)
    Planet viz showing songs as orbiting planets in a solar system
    Layout: 65% left (viz), 35% right (narrative)

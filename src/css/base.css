@@ -2,42 +2,48 @@
    BASE.CSS - Global Styles & Scene Layouts
    ═══════════════════════════════════════════════════════════════════════════════
 
-   TABLE OF CONTENTS
-   ─────────────────
-   1.  Reset & Base Styles ................... line ~20
-   2.  TikTok Splash/Loading Screen .......... line ~50
-   3.  Reduced Motion & Typography ........... line ~185
-   4.  Accessibility ......................... line ~240
-   5.  Progress Bar & Sections ............... line ~270
-   6.  Scene Background System ............... line ~310
-   7.  Scene Layers & Starfield .............. line ~440
-   8.  Hero Section .......................... line ~520
-   9.  Layout Utilities ...................... line ~560
-   10. Viz Containers & KPI Rails ............ line ~570
-   11. Detail Drawer & Footer ................ line ~710
-   12. Animations (float, pulse, etc.) ....... line ~830
-   13. Planet Visualization Styles ........... line ~920
-   14. Tooltips .............................. line ~1200
-   15. Scene Illustrations (SVG overlays) .... line ~1220
-       - Forest .............................. line ~1245
-       - Lab ................................. line ~1345
-   16. Layout System (Two-Column, etc.) ...... line ~1660
-   17. Journey Map Overlay ................... line ~1765
-   18. Reusable Components ................... line ~1900
-   19. Phone Frame Illustration .............. line ~2130
-   20. Summary Content Styling ............... line ~2190
-   21. Scene 3: Viral Sounds ................. line ~2340
-   22. Scene 4: Timing (Stopwatch) ........... line ~2905
-   23. Scene 5: Trend Pyramid (Ranking) ...... line ~3315
-   24. Scene 6: Emotion (Captions) ........... line ~3640
-   25. Scene 7: Quiz Lab ..................... line ~4460
-   26. Scene 8: Wrap-Up Recipe Card .......... line ~4715
-   27. V3 Missing Features ................... line ~5055
-   28. Layout Fixes (Responsive) ............. line ~5130
-   29. No-Scroll Enforcement ................. line ~5795
+   TABLE OF CONTENTS (Updated Dec 2025)
+   ─────────────────────────────────────
+   GLOBAL STYLES
+   1.  Reset & Base Styles ................... line ~44
+   2.  TikTok Splash/Loading Screen .......... line ~80
+   3.  Reduced Motion ........................ line ~215
+   4.  Accessibility ......................... line ~269
+   5.  Progress Bar .......................... line ~297
+   6.  Scene Background System ............... line ~347
 
-   NOTE: Scene-specific alien narrator positioning is in this file (not alien-narrator.css)
-   due to tight coupling with scene layouts.
+   LAYOUT & COMPONENTS
+   7.  Viz Containers ........................ line ~550
+   8.  KPI Rails ............................. line ~586
+   9.  Detail Drawer ......................... line ~674
+   10. Footer ................................ line ~712
+   11. Micro-interactions (comet, etc.) ...... line ~829
+   12. Planet Visualization Styles ........... line ~886
+   13. Scene Illustrations (SVG overlays) .... line ~1183
+   14. Summary Content Styling ............... line ~1853
+
+   SCENE-SPECIFIC LAYOUTS
+   15. Scene 3: Viral Sounds ................. line ~2006
+   16. Scene 4: Timing (Stopwatch) ........... line ~2573
+   17. Scene 5: Trend Pyramid (Ranking) ...... line ~2980
+   18. Scene 6: Emotion (Captions) ........... line ~3308
+   19. Scene 7: Quiz Lab ..................... line ~4129
+   20. Scene 8: Wrap-Up Recipe Card .......... line ~4382
+
+   FIXES & OVERRIDES
+   21. V3 Missing Features ................... line ~4724
+   22. Layout Fixes .......................... line ~4796
+   23. Timing Icon Buttons ................... line ~5081
+   24. Comprehensive Layout Fixes (Nov 27) ... line ~5118
+   25. No-Scroll Enforcement ................. line ~5450
+
+   EXTRACTED TO SEPARATE FILES:
+   - Hero section: hero.css
+   - Music Galaxy scene: music-galaxy.css
+   - Navigation: navigation.css
+   - Team Credits: credits.css
+   - Alien narrator: alien-narrator.css
+   - Design system components: design-system.css
 
    ═══════════════════════════════════════════════════════════════════════════════ */
 
@@ -583,42 +589,6 @@ body[data-scene="air"] .scene--bubbles {
   to { transform: translateX(100%); }
 }
 
-/* KPI Rails */
-.kpi-rail {
-  display: flex;
-  gap: var(--space-5);
-  margin-top: var(--space-6);
-  padding: var(--space-4);
-  background: var(--glass-subtle-background);
-  border-radius: 8px;
-  border: var(--glass-subtle-border);
-  backdrop-filter: blur(var(--glass-subtle-blur));
-}
-
-.kpi-rail-vertical {
-  position: absolute;
-  right: var(--space-6);
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.kpi-item {
-  flex: 1;
-}
-
-.kpi-value {
-  font-size: 2rem;
-  font-weight: var(--font-weight-bold);
-  color: var(--color-accent-cyan);
-  font-family: var(--font-family-mono);
-}
-
-.kpi-label {
-  font-size: var(--font-size-label);
-  color: var(--color-text-disabled);
-  margin-top: var(--space-1);
-}
-
 /* Year Selector */
 /* Year selector - Prominent filter pill styling */
 .year-selector {
@@ -671,44 +641,6 @@ body[data-scene="air"] .scene--bubbles {
   transform: scale(1.05);
 }
 
-/* Detail Drawer */
-.detail-drawer {
-  position: fixed;
-  right: 0;
-  top: 64px;
-  bottom: 0;
-  width: 400px;
-  background: var(--glass-frosted-background);
-  backdrop-filter: blur(var(--glass-frosted-blur));
-  border-left: var(--glass-frosted-border);
-  transform: translateX(100%);
-  transition: transform var(--duration-macro) var(--easing-standard);
-  z-index: 900;
-  padding: var(--space-6);
-}
-
-.detail-drawer:not([aria-hidden="true"]) {
-  transform: translateX(0);
-}
-
-.drawer-close {
-  position: absolute;
-  top: var(--space-4);
-  right: var(--space-4);
-  width: 32px;
-  height: 32px;
-  background: transparent;
-  border: none;
-  color: var(--color-text-secondary);
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: color var(--duration-micro) var(--easing-standard);
-}
-
-.drawer-close:hover {
-  color: var(--color-text-primary);
-}
-
 /* Footer - merged with lab bench appearance */
 .site-footer {
   text-align: center;
@@ -740,69 +672,6 @@ body[data-scene="air"] .scene--bubbles {
   color: var(--color-accent-magenta);
 }
 
-/* Falling Leaves Animation */
-.falling-leaves-container {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 200px;
-  height: 100%;
-  pointer-events: none;
-  z-index: 10;
-}
-
-.falling-leaf {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  pointer-events: auto;
-  animation: fall var(--duration-cinematic) linear infinite;
-  opacity: 0;
-  transition: transform var(--duration-micro);
-}
-
-.falling-leaf svg {
-  width: 100%;
-  height: 100%;
-  color: var(--color-accent-magenta);
-}
-
-.falling-leaf.interactive {
-  pointer-events: auto;
-}
-
-.falling-leaf:hover {
-  transform: scale(1.2);
-}
-
-@keyframes fall {
-  0% {
-    transform: translateY(-100px) rotate(0deg);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.7;
-  }
-  90% {
-    opacity: 0.7;
-  }
-  100% {
-    transform: translateY(calc(100vh + 100px)) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-@keyframes float {
-  from { transform: translateY(0); }
-  to { transform: translateY(-20px); }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 0.05; }
-  50% { opacity: 0.1; }
-}
-
 .stat-row {
   display: flex;
   justify-content: space-between;
@@ -813,17 +682,6 @@ body[data-scene="air"] .scene--bubbles {
 
 .stat-row:last-child {
   border-bottom: none;
-}
-
-.stat-label {
-  font-size: var(--font-size-body-sm);
-  color: var(--color-text-secondary);
-}
-
-.stat-value {
-  font-size: var(--font-size-h3);
-  font-weight: var(--font-weight-bold);
-  font-family: var(--font-family-mono);
 }
 
 /* Micro-interactions */
@@ -874,12 +732,6 @@ circle[data-type="bubble"] {
 
   .sticky-rail {
     position: static;
-  }
-
-  .kpi-rail-vertical {
-    position: static;
-    transform: none;
-    margin-top: var(--space-4);
   }
 }
 
@@ -980,100 +832,20 @@ circle[data-type="bubble"] {
   font-size: 1.3rem;
 }
 
-/* Danceability gradient styles - MOVED to planet.css (base definitions) */
-/* Responsive overrides remain here as they mix planet and shared legend styles */
+/* ─────────────────────────────────────────────────────────────────────────
+   Shared Component Responsive Overrides
+   NOTE: Planet/danceability gradient styles moved to planet.css (Dec 2025)
+   ───────────────────────────────────────────────────────────────────────── */
 
-/* Responsive: adjust for medium screens */
+/* Responsive: medium screens */
 @media (max-width: 1400px) {
-  .legend {
-    left: 100px;
-    max-width: 200px;
-  }
-
-  .legend-item {
-    font-size: 0.8rem;
-    padding: 12px 16px;
-  }
-
-  .color-legend {
-    right: 40px;
-    width: 240px;
-    padding: 20px;
-  }
-
-  .color-gradient-bar {
-    width: 40px;
-    height: 300px;
-  }
-
-  .color-gradient-labels {
-    height: 300px;
-    font-size: 0.9rem;
-  }
-
   .annotation-rail {
     bottom: var(--space-4);
   }
 }
 
-/* Responsive: stack legends on tablets */
+/* Responsive: tablets */
 @media (max-width: 1024px) {
-  .legend {
-    left: 10px;
-    right: auto;
-    top: 80px;
-    transform: none;
-    max-width: calc(50% - 20px);
-    flex-direction: column;
-  }
-
-  .legend-item {
-    font-size: 0.75rem;
-    padding: 10px 14px;
-  }
-
-  .color-legend {
-    left: 10px;
-    right: auto;
-    top: auto;
-    bottom: 80px;
-    transform: none;
-    width: calc(100% - 20px);
-    max-width: 500px;
-  }
-
-  .color-legend-title {
-    font-size: 0.8rem;
-  }
-
-  .color-gradient-container {
-    flex-direction: row;
-  }
-
-  .color-gradient-bar {
-    width: 100%;
-    height: 40px;
-    background: linear-gradient(
-      to right,
-      #FFFFFF 0%,      /* White - 0.0 (low danceability) */
-      #2af0ea 35%,     /* TikTok blue - 0.35 (lower-middle) */
-      #fe2858 100%     /* TikTok pink - 1.0 (high danceability) */
-    );
-  }
-
-  .color-gradient-labels {
-    flex-direction: row;
-    height: auto;
-    width: 100%;
-    margin-top: 8px;
-    font-size: 0.85rem;
-  }
-
-  .color-gradient-labels span {
-    text-align: center;
-    flex: 1;
-  }
-
   .annotation-rail {
     bottom: var(--space-2);
   }
@@ -1083,78 +855,8 @@ circle[data-type="bubble"] {
   }
 }
 
-/* Responsive: compact layout for mobile */
+/* Responsive: mobile */
 @media (max-width: 768px) {
-  .legend {
-    left: 10px;
-    right: 10px;
-    top: 70px;
-    max-width: calc(100% - 20px);
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .legend-item {
-    font-size: 0.7rem;
-    padding: 8px 12px;
-    flex: 1 1 auto;
-    min-width: 120px;
-  }
-
-  .legend-item strong {
-    font-size: 0.75rem;
-  }
-
-  .color-legend {
-    position: absolute;
-    left: 10px;
-    right: 10px;
-    top: auto;
-    bottom: 70px;
-    transform: none;
-    width: calc(100% - 20px);
-    margin: 0;
-    padding: 12px;
-  }
-
-  .color-legend-title {
-    font-size: 0.75rem;
-    margin-bottom: 8px;
-  }
-
-  .color-gradient-container {
-    flex-direction: row;
-  }
-
-  .color-gradient-bar {
-    width: 100%;
-    height: 28px;
-    background: linear-gradient(
-      to right,
-      #FFFFFF 0%,      /* White - 0.0 (low danceability) */
-      #2af0ea 35%,     /* TikTok blue - 0.35 (lower-middle) */
-      #fe2858 100%     /* TikTok pink - 1.0 (high danceability) */
-    );
-  }
-
-  .color-gradient-labels {
-    flex-direction: row;
-    height: auto;
-    width: 100%;
-    margin-top: 6px;
-    font-size: 0.7rem;
-  }
-
-  .color-gradient-labels span {
-    text-align: center;
-    flex: 1;
-  }
-
-  .color-gradient-labels small {
-    font-size: 0.65rem;
-  }
-
   .annotation-rail {
     bottom: 10px;
   }
@@ -1817,38 +1519,6 @@ circle[data-type="bubble"] {
   margin: 0 0 var(--space-3) 0;
 }
 
-/* Insight Callout Component */
-.insight-callout {
-  background: var(--glass-frosted-background);
-  backdrop-filter: blur(var(--glass-frosted-blur));
-  border: 1px solid var(--color-accent-cyan);
-  border-radius: 12px;
-  padding: var(--space-5);
-  margin-top: var(--space-5);
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all var(--duration-macro) var(--easing-standard);
-  box-shadow: 0 0 20px rgba(0, 255, 224, 0.1);
-}
-
-.insight-callout:not([aria-hidden="true"]) {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.insight-title {
-  font-size: var(--font-size-body-lg);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-accent-cyan);
-  margin: 0 0 var(--space-3) 0;
-}
-
-.insight-text {
-  color: var(--color-text-primary);
-  line-height: 1.6;
-  margin: 0;
-}
-
 /* ──────────────────────────────────────────────────────────────────────
    Summary Content Styling
    ────────────────────────────────────────────────────────────────────── */
@@ -2293,23 +1963,6 @@ circle[data-type="bubble"] {
   transform: translateY(0);
 }
 
-/* Vertical stats layout for overlay panel */
-.viral-sounds-stats--vertical {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.viral-sounds-stats--vertical .stat-item {
-  display: flex;
-  align-items: center;
-  text-align: left;
-  padding: var(--space-2);
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 8px;
-  font-size: 0.85rem;
-}
-
 /* Record player area - takes most of the width */
 .viral-sounds-record-area {
   position: relative;
@@ -2412,50 +2065,6 @@ circle[data-type="bubble"] {
   margin: 0;
 }
 
-/* Stats grid */
-.viral-sounds-stats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-3);
-}
-
-.stat-item {
-  text-align: center;
-  padding: var(--space-3);
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 8px;
-}
-
-.stat-bullet {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--color-blaze);
-  display: inline-block;
-  margin-right: var(--space-2);
-}
-
-.stat-text {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.4;
-}
-
-.stat-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-blaze);
-  line-height: 1.2;
-}
-
-.stat-label {
-  font-size: 0.75rem;
-  color: var(--color-text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-top: var(--space-1);
-}
-
 /* Track Legend Strip removed per plan.md - auto-sequence handles track display */
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -2546,11 +2155,6 @@ circle[data-type="bubble"] {
   .year-buttons {
     justify-content: center;
   }
-
-  .viral-sounds-stats {
-    grid-template-columns: 1fr;
-  }
-
 }
 
 @media (max-width: 480px) {
@@ -3535,98 +3139,7 @@ circle[data-type="bubble"] {
   margin: 0 0 var(--space-3);
 }
 
-/* Viral sounds stats - TikTok style */
-.viral-sounds-stats {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  margin-top: var(--space-4);
-}
-
-.viral-sounds-stats .stat-item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  text-align: left;
-  padding: var(--space-3);
-  background: linear-gradient(135deg, rgba(255, 0, 80, 0.1), rgba(0, 242, 234, 0.05));
-  border: 1px solid rgba(255, 0, 80, 0.2);
-  border-radius: 12px;
-  transition: all 250ms ease;
-}
-
-.viral-sounds-stats .stat-item:hover {
-  background: linear-gradient(135deg, rgba(255, 0, 80, 0.15), rgba(0, 242, 234, 0.08));
-  border-color: rgba(255, 0, 80, 0.35);
-  transform: translateX(4px);
-}
-
-.stat-bullet {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #FF0050, #00F2EA);
-  flex-shrink: 0;
-  box-shadow: 0 0 8px rgba(255, 0, 80, 0.5);
-}
-
-.stat-text {
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
-}
-
 /* Track chips removed - auto-sequence handles track display */
-
-/* Record player base styling - REMOVED - use record-player.css styles instead */
-/* .record-player-wrapper styles moved to record-player.css */
-
-.record-player-base {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1;
-}
-
-.record-disc-area {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.record-disc {
-  width: 100%;
-  height: 100%;
-}
-
-.record-center-cap {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 60px;
-  height: 60px;
-  background: radial-gradient(circle,
-    rgba(241, 32, 74, 0.8) 0%,
-    rgba(241, 32, 74, 0.6) 50%,
-    rgba(74, 5, 5, 0.8) 100%
-  );
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow:
-    0 0 20px rgba(241, 32, 74, 0.3),
-    inset 0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-.record-center-label {
-  font-size: 0.5rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-}
 
 /* Alien narrator variants for scenes */
 .alien-narrator--music-galaxy {
@@ -4266,7 +3779,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   font-weight: 700;
   color: var(--color-text-primary);
   margin-bottom: var(--space-3);
-  background: linear-gradient(135deg, #2DCCD3, #BAF6F0);
+  /* Gradient from glint to light mint for title effect */
+  background: linear-gradient(135deg, var(--color-glint), #BAF6F0);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

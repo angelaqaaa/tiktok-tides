@@ -154,7 +154,6 @@ export class ConveyorViz extends EventEmitter {
     const header = document.createElement('div');
     header.className = 'conveyor-header';
     header.innerHTML = `
-      <h3>Guess the Ingredient!</h3>
       <div class="conveyor-score">
         <span class="score-label">Score:</span>
         <span class="score-value">${this.state.score}/${this.data ? this.data.length : 0}</span>
@@ -166,10 +165,10 @@ export class ConveyorViz extends EventEmitter {
     const controls = document.createElement('div');
     controls.className = 'conveyor-controls';
     controls.innerHTML = `
-      <button class="btn-primary start-btn" aria-label="Start conveyor belt">
+      <button class="btn btn--primary start-btn" aria-label="Start conveyor belt">
         Start Conveyor
       </button>
-      <button class="btn-secondary restart-btn" aria-label="Restart from beginning" style="display:none;">
+      <button class="btn btn--secondary restart-btn" aria-label="Restart from beginning" style="display:none;">
         Restart
       </button>
     `;
@@ -250,14 +249,14 @@ export class ConveyorViz extends EventEmitter {
 
       <div class="hint-navigation" style="display:none;">
         <p class="hint-prompt">Need a hint? Explore the scene where this was covered:</p>
-        <button class="btn-secondary go-to-scene-btn" aria-label="Go to scene for hints">
+        <button class="btn btn--secondary go-to-scene-btn" aria-label="Go to scene for hints">
           <span class="go-to-icon">&#x21AA;</span>
           <span class="go-to-label">Visit Scene</span>
         </button>
       </div>
 
       <div class="feedback-area" style="display:none;">
-        <button class="btn-primary next-btn" style="display:none;" aria-label="Move to next ingredient">
+        <button class="btn btn--primary next-btn" style="display:none;" aria-label="Move to next ingredient">
           Next →
         </button>
       </div>

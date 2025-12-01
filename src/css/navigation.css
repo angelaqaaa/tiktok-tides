@@ -60,7 +60,7 @@
   font-weight: 700;
   color: var(--color-text-primary);
   letter-spacing: -0.02em;
-  background: linear-gradient(90deg, #2DCCD3, #F1204A);
+  background: linear-gradient(90deg, var(--color-glint), var(--color-blaze));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -165,13 +165,13 @@
 }
 
 .mini-node:hover svg {
-  color: #2DCCD3;
+  color: var(--color-glint);
 }
 
 /* Focus state for accessibility */
 .mini-node:focus {
   outline: none;
-  border-color: #2DCCD3;
+  border-color: var(--color-glint);
   box-shadow: 0 0 0 3px rgba(45, 204, 211, 0.2);
 }
 
@@ -180,14 +180,14 @@
   width: 32px;
   height: 32px;
   background: rgba(45, 204, 211, 0.15);
-  border-color: #2DCCD3;
+  border-color: var(--color-glint);
   box-shadow: 0 0 16px rgba(45, 204, 211, 0.4);
 }
 
 .mini-node.active svg {
   width: 16px;
   height: 16px;
-  color: #2DCCD3;
+  color: var(--color-glint);
 }
 
 /* Visited state - shows user has been to this scene */
@@ -220,7 +220,7 @@
 .map-toggle-btn svg {
   width: 18px;
   height: 18px;
-  color: #2DCCD3;
+  color: var(--color-glint);
 }
 
 .map-toggle-label {
@@ -230,13 +230,13 @@
 
 .map-toggle-btn:hover {
   background: rgba(45, 204, 211, 0.2);
-  border-color: #2DCCD3;
+  border-color: var(--color-glint);
   box-shadow: 0 0 12px rgba(45, 204, 211, 0.3);
 }
 
 .map-toggle-btn:focus {
   outline: none;
-  border-color: #2DCCD3;
+  border-color: var(--color-glint);
   box-shadow: 0 0 0 3px rgba(45, 204, 211, 0.2);
 }
 
@@ -301,7 +301,7 @@
 .journey-map-header h2 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #2DCCD3;
+  color: var(--color-glint);
   margin: 0;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -313,7 +313,7 @@
   border-radius: 8px;
   background: rgba(241, 32, 74, 0.1);
   border: 1px solid rgba(241, 32, 74, 0.3);
-  color: #F1204A;
+  color: var(--color-blaze);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -323,7 +323,7 @@
 
 .journey-map-close:hover {
   background: rgba(241, 32, 74, 0.2);
-  border-color: #F1204A;
+  border-color: var(--color-blaze);
 }
 
 .journey-map-close:focus {
@@ -423,7 +423,7 @@
   right: -4px;
   width: 18px;
   height: 18px;
-  background: linear-gradient(135deg, #2DCCD3, #F1204A);
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
   border-radius: 50%;
   font-size: 10px;
   font-weight: 700;
@@ -454,29 +454,29 @@
 }
 
 .map-node:hover .node-icon-wrap {
-  border-color: #2DCCD3;
+  border-color: var(--color-glint);
   box-shadow: 0 0 20px rgba(45, 204, 211, 0.4);
   background: rgba(45, 204, 211, 0.15);
 }
 
 .map-node:hover .node-icon-wrap svg {
-  color: #2DCCD3;
+  color: var(--color-glint);
 }
 
 .map-node:focus .node-icon-wrap {
-  border-color: #2DCCD3;
+  border-color: var(--color-glint);
   box-shadow: 0 0 0 3px rgba(45, 204, 211, 0.2);
 }
 
 /* Active node (current scene) */
 .map-node.active .node-icon-wrap {
   background: rgba(45, 204, 211, 0.2);
-  border-color: #2DCCD3;
+  border-color: var(--color-glint);
   box-shadow: 0 0 24px rgba(45, 204, 211, 0.5);
 }
 
 .map-node.active .node-icon-wrap svg {
-  color: #2DCCD3;
+  color: var(--color-glint);
 }
 
 .node-label {
@@ -629,12 +629,12 @@
 
   .map-list-item:focus {
     outline: none;
-    border-color: #2DCCD3;
+    border-color: var(--color-glint);
   }
 
   .map-list-item.active {
     background: rgba(45, 204, 211, 0.15);
-    border-color: #2DCCD3;
+    border-color: var(--color-glint);
   }
 
   .map-list-item.visited {
@@ -649,7 +649,7 @@
   .list-number {
     width: 28px;
     height: 28px;
-    background: linear-gradient(135deg, #2DCCD3, #F1204A);
+    background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
     border-radius: 50%;
     font-size: 12px;
     font-weight: 700;

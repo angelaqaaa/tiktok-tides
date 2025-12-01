@@ -78,7 +78,7 @@
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2DCCD3, #F1204A);
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
   display: flex;
   align-items: center;
   justify-content: center;

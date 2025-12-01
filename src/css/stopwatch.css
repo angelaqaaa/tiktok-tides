@@ -4,7 +4,13 @@
    Global styles removed - base.css handles resets, typography, and body styling
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* ---------- Legend Panel (Stopwatch) ---------- */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Stopwatch Legend - Custom Control Panel Design
+
+   This is intentionally different from design-system.css legend.
+   Uses dark radial gradient and chip layout for stopwatch theme.
+   NOT a duplicate - this is a custom "control panel" aesthetic.
+   ═══════════════════════════════════════════════════════════════════════════ */
 #scene-duration .legend-panel{
   width: 100%;
   margin: 0;

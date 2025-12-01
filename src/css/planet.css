@@ -131,3 +131,124 @@
   z-index: 10;
   transform: translateY(-50%);
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Danceability Gradient - Responsive Overrides
+   Consolidated from base.css during cleanup (Dec 2025)
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Medium screens - vertical layout, reduced size */
+@media (max-width: 1400px) {
+  .color-legend {
+    right: 40px;
+    width: 240px;
+    padding: 20px;
+  }
+
+  .color-gradient-bar {
+    width: 40px;
+    height: 300px;
+  }
+
+  .color-gradient-labels {
+    height: 300px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Tablets - horizontal layout */
+@media (max-width: 1024px) {
+  .color-legend {
+    left: 10px;
+    right: auto;
+    top: auto;
+    bottom: 80px;
+    transform: none;
+    width: calc(100% - 20px);
+    max-width: 500px;
+  }
+
+  .color-legend-title {
+    font-size: 0.8rem;
+  }
+
+  .color-gradient-container {
+    flex-direction: row;
+  }
+
+  .color-gradient-bar {
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(
+      to right,
+      #FFFFFF 0%,      /* White - 0.0 (low danceability) */
+      #2af0ea 35%,     /* TikTok blue - 0.35 (lower-middle) */
+      #fe2858 100%     /* TikTok pink - 1.0 (high danceability) */
+    );
+  }
+
+  .color-gradient-labels {
+    flex-direction: row;
+    height: auto;
+    width: 100%;
+    margin-top: 8px;
+    font-size: 0.85rem;
+  }
+
+  .color-gradient-labels span {
+    text-align: center;
+    flex: 1;
+  }
+}
+
+/* Mobile - compact horizontal */
+@media (max-width: 768px) {
+  .color-legend {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: auto;
+    bottom: 70px;
+    transform: none;
+    width: calc(100% - 20px);
+    margin: 0;
+    padding: 12px;
+  }
+
+  .color-legend-title {
+    font-size: 0.75rem;
+    margin-bottom: 8px;
+  }
+
+  .color-gradient-container {
+    flex-direction: row;
+  }
+
+  .color-gradient-bar {
+    width: 100%;
+    height: 28px;
+    background: linear-gradient(
+      to right,
+      #FFFFFF 0%,      /* White - 0.0 (low danceability) */
+      #2af0ea 35%,     /* TikTok blue - 0.35 (lower-middle) */
+      #fe2858 100%     /* TikTok pink - 1.0 (high danceability) */
+    );
+  }
+
+  .color-gradient-labels {
+    flex-direction: row;
+    height: auto;
+    width: 100%;
+    margin-top: 6px;
+    font-size: 0.7rem;
+  }
+
+  .color-gradient-labels span {
+    text-align: center;
+    flex: 1;
+  }
+
+  .color-gradient-labels small {
+    font-size: 0.65rem;
+  }
+}

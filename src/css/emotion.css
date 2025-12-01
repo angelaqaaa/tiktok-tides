@@ -1,3 +1,19 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   EMOTION.CSS - Caption Analysis Visualization
+   Scene 6: Word bubbles showing emotional language patterns
+
+   Sections:
+   - Word Bubble Base Styles
+   - Semantic Links
+   - Category Legend
+   - Tooltip Styling
+   - Animations & Transitions
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Word Bubble Base Styles
+   ───────────────────────────────────────────────────────────────────────────── */
+
 /* Group: whole bubble */
 .word-bubble {
   cursor: pointer;
@@ -39,7 +55,13 @@
   filter: drop-shadow(0 0 3px rgba(45, 220, 211, 0.5));
 }
 
-/* Legend styling */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Emotion Filters - Interactive Filter Chips (NOT a passive legend)
+
+   These are interactive checkboxes styled as chips.
+   Not using design-system.css legend because this is a control UI.
+   The user clicks these to filter the word bubbles visualization.
+   ═══════════════════════════════════════════════════════════════════════════ */
 .emotion-legend {
   list-style: none;
   padding: 0;
@@ -158,31 +180,9 @@
   outline-offset: 2px;
 }
 
-/* ====== NEW LAYOUT FOR LEGEND + SORT LEFT OF VIZ ====== */
-
-.emotion-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-/* Left column: legend + sort */
-.legend-panel {
-  padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
-  background: rgba(15, 23, 42, 0.3);
-  border: 1px solid rgba(148, 163, 184, 0.3);
-  max-width: 260px;
-}
-
-/* Right column: viz + drawer */
-.viz-and-drawer {
-  position: relative;
-  flex: 1 1 auto;
-}
-
-/* Sort toggle button styling */
+/* ─────────────────────────────────────────────────────────────────────────────
+   Sort Toggle Button
+   ───────────────────────────────────────────────────────────────────────────── */
 .emotion-sort-toggle {
   margin-top: 1rem;
   display: inline-flex;
@@ -216,22 +216,6 @@
   background: #0f766e;
   border-color: #a7f3d0;
   box-shadow: 0 0 0 1px rgba(167, 243, 208, 0.4);
-}
-
-/* Two-column layout on medium+ screens */
-@media (min-width: 768px) {
-  .emotion-layout {
-    flex-direction: row;
-    align-items: flex-start;
-  }
-
-  .legend-panel {
-    flex: 0 0 240px;
-  }
-
-  .viz-and-drawer {
-    flex: 1 1 auto;
-  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
