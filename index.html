@@ -942,7 +942,7 @@
           </button>
           <button class="timing-icon-item" role="listitem" data-timing-filter="long" aria-label="Filter to long clips over 30 seconds">
             <div class="timing-icon-circle timing-icon-circle--long">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg viewBox="0 0 24 24" fill="black" stroke="currentColor" stroke-width="0">
                 <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
               </svg>
             </div>
@@ -958,11 +958,11 @@
           <!-- D3 stopwatch visualization mounts here -->
           <div id="chart" class="viz-container" aria-label="Stopwatch-style radial visualization showing duration sweet spots"></div>
 
-          <!-- Callout annotation (appears during highlight) -->
+          <!-- Callout annotation (appears during highlight)
           <div class="timing-callout" data-timing-callout aria-hidden="true">
             <div class="callout-arrow"></div>
             <p class="callout-text">Most viral songs live here.</p>
-          </div>
+          </div> -->
         </div>
 
         <!-- Legend panel (positioned to side of viz) -->
@@ -1095,7 +1095,8 @@
 
           <!-- Guided interaction prompt -->
           <div class="emotion-guided-step">
-            <p class="guided-prompt">Try clicking on the legend to filter by emotion, or hover on bubbles to explore word connections.</p>
+            <p class="guided-prompt">Try clicking on the legend to filter by emotion, hover on bubbles to explore word connections.</p>
+            <p class="guided-prompt">Left click and drag to pan, and scroll wheel to zoom.</p>
           </div>
 
           <!-- Insight callout (shown after interaction) -->

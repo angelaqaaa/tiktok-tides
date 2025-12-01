@@ -33,6 +33,11 @@ export class EmotionViz extends EventEmitter {
     this.layoutHeight = null;
     this.layoutMargin = 40;
 
+    // zoom/pan layers + state
+    this.zoomLayer = null;
+    this.zoom = null;
+    this.currentTransform = null;
+
     // separate layer for hover connection lines
     this.linkLayer = null;
 
@@ -585,11 +590,11 @@ export class EmotionViz extends EventEmitter {
       const emotionColors = {
         anger: "#dc2626", // red
         sadness: "#2563eb", // blue
-        disappointment: "#FF004F", // purple
+        disappointment: "#f1204a",
         neutral: "#6b7280", // gray
-        hope: "#22c55e", // green
-        joy: "#00f7efda", // lime
-        excitement: "#f97316", // orange
+        hope: "#033624", //
+        joy: "#2dccd3", // lime
+        excitement: "#d1c328ff", // orange
       };
       const emotionCategories = new Set();
 
@@ -797,6 +802,9 @@ export class EmotionViz extends EventEmitter {
     this.layoutHeight = height;
     this.layoutMargin = margin;
 
+    // Reset zoom layer reference (new SVG)
+    this.zoomLayer = null;
+
     // Create SVG
     this.svg = d3
       .select(this.container)
@@ -808,8 +816,14 @@ export class EmotionViz extends EventEmitter {
         "Word cloud showing sentiment-colored speech bubbles for TikTok caption words"
       );
 
-    // Layer for hover lines (drawn behind words)
-    this.linkLayer = this.svg.append("g").attr("class", "semantic-links");
+    // Add a dedicated zoom/pan layer that will be transformed
+    this.zoomLayer = this.svg.append("g").attr("class", "zoom-layer");
+
+    // Hook up zoom + pan behavior
+    this.setupZoom(width, height);
+
+    // Layer for hover lines (drawn behind words), inside zoomLayer so it zooms too
+    this.linkLayer = this.zoomLayer.append("g").attr("class", "semantic-links");
 
     // Size scale: frequency → font size / bubble size
     const sizeScale = d3
@@ -895,7 +909,7 @@ export class EmotionViz extends EventEmitter {
 
     for (let i = 0; i < 150; i++) simulation.tick();
 
-    const bubbles = this.svg
+    const bubbles = this.zoomLayer
       .selectAll(".word-bubble")
       .data(tokens)
       .join("g")
@@ -981,6 +995,36 @@ export class EmotionViz extends EventEmitter {
     if (this.state.sortedView) {
       this.applySortedLayout();
     }
+  }
+
+  /**
+   * Set up zoom + pan behavior on the SVG, transforming zoomLayer.
+   */
+  setupZoom(width, height) {
+    if (!this.svg || !this.zoomLayer) return;
+
+    // Preserve previous transform if we have one, otherwise start at identity
+    const initialTransform = this.currentTransform || d3.zoomIdentity;
+
+    this.zoom = d3
+      .zoom()
+      .scaleExtent([0.5, 4]) // min/max zoom
+      .translateExtent([
+        [-width, -height],
+        [2 * width, 2 * height],
+      ]) // how far you can pan
+      .on("zoom", (event) => {
+        if (this.zoomLayer) {
+          this.zoomLayer.attr("transform", event.transform);
+        }
+        this.currentTransform = event.transform;
+      });
+
+    // Bind zoom behavior
+    this.svg.call(this.zoom);
+
+    // Apply stored transform (so zoom state persists across re-renders in this session)
+    this.svg.call(this.zoom.transform, initialTransform);
   }
 
   /**
