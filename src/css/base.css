@@ -5335,3 +5335,15 @@ svg[cursor="pointer"], [onclick], [data-clickable],
   cursor: url('/assets/Alien_Pointer_32.png') 16 16, pointer !important;
 }
 
+/* Show pointer on hover for interactive elements */
+a:hover, a:hover *, button:hover, button:hover *, 
+[role="button"]:hover, [role="button"]:hover *,
+.clickable:hover, .clickable:hover *, .btn:hover, .btn:hover *,
+svg:hover, circle:hover, rect:hover, path:hover, g:hover,
+.record-ring:hover, .planet-node:hover, .nav-dot:hover,
+.progress-segment:hover, .emotion-bar:hover, 
+.stopwatch-control:hover, .ranking-item:hover, .conveyor-item:hover,
+[data-song]:hover, [data-planet]:hover, [data-clickable]:hover {
+  cursor: url('/assets/Alien_Pointer_32.png') 16 16, pointer !important;
+}
+
