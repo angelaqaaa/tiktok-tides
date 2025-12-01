@@ -28,8 +28,8 @@
 }
 
 .viz-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 18px !important;
+    height: 18px !important;
     pointer-events: none;
 }
 
@@ -46,7 +46,7 @@
 
 .viz-btn--info {
     top: 10px;
-    right: 50px; /* Moved left from right edge */
+    right: 10px;
 }
 
 .viz-btn--reset {
@@ -151,7 +151,8 @@
     color: #ddd;
     text-align: center;
     font-size: 12px;
-    top: 48px; /* Position below buttons - moved higher */
+    top: 48px;
+    /* Position below buttons - moved higher */
     opacity: 1;
     transition: opacity 0.35s ease;
     pointer-events: none;
@@ -161,17 +162,20 @@
 }
 
 .tip-reset {
-    left: 6px; /* Moved left */
+    left: 6px;
+    /* Moved left */
     width: 36px;
 }
 
 .tip-pause {
-    left: 50px; /* Moved left */
+    left: 50px;
+    /* Moved left */
     width: 36px;
 }
 
 .tip-skip {
-    left: 94px; /* Moved left */
+    left: 94px;
+    /* Moved left */
     width: 36px;
 }
 
@@ -194,7 +198,8 @@
 .tooltip.ranking-bubble-tooltip {
     position: absolute;
     pointer-events: none;
-    z-index: 99999; /* Higher than fullPage.js watermark */
+    z-index: 99999;
+    /* Higher than fullPage.js watermark */
     background: transparent;
     border: none;
     padding: 0;
