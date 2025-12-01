@@ -837,42 +837,6 @@
   100% { width: 100%; }
 }
 
-/* Legacy phone-progress-bar (deprecated) */
-.phone-progress-bar {
-  display: none; /* Hidden - using tiktok-video-progress instead */
-}
-
-.phone-progress-bar .progress-fill {
-  height: 100%;
-  background: var(--color-blaze, #F1204A);
-  width: 0%;
-}
-
-@keyframes phoneProgress {
-  0% { width: 0%; }
-  100% { width: 100%; }
-}
-
-/* Feed scroll animation (v3 spec) */
-.phone-feed {
-  animation: phoneFeedScroll 12s ease-in-out infinite;
-}
-
-@keyframes phoneFeedScroll {
-  0%, 25% {
-    /* Clip 1 in center */
-  }
-  30%, 55% {
-    /* Transition */
-  }
-  60%, 85% {
-    /* Back */
-  }
-  90%, 100% {
-    /* Reset */
-  }
-}
-
 /* Hover effect on phone */
 .hero-phone-frame:hover .clip-action {
   transform: scale(1.05);
@@ -881,13 +845,8 @@
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .spinning-disc,
-  .phone-progress-bar .progress-fill,
-  .phone-feed {
+  .spinning-disc {
     animation: none;
-  }
-  .phone-progress-bar .progress-fill {
-    width: 50%;
   }
 }
 
@@ -950,11 +909,6 @@
   gap: 4px;
 }
 
-/* OLD battery style - deprecated */
-.status-battery {
-  display: none; /* Hidden - using status-battery-ios instead */
-}
-
 /* iOS-style battery (clean, no background) */
 .status-battery-ios {
   display: flex;
@@ -973,23 +927,6 @@
   font-size: 10px;
   font-weight: 500;
   color: #fff;
-}
-
-/* Legacy styles kept for backward compatibility */
-.status-battery::after {
-  display: none;
-}
-
-.battery-level {
-  display: none;
-}
-
-.battery-percent {
-  display: none;
-  font-size: 11px;
-  font-weight: 600;
-  color: #fff;
-  margin-left: 2px;
 }
 
 /* TikTok Top Navigation - OVERLAY below status bar */
