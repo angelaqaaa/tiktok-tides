@@ -169,7 +169,7 @@
 /* Conveyor Box */
 .conveyor-box {
   position: absolute;
-  left: 50%;
+  left: 43%;
   flex-shrink: 0;
   width: 220px;
   height: 300px;
