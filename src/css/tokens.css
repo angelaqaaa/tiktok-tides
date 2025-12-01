@@ -59,6 +59,15 @@
   --space-7: 3rem;
   --space-8: 4rem;
 
+  /* Border Radius Scale */
+  --radius-xs: 2px;      /* scrollbars, micro elements */
+  --radius-sm: 4px;      /* small inputs, tags */
+  --radius-md: 8px;      /* standard cards, buttons */
+  --radius-lg: 12px;     /* medium panels, legends */
+  --radius-xl: 16px;     /* large panels, modals */
+  --radius-2xl: 24px;    /* badges, pills, large cards */
+  --radius-full: 9999px; /* circles, fully rounded */
+
   /* Shadows */
   --shadow-100: 0px 4px 8px rgba(0,0,0,0.2), 0px 2px 4px rgba(0,0,0,0.1);
   --shadow-200: 0px 8px 16px rgba(0,0,0,0.25), 0px 4px 8px rgba(0,0,0,0.15);
@@ -66,10 +75,26 @@
   --shadow-glow-magenta: 0 0 8px #FF00E0, 0 0 16px rgba(255, 0, 224, 0.3);
   --shadow-glow-yellow: 0 0 8px #FFEB3B, 0 0 16px rgba(255, 235, 59, 0.35);
 
+  /* Panel Shadows */
+  --shadow-panel: 0 8px 32px rgba(0, 0, 0, 0.4);
+  --shadow-panel-elevated: 0 10px 40px rgba(0, 0, 0, 0.5);
+
+  /* Focus States */
+  --shadow-focus-glint: 0 0 0 3px rgba(45, 204, 211, 0.3);
+  --shadow-focus-blaze: 0 0 0 3px rgba(241, 32, 74, 0.2);
+
+  /* Glint Glows */
+  --shadow-glow-glint: 0 0 12px rgba(45, 204, 211, 0.6);
+  --shadow-glow-glint-soft: 0 0 8px rgba(45, 204, 211, 0.5);
+
   /* Glass Effects */
   --glass-subtle-blur: 8px;
   --glass-subtle-background: rgba(20, 21, 28, 0.5);
   --glass-subtle-border: 1px solid rgba(74, 77, 94, 0.5);
+
+  --glass-medium-blur: 12px;
+  --glass-medium-background: rgba(20, 21, 28, 0.55);
+  --glass-medium-border: 1px solid rgba(74, 77, 94, 0.6);
 
   --glass-standard-blur: 16px;
   --glass-standard-background: rgba(20, 21, 28, 0.6);

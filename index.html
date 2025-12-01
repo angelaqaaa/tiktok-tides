@@ -495,14 +495,14 @@
                       </div>
                       <!-- Large Alien Figure -->
                       <img src="/assets/alien.PNG" alt="" class="tiktok-alien-figure" />
-                      <!-- Speech Bubble (TikTok comment style) -->
+                      <!-- Speech Bubble (TikTok comment style) - Per narrative-alien-redesign.md -->
                       <div class="tiktok-speech-bubble">
                         <div class="speech-avatar">
                           <img src="/assets/alien.PNG" alt="" />
                         </div>
                         <div class="speech-content">
                           <span class="speech-name">@alienguide</span>
-                          <p class="speech-text">Ready to decode virality? Let's explore the data together!</p>
+                          <p class="speech-text">Greetings, human. I study your planet's strange rituals. This "TikTok" spreads like a virus. Let me show you what I found.</p>
                         </div>
                       </div>
                     </div>
@@ -702,14 +702,14 @@
           </div>
           <div class="alien-mini-planet"></div>
 
-          <!-- First speech bubble -->
+          <!-- First speech bubble - Per narrative-alien-redesign.md -->
           <div class="alien-speech-bubble alien-speech-bubble--primary" data-speech-state="hidden">
-            <p class="alien-speech-text">Each planet you see is a creator or artist. I am visiting the busiest ones.</p>
+            <p class="alien-speech-text">Each planet is an artist whose songs went viral. I'm visiting the busiest ones.</p>
           </div>
 
-          <!-- Second speech bubble (slide 2) -->
+          <!-- Second speech bubble (slide 2) - Per narrative-alien-redesign.md -->
           <div class="alien-speech-bubble alien-speech-bubble--secondary" data-speech-state="hidden" data-speech-step="2">
-            <p class="alien-speech-text">Look how this artist keeps shining year after year.</p>
+            <p class="alien-speech-text">Distance from the sun = energy level. Try the year buttons to watch the galaxy shift.</p>
           </div>
         </div>
       </div><!-- End viz-overlay -->
@@ -892,7 +892,7 @@
         <!-- Floating platform SECOND so it renders BELOW -->
         <div class="alien-floating-platform alien-floating-platform--dj"></div>
         <div class="alien-speech-bubble" data-speech-state="visible">
-          <p class="alien-speech-text">These are the sounds that everyone reuses. They match the energy and duration sweet spots you saw earlier.</p>
+          <p class="alien-speech-text">These are the sounds that spread everywhere. Click any ring to hear a preview.</p>
         </div>
       </div>
     </section>
@@ -986,7 +986,7 @@
                onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
         </div>
         <div class="alien-speech-bubble" data-speech-state="visible">
-          <p class="alien-speech-text">See how dots pack into some bands more than others. Virality loves certain durations.</p>
+          <p class="alien-speech-text">See how dots cluster in certain time bands? Virality loves certain durations.</p>
         </div>
       </div>
     </section>
@@ -1064,7 +1064,7 @@
                onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
         </div>
         <div class="alien-speech-bubble" data-speech-state="hidden">
-          <p class="alien-speech-text">Peeling these layers shows which topics really dominate the tide.</p>
+          <p class="alien-speech-text">Peeling back these layers reveals which topics truly dominate the tide.</p>
         </div>
       </div>
     </section>
@@ -1140,7 +1140,7 @@
                onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
         </div>
         <div class="alien-speech-bubble" data-speech-state="visible">
-          <p class="alien-speech-text">Bigger bubbles mean more frequent words. Notice how many are about trends and positive energy? That is the language of virality.</p>
+          <p class="alien-speech-text">Bigger bubbles = more common words. Notice the trend references and positive energy? That's the language of virality.</p>
         </div>
       </div>
     </section>
@@ -1180,7 +1180,7 @@
                onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
         </div>
         <div class="alien-speech-bubble" data-speech-state="hidden">
-          <p class="alien-speech-text">Ready for a lab test? Try guessing which recipe goes viral.</p>
+          <p class="alien-speech-text">Time for a lab test! Can you guess which recipe goes viral?</p>
         </div>
       </div>
     </section>
@@ -1355,7 +1355,7 @@
                onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
         </div>
         <div class="alien-speech-bubble" data-speech-state="hidden">
-          <p class="alien-speech-text">Here is the short version of what we found.</p>
+          <p class="alien-speech-text">Here's the formula we discovered together. Not a guarantee—but a strong signal.</p>
         </div>
       </div>
     </section>
@@ -1384,7 +1384,7 @@
       'category': 'forest',
       'emotion': 'air',
       'quiz': 'lab',
-      'summary': 'cosmos'
+      'summary': 'wrapup'
     };
 
     // Initialize fullPage.js for slide-snap behavior across entire site
@@ -1432,31 +1432,7 @@
           console.log('[fullPage] Entering Scene 2 - resetting wheel state');
         }
 
-        // Explicitly hide Scene 1 alien when leaving
-        if (previousScene === 'cosmos' && sceneName !== 'cosmos') {
-          const heroAlien = document.querySelector('.alien-narrator--hero');
-          if (heroAlien) {
-            console.log('[fullPage] Hiding Scene 1 alien');
-            heroAlien.style.display = 'none';
-            heroAlien.style.opacity = '0';
-          }
-        }
-
-        // Show Scene 1 alien when RETURNING (not on initial load)
-        // previousScene will be set if we're actually navigating, not on initial load
-        if (sceneName === 'cosmos' && previousScene && previousScene !== 'cosmos') {
-          const heroAlien = document.querySelector('.alien-narrator--hero');
-          if (heroAlien) {
-            console.log('[fullPage] Showing Scene 1 alien (returning)');
-            heroAlien.style.display = 'flex';
-            heroAlien.style.opacity = '1';
-            // Also ensure speech bubble is visible when returning
-            const speechBubble = heroAlien.querySelector('.alien-speech-bubble');
-            if (speechBubble) {
-              speechBubble.setAttribute('data-speech-state', 'visible');
-            }
-          }
-        }
+        // NOTE: .alien-narrator--hero transition code REMOVED - HTML element was removed (Dec 2025 cleanup)
       },
 
       afterLoad: function(origin, destination, direction) {

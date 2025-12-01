@@ -11,8 +11,8 @@
   margin-top: var(--space-6);
   padding: var(--space-6);
   background: rgba(20, 20, 35, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(var(--glass-medium-blur));
+  -webkit-backdrop-filter: blur(var(--glass-medium-blur));
   border-radius: var(--radius-lg);
   border: 1px solid rgba(45, 220, 211, 0.2);
   text-align: center;

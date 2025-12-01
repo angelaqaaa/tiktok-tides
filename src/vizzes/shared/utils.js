@@ -30,3 +30,15 @@ export class EventEmitter {
 export function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
+
+/**
+ * Debug logging utility - only logs in development mode
+ * Usage: debugLog('[Module]', 'message', data)
+ */
+export const DEBUG = import.meta.env?.DEV ?? (typeof process !== 'undefined' && process.env?.NODE_ENV !== 'production');
+
+export function debugLog(...args) {
+  if (DEBUG) {
+    console.log(...args);
+  }
+}

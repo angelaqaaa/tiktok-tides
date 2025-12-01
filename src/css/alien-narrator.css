@@ -284,48 +284,72 @@
 
 /* ─────────────────────────────────────────────────────────────────────────────
    SCENE-SPECIFIC VISIBILITY
-   Auto-show speech bubbles when scene is active via data-scene attribute
+   Auto-show alien containers AND speech bubbles when scene is active
+   Uses !important to override base opacity:0 and data-speech-state="hidden"
    ───────────────────────────────────────────────────────────────────────────── */
 
-[data-scene="cosmos"] .alien-narrator--hero .alien-speech-bubble,
-[data-scene="hero"] .alien-narrator--hero .alien-speech-bubble {
-  opacity: 1;
-  transform: scale(1) translateY(0);
-}
+/* .alien-narrator--hero rules REMOVED - HTML element was removed (Dec 2025 cleanup) */
 
+/* Scene 2: Galaxy - container shown via animation in base.css */
 [data-scene="galaxy"] .alien-narrator--scene2 .alien-speech-bubble {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
 }
 
+/* Scene 3: Sounds - container shown via animation in base.css */
 [data-scene="sounds"] .alien-narrator--scene3 .alien-speech-bubble {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
 }
 
+/* Scene 4: Dawn/Timing - show container AND speech bubble */
+[data-scene="dawn"] .alien-narrator--timing {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
 [data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
 }
 
+/* Scene 5: Forest/Pyramid - show avatar AND speech bubble */
+[data-scene="forest"] .alien-narrator--pyramid .alien-avatar {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+}
 [data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
 }
 
+/* Scene 6: Air/Emotion - show avatar AND speech bubble */
+[data-scene="air"] .alien-narrator--emotion .alien-avatar {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
 [data-scene="air"] .alien-narrator--emotion .alien-speech-bubble {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
 }
 
+/* Scene 7: Lab/Quiz - show container AND speech bubble */
+[data-scene="lab"] .alien-narrator--quiz {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
 [data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
 }
 
+/* Scene 8: Wrapup - show container AND speech bubble */
+[data-scene="wrapup"] .alien-narrator--wrapup {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
 [data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────

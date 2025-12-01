@@ -329,6 +329,4 @@ export function createLabIllustration(){
   return svg;
 }
 
-export function installLabParallax(){
-  // No parallax
-}
+// installLabParallax() removed - was empty function (cleanup Dec 2025)

@@ -1,6 +1,6 @@
 // src/illustrations/index.js
 import { createForestIllustration } from './forest.js';
-import { createLabIllustration, installLabParallax } from './lab.js';
+import { createLabIllustration } from './lab.js';
 const NS = 'http://www.w3.org/2000/svg';
 
 const mounts = {
@@ -92,10 +92,7 @@ function renderIllustration(){
   container.appendChild(current.node);
   console.log(`[Illustrations] SVG appended to container`);
 
-  // Install parallax for lab scene
-  if (scene === 'lab') {
-    installLabParallax();
-  }
+  // installLabParallax() call removed - was empty function (cleanup Dec 2025)
 
   // TASK 3: Attach easter eggs
   attachEasterEggs(scene, current.node);

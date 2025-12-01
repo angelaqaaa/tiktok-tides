@@ -64,12 +64,7 @@ export class LeafHintEffect {
     this.hasTriggered = true;
 
     if (this.prefersReducedMotion) {
-      // Just fade in the detail panel
-      const panel = this.container.querySelector('.detail-panel');
-      if (panel) {
-        panel.style.transition = 'opacity 400ms ease-in';
-        panel.style.opacity = '1';
-      }
+      // Skip leaf animation for reduced-motion users
       return;
     }
 
@@ -229,16 +224,7 @@ export function initMicroInteractions() {
     }, { threshold: 0.3 });
 
     observer.observe(rankingSection);
-
-    // Also allow clicking anywhere in ranking to show detail
-    rankingViz.addEventListener('click', () => {
-      const panel = rankingSection.querySelector('.detail-panel');
-      if (panel && panel.getAttribute('aria-hidden') === 'true') {
-        panel.setAttribute('aria-hidden', 'false');
-        panel.style.opacity = '1';
-        console.log('[MicroInteraction] Ranking detail panel opened');
-      }
-    }, { once: true });
+    // NOTE: .detail-panel click handler REMOVED - element not in HTML (Dec 2025 cleanup)
   }
 
   // C) Emotion bubble breathe - trigger on section intersection, not just hover

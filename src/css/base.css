@@ -2,40 +2,37 @@
    BASE.CSS - Global Styles & Scene Layouts
    ═══════════════════════════════════════════════════════════════════════════════
 
-   TABLE OF CONTENTS (Updated Dec 2025)
-   ─────────────────────────────────────
+   TABLE OF CONTENTS (Updated Dec 2025 - After Consolidation)
+   ─────────────────────────────────────────────────────────────
    GLOBAL STYLES
-   1.  Reset & Base Styles ................... line ~44
-   2.  TikTok Splash/Loading Screen .......... line ~80
-   3.  Reduced Motion ........................ line ~215
-   4.  Accessibility ......................... line ~269
-   5.  Progress Bar .......................... line ~297
-   6.  Scene Background System ............... line ~347
+   1.  Reset & Base Styles ................... line ~52
+   2.  TikTok Splash/Loading Screen .......... line ~88
+   3.  Reduced Motion ........................ line ~220
+   4.  Accessibility ......................... line ~275
+   5.  Progress Bar .......................... line ~305
+   6.  Scene Background System ............... line ~355
 
    LAYOUT & COMPONENTS
-   7.  Viz Containers ........................ line ~550
-   8.  KPI Rails ............................. line ~586
-   9.  Detail Drawer ......................... line ~674
-   10. Footer ................................ line ~712
-   11. Micro-interactions (comet, etc.) ...... line ~829
-   12. Planet Visualization Styles ........... line ~886
-   13. Scene Illustrations (SVG overlays) .... line ~1183
-   14. Summary Content Styling ............... line ~1853
+   7.  Viz Containers ........................ line ~571
+   8.  Shared Component Responsive ........... line ~772
+   9.  Scene Illustrations (SVG overlays) .... line ~795
+   10. Reusable Component Styles ............. line ~1230
+   11. Summary Content Styling ............... line ~1420
 
    SCENE-SPECIFIC LAYOUTS
-   15. Scene 3: Viral Sounds ................. line ~2006
-   16. Scene 4: Timing (Stopwatch) ........... line ~2573
-   17. Scene 5: Trend Pyramid (Ranking) ...... line ~2980
-   18. Scene 6: Emotion (Captions) ........... line ~3308
-   19. Scene 7: Quiz Lab ..................... line ~4129
-   20. Scene 8: Wrap-Up Recipe Card .......... line ~4382
+   12. Scene 3: Viral Sounds ................. line ~1568
+   13. Scene 4: Timing (Stopwatch) ........... line ~2069
+   14. Scene 5: Trend Pyramid (Ranking) ...... line ~2478
+   15. Scene 6: Emotion (Captions) ........... line ~2806
+   16. Scene 7: Quiz Lab ..................... line ~3541
+   17. Scene 8: Wrap-Up Recipe Card .......... line ~3802
 
    FIXES & OVERRIDES
-   21. V3 Missing Features ................... line ~4724
-   22. Layout Fixes .......................... line ~4796
-   23. Timing Icon Buttons ................... line ~5081
-   24. Comprehensive Layout Fixes (Nov 27) ... line ~5118
-   25. No-Scroll Enforcement ................. line ~5450
+   18. V3 Missing Features ................... line ~4144
+   19. Layout Fixes .......................... line ~4216
+   20. Timing Icon Buttons ................... line ~4480
+   21. Comprehensive Layout Fixes ............ line ~4517
+   22. No-Scroll Enforcement ................. line ~4849
 
    EXTRACTED TO SEPARATE FILES:
    - Hero section: hero.css
@@ -44,6 +41,11 @@
    - Team Credits: credits.css
    - Alien narrator: alien-narrator.css
    - Design system components: design-system.css
+
+   ARCHITECTURE NOTE:
+   Scene layouts (containers, backgrounds, responsive) remain in base.css.
+   Visualization styles (D3/SVG, bubbles, tooltips) are in viz-specific files:
+   - stopwatch.css, ranking.css, emotion.css, conveyor.css, planet.css, record-player.css
 
    ═══════════════════════════════════════════════════════════════════════════════ */
 
@@ -366,107 +368,114 @@ body::before {
   pointer-events: none; /* Allow clicks to pass through */
 }
 
-/* Cosmos - Deep space with visible purple */
-body[data-scene="cosmos"]::before {
-  background: radial-gradient(ellipse 1400px 900px at 50% 30%,
-    rgba(40, 40, 80, 0.65) 0%,
-    rgba(30, 30, 60, 0.50) 40%,
-    rgba(20, 20, 40, 0.35) 70%,
-    transparent 100%);
-}
+/* ════════════════════════════════════════════════════════════════════════════
+   BACKGROUND FAMILY 1: SPACE/ORBIT (Scenes 1-3)
+   Per background_redesign.md - consistent deep space atmosphere
+   Scenes: cosmos (Hero), galaxy (Music Galaxy), sounds (Viral Sounds)
+   ════════════════════════════════════════════════════════════════════════════ */
 
-/* Dawn - Sunrise with visible horizon glow and sky gradient
-   Metaphor: The spark moment when trends ignite */
-body[data-scene="dawn"]::before {
-  background:
-    /* Bright sun on horizon - concentrated glow */
-    radial-gradient(ellipse 800px 300px at 50% 85%, rgba(255, 180, 80, 0.70) 0%, rgba(255, 140, 60, 0.45) 30%, rgba(255, 100, 80, 0.25) 60%, transparent 100%),
-    /* Warm orange sky spreading from horizon */
-    radial-gradient(ellipse 1600px 700px at 50% 80%, rgba(255, 120, 60, 0.50) 0%, rgba(240, 100, 80, 0.35) 40%, transparent 75%),
-    /* Purple-pink upper atmosphere */
-    radial-gradient(ellipse 2000px 900px at 50% 20%, rgba(180, 80, 140, 0.42) 0%, rgba(140, 60, 120, 0.28) 50%, transparent 85%),
-    /* Deep purple night sky at top */
-    linear-gradient(180deg,
-      rgba(60, 30, 80, 0.55) 0%,
-      rgba(80, 40, 100, 0.45) 20%,
-      rgba(120, 60, 100, 0.35) 50%,
-      transparent 100%);
-}
-
-/* Galaxy (Music Galaxy) - No body background, section handles it */
-body[data-scene="galaxy"]::before {
-  background: transparent;
-}
-
-/* Sounds (Viral Sounds) - No body background, section handles it */
+/* Shared Space/Orbit gradient - used by cosmos, galaxy, sounds
+   Deep navy gradient with subtle purple nebula glow */
+body[data-scene="cosmos"]::before,
+body[data-scene="galaxy"]::before,
 body[data-scene="sounds"]::before {
-  background: transparent;
+  /* DEBUG: Bright red to test visibility - REMOVE AFTER TESTING */
+  background: red !important;
 }
 
-/* Forest - Atmospheric base (SVG handles trees)
-   Metaphor: Trends fade like leaves, but forests regrow */
-body[data-scene="forest"]::before {
-  background:
-    /* Strong sun rays through trees - more prominent */
-    radial-gradient(ellipse 900px 700px at 30% 70%, rgba(255, 235, 160, 0.35) 0%, rgba(255, 225, 140, 0.18) 40%, transparent 70%),
-    radial-gradient(ellipse 600px 500px at 50% 68%, rgba(255, 240, 180, 0.22) 0%, rgba(255, 230, 160, 0.10) 45%, transparent 65%),
-    /* More dappled light patches throughout forest */
-    radial-gradient(circle 350px at 70% 75%, rgba(210, 255, 190, 0.22) 0%, transparent 65%),
-    radial-gradient(circle 280px at 15% 80%, rgba(190, 245, 170, 0.18) 0%, transparent 55%),
-    radial-gradient(circle 220px at 85% 78%, rgba(225, 255, 205, 0.14) 0%, transparent 50%),
-    radial-gradient(circle 200px at 40% 72%, rgba(200, 250, 180, 0.12) 0%, transparent 55%),
-    radial-gradient(circle 180px at 92% 85%, rgba(215, 255, 195, 0.10) 0%, transparent 50%),
-    /* Atmospheric depth */
-    linear-gradient(180deg,
-      rgba(25, 60, 35, 0.90) 0%,
-      rgba(18, 50, 28, 0.85) 20%,
-      rgba(25, 65, 38, 0.75) 50%,
-      rgba(32, 80, 48, 0.65) 100%);
-}
+/* ════════════════════════════════════════════════════════════════════════════
+   BACKGROUND FAMILY 2: STUDIO DASHBOARD (Scenes 4-6)
+   Per background_redesign.md - professional teal-black studio atmosphere
+   Scenes: dawn (Stopwatch), forest (Ranking), air (Emotion)
+   ════════════════════════════════════════════════════════════════════════════ */
 
-/* Air (Emotion) - Vibrant multicolor emotional atmosphere */
+/* Shared Studio Dashboard gradient - used by dawn, forest, air
+   Teal-black gradient with faded stars and professional lighting */
+body[data-scene="dawn"]::before,
+body[data-scene="forest"]::before,
 body[data-scene="air"]::before {
   background:
-    /* Flowing wave patterns for visual interest */
-    radial-gradient(ellipse 1000px 200px at 0% 40%, rgba(255, 140, 180, 0.15) 0%, rgba(255, 120, 160, 0.08) 50%, transparent 70%),
-    radial-gradient(ellipse 900px 180px at 100% 60%, rgba(160, 200, 255, 0.12) 0%, rgba(140, 180, 235, 0.06) 50%, transparent 65%),
-    radial-gradient(ellipse 1100px 220px at 50% 80%, rgba(180, 255, 200, 0.10) 0%, rgba(160, 235, 180, 0.05) 50%, transparent 60%),
-    /* Concentric rings for depth */
-    radial-gradient(circle 600px at 30% 35%, transparent 30%, rgba(255, 160, 200, 0.08) 35%, transparent 40%),
-    radial-gradient(circle 450px at 70% 50%, transparent 35%, rgba(180, 210, 255, 0.07) 40%, transparent 45%),
-    /* Pink joy */
-    radial-gradient(circle 700px at 20% 30%, rgba(255, 120, 170, 0.32) 0%, rgba(255, 100, 150, 0.18) 50%, transparent 65%),
-    /* Blue calm */
-    radial-gradient(circle 900px at 75% 60%, rgba(120, 170, 255, 0.28) 0%, rgba(100, 150, 230, 0.15) 50%, transparent 65%),
-    /* Green energy */
-    radial-gradient(circle 600px at 50% 80%, rgba(170, 255, 220, 0.25) 0%, rgba(150, 230, 200, 0.12) 50%, transparent 60%),
-    /* Warm glow */
-    radial-gradient(ellipse 1400px 500px at 50% 40%, rgba(255, 200, 120, 0.20) 0%, rgba(255, 180, 100, 0.10) 40%, transparent 70%),
-    /* Base gradient */
-    linear-gradient(135deg,
-      rgba(40, 35, 50, 0.55) 0%,
-      rgba(35, 40, 55, 0.42) 50%,
-      rgba(30, 35, 45, 0.35) 100%);
+    /* Faded stars at top (much dimmer than Space/Orbit) */
+    radial-gradient(1px 1px at 15% 8%, rgba(255, 255, 255, 0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 12%, rgba(255, 255, 255, 0.20) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 6%, rgba(255, 255, 255, 0.22) 0%, transparent 100%),
+    radial-gradient(1px 1px at 88% 15%, rgba(255, 255, 255, 0.18) 0%, transparent 100%),
+    /* Subtle teal accent glow from equipment */
+    radial-gradient(ellipse 600px 400px at 20% 70%,
+      rgba(45, 204, 211, 0.12) 0%,
+      rgba(45, 204, 211, 0.04) 50%,
+      transparent 70%
+    ),
+    /* Secondary accent on right */
+    radial-gradient(ellipse 500px 350px at 85% 60%,
+      rgba(45, 204, 211, 0.08) 0%,
+      rgba(45, 204, 211, 0.02) 50%,
+      transparent 70%
+    ),
+    /* Overhead soft studio lighting */
+    radial-gradient(ellipse 1000px 300px at 50% 5%,
+      rgba(100, 150, 180, 0.15) 0%,
+      rgba(80, 120, 150, 0.08) 50%,
+      transparent 70%
+    ),
+    /* Base teal-black gradient */
+    linear-gradient(180deg,
+      #080c10 0%,
+      #0a1218 25%,
+      #0c161e 50%,
+      #0e1a24 75%,
+      #101e28 100%
+    );
 }
 
-/* Lab - Atmospheric base (SVG handles equipment) */
-body[data-scene="lab"]::before {
+/* ════════════════════════════════════════════════════════════════════════════
+   BACKGROUND FAMILY 3: SHOW STAGE (Scenes 7-8)
+   Per background_redesign.md - warm performance stage atmosphere
+   Scenes: lab (Quiz), wrapup (Summary)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* Shared Show Stage gradient - used by lab, wrapup
+   Warmer teal with stage floor and spotlight effects */
+body[data-scene="lab"]::before,
+body[data-scene="wrapup"]::before {
   background:
-    /* Subtle molecular orbital rings - elegant and scientific */
-    radial-gradient(circle 500px at 75% 25%, transparent 35%, rgba(80, 180, 220, 0.04) 37%, transparent 39%),
-    radial-gradient(circle 400px at 75% 25%, transparent 40%, rgba(100, 200, 240, 0.05) 42%, transparent 44%),
-    radial-gradient(circle 300px at 75% 25%, transparent 45%, rgba(120, 220, 255, 0.06) 47%, transparent 49%),
-    /* Soft glowing light from lab equipment */
-    radial-gradient(circle 450px at 20% 45%, rgba(80, 200, 240, 0.15) 0%, rgba(60, 180, 220, 0.08) 50%, transparent 70%),
-    radial-gradient(circle 350px at 85% 70%, rgba(100, 220, 200, 0.12) 0%, rgba(80, 200, 180, 0.06) 50%, transparent 65%),
-    /* Overhead cool lab lighting */
-    radial-gradient(ellipse 800px 400px at 50% 0%, rgba(200, 230, 250, 0.20) 0%, rgba(180, 210, 230, 0.10) 50%, transparent 80%),
-    /* Clean scientific atmosphere */
+    /* Spotlight beam from above-left */
+    radial-gradient(ellipse 400px 800px at 25% 0%,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(200, 220, 240, 0.04) 30%,
+      transparent 60%
+    ),
+    /* Spotlight beam from above-right */
+    radial-gradient(ellipse 350px 700px at 75% 0%,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(200, 220, 240, 0.03) 30%,
+      transparent 60%
+    ),
+    /* Faint stars returning at very top */
+    radial-gradient(1px 1px at 20% 5%, rgba(255, 255, 255, 0.15) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 8%, rgba(255, 255, 255, 0.12) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 4%, rgba(255, 255, 255, 0.14) 0%, transparent 100%),
+    /* Stage floor gradient strip at bottom */
     linear-gradient(180deg,
-      rgba(15, 40, 55, 0.90) 0%,
-      rgba(18, 50, 65, 0.85) 30%,
-      rgba(20, 55, 70, 0.80) 60%,
-      rgba(22, 60, 75, 0.75) 100%);
+      transparent 0%,
+      transparent 85%,
+      rgba(45, 204, 211, 0.06) 92%,
+      rgba(45, 204, 211, 0.12) 100%
+    ),
+    /* Warm teal stage atmosphere */
+    radial-gradient(ellipse 1200px 600px at 50% 40%,
+      rgba(60, 180, 200, 0.12) 0%,
+      rgba(45, 150, 170, 0.06) 50%,
+      transparent 70%
+    ),
+    /* Base warmer teal gradient */
+    linear-gradient(180deg,
+      #0a1014 0%,
+      #0c1418 25%,
+      #0e181e 50%,
+      #101c24 75%,
+      #12202a 100%
+    );
 }
 
 /* Scene layers - decorative overlays per scene */
@@ -479,8 +488,10 @@ body[data-scene="lab"]::before {
   will-change: opacity;
 }
 
-/* Stars - Animated twinkling field */
-body[data-scene="cosmos"] .scene--stars {
+/* Stars - Animated twinkling field for Space/Orbit family (Scenes 1-3) */
+body[data-scene="cosmos"] .scene--stars,
+body[data-scene="galaxy"] .scene--stars,
+body[data-scene="sounds"] .scene--stars {
   opacity: 0.4;
   background-image:
     radial-gradient(2px 2px at 15% 25%, rgba(255, 255, 255, 0.6) 0 2px, transparent 2px),
@@ -497,33 +508,19 @@ body[data-scene="cosmos"] .scene--stars {
   100% { background-position: 140px 140px, -180px 180px, 200px -200px, -220px -220px, 160px 160px; }
 }
 
-/* Forest Canopy - Layered organic shapes with light filtering */
+/* ────────────────────────────────────────────────────────────────────────────
+   Studio Dashboard Scene Overlays (Scenes 4-6)
+   Now using teal-black professional theme instead of nature themes
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Forest/Ranking scene - subtle triangular hints for pyramid visualization */
 body[data-scene="forest"] .scene--canopy {
-  opacity: 0.35;
-  background:
-    radial-gradient(ellipse 800px 250px at 30% 0%, rgba(100, 180, 100, 0.4) 0%, transparent 50%),
-    radial-gradient(ellipse 600px 200px at 70% 0%, rgba(80, 160, 90, 0.35) 0%, transparent 50%),
-    radial-gradient(ellipse 700px 220px at 50% 0%, rgba(90, 170, 95, 0.3) 0%, transparent 50%),
-    linear-gradient(180deg, transparent 0%, rgba(60, 120, 70, 0.15) 30%, transparent 70%);
+  opacity: 0; /* Disabled - forest canopy doesn't match Studio Dashboard */
 }
 
-/* Emotion Orbs - Colorful floating spheres representing different emotions */
+/* Air/Emotion scene - subtle speech bubble hints in background */
 body[data-scene="air"] .scene--bubbles {
-  opacity: 0.35;
-  background-image:
-    /* Joy - warm yellow/orange */
-    radial-gradient(circle 80px at 25% 35%, rgba(255, 200, 100, 0.20) 20%, rgba(255, 150, 80, 0.08) 50%, transparent 80%),
-    /* Calm - cool blue */
-    radial-gradient(circle 100px at 70% 60%, rgba(100, 180, 255, 0.18) 20%, rgba(80, 150, 230, 0.06) 50%, transparent 80%),
-    /* Energy - cyan/green */
-    radial-gradient(circle 70px at 15% 75%, rgba(100, 255, 200, 0.16) 20%, rgba(80, 230, 180, 0.05) 50%, transparent 80%),
-    /* Excitement - pink/magenta */
-    radial-gradient(circle 90px at 80% 25%, rgba(255, 100, 180, 0.18) 20%, rgba(230, 80, 150, 0.06) 50%, transparent 80%),
-    /* Subtle background orbs */
-    radial-gradient(circle 60px at 50% 50%, rgba(200, 200, 255, 0.10) 30%, rgba(180, 180, 230, 0.03) 60%, transparent 90%),
-    radial-gradient(circle 50px at 35% 20%, rgba(255, 220, 180, 0.08) 30%, transparent 70%);
-  background-size: 350px 350px, 420px 420px, 300px 300px, 380px 380px, 250px 250px, 220px 220px;
-  animation: emotion-drift 40s ease-in-out infinite;
+  opacity: 0; /* Disabled - colorful orbs don't match Studio Dashboard */
 }
 
 @keyframes emotion-drift {
@@ -542,10 +539,10 @@ body[data-scene="air"] .scene--bubbles {
   .scene-layer {
     animation: none !important;
   }
-  body[data-scene="cosmos"] .scene--stars {
-    animation: none;
-  }
-  body[data-scene="air"] .scene--bubbles {
+  /* Space/Orbit family stars */
+  body[data-scene="cosmos"] .scene--stars,
+  body[data-scene="galaxy"] .scene--stars,
+  body[data-scene="sounds"] .scene--stars {
     animation: none;
   }
   body::before {
@@ -589,31 +586,10 @@ body[data-scene="air"] .scene--bubbles {
   to { transform: translateX(100%); }
 }
 
-/* Year Selector */
-/* Year selector - Prominent filter pill styling */
-.year-selector {
-  display: inline-flex;
-  gap: var(--space-2);
-  padding: 4px;
-  background: rgba(10, 15, 20, 0.7);
-  border-radius: 16px;
-  border: 1.5px solid rgba(45, 204, 211, 0.25);
-  max-width: fit-content;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
-}
+/* Year Selector - REMOVED (class not in HTML, Dec 2025 cleanup) */
 
-/* Annotation Rail */
-.annotation-rail {
-  position: absolute;
-  bottom: var(--space-6);
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-2);
-  z-index: 10;
-}
+/* Annotation Rail - REMOVED (class not in HTML)
+   Deleted 2025-12-01 during cleanup session */
 
 .annotation {
   color: var(--color-text-secondary);
@@ -641,48 +617,8 @@ body[data-scene="air"] .scene--bubbles {
   transform: scale(1.05);
 }
 
-/* Footer - merged with lab bench appearance */
-.site-footer {
-  text-align: center;
-  padding: var(--space-5) 0;
-  padding-bottom: var(--space-5);
-  border-top: none; /* No border - seamless merge with lab bench */
-  margin-top: -5px !important; /* Eliminate gap completely */
-  color: var(--color-text-secondary);
-  /* Match lab bench color and fade to black */
-  position: relative;
-  z-index: 2;
-  background: linear-gradient(180deg,
-    #0b1116 0%,                     /* Exact lab bench color match */
-    #0b1116 5%,                     /* Hold bench color briefly */
-    rgba(8, 12, 15, 1) 20%,
-    rgba(5, 8, 10, 1) 40%,
-    #000000 65%,
-    #000000 100%
-  );
-}
-
-.site-footer a {
-  color: var(--color-accent-cyan);
-  text-decoration: none;
-  transition: color var(--duration-micro) var(--easing-standard);
-}
-
-.site-footer a:hover {
-  color: var(--color-accent-magenta);
-}
-
-.stat-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-2) 0;
-  border-bottom: 1px solid var(--color-border-disabled);
-}
-
-.stat-row:last-child {
-  border-bottom: none;
-}
+/* Footer (.site-footer) - REMOVED (class not in HTML, Dec 2025 cleanup) */
+/* Stat Row (.stat-row) - REMOVED (class not in HTML, Dec 2025 cleanup) */
 
 /* Micro-interactions */
 /* A) Planets - Comet effect */
@@ -714,26 +650,9 @@ circle[data-type="bubble"] {
   transform-origin: center;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .nav-links {
-    display: none;
-  }
-
-  .layout-left-viz,
-  .layout-center-network,
-  .layout-bubble-cloud {
-    grid-template-columns: 1fr;
-  }
-
-  .detail-drawer {
-    width: 100%;
-  }
-
-  .sticky-rail {
-    position: static;
-  }
-}
+/* Responsive - Legacy unused classes removed (nav-links, layout-left-viz,
+   layout-center-network, layout-bubble-cloud, detail-drawer, sticky-rail)
+   Deleted 2025-12-01 during cleanup session */
 
 /* Planet Visualization Specific Styles */
 .legend {
@@ -812,8 +731,8 @@ circle[data-type="bubble"] {
   width: 280px;
   background: rgba(10, 10, 15, 0.9);
   padding: 26px;
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(var(--glass-medium-blur));
   border: 1px solid var(--color-border-interactive);
   z-index: 10;
   pointer-events: none;
@@ -837,35 +756,8 @@ circle[data-type="bubble"] {
    NOTE: Planet/danceability gradient styles moved to planet.css (Dec 2025)
    ───────────────────────────────────────────────────────────────────────── */
 
-/* Responsive: medium screens */
-@media (max-width: 1400px) {
-  .annotation-rail {
-    bottom: var(--space-4);
-  }
-}
-
-/* Responsive: tablets */
-@media (max-width: 1024px) {
-  .annotation-rail {
-    bottom: var(--space-2);
-  }
-
-  .year-selector {
-    gap: 8px;
-  }
-}
-
-/* Responsive: mobile */
-@media (max-width: 768px) {
-  .annotation-rail {
-    bottom: 10px;
-  }
-
-  .year-selector {
-    gap: 6px;
-    margin-bottom: 0.5rem;
-  }
-}
+/* Responsive: .year-selector rules REMOVED - class not in HTML (Dec 2025 cleanup) */
+/* Note: .annotation-rail responsive rules also removed - class not in HTML (2025-12-01) */
 
 /* ========== Shared Tooltip Base ========== */
 /* Minimal base tooltip - viz-specific styles extend this */
@@ -1345,20 +1237,7 @@ circle[data-type="bubble"] {
   margin-bottom: var(--space-2);
 }
 
-.section-question {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  margin: 0;
-  line-height: 1.3;
-}
-
-.section-subquestion {
-  font-size: var(--font-size-h3);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-  margin: var(--space-4) 0;
-}
+/* REMOVED: .section-question, .section-subquestion (Dec 2025 - not in HTML) */
 
 .section-explanation {
   color: var(--color-text-secondary);
@@ -1610,10 +1489,7 @@ circle[data-type="bubble"] {
 }
 
 @media (max-width: 768px) {
-  .nav-links {
-    gap: var(--space-3);
-    font-size: var(--font-size-label);
-  }
+  /* .nav-links removed - class not in HTML (2025-12-01) */
 
   .nav-subtitle {
     display: none;
@@ -1649,9 +1525,7 @@ circle[data-type="bubble"] {
 }
 
 @media (max-width: 480px) {
-  .nav-links {
-    display: none;
-  }
+  /* .nav-links removed - class not in HTML (2025-12-01) */
 
   .nav-title {
     font-size: var(--font-size-body-lg);
@@ -1881,7 +1755,7 @@ circle[data-type="bubble"] {
   background: rgba(10, 10, 20, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(var(--glass-medium-blur));
   z-index: 10;
 }
 
@@ -2043,8 +1917,8 @@ circle[data-type="bubble"] {
   padding: var(--space-5);
   background: rgba(10, 10, 20, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  backdrop-filter: blur(8px);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(var(--glass-subtle-blur));
 }
 
 .viral-sounds-narrative {
@@ -2253,20 +2127,22 @@ circle[data-type="bubble"] {
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Icon row - timing concepts */
+/* Icon row - timing concepts (compact layout - consolidated from Layout Fixes) */
 .timing-icons-row {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: var(--space-6);
+  gap: var(--space-3); /* Compacted for one-page fit */
   flex-wrap: wrap;
+  margin-bottom: var(--space-1);
 }
 
 .timing-icon-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-2);
+  gap: 2px; /* Compacted for one-page fit */
+  padding: var(--space-1);
   min-width: 100px;
   opacity: 0.7;
   transition: opacity 300ms ease, transform 300ms ease;
@@ -2289,8 +2165,8 @@ circle[data-type="bubble"] {
 }
 
 .timing-icon-circle {
-  width: 56px;
-  height: 56px;
+  width: 40px; /* Compacted from 56px for one-page fit */
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -2322,14 +2198,14 @@ circle[data-type="bubble"] {
 }
 
 .timing-icon-label {
-  font-size: 0.9375rem;
+  font-size: 0.7rem; /* Compacted from 0.9375rem for one-page fit */
   font-weight: 600;
   color: rgba(255, 255, 255, 0.95);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .timing-icon-desc {
-  font-size: 0.75rem;
+  font-size: 0.65rem; /* Compacted from 0.75rem for one-page fit */
   color: rgba(255, 255, 255, 0.7);
   text-align: center;
   max-width: 100px;
@@ -2408,8 +2284,8 @@ circle[data-type="bubble"] {
   margin-top: var(--space-4);
   padding: var(--space-3) var(--space-4);
   background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
+  backdrop-filter: blur(var(--glass-subtle-blur));
+  border-radius: var(--radius-lg);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -2671,8 +2547,8 @@ circle[data-type="bubble"] {
   gap: var(--space-3);
   padding: var(--space-3);
   background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
+  backdrop-filter: blur(var(--glass-subtle-blur));
+  border-radius: var(--radius-lg);
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: background 300ms ease, border-color 300ms ease;
 }
@@ -2708,8 +2584,8 @@ circle[data-type="bubble"] {
   margin-top: var(--space-2);
   padding: var(--space-3);
   background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(8px);
-  border-radius: 8px;
+  backdrop-filter: blur(var(--glass-subtle-blur));
+  border-radius: var(--radius-md);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -2913,6 +2789,11 @@ circle[data-type="bubble"] {
    SCENE 6 - EMOTION (Captions) - v2 dark theme
    Layout: Text left (25%), Viz center (50%), Controls right (25%)
    Background: Dark gradient with subtle floating particles (v2 theme)
+
+   NOTE: Additional .scene-emotion overrides in Layout Fixes section:
+   - Line ~4260: padding/container width fixes
+   - Line ~4980+: fullPage.js integration and no-scroll enforcement
+   Core viz styles are in emotion.css (word bubbles, links, tooltips, animations)
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .scene-emotion {
@@ -3017,8 +2898,8 @@ circle[data-type="bubble"] {
   gap: var(--space-3);
   padding: var(--space-2) var(--space-4);
   background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
-  border-radius: 24px;
+  backdrop-filter: blur(var(--glass-subtle-blur));
+  border-radius: var(--radius-2xl);
   border: 1px solid rgba(45, 204, 211, 0.3);
   z-index: 20;
 }
@@ -3453,11 +3334,11 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
     rgba(8, 8, 18, 0.92) 50%,
     rgba(15, 10, 25, 0.88) 100%
   );
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(var(--glass-standard-blur));
+  -webkit-backdrop-filter: blur(var(--glass-standard-blur));
 
   /* Rounded corners */
-  border-radius: 16px;
+  border-radius: var(--radius-xl);
   padding: var(--space-4);
 
   /* Animated gradient border */
@@ -3644,6 +3525,13 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
    v3 spec 5.7 - Conveyor quiz in the lab
    Layout: Question panel top, conveyor card middle, belt bottom
    Background: Lab illustration with beakers, pipes, bubbles
+
+   NOTE: Additional .scene-quiz overrides scattered in Layout Fixes section:
+   - Line ~4325: padding/width fixes
+   - Line ~4514+: fullPage.js integration fixes
+   - Line ~4812+: more fullPage.js overrides
+   - Line ~5023: no-scroll enforcement
+   These could be consolidated in a future cleanup session.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .scene-quiz {
@@ -3765,8 +3653,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   text-align: center;
   padding: var(--space-5) var(--space-6);
   background: rgba(26, 10, 46, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(var(--glass-medium-blur));
+  -webkit-backdrop-filter: blur(var(--glass-medium-blur));
   border-radius: var(--radius-lg);
   border: 1px solid rgba(45, 220, 211, 0.2);
   box-shadow:
@@ -3947,8 +3835,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   width: 100%;
   max-width: 900px;
   background: rgba(10, 12, 18, 0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(var(--glass-frosted-blur));
+  -webkit-backdrop-filter: blur(var(--glass-frosted-blur));
   border-radius: var(--radius-xl);
   border: 1px solid rgba(45, 204, 211, 0.3);
   box-shadow:
@@ -4351,28 +4239,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   margin-bottom: var(--space-1) !important;
 }
 
-.timing-icons-row {
-  gap: var(--space-3) !important;
-  margin-bottom: var(--space-1) !important;
-}
-
-.timing-icon-item {
-  gap: 2px !important;
-  padding: var(--space-1) !important;
-}
-
-.timing-icon-circle {
-  width: 40px !important;
-  height: 40px !important;
-}
-
-.timing-icon-label {
-  font-size: 0.7rem !important;
-}
-
-.timing-icon-desc {
-  font-size: 0.65rem !important;
-}
+/* timing-icon-* overrides REMOVED - consolidated into Scene 4 base definitions (line ~2148) */
 
 .timing-viz-area {
   flex: 1 !important;

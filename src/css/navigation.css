@@ -20,8 +20,8 @@
   justify-content: space-between;
   padding: 0 var(--space-5);
   background: rgba(10, 10, 15, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(var(--glass-standard-blur));
+  -webkit-backdrop-filter: blur(var(--glass-standard-blur));
   border-bottom: 1px solid rgba(45, 204, 211, 0.15);
   transition: background-color 300ms ease, border-color 300ms ease;
 }
@@ -252,7 +252,7 @@
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(var(--glass-subtle-blur));
   opacity: 0;
   visibility: hidden;
   transition: opacity 400ms ease, visibility 400ms ease;

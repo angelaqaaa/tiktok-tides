@@ -29,7 +29,7 @@
   position: relative;
   min-height: 100vh;
   overflow: hidden;
-  background: var(--color-bg-deep);
+  background: transparent; /* Let body::before show through - per background_redesign.md */
   /* Grid layout set below after slide-scrollytelling styles */
 }
 
@@ -203,11 +203,11 @@
     rgba(8, 8, 18, 0.85) 50%,
     rgba(15, 10, 25, 0.8) 100%
   );
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(var(--glass-medium-blur));
+  -webkit-backdrop-filter: blur(var(--glass-medium-blur));
 
   /* Rounded corners for modern feel */
-  border-radius: 24px;
+  border-radius: var(--radius-2xl);
 
   /* Multi-layer border effect */
   border: 1px solid transparent;
@@ -430,7 +430,7 @@
   border: 1px solid rgba(45, 204, 211, 0.3);
   border-radius: 20px;
   padding: var(--space-5);
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(var(--glass-frosted-blur));
   box-shadow:
     0 4px 24px rgba(0, 0, 0, 0.4),
     0 0 40px rgba(0, 242, 234, 0.05),
@@ -812,9 +812,9 @@
   position: relative;
   z-index: 30; /* Highest - always on top */
   background: rgba(10, 10, 20, 0.95); /* More opaque to block viz */
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(var(--glass-frosted-blur));
   border: 1px solid rgba(45, 204, 211, 0.4);
-  border-radius: 16px;
+  border-radius: var(--radius-xl);
   padding: var(--space-6);
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.6),
@@ -956,10 +956,10 @@
 .annotation-content {
   background: linear-gradient(145deg, rgba(251, 235, 53, 0.28), rgba(251, 235, 53, 0.18));
   border: 1px solid rgba(251, 235, 53, 0.6);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   padding: var(--space-4);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(var(--glass-subtle-blur));
 }
 
 .annotation-content p {

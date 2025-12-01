@@ -188,31 +188,7 @@ class TikTokTidesApp {
           document.body.dataset.scene = scene;
           console.log('Scene changed from:', previousScene, '→', scene, '(ratio:', mostVisible.intersectionRatio.toFixed(2), ')');
 
-          // CRITICAL: Explicitly hide Scene 1 alien when leaving hero
-          if (previousScene === 'cosmos' && scene !== 'cosmos') {
-            const heroAlien = document.querySelector('.alien-narrator--hero');
-            if (heroAlien) {
-              console.log('[Scene Transition] Hiding Scene 1 alien');
-              heroAlien.style.display = 'none';
-              heroAlien.style.opacity = '0';
-            }
-          }
-
-          // Show Scene 1 alien when RETURNING to hero (not on initial load)
-          // We know it's a return if previousScene exists and is not 'cosmos'
-          if (scene === 'cosmos' && previousScene && previousScene !== 'cosmos') {
-            const heroAlien = document.querySelector('.alien-narrator--hero');
-            if (heroAlien) {
-              console.log('[Scene Transition] Showing Scene 1 alien (returning)');
-              heroAlien.style.display = 'flex';
-              heroAlien.style.opacity = '1';
-              // Also ensure speech bubble is visible when returning
-              const speechBubble = heroAlien.querySelector('.alien-speech-bubble');
-              if (speechBubble) {
-                speechBubble.setAttribute('data-speech-state', 'visible');
-              }
-            }
-          }
+          // NOTE: .alien-narrator--hero transition code REMOVED - HTML element was removed (Dec 2025 cleanup)
 
           // Update journey map highlighting (inside scene change block for scene-specific updates)
         }
@@ -968,29 +944,7 @@ class TikTokTidesApp {
    * Shows speech bubble after a delay when user enters a scene
    */
   initAlienNarrator() {
-    // Show the hero alien's speech bubble after a delay
-    const heroAlien = document.querySelector('.alien-narrator--hero');
-    if (heroAlien) {
-      const speechBubble = heroAlien.querySelector('.alien-speech-bubble');
-      if (speechBubble) {
-        // Show speech bubble after 1.5 seconds
-        setTimeout(() => {
-          speechBubble.setAttribute('data-speech-state', 'visible');
-        }, 1500);
-
-        // Allow clicking the alien to toggle speech
-        const avatar = heroAlien.querySelector('.alien-avatar');
-        if (avatar) {
-          avatar.style.cursor = 'pointer';
-          avatar.addEventListener('click', () => {
-            const current = speechBubble.getAttribute('data-speech-state');
-            speechBubble.setAttribute('data-speech-state',
-              current === 'visible' ? 'hidden' : 'visible'
-            );
-          });
-        }
-      }
-    }
+    // NOTE: .alien-narrator--hero initialization REMOVED - HTML element was removed (Dec 2025 cleanup)
 
     // Setup observer for scene-specific alien narrators
     this.setupAlienSceneObserver();
@@ -1020,10 +974,9 @@ class TikTokTidesApp {
    * Update alien narrator based on current scene
    */
   updateAlienNarrator(scene) {
-    // Hide all alien narrators first, EXCEPT the hero alien which is managed by initAlienNarrator
+    // Hide all alien narrators first
     document.querySelectorAll('.alien-narrator').forEach(narrator => {
-      // Skip hero alien - it's managed separately to avoid flickering
-      if (narrator.classList.contains('alien-narrator--hero')) return;
+      // NOTE: .alien-narrator--hero check removed - HTML element was removed (Dec 2025 cleanup)
 
       const speechBubble = narrator.querySelector('.alien-speech-bubble');
       if (speechBubble) {
