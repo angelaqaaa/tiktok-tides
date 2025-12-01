@@ -31,7 +31,7 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 3rem 2rem 2rem 2rem;
 }
 
 .conveyor-header {
@@ -39,6 +39,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  margin-top: 2rem;
 }
 
 .conveyor-header h3 {
@@ -59,7 +60,10 @@
   background: rgba(0, 255, 224, 0.1);
   border: 1px solid rgba(0, 255, 224, 0.3);
   border-radius: 8px;
+  margin-left: 25rem;
 }
+
+/* Score sits inline next to Start button inside .conveyor-controls */
 
 .score-label {
   font-weight: 600;
@@ -937,7 +941,9 @@
 .conveyor-controls {
   display: flex;
   gap: 1rem;
-  justify-content: center;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: nowrap;
   margin: 1.5rem 0 1rem 0;
 }
 
