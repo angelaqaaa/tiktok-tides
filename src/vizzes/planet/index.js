@@ -183,6 +183,10 @@ export class PlanetViz extends EventEmitter {
     const width = bbox.width || 1200;
     const height = bbox.height || 800;
 
+    // Store dimensions for consistent coordinate system
+    this.viewBoxWidth = width;
+    this.viewBoxHeight = height;
+
     this.svg = d3.select(this.container)
       .append('svg')
       .attr('width', '100%')
@@ -247,9 +251,9 @@ export class PlanetViz extends EventEmitter {
     const data = this.data[this.currentYear];
     if (!data) return;
 
-    const bbox = this.container.getBoundingClientRect();
-    const width = bbox.width || 1200;
-    const height = bbox.height || 800;
+    // Use stored viewBox dimensions for consistent coordinate system
+    const width = this.viewBoxWidth || 1200;
+    const height = this.viewBoxHeight || 800;
     const centerX = width / 2;
     const centerY = height / 2;
     const minRadius = 80;
