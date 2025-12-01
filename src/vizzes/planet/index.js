@@ -255,6 +255,11 @@ export class PlanetViz extends EventEmitter {
     const minRadius = 80;
     const maxRadius = 350;
 
+    // Update sun position to always stay centered
+    this.svg.select('.sun')
+      .attr('cx', centerX)
+      .attr('cy', centerY);
+
     const sizeScale = d3.scaleSqrt()
       .domain([1, d3.max(data, d => d.songCount)])
       .range([8, 40]);
