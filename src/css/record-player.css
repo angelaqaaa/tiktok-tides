@@ -340,7 +340,7 @@
     box-shadow: inset 0 4px 6px rgba(255, 255, 255, 0.18); } 
     
 .tonearm-arm { position: absolute; 
-   pointer-events: auto;
+   pointer-events: none; /* Disabled dragging */
    top: calc(var(--hinge-size) * 0.65); 
    right: calc(var(--hinge-size) * 0.55 - var(--arm-width) / 2); 
    width: var(--arm-width); 
@@ -350,7 +350,6 @@
    background: linear-gradient(180deg, rgba(235, 239, 247, 0.96), rgba(166, 171, 186, 0.96) 45%, rgba(82, 86, 104, 0.94) 78%, rgba(191, 196, 212, 0.98)); 
    border-radius: calc(var(--arm-width) * 0.2); 
    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.32), inset 0 -12px 18px rgba(0, 0, 0, 0.38), 0 12px 26px rgba(0, 0, 0, 0.35); 
-   cursor: grab; 
    transition: box-shadow 160ms ease; z-index: 3; } 
    
 .tonearm-back { 
@@ -364,14 +363,13 @@
    background: linear-gradient(180deg, rgba(221, 226, 236, 0.96), rgba(132, 137, 151, 0.95) 45%, rgba(70, 74, 90, 0.92) 80%, rgba(175, 180, 195, 0.96)); 
    border-radius: calc(var(--arm-width) * 0.3); 
    box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.28), inset 0 -10px 16px rgba(0, 0, 0, 0.32), 0 10px 18px rgba(0, 0, 0, 0.28); 
-   pointer-events: auto; 
+   pointer-events: none; /* Disabled dragging */
    display: flex; 
    align-items: center; 
    justify-content: center; } 
    
    /* .tonearm-arm::before { content: ""; position: absolute; top: calc(var(--arm-length) * 0.45); left: 50%; width: var(--arm-width); height: calc(var(--arm-length) * 0.34); transform-origin: top center; transform: translateX(-50%) rotate(20deg); background: linear-gradient(180deg, rgba(221, 226, 236, 0.96), rgba(132, 137, 151, 0.95) 45%, rgba(70, 74, 90, 0.92) 80%, rgba(175, 180, 195, 0.96)); border-radius: calc(var(--arm-width) * 0.75); box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.28), inset 0 -10px 16px rgba(0, 0, 0, 0.32), 0 10px 18px rgba(0, 0, 0, 0.28); pointer-events:none; } */
-.tonearm-arm:active { cursor: grabbing; box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.55), inset 0 -14px 20px rgba(0, 0, 0, 0.6), 0 14px 30px rgba(0, 0, 0, 0.38); } 
-.tonearm-arm .tonearm-back:active { cursor: grabbing; box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.55), inset 0 -14px 20px rgba(0, 0, 0, 0.6), 0 14px 30px rgba(0, 0, 0, 0.38); } 
+/* Removed :active styles - dragging is disabled */ 
 .tonearm-head {
  position: absolute;
  bottom: calc(var(--arm-width) * -1.6);
@@ -382,7 +380,7 @@
  border-radius: calc(var(--arm-width) * 0.5);
  background: linear-gradient(145deg, rgba(46, 48, 60, 0.96), rgba(15, 16, 22, 0.98));
  box-shadow: inset 0 8px 12px rgba(255, 255, 255, 0.14), inset 0 -12px 16px rgba(0, 0, 0, 0.55), 0 12px 22px rgba(0, 0, 0, 0.35);
- pointer-events: auto;
+ pointer-events: none; /* Disabled dragging */
 }
    
 .tonearm-head::after { content: ""; 
@@ -551,8 +549,11 @@
     right: 0vw;
     left: auto;
     transform: none;
-    width: clamp(110px, 10vw, 170px);
-    height: clamp(90px, 11vw, 140px);
+    min-width: clamp(110px, 10vw, 170px);
+    max-width: clamp(200px, 25vw, 300px); /* Allow expansion for long titles */
+    width: auto; /* Auto width based on content */
+    min-height: clamp(90px, 11vw, 140px);
+    height: auto; /* Auto height to accommodate wrapped text */
     border-radius: clamp(0.6rem, 1vw, 1rem);
     background: linear-gradient(158deg, rgba(20, 22, 35, 0.98) -8%, rgba(8, 9, 18, 0.99) 92%);
     box-shadow: inset 0 2px 8px rgba(255, 255, 255, 0.06), inset 0 -8px 16px rgba(0, 0, 0, 0.5), 0 16px 32px rgba(0, 0, 0, 0.6);
@@ -563,13 +564,11 @@
 }
 
 .song-info-screen__left {
-    flex: 1;
+    flex: 2; /* Increased from 1 to make cover section larger */
     display: flex;
-    aspect-ratio: 1 / 1;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: clamp(1rem, 1.5vw, 1.5rem);
     border-right: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -604,10 +603,10 @@
     font-weight: var(--font-weight-bold);
     color: var(--color-text-primary);
     margin: 0;
-    line-height: 1.2;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    line-height: 1.3;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 .song-info-screen__title .music-icon {
