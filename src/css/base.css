@@ -3694,7 +3694,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
     inset 0 0 12px rgba(45, 204, 211, 0.02);
 
   /* For pseudo-element border */
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* Animated gradient border for legend */
@@ -3809,12 +3809,76 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   font-weight: 600;
   color: rgba(255, 255, 255, 0.95);
   letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .music-galaxy-legend .legend-sublabel {
   font-size: 0.6875rem;
   color: rgba(255, 255, 255, 0.5);
   font-style: italic;
+}
+
+/* Info icon with tooltip */
+.music-galaxy-legend .info-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: help;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.2s ease;
+}
+
+.music-galaxy-legend .info-icon:hover {
+  color: #00F2EA;
+}
+
+.music-galaxy-legend .info-icon svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.music-galaxy-legend .info-tooltip {
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.95);
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  white-space: normal;
+  max-width: 280px;
+  width: max-content;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: none;
+  z-index: 10000;
+  border: 1px solid rgba(0, 242, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* Tooltip arrow (pointing left) */
+.music-galaxy-legend .info-tooltip::after {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-right-color: rgba(0, 0, 0, 0.95);
+}
+
+.music-galaxy-legend .info-icon:hover .info-tooltip {
+  opacity: 1;
+  visibility: visible;
 }
 
 .music-galaxy-legend .legend-gradient-wrap {
