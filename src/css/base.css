@@ -2567,29 +2567,6 @@ circle[data-type="bubble"] {
   margin: 0;
 }
 
-/* Top 3 banner (shown during auto-sequence) */
-.viral-sounds-top3-banner {
-  margin-top: var(--space-4);
-  padding: var(--space-2) var(--space-3);
-  background: linear-gradient(90deg, rgba(241, 32, 74, 0.2), rgba(45, 204, 211, 0.2));
-  border-radius: 8px;
-  border: 1px solid rgba(241, 32, 74, 0.4);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #fbeb35;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 400ms ease, transform 400ms ease;
-}
-
-.viral-sounds-top3-banner[aria-hidden="false"] {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 /* Record player area - takes most of the width */
 .viral-sounds-record-area {
   position: relative;
@@ -3161,8 +3138,7 @@ circle[data-type="bubble"] {
 /* Chart Instructions for Stopwatch Scene (per narrative-alien-redesign.md) */
 .chart-instructions--stopwatch {
   position: absolute;
-  top: 100px;
-  /* Top-right corner, near scene-label-badge */
+  top: 80px; /* Top-right corner, near scene-label-badge */
   right: 32px;
   z-index: 15;
 }
@@ -3361,7 +3337,7 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 /* Scene label badge positioning (matches music-galaxy) */
 .pyramid-viz-overlay .scene-label-badge {
   position: absolute;
-  top: 100px;
+  top: 80px;
   left: 35px;
   z-index: 15;
 }
@@ -3579,7 +3555,9 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 
 .pyramid-viz-wrapper .viz-container {
   width: 100%;
-  min-height: 400px;
+  min-height: 450px; /* Moderate increase from 400px */
+  height: calc(100vh - 120px); /* Back to original ratio */
+  max-height: 550px; /* Limit max to prevent oversized blocks */
 }
 
 /* Callout annotation */
@@ -3774,7 +3752,7 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
 /* Scene label badge positioning (matches music-galaxy) */
 .emotion-viz-overlay .scene-label-badge {
   position: absolute;
-  top: 100px;
+  top: 80px;
   left: 35px;
   z-index: 15;
 }
@@ -4061,8 +4039,6 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
   line-height: 1.7;
   margin: 0 0 var(--space-3);
 }
-
-/* Track chips removed - auto-sequence handles track display */
 
 /* Alien narrator variants for scenes */
 .alien-narrator--music-galaxy {
@@ -4830,18 +4806,43 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
 .scene-wrapup {
   position: relative;
   min-height: 100vh;
-  height: auto;
-  /* Allow content to expand */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  /* Start from top for scrollable content */
+  justify-content: flex-start; /* Align to top instead of center */
+  padding-top: calc(64px + var(--space-3)); /* Match scene-label badge top position */
+  padding-left: var(--space-6);
+  padding-right: var(--space-6);
+  padding-bottom: var(--space-2); /* Reduced from var(--space-6) (32px) */
+}
+
+/* Centered wrapper for recipe card */
+.wrapup-center {
+  display: flex;
+  align-items: flex-start; /* Align to top */
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  top: -55px; /* Move up to align with scene-label badge */
+}
+
+/* Scene for team credits (standalone page) */
+.scene-credits {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: calc(64px + var(--space-4)) var(--space-6) var(--space-6);
-  overflow: visible;
-  /* Allow scrolling */
-  overflow-y: auto;
-  /* Enable vertical scroll for long content */
+}
+
+/* Centered wrapper for team credits */
+.credits-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 /* Recipe card container - v2 dark theme with glint accent */
@@ -5799,9 +5800,9 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
 }
 
 .pyramid-viz-wrapper .viz-container {
-  min-height: 350px !important;
-  height: calc(100vh - 120px) !important;
-  max-height: 600px !important;
+  min-height: 450px !important; /* Moderate increase from 350px */
+  height: calc(100vh - 120px) !important; /* Back to original ratio */
+  max-height: 550px !important; /* Reduced to prevent oversized blocks */
 }
 
 /* 6. EMOTION VIZ - No sizing changes, use natural dimensions */

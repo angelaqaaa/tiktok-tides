@@ -32,7 +32,8 @@ const SCENE_MAP = {
   '#scene-category': 'forest',
   '#scene-emotion': 'air',
   '#scene-quiz': 'lab',
-  '#scene-summary': 'wrapup'
+  '#scene-summary': 'wrapup',
+  '#scene-credits': 'wrapup'          // Team credits page
 };
 
 // Node positions for alien marker on map canvas
@@ -44,7 +45,8 @@ const NODE_POSITIONS = {
   'scene-category': { x: '58%', y: '60%' },
   'scene-emotion': { x: '42%', y: '72%' },
   'scene-quiz': { x: '28%', y: '82%' },
-  'scene-summary': { x: '50%', y: '90%' }
+  'scene-summary': { x: '50%', y: '90%' },
+  'scene-credits': { x: '50%', y: '95%' }  // Credits page below summary
 };
 
 // Scene names for keyboard shortcuts (includes new scene values)
@@ -390,17 +392,6 @@ class TikTokTidesApp {
       sw?.update(1);
       setTimeout(() => sw?.update(2), 1600);
       this._stopwatchResize?.();
-    }
-
-    // Special-case: Record player auto-sequence for Scene 3
-    if (sectionId === 'scene-viral-sounds') {
-      const rp = this.vizControllers.recordPlayer;
-      if (rp && !rp.autoSequenceTriggered) {
-        setTimeout(() => {
-          rp.startAutoSequence?.();
-          rp.autoSequenceTriggered = true;
-        }, 500);
-      }
     }
 
     // Live region announcement

@@ -582,7 +582,7 @@
 }
 
 .song-info-screen__left {
-    flex: 0 0 115px; /* Slightly wider - increased from 105px */
+    flex: 0 0 120px; /* A bit wider - increased from 115px */
     display: flex;
     flex-direction: column;
     justify-content: center;
