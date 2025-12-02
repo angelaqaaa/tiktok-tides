@@ -591,6 +591,12 @@ export class RecordPlayerViz {
         if (this.spinTimers.has(index)) return;
         const node = this.getRingNode(index);
         if (!node) return;
+
+        // Hide indicator line when rotation starts
+        if (this.spinTimers.size === 0) {
+            this.hideIndicator();
+        }
+
         let angle = this.spinAngles.get(index) || 0;
         const state = { last: null, rafId: null };
         const step = (timestamp) => {
@@ -615,6 +621,11 @@ export class RecordPlayerViz {
             this.spinTimers.delete(index);
         }
         this.applyRingTransform(index);
+
+        // Show indicator line when all rotations stop
+        if (this.spinTimers.size === 0) {
+            this.showIndicator();
+        }
     }
 
     stopAllRingRotation() {
@@ -622,6 +633,9 @@ export class RecordPlayerViz {
             if (state.rafId) cancelAnimationFrame(state.rafId);
         });
         this.spinTimers.clear();
+
+        // Show indicator line when all rotations stop
+        this.showIndicator();
     }
 
     getRingRotation(index) {
