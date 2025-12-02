@@ -44,7 +44,8 @@ export class StopwatchViz extends EventEmitter {
       btnY: 0,
       crownY: 0,
       R: 0,
-      margin: 42,
+      // Reduced margin so the stopwatch appears larger within the container
+      margin: 24,
       arcThickness: 8 // default; will be overwritten in render()
     };
 
@@ -272,9 +273,21 @@ export class StopwatchViz extends EventEmitter {
       arcThickness
     });
 
-    // Stopwatch chrome
-    this.g.append('circle').attr('r', ringOuter).attr('class', 'stopwatch-ring');
-    this.g.append('circle').attr('r', ringInner).attr('class', 'stopwatch-inner');
+    // Stopwatch chrome (with solid circular background)
+    // Background disc behind the ring so the stopwatch face has a solid fill
+    this.g.append('circle')
+      .attr('r', ringOuter)
+      .attr('class', 'stopwatch-bg')
+      .attr('fill', 'var(--stopwatch-bg, #050510)')
+      .attr('stroke', 'none');
+
+    this.g.append('circle')
+      .attr('r', ringOuter)
+      .attr('class', 'stopwatch-ring');
+
+    this.g.append('circle')
+      .attr('r', ringInner)
+      .attr('class', 'stopwatch-inner');
 
     // Top button & crown (button clickable to replay)
     const btnW = R * 0.25, btnH = R * 0.1, btnR = 8;
