@@ -79,19 +79,15 @@
   /* Planet surface - dark with subtle terrain hints */
   background:
     /* Surface highlight near the edge */
-    radial-gradient(
-      ellipse 100% 8% at 50% 0%,
+    radial-gradient(ellipse 100% 8% at 50% 0%,
       rgba(45, 204, 211, 0.12) 0%,
-      transparent 100%
-    ),
+      transparent 100%),
     /* Main planet body - deep blue-green */
-    radial-gradient(
-      circle at 50% 0%,
+    radial-gradient(circle at 50% 0%,
       #0d2f3d 0%,
       #061a22 30%,
       #030f14 60%,
-      #010609 100%
-    );
+      #010609 100%);
 
   /* Layered atmospheric glow - the key to realism */
   box-shadow:
@@ -121,14 +117,12 @@
   height: 350px;
   background:
     /* Bright glow band near horizon */
-    linear-gradient(
-      to top,
+    linear-gradient(to top,
       rgba(45, 204, 211, 0.25) 0%,
       rgba(45, 204, 211, 0.15) 15%,
       rgba(186, 246, 240, 0.08) 35%,
       rgba(186, 246, 240, 0.03) 55%,
-      transparent 100%
-    );
+      transparent 100%);
   /* Blur for soft atmospheric haze */
   filter: blur(2px);
   pointer-events: none;
@@ -183,11 +177,10 @@
   letter-spacing: -0.03em;
   /* Gradient uses glint → light-mint → blaze → yellow for shimmer effect */
   background: linear-gradient(135deg,
-    var(--color-glint) 0%,
-    #BAF6F0 30%,
-    var(--color-blaze) 70%,
-    var(--color-accent-yellow) 100%
-  );
+      var(--color-glint) 0%,
+      #BAF6F0 30%,
+      var(--color-blaze) 70%,
+      var(--color-glow) 100%);
   background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -196,8 +189,15 @@
 }
 
 @keyframes titleShimmer {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .scene-hero .hero-subtitle {
@@ -291,10 +291,13 @@
 }
 
 @keyframes scrollArrowBob {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
     opacity: 0.7;
   }
+
   50% {
     transform: translateY(8px);
     opacity: 1;
@@ -508,8 +511,13 @@
 }
 
 @keyframes spinDisc {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Themed clip backgrounds per combined spec */
@@ -602,8 +610,13 @@
 }
 
 @keyframes twinkleStars {
-  0% { opacity: 0.6; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0.6;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 .clip-nebula {
@@ -669,6 +682,7 @@
     opacity: 0;
     transform: scale(0.8) translateY(10px);
   }
+
   100% {
     opacity: 1;
     transform: scale(1) translateY(0);
@@ -676,8 +690,15 @@
 }
 
 @keyframes alienBob {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-8px) scale(1.02); }
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-8px) scale(1.02);
+  }
 }
 
 .clip-video-overlay {
@@ -758,14 +779,20 @@
 
 .tiktok-video-progress .video-progress-fill {
   height: 100%;
-  background: #fff; /* TikTok uses white, not red */
+  background: #fff;
+  /* TikTok uses white, not red */
   width: 35%;
   animation: tiktokProgress 8s linear infinite;
 }
 
 @keyframes tiktokProgress {
-  0% { width: 0%; }
-  100% { width: 100%; }
+  0% {
+    width: 0%;
+  }
+
+  100% {
+    width: 100%;
+  }
 }
 
 /* Hover effect on phone */
@@ -818,9 +845,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 16px 4px; /* Minimal padding - no notch in mockup */
+  padding: 8px 16px 4px;
+  /* Minimal padding - no notch in mockup */
   z-index: 30;
-  background: transparent; /* Let video show through */
+  background: transparent;
+  /* Let video show through */
 }
 
 .status-time {
@@ -845,7 +874,8 @@
   display: flex;
   align-items: center;
   gap: 3px;
-  flex-direction: row-reverse; /* Number first, then icon */
+  flex-direction: row-reverse;
+  /* Number first, then icon */
 }
 
 .status-battery-ios svg {
@@ -863,12 +893,14 @@
 /* TikTok Top Navigation - OVERLAY below status bar */
 .tiktok-top-nav {
   position: absolute;
-  top: 28px; /* Below status bar */
+  top: 28px;
+  /* Below status bar */
   left: 0;
   right: 0;
   display: flex;
   align-items: center;
-  justify-content: center; /* Center the nav tabs */
+  justify-content: center;
+  /* Center the nav tabs */
   padding: 2px 10px 6px;
   z-index: 30;
 }
@@ -920,14 +952,16 @@
 .tiktok-video-area {
   flex: 1;
   position: relative;
-  min-height: 0; /* Allow flex shrinking */
+  min-height: 0;
+  /* Allow flex shrinking */
   overflow: hidden;
   /* Status bar, top nav, action bar, bottom info are all positioned absolute within this */
 }
 
 .tiktok-video-caption-top {
   position: absolute;
-  top: 85px; /* Lower - below top nav bar */
+  top: 85px;
+  /* Lower - below top nav bar */
   left: 12px;
   right: 60px;
   z-index: 10;
@@ -974,8 +1008,13 @@
 }
 
 @keyframes starTwinkle {
-  0% { opacity: 0.7; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0.7;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 
 .video-nebula {
@@ -1016,9 +1055,12 @@
 
 /* Hero-specific alien float animation (includes translateX for centering) */
 @keyframes tiktokAlienFloat {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateX(-50%) translateY(0) scale(1);
   }
+
   50% {
     transform: translateX(-50%) translateY(-12px) scale(1.03);
   }
@@ -1027,7 +1069,8 @@
 /* TikTok-style Speech Bubble (looks like a comment) */
 .tiktok-speech-bubble {
   position: absolute;
-  top: 22%; /* Lower together with content */
+  top: 22%;
+  /* Lower together with content */
   left: 10px;
   right: 20px;
   background: rgba(255, 255, 255, 0.95);
@@ -1046,6 +1089,7 @@
     opacity: 0;
     transform: translateY(-10px) scale(0.95);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -1093,11 +1137,13 @@
 .tiktok-action-bar {
   position: absolute;
   right: 8px;
-  bottom: 10px; /* Right above progress bar - keep lowest element fixed */
+  bottom: 10px;
+  /* Right above progress bar - keep lowest element fixed */
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px; /* Reduced spacing */
+  gap: 6px;
+  /* Reduced spacing */
   z-index: 10;
 }
 
@@ -1198,16 +1244,23 @@
 }
 
 @keyframes discSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Bottom Info Area - positioned right above progress bar (like real TikTok) */
 .tiktok-bottom-info {
   position: absolute;
-  bottom: 5px; /* Just above progress bar */
+  bottom: 5px;
+  /* Just above progress bar */
   left: 10px;
-  right: 50px; /* Leave space for action bar */
+  right: 50px;
+  /* Leave space for action bar */
   z-index: 10;
 }
 
@@ -1226,7 +1279,8 @@
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   margin: 0 0 4px;
   line-height: 1.3;
-  display: inline; /* Inline with hashtags */
+  display: inline;
+  /* Inline with hashtags */
 }
 
 .tiktok-description-line {
@@ -1243,7 +1297,8 @@
   color: #fff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   margin: 0;
-  display: inline; /* Inline with description */
+  display: inline;
+  /* Inline with description */
 }
 
 .tiktok-music-row {
@@ -1270,9 +1325,11 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 4px 0 8px; /* More compact padding */
+  padding: 4px 0 8px;
+  /* More compact padding */
   background: #000;
-  flex-shrink: 0; /* Don't shrink */
+  flex-shrink: 0;
+  /* Don't shrink */
   z-index: 30;
 }
 
@@ -1366,10 +1423,13 @@
 }
 
 @keyframes scrollBounce {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
     opacity: 0.7;
   }
+
   50% {
     transform: translateY(8px);
     opacity: 1;
@@ -1381,6 +1441,7 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1421,9 +1482,8 @@
   height: 72px;
   border-radius: 50%;
   background: linear-gradient(135deg,
-    rgba(45, 204, 211, 0.2) 0%,
-    rgba(186, 246, 240, 0.1) 100%
-  );
+      rgba(45, 204, 211, 0.2) 0%,
+      rgba(186, 246, 240, 0.1) 100%);
   border: 2px solid rgba(45, 204, 211, 0.4);
   display: flex;
   align-items: center;
@@ -1496,7 +1556,8 @@
   }
 
   .hero-visual-column {
-    order: -1; /* Phone above text on tablet */
+    order: -1;
+    /* Phone above text on tablet */
   }
 
   .hero-phone-frame {
@@ -1516,7 +1577,8 @@
 
 @media (max-width: 768px) {
   .hero-nav-spacer {
-    height: 72px; /* 56px nav + 16px */
+    height: 72px;
+    /* 56px nav + 16px */
   }
 
   .hero-content-band {
@@ -1569,7 +1631,8 @@
 
 @media (max-width: 480px) {
   .hero-nav-spacer {
-    height: 64px; /* 48px nav + 16px */
+    height: 64px;
+    /* 48px nav + 16px */
   }
 
   .hero-phone-frame {
