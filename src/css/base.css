@@ -2112,7 +2112,7 @@ circle[data-type="bubble"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-glint), var(--color-shimmer));
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
   color: #1a1a2e;
   font-size: 0.75rem;
   font-weight: 700;
@@ -2626,7 +2626,7 @@ circle[data-type="bubble"] {
 }
 
 .legend-dot--radius {
-  background: linear-gradient(135deg, var(--color-glint), var(--color-shimmer));
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
 }
 
 /* Alien narrator for timing scene */
@@ -2885,7 +2885,7 @@ circle[data-type="bubble"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-glint), var(--color-shimmer));
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
   color: #1a1a2e;
   font-size: 0.875rem;
   font-weight: 700;
@@ -3380,7 +3380,7 @@ circle[data-type="bubble"] {
   height: 10px;
   background: linear-gradient(90deg,
       var(--color-glint) 0%,
-      var(--color-shimmer) 50%,
+      var(--color-blaze) 50%,
       var(--color-glint) 100%);
   border-radius: 5px;
   box-shadow:
@@ -3933,9 +3933,12 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 @keyframes pulse-arrow {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateX(-50%) translateY(0);
   }
+
   50% {
     transform: translateX(-50%) translateY(-2px);
   }
