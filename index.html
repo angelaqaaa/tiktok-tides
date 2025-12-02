@@ -826,30 +826,37 @@
               <h2 id="viral-sounds-title" class="viral-sounds-heading">A handful of sounds spin through every feed</h2>
             </div>
 
-            <!-- Main content: Central focus layout per v2 spec 5.3.2 -->
-            <!-- Record centered but slightly left, text panel overlays top-right -->
-            <div class="viral-sounds-main viral-sounds-main--central">
-              <!-- Record visualization (centered, slightly left of center) -->
-              <div class="viral-sounds-record-area viral-sounds-record-area--central record-player-section">
-                <div class="record-player-layout" data-player-layout>
-                  <div class="record-player-wrapper">
-                    <!-- Mute Toggle Button - Top Left -->
-                    <button class="mute-toggle-button" type="button" aria-label="Toggle mute" data-mute-toggle>
-                      <svg class="mute-toggle-button__icon" viewBox="0 0 24 24" fill="none"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                          d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
-                      </svg>
-                    </button>
-                    <div class="record-player-base">
-                      <div class="record-disc-area">
-                        <div class="record-indicator-line record-indicator-line--max" aria-hidden="true">higher
-                          popularity</div>
-                        <svg class="record-disc" viewBox="0 0 700 700" role="img">
-                          <g class="record-rings" data-record-rings></g>
-                        </svg>
-                        <div class="record-center-cap" aria-hidden="true">
-                          <span class="record-center-year" data-year-range-display>2020–2025</span>
+        <!-- Main content: Central focus layout per v2 spec 5.3.2 -->
+        <!-- Record centered but slightly left, text panel overlays top-right -->
+        <div class="viral-sounds-main viral-sounds-main--central">
+          <!-- Record visualization (centered, slightly left of center) -->
+          <div class="viral-sounds-record-area viral-sounds-record-area--central record-player-section">
+            <div class="record-player-layout" data-player-layout>
+              <div class="record-player-wrapper">
+                <!-- Mute Toggle Button - Top Left -->
+                <button class="mute-toggle-button" type="button" aria-label="Toggle mute" data-mute-toggle>
+                  <svg class="mute-toggle-button__icon" viewBox="0 0 24 24" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                      d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                  </svg>
+                </button>
+                <span class="mute-toggle-helper" data-mute-helper>Unmute the sound tracks!</span>
+                <div class="record-player-base">
+                  <div class="record-disc-area">
+                    <div class="record-indicator-line record-indicator-line--max" aria-hidden="true">higher popularity</div>
+                    <svg class="record-disc" viewBox="0 0 700 700" role="img">
+                      <g class="record-rings" data-record-rings></g>
+                    </svg>
+                    <div class="record-center-cap" aria-hidden="true">
+                      <span class="record-center-year" data-year-range-display>2020–2025</span>
+                    </div>
+                  </div>
+                  <div class="tonearm" data-tonearm>
+                    <div class="tonearm-hinge">
+                      <div class="tonearm-arm" data-tonearm-arm>
+                        <div class="tonearm-back">
+                          <div class="tonearm-head"></div>
                         </div>
                       </div>
                       <div class="tonearm" data-tonearm>

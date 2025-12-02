@@ -50,7 +50,6 @@ export class RecordPlayerViz {
         this.data = [];
         this.songInfo = []; // song info data
         this.radiusScale = null;
-        this.angleScale = null;
         this.shuffledAlbumCovers = shuffleArray(albumCoverPaths); // Randomly shuffled album covers
 
         this.allSongs = [];
@@ -70,6 +69,7 @@ export class RecordPlayerViz {
         this.currentAudio = null;
         this.currentAudioIndex = null;
         this.isMuted = true; // mute state - default to muted
+        this.hasUnmutedOnce = false; // Track if user has unmuted at least once
 
         this.yearSliderEl = null;
         this.yearSelectionEl = null;
@@ -93,7 +93,7 @@ export class RecordPlayerViz {
 
         // Debounce hover events to prevent excessive state changes
         this.hoverDebounceTimer = null;
-        this.hoverDebounceDelay = 50; // 50ms debounce
+        this.hoverDebounceDelay = 0; // No delay for maximum responsiveness
     }
 
     async init(selector, options = {}) {
@@ -120,6 +120,7 @@ export class RecordPlayerViz {
 
         // Mute toggle button
         this.muteToggleButton = this.container.querySelector('[data-mute-toggle]');
+        this.muteHelperText = this.container.querySelector('[data-mute-helper]');
 
         // Year range slider elements
         this.yearSliderEl = this.container.querySelector('[data-year-slider]');
@@ -137,7 +138,20 @@ export class RecordPlayerViz {
         this.initializeMuteButton(); // Set initial mute button state
         this.resetSongInfo(); // Set default "no song" state
         document.addEventListener('pointerdown', this.handleFirstGesture, { once: true });
-        this.setTonearmToIndex(0, { silent: true });
+
+        // Ensure all states are cleared and tonearm is at default position
+        // Use setTimeout to ensure rings are rendered before clearing
+        setTimeout(() => {
+            this.clearActiveRing({ preserveLocked: false });
+            this.stopSongImmediate();
+            // Reset activeIndex and lockedIndex to null
+            this.activeIndex = null;
+            this.lockedIndex = null;
+            if (this.tonearmArm) {
+                // Reset to default CSS position (rotate(-32deg) from CSS)
+                this.tonearmArm.style.transform = 'rotate(-1.5deg)';
+            }
+        }, 100);
     }
 
     async loadData() {
@@ -217,7 +231,14 @@ export class RecordPlayerViz {
         this.totalRings = Math.max(this.data.length, 1);
         this.setupScales();
         this.renderRings({ animate });
-        this.bindRingEvents();
+
+        // Event bindings will be refreshed in bindRingEvents
+
+        // Use requestAnimationFrame to ensure DOM is updated before binding events
+        requestAnimationFrame(() => {
+            this.bindRingEvents();
+        });
+
         this.updateYearRangeLabel();
         if (!skipSliderUpdate) {
             this.updateYearSliderUI();
@@ -229,6 +250,8 @@ export class RecordPlayerViz {
         this.resetSongInfo();
         this.toggleNotes(false);
         this.setHoverState(false);
+
+        // Don't reset tonearm position when updating year range - keep it in current position
     }
 
     initializeYearSlider() {
@@ -363,10 +386,6 @@ export class RecordPlayerViz {
         const ringCount = Math.max(this.data.length, 1);
         const ringStep = (OUTER_RADIUS - INNER_RADIUS) / ringCount;
         this.radiusScale = (index) => OUTER_RADIUS - (index + 0.75) * ringStep;
-        const maxAngle = 32;
-        const minAngle = 8;
-        const domainEnd = Math.max(ringCount - 1, 1);
-        this.angleScale = d3.scaleLinear().domain([0, domainEnd]).range([minAngle, maxAngle]);
     }
 
     renderRings({ animate = false } = {}) {
@@ -388,6 +407,8 @@ export class RecordPlayerViz {
             .attr('transform', `translate(${CENTER}, ${CENTER})`)
             .style('opacity', 0);
 
+        // Add transparent hit area circle first (for better hover detection)
+        ringsEnter.append('circle').attr('class', 'record-ring-hit-area');
         ringsEnter.append('circle').attr('class', 'record-ring-arc');
         ringsEnter.append('text').attr('class', 'record-ring-label').append('textPath');
 
@@ -405,8 +426,26 @@ export class RecordPlayerViz {
                 const radius = Math.max(14, this.radiusScale(i));
                 const ringCount = Math.max(this.totalRings, 1);
                 const ringStep = (OUTER_RADIUS - INNER_RADIUS) / ringCount;
-                const strokeWidth = ringStep * 1.0;
+                const strokeWidth = ringStep * 1.3; /* Increased from 1.0 to make rings thicker */
                 const ringSel = d3.select(nodes[i]);
+
+                // Set up hit area circle (larger transparent circle for better hover detection)
+                const hitArea = ringSel.select('.record-ring-hit-area');
+                const hitAreaRadius = radius + strokeWidth * 0.6; // Extend beyond stroke for better detection
+                if (transition) {
+                    hitArea.transition(transition)
+                        .attr('r', hitAreaRadius)
+                        .attr('fill', 'transparent')
+                        .attr('stroke', 'none')
+                        .style('pointer-events', 'all');
+                } else {
+                    hitArea
+                        .attr('r', hitAreaRadius)
+                        .attr('fill', 'transparent')
+                        .attr('stroke', 'none')
+                        .style('pointer-events', 'all');
+                }
+
                 const arc = ringSel.select('.record-ring-arc');
 
                 if (transition) {
@@ -419,8 +458,8 @@ export class RecordPlayerViz {
                         .attr('stroke-width', strokeWidth);
                 }
 
-                const labelRadius = Math.max(12, radius - strokeWidth * 0.35);
-                const sweep = Math.PI * 0.72;
+                const labelRadius = Math.max(12, radius - strokeWidth * 0.1); /* Further increased to move text more outward/up */
+                const sweep = Math.PI * 1.2; /* Increased from 0.72 to 1.2 for maximum coverage (~216 degrees) */
                 const baseStart = -Math.PI / 2 - sweep / 2;
                 const startAngle = baseStart + (i % 2 === 0 ? -0.05 : 0.05);
                 const endAngle = startAngle + sweep;
@@ -440,14 +479,14 @@ export class RecordPlayerViz {
 
                 const isInner = i >= this.data.length - 2;
                 textPath
-                    .attr('startOffset', '50%')
+                    .attr('startOffset', '0%') /* Start from beginning for maximum coverage */
                     .attr('href', `#${pathId}`)
-                    .attr('text-anchor', 'middle')
+                    .attr('text-anchor', 'start')
                     .attr('dominant-baseline', 'middle')
-                    .attr('method', 'stretch')
-                    .attr('dy', 0)
+                    .attr('method', 'spacingAndGlyphs') /* Use spacingAndGlyphs to show all text naturally */
+                    .attr('dy', -4) /* Move text up more */
                     .classed('inner-label', isInner)
-                    .attr('textLength', isInner ? sweep * labelRadius * 1.1 : null)
+                    .attr('textLength', null) /* Remove text length limit to allow full text display */
                     .text(() => {
                         const millions = d.totalPlayCount / 1_000_000;
                         const metric = millions >= 100 ? Math.round(millions) : millions.toFixed(1);
@@ -503,49 +542,26 @@ export class RecordPlayerViz {
     bindRingEvents() {
         const ringNodes = this.container.querySelectorAll('.record-ring');
         ringNodes.forEach((ringEl) => {
-            if (ringEl.dataset.bound === 'true') return;
-            ringEl.dataset.bound = 'true';
+            const index = Number(ringEl.dataset.songIndex);
+            if (isNaN(index) || index < 0 || index >= this.data.length) return;
 
-            ringEl.addEventListener('mouseenter', () => {
-                const index = Number(ringEl.dataset.songIndex);
-                // If there's a locked ring, don't override it
-                if (this.lockedIndex !== null && this.lockedIndex !== index) {
-                    return;
-                }
-                // Debounce hover to prevent excessive state changes
-                if (this.hoverDebounceTimer) {
-                    clearTimeout(this.hoverDebounceTimer);
-                }
-                this.hoverDebounceTimer = setTimeout(() => {
-                    // Immediately activate this ring - all states change together
-                    this.activateRingImmediate(index, { locked: false, source: 'hover' });
-                    this.hoverDebounceTimer = null;
-                }, this.hoverDebounceDelay);
-            });
+            // Use pointerenter/pointerleave for better sensitivity and device support
+            ringEl.addEventListener('pointerenter', () => {
+                if (this.lockedIndex !== null && this.lockedIndex !== index) return;
+                this.activateRingImmediate(index, { locked: false, source: 'hover' });
+            }, { passive: true });
 
-            ringEl.addEventListener('mouseleave', () => {
-                const index = Number(ringEl.dataset.songIndex);
-
-                // Clear any pending hover activation
-                if (this.hoverDebounceTimer) {
-                    clearTimeout(this.hoverDebounceTimer);
-                    this.hoverDebounceTimer = null;
-                }
-
-                // If there's a locked ring, restore it
+            ringEl.addEventListener('pointerleave', () => {
                 if (this.lockedIndex !== null && this.lockedIndex !== index) {
                     this.activateRingImmediate(this.lockedIndex, { locked: true, source: 'tonearm' });
                     return;
                 }
-
-                // Immediately deactivate - all states change together
                 if (this.activeIndex === index) {
                     this.deactivateRingImmediate(index);
                 }
-            });
+            }, { passive: true });
 
             ringEl.addEventListener('click', () => {
-                const index = Number(ringEl.dataset.songIndex);
                 this.handleFirstGesture();
                 this.activateRingImmediate(index, { locked: true, source: 'click' });
                 this.hideIndicator();
@@ -573,6 +589,12 @@ export class RecordPlayerViz {
         if (this.spinTimers.has(index)) return;
         const node = this.getRingNode(index);
         if (!node) return;
+
+        // Hide indicator line when rotation starts
+        if (this.spinTimers.size === 0) {
+            this.hideIndicator();
+        }
+
         let angle = this.spinAngles.get(index) || 0;
         const state = { last: null, rafId: null };
         const step = (timestamp) => {
@@ -597,6 +619,11 @@ export class RecordPlayerViz {
             this.spinTimers.delete(index);
         }
         this.applyRingTransform(index);
+
+        // Show indicator line when all rotations stop
+        if (this.spinTimers.size === 0) {
+            this.showIndicator();
+        }
     }
 
     stopAllRingRotation() {
@@ -604,6 +631,9 @@ export class RecordPlayerViz {
             if (state.rafId) cancelAnimationFrame(state.rafId);
         });
         this.spinTimers.clear();
+
+        // Show indicator line when all rotations stop
+        this.showIndicator();
     }
 
     getRingRotation(index) {
@@ -673,11 +703,9 @@ export class RecordPlayerViz {
         // STEP 6: Start audio playback (with mute state)
         this.playSongImmediate(index, { autoplay: isHover || locked });
 
-        // STEP 7: Update tonearm
-        if (isHover) {
-            this.setTonearmToIndex(index, { silent: true });
-        } else {
-            this.setTonearmToIndex(index, { silent: !locked });
+        // STEP 7: Update tonearm - always set to 20 degrees regardless of which ring
+        if (this.tonearmArm) {
+            this.tonearmArm.style.transform = 'rotate(20deg)';
         }
     }
 
@@ -704,6 +732,11 @@ export class RecordPlayerViz {
 
         // STEP 5: Reset hover state
         this.setHoverState(false);
+
+        // STEP 6: Reset tonearm to default position when leaving hover
+        if (this.tonearmArm && this.lockedIndex === null) {
+            this.tonearmArm.style.transform = 'rotate(-1.5deg)';
+        }
     }
 
     // Legacy method for backward compatibility
@@ -727,24 +760,6 @@ export class RecordPlayerViz {
         this.setHoverState(false);
     }
 
-    setTonearmToIndex(index, { silent = false } = {}) {
-        if (!this.tonearmArm || index == null || index < 0 || index >= this.data.length) return;
-
-        // Use angleScale from setupScales()
-        const angle = this.angleScale(index);
-
-        this.tonearmArm.style.transform = `rotate(${angle}deg)`;
-        if (!silent) {
-            this.lockedIndex = index;
-        }
-    }
-
-    clampTonearmAngle(angle) {
-        const range = this.angleScale.range();
-        const min = Math.min(...range) - 12;
-        const max = Math.max(...range) + 8;
-        return Math.max(min, Math.min(max, angle));
-    }
 
     updateSongInfo(index) {
         if (index == null || index < 0 || index >= this.data.length) {
@@ -1023,6 +1038,12 @@ export class RecordPlayerViz {
      * Per spec 5.3.4: ~5 seconds total, each ring highlighted for ~1.5s
      */
     startAutoSequence() {
+        // Disabled: Don't auto-activate any rings on page load
+        // This prevents the outermost ring (anxiety) from being automatically triggered
+        return;
+
+        // Original code commented out to prevent auto-activation
+        /*
         if (this.autoSequenceRunning) return;
         this.autoSequenceRunning = true;
 
@@ -1038,8 +1059,12 @@ export class RecordPlayerViz {
                     detail: { lastIndex: topRings[topRings.length - 1] }
                 });
                 this.container.dispatchEvent(event);
-                // Leave tonearm on top track
-                this.activateRing(0, { locked: false, source: 'auto' });
+                // Don't leave tonearm on top track - let user interact instead
+                // this.activateRing(0, { locked: false, source: 'auto' });
+                // Clear all states after sequence
+                this.clearActiveRing({ preserveLocked: false });
+                this.stopSongImmediate();
+                this.resetSongInfo();
                 return;
             }
 
@@ -1052,6 +1077,7 @@ export class RecordPlayerViz {
 
         // Start after small delay
         setTimeout(highlightNext, 300);
+        */
     }
 
     mount() {
@@ -1106,7 +1132,16 @@ export class RecordPlayerViz {
     }
 
     handleMuteToggle() {
+        const wasMuted = this.isMuted;
         this.isMuted = !this.isMuted;
+
+        // Hide helper text when user unmutes for the first time
+        if (wasMuted && !this.isMuted && !this.hasUnmutedOnce) {
+            this.hasUnmutedOnce = true;
+            if (this.muteHelperText) {
+                this.muteHelperText.classList.add('is-hidden');
+            }
+        }
 
         // Update button visual state
         if (this.muteToggleButton) {
