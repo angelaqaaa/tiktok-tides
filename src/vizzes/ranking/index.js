@@ -153,7 +153,7 @@ export class RankingViz extends EventEmitter {
       .append('div')
       .attr('class', 'viz-btn viz-btn--info')
       .html(`
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <svg viewBox="0 0 24 24" fill="white">
           <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="none"/>
           <line x1="12" y1="10" x2="12" y2="16" stroke="white" stroke-width="2" />
           <circle cx="12" cy="7" r="1.5" fill="white"/>
