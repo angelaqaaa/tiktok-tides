@@ -3883,7 +3883,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .music-galaxy-legend .legend-gradient-wrap {
   position: relative;
-  padding-bottom: 24px;
+  padding-bottom: 4px;
 }
 
 .music-galaxy-legend .legend-gradient-labels {
