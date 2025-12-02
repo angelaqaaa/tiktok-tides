@@ -389,6 +389,7 @@ export class RecordPlayerViz {
         const ringStep = (OUTER_RADIUS - INNER_RADIUS) / ringCount;
         this.radiusScale = (index) => OUTER_RADIUS - (index + 0.75) * ringStep;
     }
+    
 
     renderRings({ animate = false } = {}) {
         // reset timers/angles when rendering
