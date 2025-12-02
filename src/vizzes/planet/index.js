@@ -60,12 +60,12 @@ export class PlanetViz extends EventEmitter {
 
   processData(data) {
     const artistMap = new Map();
-    
+
     data.forEach(song => {
       const artist = song.artist_name;
       const danceability = parseFloat(song.danceability);
       const energy = parseFloat(song.energy);
-      
+
       if (!artistMap.has(artist)) {
         artistMap.set(artist, {
           name: artist,
@@ -74,13 +74,13 @@ export class PlanetViz extends EventEmitter {
           energies: []
         });
       }
-      
+
       const artistData = artistMap.get(artist);
       artistData.songs.push(song.track_name);
       artistData.danceabilities.push(danceability);
       artistData.energies.push(energy);
     });
-    
+
     return Array.from(artistMap.values()).map(artist => ({
       name: artist.name,
       songCount: artist.songs.length,
@@ -96,14 +96,14 @@ export class PlanetViz extends EventEmitter {
       { value: 0.35, color: '#2af0ea' },  // TikTok blue in lower-middle
       { value: 1.0, color: '#fe2858' }   // TikTok pink at top
     ];
-    
+
     for (let i = 0; i < colors.length - 1; i++) {
       if (danceability >= colors[i].value && danceability <= colors[i + 1].value) {
         const t = (danceability - colors[i].value) / (colors[i + 1].value - colors[i].value);
         return d3.interpolateRgb(colors[i].color, colors[i + 1].color)(t);
       }
     }
-    
+
     return colors[colors.length - 1].color;
   }
 
@@ -183,6 +183,10 @@ export class PlanetViz extends EventEmitter {
     const width = bbox.width || 1200;
     const height = bbox.height || 800;
 
+    // Store dimensions for consistent coordinate system
+    this.viewBoxWidth = width;
+    this.viewBoxHeight = height;
+
     this.svg = d3.select(this.container)
       .append('svg')
       .attr('width', '100%')
@@ -217,42 +221,38 @@ export class PlanetViz extends EventEmitter {
 
     this.tooltip = d3.select('body').append('div')
       .attr('class', 'tooltip-planet')
-      .style('opacity', 0)
-      .style('display', 'none')
-      .style('position', 'absolute')
-      .style('background', 'rgba(0, 0, 0, 0.9)')
-      .style('color', '#fff')
-      .style('padding', '10px')
-      .style('border-radius', '8px')
-      .style('border', '1px solid var(--color-accent-cyan)')
-      .style('pointer-events', 'none')
-      .style('z-index', '1000')
-      .style('font-size', '0.9rem');
+      .style('display', 'none');
 
-    // Create danceability indicator for legend
-    this.legendIndicator = d3.select('.color-gradient-container').append('div')
+    // Create danceability indicator for legend (upward-pointing arrow below gradient)
+    this.legendIndicator = d3.select('.legend-gradient-wrap').append('div')
       .attr('class', 'danceability-indicator')
       .style('position', 'absolute')
+      .style('bottom', '-20px')
       .style('opacity', 0)
       .style('pointer-events', 'none')
       .style('transition', 'all 0.2s ease')
-      .html(`
-        <div class="indicator-arrow">▶</div>
-        <div class="indicator-line"></div>
-      `);
+      .style('font-size', '16px')
+      .style('color', '#00F2EA')
+      .style('text-shadow', '0 0 8px rgba(0, 242, 234, 0.8)')
+      .text('▲');
   }
 
   updateVisualization() {
     const data = this.data[this.currentYear];
     if (!data) return;
 
-    const bbox = this.container.getBoundingClientRect();
-    const width = bbox.width || 1200;
-    const height = bbox.height || 800;
+    // Use stored viewBox dimensions for consistent coordinate system
+    const width = this.viewBoxWidth || 1200;
+    const height = this.viewBoxHeight || 800;
     const centerX = width / 2;
     const centerY = height / 2;
     const minRadius = 80;
     const maxRadius = 350;
+
+    // Update sun position to always stay centered
+    this.svg.select('.sun')
+      .attr('cx', centerX)
+      .attr('cy', centerY);
 
     const sizeScale = d3.scaleSqrt()
       .domain([1, d3.max(data, d => d.songCount)])
@@ -357,40 +357,37 @@ export class PlanetViz extends EventEmitter {
 
     // Merge enter and update selections, then set up event handlers
     const allPlanets = planetsEnter.merge(planets)
-      .on('mouseenter', function(event, d) {
+      .on('mouseenter', function (event, d) {
         const currentRadius = sizeScale(d.songCount);
         d3.select(this).attr('data-original-r', currentRadius);
-        
+
         d3.select(this)
           .transition()
           .duration(200)
           .attr('stroke-width', 4)
           .attr('r', currentRadius * 1.2);
-        
+
         tooltip
           .style('display', 'block')
           .transition()
           .duration(200)
           .style('opacity', 1);
 
-        // Show indicator arrow and line on legend
-        const gradientBar = document.querySelector('.color-gradient-bar');
+        // Show indicator arrow on legend
+        const gradientBar = document.querySelector('.legend-dance-bar');
         if (gradientBar && self.legendIndicator) {
           const barRect = gradientBar.getBoundingClientRect();
-          const barHeight = barRect.height;
-          // Position from top: 1.0 is at top (0%), 0.0 is at bottom (100%)
-          const position = (1 - d.avgDanceability) * barHeight;
-          
-          const arrow = self.legendIndicator.select('.indicator-arrow');
-          const line = self.legendIndicator.select('.indicator-line');
-          
-          arrow.style('top', `${position}px`);
-          line.style('top', `${position}px`);
-          
-          self.legendIndicator.style('opacity', 1);
+          const barWidth = barRect.width;
+          // Position from left: 0.0 is at left (0%), 1.0 is at right (100%)
+          // Gradient goes: White (0.0) -> Blue (0.35) -> Pink (1.0)
+          const position = d.avgDanceability * barWidth;
+
+          self.legendIndicator
+            .style('left', `${position}px`)
+            .style('opacity', 1);
         }
       })
-      .on('mousemove', function(event, d) {
+      .on('mousemove', function (event, d) {
         tooltip
           .html(`
             <strong>${d.name}</strong>
@@ -404,20 +401,20 @@ export class PlanetViz extends EventEmitter {
           .style('left', (event.pageX + 15) + 'px')
           .style('top', (event.pageY - 15) + 'px');
       })
-      .on('mouseleave', function(event, d) {
+      .on('mouseleave', function (event, d) {
         const currentRadius = sizeScale(d.songCount);
-        
+
         d3.select(this)
           .transition()
           .duration(200)
           .attr('stroke-width', 2)
           .attr('r', currentRadius);
-        
+
         tooltip
           .transition()
           .duration(200)
           .style('opacity', 0)
-          .on('end', function() {
+          .on('end', function () {
             d3.select(this).style('display', 'none');
           });
 
@@ -626,7 +623,7 @@ export class PlanetViz extends EventEmitter {
       const energy = planetData.avgEnergy || 0;
       const dance = planetData.avgDanceability || 0;
       return (energy >= minEnergy && energy <= maxEnergy) &&
-             (dance >= minDance && dance <= maxDance);
+        (dance >= minDance && dance <= maxDance);
     };
 
     // Highlight planets in the sweet spot with glowing effect, dim others

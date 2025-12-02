@@ -153,7 +153,7 @@ export class RankingViz extends EventEmitter {
       .append('div')
       .attr('class', 'viz-btn viz-btn--info')
       .html(`
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <svg viewBox="0 0 24 24" fill="white">
           <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="none"/>
           <line x1="12" y1="10" x2="12" y2="16" stroke="white" stroke-width="2" />
           <circle cx="12" cy="7" r="1.5" fill="white"/>
@@ -414,8 +414,6 @@ export class RankingViz extends EventEmitter {
           .attr("text-anchor", "middle")
           .attr("dominant-baseline", "middle")
           .attr("fill", "none")
-          .attr("stroke", "rgba(0, 0, 0, 0.8)")
-          .attr("stroke-width", 4)
           .style("font-size", "16px")
           .style("font-weight", "600")
           .text(formatViews(d.views) + ' views');
@@ -456,7 +454,7 @@ export class RankingViz extends EventEmitter {
           .attr("width", barWidth * fillRatio)
           .attr("height", barHeight)
           .attr("rx", barHeight / 2)
-          .attr("fill", d.rank === 1 ? "#00F2EA" : "rgba(255, 255, 255, 0.7)");
+          .attr("fill", d.rank === 1 ? "#2DCCD3" : "rgba(255, 255, 255, 0.7)");
 
         // Percentage label for non-top categories
         if (d.rank > 1) {

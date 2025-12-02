@@ -44,7 +44,8 @@ export class StopwatchViz extends EventEmitter {
       btnY: 0,
       crownY: 0,
       R: 0,
-      margin: 42,
+      // Reduced margin so the stopwatch appears larger within the container
+      margin: 24,
       arcThickness: 8 // default; will be overwritten in render()
     };
 
@@ -109,13 +110,13 @@ export class StopwatchViz extends EventEmitter {
           return binEnd; // numeric key: 10, 20, 30, 40, 50, 60
         }
       )
-      // Flatten to [binEnd, meanPlayCount, meanDuration]
-      .map(([binEnd, stats]) => [binEnd, stats.meanPlayCount, stats.meanDuration])
-      .filter(d =>
-        Number.isFinite(d[0]) && // binEnd
-        Number.isFinite(d[1]) && // meanPlayCount
-        Number.isFinite(d[2])    // meanDuration
-      );
+        // Flatten to [binEnd, meanPlayCount, meanDuration]
+        .map(([binEnd, stats]) => [binEnd, stats.meanPlayCount, stats.meanDuration])
+        .filter(d =>
+          Number.isFinite(d[0]) && // binEnd
+          Number.isFinite(d[1]) && // meanPlayCount
+          Number.isFinite(d[2])    // meanDuration
+        );
 
       // Sort by binEnd ascending for consistent angle mapping
       binned.sort((a, b) => d3.ascending(a[0], b[0]));
@@ -272,9 +273,21 @@ export class StopwatchViz extends EventEmitter {
       arcThickness
     });
 
-    // Stopwatch chrome
-    this.g.append('circle').attr('r', ringOuter).attr('class', 'stopwatch-ring');
-    this.g.append('circle').attr('r', ringInner).attr('class', 'stopwatch-inner');
+    // Stopwatch chrome (with solid circular background)
+    // Background disc behind the ring so the stopwatch face has a solid fill
+    this.g.append('circle')
+      .attr('r', ringOuter)
+      .attr('class', 'stopwatch-bg')
+      .attr('fill', 'var(--stopwatch-bg, #050510)')
+      .attr('stroke', 'none');
+
+    this.g.append('circle')
+      .attr('r', ringOuter)
+      .attr('class', 'stopwatch-ring');
+
+    this.g.append('circle')
+      .attr('r', ringInner)
+      .attr('class', 'stopwatch-inner');
 
     // Top button & crown (button clickable to replay)
     const btnW = R * 0.25, btnH = R * 0.1, btnR = 8;
@@ -605,7 +618,7 @@ export class StopwatchViz extends EventEmitter {
         const binEnd = d[0];
         const binStart = binEnd - binSize;
         const overlaps = binEnd >= min && binStart <= max;
-        return overlaps ? 'var(--color-accent-cyan)' : 'none';
+        return overlaps ? 'var(--color-glint)' : 'none';
       })
       .attr('stroke-width', d => {
         const binEnd = d[0];
@@ -668,7 +681,7 @@ export class StopwatchViz extends EventEmitter {
       .attr('y1', 0)
       .attr('x2', 0)
       .attr('y2', -this._geom.R * 0.8)
-      .attr('stroke', 'var(--color-accent-cyan)')
+      .attr('stroke', 'var(--color-glint)')
       .attr('stroke-width', 3)
       .attr('opacity', 0.8);
 

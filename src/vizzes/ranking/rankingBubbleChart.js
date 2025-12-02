@@ -26,8 +26,8 @@ export class RankingBubbleChart {
     this.options = {
       maxAuthors: 18, // show top N authors in this category
       margin: { top: 40, right: 10, bottom: 25, left: 10 },
-      minRadius: 14,
-      maxRadius: 60,
+      minRadius: 30,
+      maxRadius: 75,
       dataPath: '/data/youtube_shorts_tiktok_trends_2025.csv',
       ...options
     };
@@ -86,7 +86,7 @@ export class RankingBubbleChart {
       .attr('height', this.height)
       .attr('rx', rx)
       .attr('ry', ry);
-    
+
     // TikTok-style gradient for hover strokes
     const hoverGradient = defs.append('linearGradient')
       .attr('id', 'bubbleHoverStroke')
@@ -97,13 +97,13 @@ export class RankingBubbleChart {
 
     hoverGradient.append('stop')
       .attr('offset', '0%')
-      .attr('stop-color', '#00f7ff'); // aqua
+      .attr('stop-color', '#2DCCD3'); // glint
 
     hoverGradient.append('stop')
       .attr('offset', '100%')
-      .attr('stop-color', '#ff5ce7'); // pink
+      .attr('stop-color', '#F1204A'); // blaze
 
-     // Background + border for the whole drawing area
+    // Background + border for the whole drawing area
     this.svg
       .append('rect')
       .attr('class', 'bubble-bg')
@@ -112,11 +112,11 @@ export class RankingBubbleChart {
       .attr('width', this.width)
       .attr('height', this.height)
       .attr('fill', '#ffffff')
-      .attr('stroke', '#ff0050') // TikTok pink border
+      .attr('stroke', '#F1204A') // TikTok pink border
       .attr('stroke-width', 0)
       .attr('rx', rx)   // horizontal corner radius
       .attr('ry', ry);
-    
+
     // --- GIF layer (plays automatically if animated)
     if (this.gifUrl) {
       this.svg.append('image')
@@ -172,7 +172,7 @@ export class RankingBubbleChart {
       .style('font-size', '60px')
       .style('font-weight', '700')
       .style('fill', 'url(#bubbleHoverStroke)');
-    
+
     // Subtitle
     this.subtitle = this.chartG
       .append('text')
@@ -181,9 +181,8 @@ export class RankingBubbleChart {
       .attr('y', 60)  // just below the title; tweak as needed
       .attr('text-anchor', 'middle')
       .style('font-size', '20px')
-      .style('font-weight', '700')
-      .style('fill', 'url(#bubbleHoverStroke)')
-      .text('Top Creators In This Community');
+      .style('fill', 'black')
+      .text('Top Creators in This Community');
 
 
     // Lab 6-style tooltip
@@ -288,13 +287,13 @@ export class RankingBubbleChart {
 
           // Genre tags
           const genre = d.genre || d.Genre;
-            if (genre) {
-              // allow comma-separated lists too
-              String(genre)
-                .split(/[,\s]+/)
-                .filter(Boolean)
-                .forEach((c) => genreSet.add(c));
-            }
+          if (genre) {
+            // allow comma-separated lists too
+            String(genre)
+              .split(/[,\s]+/)
+              .filter(Boolean)
+              .forEach((c) => genreSet.add(c));
+          }
 
           // Sounds / tracks
           const s =
@@ -342,15 +341,18 @@ export class RankingBubbleChart {
     stats = stats.slice(0, 25);
 
     // Proportional circle sizes (area ~ views)
-    const maxViews =
-      d3.max(stats, (d) => d.totalViews) || 1;
-    const rScale = d3
-      .scaleSqrt()
-      .domain([0, maxViews])
+    const viewsExtent = d3.extent(stats, (d) => d.totalViews);
+    const minViews = viewsExtent[0] ?? 0;
+    const maxViews = viewsExtent[1] ?? 1;
+
+    // Map [minViews, maxViews] → [minRadius, maxRadius]
+    // This stretches the differences between creators in this category.
+    const baseRScale = d3.scaleSqrt()
+      .domain([minViews, maxViews])
       .range([this.options.minRadius, this.options.maxRadius]);
 
     stats.forEach((d) => {
-      d.r = rScale(d.totalViews);
+      d.r = baseRScale(d.totalViews);
     });
 
     this.authorStats = stats;
@@ -388,12 +390,12 @@ export class RankingBubbleChart {
     // Run a fixed number of ticks and clamp within the inner chart box
     const maxTicks = 260;
     for (let i = 0; i < maxTicks; i++) {
-    simulation.tick();
-    simNodes.forEach((d) => {
+      simulation.tick();
+      simNodes.forEach((d) => {
         // keep each circle fully inside [0, innerWidth] x [30, innerHeight]
         d.x = Math.max(d.r, Math.min(this.innerWidth - d.r, d.x));
         d.y = Math.max(d.r + 80, Math.min((this.innerHeight) - d.r, d.y));
-    });
+      });
     }
     simulation.stop();
 
@@ -489,6 +491,14 @@ export class RankingBubbleChart {
       .duration(400)
       .attr('r', (d) => d.r)
       .attr('fill', this.categoryColor);
+    
+    // Ensure top 3 creators (with badges) are drawn above other circles
+    nodesMerged
+      .filter(d => d.isTop3)
+      .each(function () {
+        // Move this <g> to the end of its parent, so it renders on top
+        this.parentNode.appendChild(this);
+      });
 
     nodesMerged.select('.author-label').each(function (d) {
       const textSel = d3.select(this);
@@ -543,8 +553,8 @@ export class RankingBubbleChart {
 
         // Highlight circle with TikTok aqua
         node.select('.author-circle')
-            .attr('stroke', 'url(#bubbleHoverStroke)')
-            .attr('stroke-width', 5);
+          .attr('stroke', 'url(#bubbleHoverStroke)')
+          .attr('stroke-width', 5);
 
         // Show tooltip using class for CSS override
         if (this.tooltip) {
@@ -583,8 +593,8 @@ export class RankingBubbleChart {
 
   moveTooltip(event) {
     if (!this.tooltip) return;
-    const offsetX = -40;
-    const offsetY = 20;
+    const offsetX = -310;
+    const offsetY = -140;
 
     let x = event.pageX + offsetX;
     let y = event.pageY + offsetY;
@@ -599,29 +609,29 @@ export class RankingBubbleChart {
 
     const firstLetter =
       d.author && d.author.length ? d.author[0].toUpperCase() : '?';
-    
+
     const metrics = [
-    { label: 'Views',    key: 'totalViews',    emoji: '👀' },
-    { label: 'Likes',    key: 'totalLikes',    emoji: '❤️' },
-    { label: 'Comments', key: 'totalComments', emoji: '💬' },
-    { label: 'Shares',   key: 'totalShares',   emoji: '🚀' },
-    { label: 'Saves',    key: 'totalSaves',    emoji: '🔒' }
-  ];
+      { label: 'Views', key: 'totalViews', emoji: '👀' },
+      { label: 'Likes', key: 'totalLikes', emoji: '❤️' },
+      { label: 'Comments', key: 'totalComments', emoji: '💬' },
+      { label: 'Shares', key: 'totalShares', emoji: '🚀' },
+      { label: 'Saves', key: 'totalSaves', emoji: '🔒' }
+    ];
 
     // Build hashtag "chips"
     const hashtags =
       d.hashtags && d.hashtags.length
         ? d.hashtags.slice(0, 8)
-            .map((h) => {
-              const label = String(h).replace(/^#/, '');
-              return `
+          .map((h) => {
+            const label = String(h).replace(/^#/, '');
+            return `
                 <span style="
                   font-size: 0.8rem;
                   padding: 0.1rem 0.45rem;
                   border-radius: 999px;
                   background: rgba(15, 23, 42, 0.85);
-                  border: 1px solid rgba(124, 240, 255, 0.5);
-                  color: rgba(226, 232, 240, 0.95);
+                  border: 1px solid rgba(45, 204, 211, 0.5);
+                  color: rgba(255, 255, 255, 0.95);
                   white-space: nowrap;
                   margin-right: 0.25rem;
                   margin-bottom: 0.25rem;
@@ -629,24 +639,24 @@ export class RankingBubbleChart {
                   align-items: center;
                 ">#${label}</span>
               `;
-            })
-            .join('')
+          })
+          .join('')
         : '';
 
     // Build sound "chips"
     const sounds =
       d.sounds && d.sounds.length
         ? d.sounds.slice(0, 4)
-            .map((s) => {
-              const label = String(s);
-              return `
+          .map((s) => {
+            const label = String(s);
+            return `
                 <span style="
                   font-size: 0.8rem;
                   padding: 0.1rem 0.45rem;
                   border-radius: 999px;
                   background: rgba(15, 23, 42, 0.85);
-                  border: 1px solid rgba(255, 92, 231, 0.5);
-                  color: rgba(226, 232, 240, 0.95);
+                  border: 1px solid rgba(241, 32, 74, 0.5);
+                  color: rgba(255, 255, 255, 0.95);
                   white-space: nowrap;
                   margin-right: 0.25rem;
                   margin-bottom: 0.25rem;
@@ -654,8 +664,8 @@ export class RankingBubbleChart {
                   align-items: center;
                 ">${label}</span>
               `;
-            })
-            .join('')
+          })
+          .join('')
         : '';
 
     return `
@@ -667,7 +677,7 @@ export class RankingBubbleChart {
         background: rgba(10, 13, 24, 0.96);
         border: 1px solid rgba(255, 255, 255, 0.06);
         box-shadow: 0 18px 48px rgba(0, 0, 0, 0.6);
-        color: #f9fafb;
+        color: #ffffffff;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       ">
         <!-- Header -->
@@ -687,7 +697,7 @@ export class RankingBubbleChart {
             font-weight: 700;
             font-size: 0.9rem;
             color: #050609;
-            background: linear-gradient(135deg, #00f7ff, #ff5ce7);
+            background: linear-gradient(135deg, #2DCCD3, #F1204A);
           ">
             ${firstLetter}
           </div>
@@ -703,8 +713,8 @@ export class RankingBubbleChart {
               <span style="
                 padding: 0.1rem 0.45rem;
                 border-radius: 999px;
-                background: rgba(0, 247, 255, 0.12);
-                color: #7cf0ff;
+                background: rgba(45, 204, 211, 0.12);
+                color: #2DCCD3;
                 margin-left: 0.2rem;
               ">${this.category}Tok</span>
             </div>
@@ -723,9 +733,9 @@ export class RankingBubbleChart {
           </div>
 
           ${metrics
-          .map(({ label, key, emoji }) => {
-            const value = fmt(d[key] || 0);
-            return `
+        .map(({ label, key, emoji }) => {
+          const value = fmt(d[key] || 0);
+          return `
               <div style="
                 display: flex;
                 justify-content: space-between;
@@ -739,15 +749,14 @@ export class RankingBubbleChart {
                 <strong style="font-weight: 600;">${value}</strong>
               </div>
             `;
-          })
-          .join('')}
+        })
+        .join('')}
 
         </div>
 
         <!-- Hashtags -->
-        ${
-          hashtags
-            ? `
+        ${hashtags
+        ? `
         <div style="margin-top: 0.8rem;">
           <div style="
             font-size: 0.8rem;
@@ -763,13 +772,12 @@ export class RankingBubbleChart {
           </div>
         </div>
         `
-            : ''
-        }
+        : ''
+      }
 
         <!-- Sounds -->
-        ${
-          sounds
-            ? `
+        ${sounds
+        ? `
         <div style="margin-top: 0.5rem;">
           <div style="
             font-size: 0.8rem;
@@ -785,8 +793,8 @@ export class RankingBubbleChart {
           </div>
         </div>
         `
-            : ''
-        }
+        : ''
+      }
       </div>
     `;
   }
