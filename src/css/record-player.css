@@ -70,7 +70,7 @@
  max-width: min(85vw, 1100px); /* Match wrapper sizing */
  margin: 0 auto;
  position: absolute;
-    right: 800px;
+    right: 600px; /* Reduced from 800px to shift record player right */
 }
 
 .record-player-wrapper {

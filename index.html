@@ -74,11 +74,11 @@
   <nav class="top-nav-bar" role="navigation" aria-label="Main navigation">
     <!-- Scroll Progress Bar (v3 spec 4.2) -->
     <div class="scroll-progress-bar" aria-hidden="true"></div>
-    <!-- Left: Site Logo Cluster (25%) -->
-    <a href="#scene-landing" class="nav-logo-cluster" aria-label="Go to start">
+    <!-- Left: Logo Cluster - click to return to hero -->
+    <a href="#scene-hero" class="nav-logo-cluster" aria-label="Go to start" data-nav-home>
       <!-- TikTok-inspired logo mark with alien -->
       <div class="logo-mark">
-        <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true">
+        <svg viewBox="0 0 36 36" aria-hidden="true">
           <!-- Rounded square with TikTok-like gradient border -->
           <defs>
             <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -324,7 +324,7 @@
     <div class="sidebar-bg sidebar-bg-terrain" aria-hidden="true"></div>
 
     <!-- Path SVG - Organic flowing path using cubic Bézier curves -->
-    <svg class="sidebar-path-svg" viewBox="0 0 100 500" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+    <svg class="sidebar-path-svg" viewBox="0 0 100 500" preserveAspectRatio="none" aria-hidden="true">
       <defs>
         <linearGradient id="sidebar-path-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stop-color="#2DCCD3"/>
@@ -1294,6 +1294,21 @@
     </section>
 
     <!-- ════════════════════════════════════════════════════════════════════════
+         BRIDGE 2.5 - FROM TOPICS TO CAPTIONS
+         Text-only transition page summarizing topic findings, introducing captions
+         ════════════════════════════════════════════════════════════════════════ -->
+    <section id="bridge-captions" class="section section--bridge" data-scene-id="bridge-captions" role="region"
+      aria-labelledby="bridge-captions-title">
+      <div class="bridge-container">
+        <div class="bridge-message bridge-message--minimal">
+          <p class="bridge-eyebrow">Insight</p>
+          <h2 id="bridge-captions-title" class="bridge-title">Topics show what goes viral.</h2>
+          <p class="bridge-text">But even with sounds, timing, and topics chosen, we still need a caption. What feelings do viral captions express?</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
          SCENE 6 - CAPTIONS & EMOTION: "What words appear in viral captions?"
          Emotion bubble cloud visualization
          Layout: Text left (25%), Viz center (50%), Legend right (25%)
@@ -1389,8 +1404,8 @@
 
         <!-- Step 4: Transition to Scene 7 -->
         <div class="step-content step-content--emotion" data-slide-step="3" style="display: none;">
-          <h3 class="step-subheading">Recipe almost complete</h3>
-          <p>Now we have checked sounds, timing, topics, and caption emotions. Our viral recipe is almost complete. Let's test your knowledge with a quiz game.</p>
+          <h3 class="step-subheading">Time to test your intuition</h3>
+          <p>We have seen that viral videos pick dominant sounds, stay near a sweet duration, cluster in certain categories, and often use emotionally charged captions. Time to see if you can use these ingredients.</p>
           <p class="step-transition">Scroll to continue to the quiz lab, where you'll apply what you've learned.</p>
         </div>
       </div><!-- End text-overlay -->
@@ -1413,7 +1428,7 @@
         <div class="bridge-message bridge-message--minimal">
           <p class="bridge-eyebrow">Final Test</p>
           <h2 id="bridge-quiz-title" class="bridge-title">Can you spot virality?</h2>
-          <p class="bridge-text">Apply what you have learned.</p>
+          <p class="bridge-text">We have enough data to design a viral recipe. Let's test your memory with a quiz.</p>
         </div>
       </div>
     </section>
@@ -1667,6 +1682,7 @@
       'duration': 'dawn',
       'bridge-topics': 'dawn',        // Mid-point bridge
       'category': 'forest',
+      'bridge-captions': 'forest',    // Topics to captions bridge
       'emotion': 'air',
       'bridge-quiz': 'lab',           // Quiz intro bridge
       'quiz': 'lab',
@@ -1722,7 +1738,7 @@
       // Navigation
       navigation: true,              // Show right-side navigation dots
       navigationPosition: 'right',
-      navigationTooltips: ['Arrival', 'Intro', 'Music Galaxy', 'Viral Sounds', 'Timing', 'Insights', 'Trend Pyramid', 'Captions & Emotion', 'Quiz Intro', 'Quiz', 'Wrap-up'],
+      navigationTooltips: ['Arrival', 'Intro', 'Music Galaxy', 'Viral Sounds', 'Timing', 'Insights', 'Trend Pyramid', 'Captions Intro', 'Captions & Emotion', 'Quiz Intro', 'Quiz', 'Wrap-up'],
       showActiveTooltip: false,
 
       // Accessibility
@@ -1936,13 +1952,15 @@
       }
 
       const currentSlideIndex = activeSlideData.index;
-      const totalSlides = 4;  // All horizontal slide sections have 4 slides
+      // Get actual slide count for this section (not all sections have 4 slides)
+      const sectionElement = activeSection.item;
+      const totalSlides = sectionElement.querySelectorAll('.fp-slide').length || sectionElement.querySelectorAll('.slide').length || 4;
       const scrollingDown = e.deltaY > 0;
       const scrollingUp = e.deltaY < 0;
 
       // Debug: Log current state
       if (debugMode) {
-        console.log('[Wheel]', sectionId, '| slideIndex:', currentSlideIndex, 'scrollingDown:', scrollingDown);
+        console.log('[Wheel]', sectionId, '| slideIndex:', currentSlideIndex, '/', totalSlides, 'scrollingDown:', scrollingDown);
       }
 
       // BOUNDARY HANDLING: At edge slides, navigate to adjacent sections

@@ -371,13 +371,14 @@
 
 /* ─────────────────────────────────────────────────────────────────────────
    Alien narrator for emotion scene
-   Per spec: "top right of the visualization, floating above the bubbles"
+   Position: bottom-left of the scene
    ───────────────────────────────────────────────────────────────────────── */
 .alien-narrator--emotion {
   position: absolute;
-  top: 12%;
-  right: 200px;
-  left: auto;
+  bottom: 8%;
+  left: 40px;
+  top: auto;
+  right: auto;
   z-index: 100;
   display: flex;
   flex-direction: column;

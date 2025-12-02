@@ -553,6 +553,31 @@ class TikTokTidesApp {
       }
     });
 
+    // Logo click - return to hero section
+    const logoCluster = document.querySelector('.nav-logo-cluster[data-nav-home]');
+    if (logoCluster) {
+      logoCluster.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = 'scene-hero';
+
+        // Update navigation states
+        this.updateNavigation(targetId);
+        this.updateAlienMarkerPosition(targetId);
+        this.updateJourneyMapHighlight(targetId);
+
+        // Use fullPage API if available
+        if (window.fullpage_api) {
+          window.fullpage_api.moveTo(1); // Section 1 is hero
+        } else {
+          const target = document.getElementById(targetId);
+          target?.scrollIntoView({
+            behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    }
+
     // Map node clicks (desktop cartoon map)
     document.querySelectorAll('.map-node').forEach(node => {
       node.addEventListener('click', () => {

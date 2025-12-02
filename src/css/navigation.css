@@ -6,19 +6,19 @@
 
 /* ─────────────────────────────────────────────────────────────────────────
    TopNavBar - Fixed top navigation bar
-   Height: 64px desktop, 56px tablet, 48px mobile
+   Height: 48px desktop, 44px tablet, 40px mobile
    ───────────────────────────────────────────────────────────────────────── */
 .top-nav-bar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 64px;
+  height: 48px;
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--space-5);
+  padding: 0 var(--space-4);
   background: rgba(10, 10, 15, 0.75);
   backdrop-filter: blur(var(--glass-standard-blur));
   -webkit-backdrop-filter: blur(var(--glass-standard-blur));
@@ -33,22 +33,26 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Logo Cluster - Left section (~25% width)
+   Logo Cluster - Left section
    ───────────────────────────────────────────────────────────────────────── */
 .nav-logo-cluster {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
   text-decoration: none;
   flex-shrink: 0;
-  min-width: 160px;
 }
 
 .logo-mark {
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
   flex-shrink: 0;
   transition: transform 200ms ease;
+}
+
+.logo-mark svg {
+  width: 100%;
+  height: 100%;
 }
 
 .nav-logo-cluster:hover .logo-mark {
@@ -56,7 +60,7 @@
 }
 
 .logo-text {
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--color-text-primary);
   letter-spacing: -0.02em;
@@ -551,8 +555,12 @@
    ───────────────────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
   .top-nav-bar {
-    height: 56px;
-    padding: 0 var(--space-4);
+    height: 44px;
+  }
+
+  .logo-mark {
+    width: 26px;
+    height: 26px;
   }
 
   .journey-mini-strip {
@@ -577,8 +585,7 @@
 
 @media (max-width: 768px) {
   .top-nav-bar {
-    height: 48px;
-    padding: 0 var(--space-3);
+    height: 40px;
   }
 
   .logo-text {
@@ -586,8 +593,8 @@
   }
 
   .logo-mark {
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
   }
 
   .journey-mini-strip {
@@ -599,7 +606,7 @@
   }
 
   .map-toggle-btn {
-    padding: 8px;
+    padding: 6px;
   }
 
   /* Show list view on mobile, hide canvas */

@@ -1375,20 +1375,25 @@ circle[data-type="bubble"] {
   flex-shrink: 0;
 }
 
-/* Content panel - hidden by default, TikTok-inspired styling */
+/* Content panel - hidden by default, positioned absolutely to not move toggle */
 .chart-instructions__content {
   display: none;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
-  margin-top: var(--space-2);
   max-width: 300px;
   animation: infoSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
+  /* Position absolutely so opening doesn't move the toggle */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: var(--space-2);
+  z-index: 100;
   box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.5),
     0 0 30px rgba(37, 244, 238, 0.08),
     0 0 60px rgba(254, 44, 85, 0.04);
 }
@@ -2023,7 +2028,10 @@ circle[data-type="bubble"] {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start; /* Prevent overlap with absolute header */
   padding: var(--space-4);
+  padding-top: 240px; /* Reduced to move record player up */
+  gap: var(--space-4);
 }
 
 /* Scene label badge positioning (matches music-galaxy) */
@@ -2034,29 +2042,13 @@ circle[data-type="bubble"] {
   z-index: 15;
 }
 
-/* Centered scene title (above viz, below nav) */
-.viral-sounds-viz-overlay .scene-title {
-  position: absolute;
-  top: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 15;
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 800;
-  text-align: center;
-  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: none;
-  margin: 0;
-  padding: 0 var(--space-4);
-}
+/* NOTE: .scene-title styling is now inside .scene-header block (lines 6300+) */
+/* Removed duplicate absolute positioning that was conflicting with header */
 
 /* TEXT OVERLAY - Shows one step at a time, right side (matches music-galaxy style) */
 .viral-sounds-text-overlay {
   position: absolute !important;
-  top: 50%;
+  top: 60%; /* Moved up to align with record player center */
   right: 150px; /* Moved left to reduce clustering */
   width: 38%;
   transform: translateY(-50%);
@@ -2067,7 +2059,7 @@ circle[data-type="bubble"] {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: calc(64px + var(--space-6)) var(--space-4) var(--space-6);
+  padding: var(--space-4);
   z-index: 70 !important;
   pointer-events: auto;
 }
@@ -2305,7 +2297,10 @@ circle[data-type="bubble"] {
 
 /* Chart Instructions for Record Player Scene (per narrative-alien-redesign.md) */
 .chart-instructions--record-player {
-  margin-bottom: var(--space-3);
+  position: absolute;
+  top: 100px; /* Top-right corner */
+  right: 32px;
+  z-index: 15;
   padding: var(--space-2) var(--space-3);
   max-width: 100%;
 }
@@ -2577,6 +2572,16 @@ circle[data-type="bubble"] {
   .year-buttons {
     justify-content: center;
   }
+
+  /* Adjust viral-sounds overlay for mobile */
+  .viral-sounds-viz-overlay {
+    padding-top: 250px;
+  }
+
+  .chart-instructions--record-player {
+    top: 90px;
+    right: 16px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -2622,8 +2627,10 @@ circle[data-type="bubble"] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* Changed from center to prevent overlap */
   padding: var(--space-4);
+  padding-top: 370px; /* Space for header (90+150) + icons (~100) at top */
+  gap: var(--space-4);
 }
 
 /* Scene label badge positioning (matches music-galaxy) */
@@ -2634,24 +2641,8 @@ circle[data-type="bubble"] {
   z-index: 15;
 }
 
-/* Centered scene title (above viz, below nav) */
-.timing-viz-overlay .scene-title {
-  position: absolute;
-  top: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 15;
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 800;
-  text-align: center;
-  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: none;
-  margin: 0;
-  padding: 0 var(--space-4);
-}
+/* NOTE: .scene-title styling is now inside .scene-header block (lines 6330+) */
+/* Removed duplicate absolute positioning that was conflicting with header */
 
 /* TEXT OVERLAY - Shows one step at a time, right side (matches music-galaxy style) */
 .timing-text-overlay {
@@ -2773,12 +2764,16 @@ circle[data-type="bubble"] {
 
 /* Icon row - timing concepts (compact layout - consolidated from Layout Fixes) */
 .timing-icons-row {
+  position: absolute;
+  top: 270px; /* Below scene-header (header ~150px tall starting at 90px) */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   gap: var(--space-3); /* Compacted for one-page fit */
   flex-wrap: wrap;
-  margin-bottom: var(--space-1);
 }
 
 .timing-icon-item {
@@ -2958,7 +2953,10 @@ circle[data-type="bubble"] {
 
 /* Chart Instructions for Stopwatch Scene (per narrative-alien-redesign.md) */
 .chart-instructions--stopwatch {
-  margin-bottom: var(--space-3);
+  position: absolute;
+  top: 100px; /* Top-right corner, near scene-label-badge */
+  right: 32px;
+  z-index: 15;
 }
 
 /* Timing Narrative Steps - LEGACY, kept for non-overlay contexts */
@@ -2971,17 +2969,17 @@ circle[data-type="bubble"] {
    for any legacy non-overlay contexts only. */
 
 /* Alien narrator for timing scene */
-/* Per spec: "bottom center of the scene, slightly overlapping the empty area under the clock" */
+ /* Positioned bottom-left to avoid covering the stopwatch viz */
 .alien-narrator--timing {
   position: absolute;
-  left: 50%;
-  bottom: 8%;
-  transform: translateX(-50%);
+  left: 32px;
+  bottom: 32px;
+  transform: none;
   z-index: 100;
   display: flex;
-  flex-direction: column; /* Bubble above alien */
-  align-items: center;
-  gap: var(--space-2);
+  flex-direction: row; /* Bubble to the right of alien */
+  align-items: flex-end;
+  gap: var(--space-3);
   opacity: 0;
   transition: opacity 600ms ease, transform 600ms ease;
 }
@@ -2990,7 +2988,7 @@ circle[data-type="bubble"] {
 body[data-scene="dawn"] .alien-narrator--timing {
   opacity: 1 !important;
   visibility: visible !important;
-  transform: translateX(-50%) !important; /* Maintain center positioning */
+  transform: none !important; /* Bottom-left positioning */
   animation: alienFloat 3s ease-in-out 1.5s infinite;
 }
 
@@ -3058,7 +3056,8 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   }
 
   .alien-narrator--timing {
-    bottom: 5%;
+    left: 24px;
+    bottom: 24px;
   }
 
   .timing-callout {
@@ -3100,11 +3099,9 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   }
 
   .alien-narrator--timing {
-    position: relative;
-    right: auto;
-    top: auto;
-    margin-top: var(--space-4);
-    justify-content: center;
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
   }
 
   .alien-narrator--timing .alien-speech-bubble {
@@ -3118,6 +3115,20 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 
   .alien-narrator--timing .alien-speech-bubble::before {
     display: none;
+  }
+
+  /* Adjust timing overlay for mobile */
+  .timing-viz-overlay {
+    padding-top: 320px;
+  }
+
+  .timing-icons-row {
+    top: 240px;
+  }
+
+  .chart-instructions--stopwatch {
+    top: 90px;
+    right: 16px;
   }
 }
 
