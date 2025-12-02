@@ -8368,11 +8368,6 @@ body:not([data-scene="cosmos"]) .alien-narrator--hero {
   color: rgba(255, 255, 255, 0.85);
 }
 
-/* Track chips removed - auto-sequence handles track display */
-
-/* Record player base styling - REMOVED - use record-player.css styles instead */
-/* .record-player-wrapper styles moved to record-player.css */
-
 
 /* Alien narrator variants for scenes */
 .alien-narrator--music-galaxy {
