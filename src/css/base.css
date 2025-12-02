@@ -69,13 +69,13 @@ body {
   background: #0a0a0f; /* Dark base - merged from line 201 */
   overflow-x: hidden;
   position: relative;
-  /* UFO custom cursor - using smaller size for better usability */
-  cursor: url('/assets/UFO.png'), auto;
+  /* Custom alien cursor - using 32x32 resized version */
+  cursor: url('/assets/Alien_Cursor_32.png') 16 16, auto;
 }
 
-/* UFO cursor for clickable elements */
+/* Alien pointer cursor for clickable elements */
 a, button, [role="button"], .clickable, input[type="button"], input[type="submit"] {
-  cursor: url('/assets/UFO.png'), pointer;
+  cursor: url('/assets/Alien_Pointer_32.png') 16 16, pointer;
 }
 
 /* Fallback: ensure cursor works on all elements */
@@ -5318,3 +5318,32 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
     font-size: 1.1rem !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   GLOBAL CURSOR OVERRIDE - Must be at end to override all other cursor styles
+   ═══════════════════════════════════════════════════════════════ */
+* {
+  cursor: url('/assets/Alien_Cursor_32.png') 16 16, auto !important;
+}
+
+a, a *, button, button *, [role="button"], [role="button"] *, 
+.clickable, .clickable *, input[type="button"], input[type="submit"], 
+input[type="reset"], .btn, .btn *, 
+svg[cursor="pointer"], [onclick], [data-clickable],
+.record-ring, .planet-node, .nav-dot, .progress-segment,
+.emotion-bar, .stopwatch-control, .ranking-item, .conveyor-item {
+  cursor: url('/assets/Alien_Pointer_32.png') 16 16, pointer !important;
+}
+
+/* Show pointer on hover for interactive elements */
+a:hover, a:hover *, button:hover, button:hover *, 
+[role="button"]:hover, [role="button"]:hover *,
+.clickable:hover, .clickable:hover *, .btn:hover, .btn:hover *,
+svg:hover, circle:hover, rect:hover, path:hover, g:hover,
+.record-ring:hover, .planet-node:hover, .nav-dot:hover,
+.progress-segment:hover, .emotion-bar:hover, 
+.stopwatch-control:hover, .ranking-item:hover, .conveyor-item:hover,
+[data-song]:hover, [data-planet]:hover, [data-clickable]:hover {
+  cursor: url('/assets/Alien_Pointer_32.png') 16 16, pointer !important;
+}
+
