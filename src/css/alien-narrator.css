@@ -1,0 +1,488 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   ALIEN NARRATOR SYSTEM
+   TikTok Tides Project - Consolidated Alien Character Styles
+
+   The alien narrator appears in each scene as a guide. This file contains:
+   1. Base styles (avatar, speech bubble, text)
+   2. Keyframe animations (float, glow, enter)
+   3. Scene-specific positioning variants
+   4. Speech bubble visibility states
+
+   Scenes using alien narrator:
+   - Hero (cosmos) - bottom-left of phone
+   - Music Galaxy (galaxy) - standing on mini-planet
+   - Viral Sounds (sounds) - on floating platform, bottom-right
+   - Timing (dawn) - right side
+   - Pyramid (forest) - bottom-left
+   - Emotion (air) - specific positioning
+   - Quiz (lab) - bottom-left with goggles effect
+   - Wrap-up - bottom-right
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   KEYFRAME ANIMATIONS (defined once, used by all variants)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Gentle floating motion for the alien */
+@keyframes alienFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Float animation with scale (for hero positioning) */
+@keyframes alienFloatWithScale {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-12px) scale(1.03);
+  }
+}
+
+/* Rotating hue for gradient border */
+@keyframes borderRotate {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* Pulsing glow effect */
+@keyframes glowPulse {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  100% { transform: scale(1.1); opacity: 1; }
+}
+
+/* Speech bubble appear animation */
+@keyframes bubbleAppear {
+  from {
+    opacity: 0;
+    transform: translateX(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Enter from below (for scene transitions) */
+@keyframes alienEnterFromBelow {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-8px);
+  }
+  85% {
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pointing up animation */
+@keyframes alienPointUp {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-5px) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-8deg);
+  }
+  75% {
+    transform: translateY(-5px) rotate(-5deg);
+  }
+}
+
+/* Tap bounce animation */
+@keyframes alienTapBounce {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-15px); }
+  50% { transform: translateY(5px); }
+  70% { transform: translateY(-8px); }
+}
+
+/* Lab scene float */
+@keyframes labAlienFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Floating platform bob */
+@keyframes platformFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Platform neon glow animation */
+@keyframes platformNeonGlow {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}
+
+/* Mini planet glow */
+@keyframes miniPlanetGlow {
+  0% {
+    box-shadow: 0 6px 25px rgba(45, 204, 211, 0.4),
+                0 0 40px rgba(45, 204, 211, 0.2),
+                inset 0 -12px 25px rgba(0, 0, 0, 0.4);
+  }
+  100% {
+    box-shadow: 0 8px 35px rgba(45, 204, 211, 0.6),
+                0 0 60px rgba(45, 204, 211, 0.35),
+                inset 0 -12px 25px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Hoverboard float */
+@keyframes hoverboardFloat {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-4px); }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   BASE ALIEN NARRATOR STYLES
+   Common styles for all scene variants
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Base narrator container */
+.alien-narrator--scene {
+  position: absolute;
+  bottom: 32px;
+  left: 32px;
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  z-index: 100;
+  pointer-events: auto;
+  opacity: 1;
+}
+
+/* Avatar circle with TikTok gradient border */
+.alien-narrator--scene .alien-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,
+    rgba(0, 242, 234, 0.25) 0%,
+    rgba(255, 0, 80, 0.15) 100%
+  );
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  animation: alienFloat 3s ease-in-out infinite;
+  cursor: pointer;
+}
+
+/* TikTok-style gradient border on avatar */
+.alien-narrator--scene .alien-avatar::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00F2EA, #FF0050);
+  z-index: -1;
+  animation: borderRotate 4s linear infinite;
+}
+
+/* Glow effect behind avatar */
+.alien-narrator--scene .alien-avatar::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(0, 242, 234, 0.3) 0%,
+    rgba(255, 0, 80, 0.15) 50%,
+    transparent 70%
+  );
+  z-index: -2;
+  animation: glowPulse 2s ease-in-out infinite alternate;
+}
+
+/* Avatar image */
+.alien-narrator--scene .alien-avatar img,
+.alien-avatar img {
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: rgba(10, 10, 20, 0.8);
+}
+
+/* Speech bubble base */
+.alien-narrator--scene .alien-speech-bubble,
+.alien-speech-bubble {
+  max-width: 380px;
+  min-width: 280px;
+  padding: var(--space-4) var(--space-5);
+  background: linear-gradient(145deg, rgba(15, 15, 25, 0.98), rgba(8, 8, 16, 0.95));
+  border: 2px solid rgba(0, 242, 234, 0.45);
+  border-radius: 20px 20px 20px 6px;
+  box-shadow:
+    0 0 25px rgba(0, 242, 234, 0.2),
+    0 0 50px rgba(255, 0, 80, 0.1),
+    0 12px 40px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+/* Speech bubble tail - pointing left (default) */
+.alien-narrator--scene .alien-speech-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: 12px;
+  left: -8px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 8px 10px 8px 0;
+  border-color: transparent rgba(0, 242, 234, 0.35) transparent transparent;
+}
+
+/* Speech text */
+.alien-narrator--scene .alien-speech-text,
+.alien-speech-text {
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  line-height: 1.7;
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   SPEECH BUBBLE VISIBILITY STATES
+   Controlled by data-speech-state attribute via JS
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.alien-speech-bubble {
+  opacity: 0;
+  transform: scale(0.9) translateY(10px);
+  transition: opacity 0.4s ease 0.8s, transform 0.4s ease 0.8s;
+}
+
+.alien-speech-bubble[data-speech-state="hidden"] {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.9);
+}
+
+.alien-speech-bubble[data-speech-state="visible"] {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   SCENE-SPECIFIC VISIBILITY
+   Auto-show speech bubbles when scene is active via data-scene attribute
+   ───────────────────────────────────────────────────────────────────────────── */
+
+[data-scene="cosmos"] .alien-narrator--hero .alien-speech-bubble,
+[data-scene="hero"] .alien-narrator--hero .alien-speech-bubble {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+[data-scene="galaxy"] .alien-narrator--scene2 .alien-speech-bubble {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+[data-scene="sounds"] .alien-narrator--scene3 .alien-speech-bubble {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+[data-scene="air"] .alien-narrator--emotion .alien-speech-bubble {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MINI-PLANET (Scene 2 - Music Galaxy)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.alien-mini-planet {
+  width: 120px;
+  height: 60px;
+  background: radial-gradient(ellipse 100% 80% at 50% 20%,
+    rgba(45, 204, 211, 0.7) 0%,
+    rgba(45, 204, 211, 0.4) 30%,
+    rgba(3, 54, 36, 0.8) 60%,
+    rgba(3, 54, 36, 0.95) 100%
+  );
+  border-radius: 50%;
+  position: relative;
+  z-index: 1;
+  box-shadow:
+    0 6px 25px rgba(45, 204, 211, 0.5),
+    0 0 50px rgba(45, 204, 211, 0.25),
+    inset 0 -12px 25px rgba(0, 0, 0, 0.4),
+    inset 0 4px 10px rgba(255, 255, 255, 0.1);
+  animation: miniPlanetGlow 3s ease-in-out infinite alternate;
+}
+
+/* Highlight on mini-planet */
+.alien-mini-planet::after {
+  content: '';
+  position: absolute;
+  top: 12%;
+  left: 18%;
+  width: 35%;
+  height: 25%;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  filter: blur(5px);
+}
+
+/* Crater details on mini-planet */
+.alien-mini-planet::before {
+  content: '';
+  position: absolute;
+  bottom: 20%;
+  right: 25%;
+  width: 15px;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 50%;
+  box-shadow:
+    -25px -5px 0 5px rgba(0, 0, 0, 0.1),
+    15px 8px 0 3px rgba(0, 0, 0, 0.1);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   FLOATING PLATFORM (Scene 3 - Viral Sounds)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.alien-floating-platform {
+  width: 110px;
+  height: 20px;
+  background: linear-gradient(180deg,
+    rgba(255, 0, 80, 0.8) 0%,
+    rgba(0, 242, 234, 0.6) 50%,
+    rgba(255, 0, 80, 0.4) 100%
+  );
+  border-radius: 10px;
+  position: relative;
+  z-index: 1;
+  box-shadow:
+    0 6px 20px rgba(255, 0, 80, 0.5),
+    0 0 40px rgba(0, 242, 234, 0.35),
+    inset 0 3px 6px rgba(255, 255, 255, 0.4),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.3);
+  animation: platformFloat 2s ease-in-out infinite;
+}
+
+/* Neon edge glow on platform */
+.alien-floating-platform::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #00F2EA, #FF0050, #00F2EA);
+  background-size: 200% 100%;
+  z-index: -1;
+  animation: platformNeonGlow 2s linear infinite;
+  opacity: 0.6;
+}
+
+/* Glow below platform */
+.alien-floating-platform::before {
+  content: '';
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 25px;
+  background: radial-gradient(ellipse at center,
+    rgba(0, 242, 234, 0.35) 0%,
+    rgba(255, 0, 80, 0.15) 50%,
+    transparent 70%
+  );
+  filter: blur(6px);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   HOVERBOARD (Scene 3 alternate - positioned below alien)
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.alien-hoverboard {
+  width: 80px;
+  height: 16px;
+  background: linear-gradient(90deg,
+    var(--color-glint) 0%,
+    var(--color-shimmer) 50%,
+    var(--color-glint) 100%
+  );
+  border-radius: 8px;
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow:
+    0 4px 12px rgba(45, 204, 211, 0.4),
+    0 0 20px rgba(45, 204, 211, 0.2);
+  animation: hoverboardFloat 2s ease-in-out infinite;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   RESPONSIVE ADJUSTMENTS
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .alien-narrator--scene {
+    bottom: 16px;
+    left: 16px;
+  }
+
+  .alien-narrator--scene .alien-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .alien-narrator--scene .alien-avatar img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .alien-narrator--scene .alien-speech-bubble {
+    max-width: 200px;
+    min-width: auto;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .alien-narrator--scene .alien-speech-text {
+    font-size: 0.8125rem;
+  }
+}

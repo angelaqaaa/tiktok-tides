@@ -1,3 +1,16 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   RANKING.CSS - Community Trend Pyramid Visualization
+   Scene 5: Pyramid showing trend lifecycle stages
+
+   Sections:
+   - Visualization Control Buttons (.viz-btn)
+   - Pyramid SVG Styles
+   - Tooltip Styling
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Visualization Control Buttons
+   ───────────────────────────────────────────────────────────────────────────── */
 .viz-btn {
     position: absolute;
     width: 36px;
