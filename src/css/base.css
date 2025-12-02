@@ -85,8 +85,6 @@ a, button, [role="button"], .clickable, input[type="button"], input[type="submit
   cursor: inherit;
 }
 
-/* Zoom scaling system removed - designing for laptop-first approach instead */
-
 /* ═══════════════════════════════════════════════════════════════
    TikTok Splash/Loading Screen
    Shows TikTok logo and loading bar until app is ready

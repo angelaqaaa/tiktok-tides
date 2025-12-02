@@ -916,48 +916,8 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   RESPONSIVE LAYOUT FIXES
-   Prevents viz/text overlap on screens smaller than 4K design viewport
+   RESPONSIVE LAYOUT
    ═══════════════════════════════════════════════════════════════════════════════ */
-
-/* Medium screens (1920px and below) */
-@media (max-width: 1920px) {
-  .music-galaxy-viz-overlay {
-    width: 55%;
-  }
-
-  .music-galaxy-text-overlay {
-    width: 42%;
-    right: 20px;
-  }
-}
-
-/* Smaller screens (1536px and below - common laptop resolution) */
-@media (max-width: 1600px) {
-  .music-galaxy-viz-overlay {
-    width: 50%;
-    padding-top: calc(56px + var(--space-3));
-  }
-
-  .music-galaxy-text-overlay {
-    width: 46%;
-    right: 15px;
-    min-width: 280px;
-    padding: calc(56px + var(--space-4)) var(--space-3) var(--space-4);
-  }
-
-  .music-galaxy-text-overlay .step-content {
-    width: 95%;
-  }
-
-  .music-galaxy-text-overlay .step-content h3 {
-    font-size: 1.1rem;
-  }
-
-  .music-galaxy-text-overlay .step-content p {
-    font-size: 0.9rem;
-  }
-}
 
 /* Tablet/small laptop (1024px and below) - stack vertically */
 @media (max-width: 1024px) {
@@ -997,7 +957,7 @@
   }
 
   .music-galaxy-text-overlay .step-content {
-    padding: var(--space-4);
+    padding: var(--space-5); /* Keep same as base, don't shrink */
   }
 }
 
