@@ -325,19 +325,19 @@ h3 {
 }
 
 .gradient-text {
-  background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-magenta));
+  background: linear-gradient(90deg, var(--color-glint), var(--color-blaze));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .highlight-cyan {
-  color: var(--color-accent-cyan);
+  color: var(--color-glint);
   font-weight: var(--font-weight-semibold);
 }
 
 .highlight-magenta {
-  color: var(--color-accent-magenta);
+  color: var(--color-blaze);
   font-weight: var(--font-weight-semibold);
 }
 
@@ -358,7 +358,7 @@ h3 {
   position: absolute;
   top: -40px;
   left: 0;
-  background: var(--color-accent-cyan);
+  background: var(--color-glint);
   color: var(--color-background-primary);
   padding: var(--space-2) var(--space-4);
   text-decoration: none;
@@ -375,7 +375,7 @@ h3 {
   top: 0;
   left: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-magenta));
+  background: linear-gradient(90deg, var(--color-glint), var(--color-blaze));
   width: 0%;
   z-index: 9999;
   transition: width 100ms ease-out;
@@ -670,7 +670,7 @@ body[data-scene="air"] .scene--bubbles {
   height: 2px;
   background: linear-gradient(90deg,
       transparent,
-      var(--color-accent-cyan),
+      var(--color-glint),
       transparent);
   transform: translateX(-100%);
   animation: scan 3s infinite;
@@ -726,9 +726,9 @@ body[data-scene="air"] .scene--bubbles {
 
 /* Emotion sort toggle pressed state */
 .emotion-sort-toggle[aria-pressed="true"] {
-  background: linear-gradient(135deg, var(--color-accent-magenta), var(--color-accent-cyan));
+  background: linear-gradient(135deg, var(--color-blaze), var(--color-glint));
   color: #000;
-  border-color: var(--color-accent-magenta);
+  border-color: var(--color-blaze);
   box-shadow: 0 0 20px rgba(241, 32, 74, 0.6), 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
   font-weight: 700;
   transform: scale(1.05);
@@ -759,13 +759,13 @@ body[data-scene="air"] .scene--bubbles {
 }
 
 .site-footer a {
-  color: var(--color-accent-cyan);
+  color: var(--color-glint);
   text-decoration: none;
   transition: color var(--duration-micro) var(--easing-standard);
 }
 
 .site-footer a:hover {
-  color: var(--color-accent-magenta);
+  color: var(--color-blaze);
 }
 
 .stat-row {
@@ -864,7 +864,7 @@ circle[data-type="bubble"] {
   color: #fff;
   padding: 12px 16px;
   border-radius: 8px;
-  border: 1px solid var(--color-accent-cyan);
+  border: 1px solid var(--color-glint);
   font-size: 0.8rem;
   line-height: 1.5;
   width: 320px;
@@ -895,7 +895,7 @@ circle[data-type="bubble"] {
 }
 
 .legend-tooltip strong {
-  color: var(--color-accent-cyan);
+  color: var(--color-glint);
   display: inline;
   margin-bottom: 0;
 }
@@ -923,7 +923,7 @@ circle[data-type="bubble"] {
 
 .color-legend-title strong {
   display: block;
-  color: var(--color-accent-magenta);
+  color: var(--color-blaze);
   margin-bottom: 8px;
   font-size: 1.3rem;
 }
@@ -1513,7 +1513,7 @@ circle[data-type="bubble"] {
   display: block;
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-accent-cyan);
+  color: var(--color-glint);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: var(--space-2);
@@ -1550,7 +1550,7 @@ circle[data-type="bubble"] {
 .section-transition {
   padding: var(--space-4);
   background: var(--glass-subtle-background);
-  border-left: 3px solid var(--color-accent-magenta);
+  border-left: 3px solid var(--color-blaze);
   border-radius: 4px;
   margin-bottom: var(--space-5);
 }
@@ -1597,7 +1597,7 @@ circle[data-type="bubble"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-magenta));
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
   color: var(--color-background-primary);
   border-radius: 50%;
   font-weight: var(--font-weight-bold);
@@ -1632,13 +1632,13 @@ circle[data-type="bubble"] {
 
 .step-button:hover {
   background: var(--glass-standard-background);
-  border-color: var(--color-accent-cyan);
-  color: var(--color-accent-cyan);
+  border-color: var(--color-glint);
+  color: var(--color-glint);
   transform: translateX(4px);
 }
 
 .step-button:focus {
-  outline: 2px solid var(--color-accent-cyan);
+  outline: 2px solid var(--color-glint);
   outline-offset: 2px;
 }
 
@@ -1667,11 +1667,11 @@ circle[data-type="bubble"] {
 }
 
 .legend-marker--size {
-  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-magenta));
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
 }
 
 .legend-marker--distance {
-  background: var(--color-accent-yellow);
+  background: var(--color-glow);
 }
 
 .legend-marker--color {
@@ -1683,7 +1683,7 @@ circle[data-type="bubble"] {
 .legend-marker--radius,
 .legend-marker--rank,
 .legend-marker--tile {
-  background: var(--color-accent-cyan);
+  background: var(--color-glint);
 }
 
 .legend-title {
@@ -1708,7 +1708,7 @@ circle[data-type="bubble"] {
 
 .summary-block h3 {
   font-size: var(--font-size-h3);
-  color: var(--color-accent-cyan);
+  color: var(--color-glint);
   margin-bottom: var(--space-4);
 }
 
@@ -1737,18 +1737,18 @@ circle[data-type="bubble"] {
   content: "→";
   position: absolute;
   left: 0;
-  color: var(--color-accent-cyan);
+  color: var(--color-glint);
   font-weight: var(--font-weight-bold);
 }
 
 .summary-list a {
-  color: var(--color-accent-cyan);
+  color: var(--color-glint);
   text-decoration: none;
   transition: color var(--duration-micro) var(--easing-standard);
 }
 
 .summary-list a:hover {
-  color: var(--color-accent-magenta);
+  color: var(--color-blaze);
   text-decoration: underline;
 }
 
@@ -1756,7 +1756,7 @@ circle[data-type="bubble"] {
   font-size: var(--font-size-h1);
   text-align: center;
   margin-bottom: var(--space-8);
-  background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-magenta));
+  background: linear-gradient(90deg, var(--color-glint), var(--color-blaze));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -2204,7 +2204,7 @@ circle[data-type="bubble"] {
   height: 16px;
   background: linear-gradient(90deg,
       var(--color-glint) 0%,
-      var(--color-shimmer) 50%,
+      var(--color-blaze) 50%,
       var(--color-glint) 100%);
   border-radius: 8px;
   position: absolute;
@@ -2511,7 +2511,7 @@ circle[data-type="bubble"] {
 .timing-icon-circle--long {
   background: linear-gradient(135deg, rgba(186, 246, 240, 0.2), rgba(186, 246, 240, 0.05));
   border: 2px solid rgba(186, 246, 240, 0.4);
-  color: var(--color-shimmer);
+  color: var(--color-blaze);
 }
 
 .timing-icon-label {
@@ -3266,7 +3266,7 @@ circle[data-type="bubble"] {
 
 .legend-icon--color {
   background: linear-gradient(135deg,
-      var(--color-shimmer) 0%,
+      var(--color-blaze) 0%,
       var(--color-glint) 50%,
       var(--color-blaze) 100%);
 }
@@ -5220,7 +5220,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .pyramid-text-column {
   padding: var(--space-2) var(--space-3) !important;
   max-height: calc(100vh - 90px) !important;
-  overflow: hidden !important; /* No scrolling – content must fit */
+  overflow: hidden !important;
+  /* No scrolling – content must fit */
   flex: 1 1 20% !important;
   min-width: 300px !important;
   font-size: 1rem !important;
@@ -5239,33 +5240,39 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .pyramid-viz-column {
   max-height: calc(100vh - 90px) !important;
-  flex: 0 0 90% !important;   /* was at 60% */
+  flex: 0 0 90% !important;
+  /* was at 60% */
   min-width: 450px !important;
 }
 
 .pyramid-viz-wrapper {
-  max-width: 3000px !important;   /* was at 900 */
+  max-width: 3000px !important;
+  /* was at 900 */
   width: 100% !important;
 }
 
 .pyramid-viz-wrapper .viz-container {
   min-height: 350px !important;
   height: calc(100vh - 120px) !important;
-  max-height: 700px !important;   /* was at 600 */
+  max-height: 700px !important;
+  /* was at 600 */
 }
 
 /* ── Pyramid sizing tweaks ───────────────────────────────── */
 .scene-pyramid .pyramid-container {
   /* let the whole scene row be wider */
-  max-width: 2000px;        /* try 1300–1400; tweak as needed */
+  max-width: 2000px;
+  /* try 1300–1400; tweak as needed */
   margin-inline: auto;
-  column-gap: 1.5rem;         /* slightly smaller gap between text + viz */
+  column-gap: 1.5rem;
+  /* slightly smaller gap between text + viz */
 }
 
 /* make the text column a bit narrower */
 .scene-pyramid .pyramid-text-column {
   flex: 0 0 10%;
-  max-width: 2500px;           /* hard cap so it doesn't grow too wide */
+  max-width: 2500px;
+  /* hard cap so it doesn't grow too wide */
 }
 
 /* give more width to the viz panel */

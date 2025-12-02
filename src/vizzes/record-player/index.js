@@ -975,8 +975,8 @@ export class RecordPlayerViz {
 
             if (isTop3) {
                 // Highlight top 3 with cyan glow
-                arc.style('filter', 'drop-shadow(0 0 8px var(--color-accent-cyan))');
-                arc.style('stroke', 'var(--color-accent-cyan)');
+                arc.style('filter', 'drop-shadow(0 0 8px var(--color-glint))');
+                arc.style('stroke', 'var(--color-glint)');
                 arc.style('opacity', 1);
                 label.style('opacity', 1);
                 label.style('font-weight', 'bold');
