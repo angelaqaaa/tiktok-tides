@@ -25,7 +25,6 @@ import { initMicroInteractions } from './micro-interactions.js';
 // Maps section IDs to scene attribute values for body[data-scene]
 const SCENE_MAP = {
   '#scene-hero': 'cosmos',
-  '#bridge-intro': 'cosmos',         // Bridge pages inherit parent scene background
   '#scene-music-galaxy': 'galaxy',
   '#scene-viral-sounds': 'sounds',
   '#scene-duration': 'dawn',

@@ -31,7 +31,16 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: transparent; /* Let body::before show through - per background_redesign.md */
+  background: transparent;
+  padding: 0 !important; /* Override section padding to fill viewport */
+}
+
+/* Scene label badge positioning */
+.scene-hero .scene-label-badge {
+  display: block;
+  margin-left: 35px;
+  max-width: 240px;
+  margin-top: -10px;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -303,7 +312,8 @@
 .hero-phone-frame {
   position: relative;
   width: min(40vw, 320px);
-  height: min(80vh, 640px);
+  height: min(70vh, 640px); /* Reduced from 80vh to prevent overflow */
+  max-height: calc(100vh - 200px); /* Reserve space for nav and text */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1483,6 +1493,82 @@
 /* ─────────────────────────────────────────────────────────────────────────
    Hero Scene Responsive Styles
    ───────────────────────────────────────────────────────────────────────── */
+
+/* Laptop screens (14-15 inch, typically 1440px-1920px) */
+@media (max-width: 1920px) {
+  .hero-main-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .scene-hero .hero-subtitle {
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+  }
+
+  .hero-description p {
+    font-size: 0.9rem;
+  }
+
+  .hero-container {
+    max-width: 1200px;
+    /* Shift content right a bit, but leave room for sidebar */
+    margin-right: clamp(80px, 8vw, 120px);
+    margin-left: auto;
+    padding-left: var(--space-6);
+    gap: var(--space-4); /* Reduce gap between text and phone */
+  }
+
+  /* Smaller CTA button */
+  .hero-cta-button {
+    padding: 10px 20px;
+    font-size: 0.875rem;
+  }
+
+  /* Move phone up a bit */
+  .hero-visual-column {
+    margin-top: -50px;
+  }
+}
+
+/* Smaller laptops (13-14 inch, around 1440px) */
+@media (max-width: 1440px) {
+  .hero-main-title {
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  }
+
+  .scene-hero .hero-subtitle {
+    font-size: clamp(0.95rem, 1.3vw, 1.125rem);
+  }
+
+  .hero-description p {
+    font-size: 0.875rem;
+  }
+
+  .hero-container {
+    max-width: 1000px;
+    gap: var(--space-3); /* Smaller gap for smaller screens */
+    margin-right: clamp(90px, 9vw, 130px);
+    margin-left: auto;
+    padding-left: var(--space-5);
+  }
+
+  .hero-text-column {
+    gap: var(--space-4);
+  }
+
+  .hero-cta-button {
+    padding: 10px 18px;
+    font-size: 0.85rem;
+  }
+
+  .hero-visual-column {
+    margin-top: -40px;
+  }
+
+  .hero-bg-horizon::before {
+    bottom: calc(-300vw + 60px);
+  }
+}
+
 @media (max-width: 992px) {
   .hero-container {
     grid-template-columns: 1fr;

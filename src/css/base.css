@@ -85,6 +85,8 @@ a, button, [role="button"], .clickable, input[type="button"], input[type="submit
   cursor: inherit;
 }
 
+/* Zoom scaling system removed - designing for laptop-first approach instead */
+
 /* ═══════════════════════════════════════════════════════════════
    TikTok Splash/Loading Screen
    Shows TikTok logo and loading bar until app is ready
@@ -5699,7 +5701,7 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
 
 .scene-hero .hero-bottom-band {
   position: absolute !important;
-  bottom: 10px !important; /* At the bottom of the scene */
+  bottom: 7px !important; /* At the bottom of the scene */
   left: 50% !important;
   transform: translateX(-50%) !important;
   margin: 0 !important;
@@ -5894,10 +5896,11 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
   flex: 0.8 !important;
 }
 
-/* Recipe card - fit within column */
+/* Recipe card - fit within column, allow scrolling for full content */
 .wrapup-column .recipe-card {
   max-height: 100% !important;
-  overflow: hidden !important;
+  overflow-y: auto !important; /* Allow scroll to see all content including button */
+  overflow-x: hidden !important;
   width: 100% !important;
 }
 
@@ -6249,6 +6252,256 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
 }
 
 /* Removed hover - not interactive */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ENHANCED BRIDGE STYLES - Professional data story patterns
+   ───────────────────────────────────────────────────────────────────────── */
+
+.bridge-message--enhanced {
+  max-width: 700px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: var(--space-10) var(--space-8);
+}
+
+/* Data hook - striking statistic */
+.bridge-data-hook {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--space-6);
+}
+
+.bridge-stat {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-weight: var(--font-bold);
+  background: linear-gradient(135deg, #25F4EE 0%, #FE2C55 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.bridge-stat-label {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: var(--space-2);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* Enhanced title */
+.bridge-message--enhanced .bridge-title {
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  margin-bottom: var(--space-4);
+  line-height: 1.2;
+}
+
+/* Journey map - visual factor preview */
+.bridge-journey {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0;
+  margin: var(--space-8) 0;
+  flex-wrap: wrap;
+}
+
+.bridge-journey-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-3);
+  min-width: 90px;
+  transition: transform 0.3s ease;
+}
+
+.bridge-journey-item:hover {
+  transform: translateY(-4px);
+}
+
+.bridge-journey-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.bridge-journey-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: rgba(255, 255, 255, 0.6);
+  transition: stroke 0.3s ease;
+}
+
+/* Alternating TikTok colors */
+.bridge-journey-item[data-factor="music"] .bridge-journey-icon,
+.bridge-journey-item[data-factor="topics"] .bridge-journey-icon {
+  border-color: rgba(37, 244, 238, 0.3);
+}
+
+.bridge-journey-item[data-factor="music"] .bridge-journey-icon svg,
+.bridge-journey-item[data-factor="topics"] .bridge-journey-icon svg {
+  stroke: #25F4EE;
+}
+
+.bridge-journey-item[data-factor="duration"] .bridge-journey-icon,
+.bridge-journey-item[data-factor="captions"] .bridge-journey-icon {
+  border-color: rgba(254, 44, 85, 0.3);
+}
+
+.bridge-journey-item[data-factor="duration"] .bridge-journey-icon svg,
+.bridge-journey-item[data-factor="captions"] .bridge-journey-icon svg {
+  stroke: #FE2C55;
+}
+
+.bridge-journey-item:hover .bridge-journey-icon {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+.bridge-journey-label {
+  font-size: 0.85rem;
+  font-weight: var(--font-semibold);
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.bridge-journey-hint {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  max-width: 100px;
+  line-height: 1.4;
+}
+
+.bridge-journey-connector {
+  width: 24px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.2), rgba(255,255,255,0.1));
+  margin-top: 24px;
+  flex-shrink: 0;
+}
+
+/* Scroll hint */
+.bridge-scroll-hint {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-top: var(--space-8);
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.6; }
+}
+
+/* Quiz bridge specific styles */
+.bridge-message--quiz {
+  max-width: 550px;
+}
+
+.bridge-challenge-intro {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: var(--space-2);
+  font-weight: var(--font-medium);
+}
+
+.bridge-message--quiz .bridge-title {
+  font-size: clamp(2rem, 6vw, 3rem);
+  background: linear-gradient(135deg, #25F4EE 0%, #fff 50%, #FE2C55 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-6);
+}
+
+/* Recap checklist */
+.bridge-recap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: var(--space-6) 0;
+  padding: var(--space-5);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-lg);
+  border-left: 3px solid rgba(37, 244, 238, 0.5);
+}
+
+.bridge-recap-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.bridge-recap-check {
+  color: #25F4EE;
+  font-weight: var(--font-bold);
+  font-size: 0.85rem;
+}
+
+/* Responsive - Enhanced bridges */
+@media (max-width: 640px) {
+  .bridge-message--enhanced {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .bridge-stat {
+    font-size: 2.5rem;
+  }
+
+  .bridge-journey {
+    gap: var(--space-2);
+  }
+
+  .bridge-journey-item {
+    padding: var(--space-2);
+    min-width: 70px;
+  }
+
+  .bridge-journey-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .bridge-journey-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .bridge-journey-connector {
+    width: 12px;
+    margin-top: 20px;
+  }
+
+  .bridge-journey-hint {
+    display: none;
+  }
+
+  .bridge-recap {
+    padding: var(--space-4);
+  }
+
+  .bridge-recap-item {
+    font-size: 0.8rem;
+  }
+}
 
 /* Responsive */
 @media (max-width: 640px) {

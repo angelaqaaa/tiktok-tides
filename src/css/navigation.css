@@ -737,8 +737,9 @@
   right: 12px;
   transform: translateY(-50%);
   z-index: 1500;
-  width: 95px;
-  height: 560px;
+  width: clamp(70px, 8vw, 95px); /* Responsive width */
+  height: clamp(400px, 60vh, 560px); /* Responsive height - never exceeds 60% of viewport */
+  max-height: calc(100vh - 120px); /* Always leave space for nav */
   background: linear-gradient(180deg,
     rgba(10, 10, 20, 0.98) 0%,
     rgba(20, 25, 40, 0.98) 100%

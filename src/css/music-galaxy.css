@@ -915,3 +915,109 @@
   box-shadow: 0 0 8px rgba(45, 204, 211, 0.5);
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVE LAYOUT FIXES
+   Prevents viz/text overlap on screens smaller than 4K design viewport
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Medium screens (1920px and below) */
+@media (max-width: 1920px) {
+  .music-galaxy-viz-overlay {
+    width: 55%;
+  }
+
+  .music-galaxy-text-overlay {
+    width: 42%;
+    right: 20px;
+  }
+}
+
+/* Smaller screens (1536px and below - common laptop resolution) */
+@media (max-width: 1600px) {
+  .music-galaxy-viz-overlay {
+    width: 50%;
+    padding-top: calc(56px + var(--space-3));
+  }
+
+  .music-galaxy-text-overlay {
+    width: 46%;
+    right: 15px;
+    min-width: 280px;
+    padding: calc(56px + var(--space-4)) var(--space-3) var(--space-4);
+  }
+
+  .music-galaxy-text-overlay .step-content {
+    width: 95%;
+  }
+
+  .music-galaxy-text-overlay .step-content h3 {
+    font-size: 1.1rem;
+  }
+
+  .music-galaxy-text-overlay .step-content p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Tablet/small laptop (1024px and below) - stack vertically */
+@media (max-width: 1024px) {
+  .music-galaxy-viz-overlay {
+    position: relative !important;
+    width: 100%;
+    height: 55vh;
+    padding-top: calc(48px + var(--space-2));
+  }
+
+  .music-galaxy-text-overlay {
+    position: relative !important;
+    width: 100%;
+    height: 40vh;
+    right: 0;
+    top: 0;
+    transform: none;
+    min-width: auto;
+    padding: var(--space-4);
+  }
+
+  #viz-planets {
+    height: 100%;
+  }
+}
+
+/* Short viewports (height-based - for 16:9 screens like 1920x1080) */
+@media (max-height: 900px) {
+  .music-galaxy-viz-overlay {
+    padding-top: calc(48px + var(--space-2));
+    padding-bottom: var(--space-2);
+  }
+
+  .music-galaxy-text-overlay {
+    padding-top: calc(48px + var(--space-3));
+    padding-bottom: var(--space-3);
+  }
+
+  .music-galaxy-text-overlay .step-content {
+    padding: var(--space-4);
+  }
+}
+
+/* Very short viewports */
+@media (max-height: 768px) {
+  .music-galaxy-viz-overlay {
+    padding-top: 48px;
+  }
+
+  .music-galaxy-text-overlay {
+    padding-top: 48px;
+  }
+
+  .music-galaxy-text-overlay .step-content h3 {
+    font-size: 1rem;
+    margin-bottom: var(--space-2);
+  }
+
+  .music-galaxy-text-overlay .step-content p {
+    font-size: 0.85rem;
+  }
+}
+
