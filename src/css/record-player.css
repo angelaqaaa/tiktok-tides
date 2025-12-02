@@ -346,7 +346,7 @@
 .tonearm {
    --hinge-size: clamp(33px, 3.3vw, 60px);
     --arm-width: clamp(1px, 8vw, 13px); 
-    --arm-length: clamp(1px, 170vw, 190px); 
+    --arm-length: clamp(2px, 180vw, 190px); 
     position: absolute; 
     top: clamp(2%, 3vw, 4%); 
     right: clamp(25%, 30vw, 35%); /* Moved right */
