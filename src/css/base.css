@@ -2924,7 +2924,7 @@ circle[data-type="bubble"] {
 .pyramid-viz-wrapper {
   position: relative;
   width: 100%;
-  max-width: 550px;
+  max-width: 2000px;
 }
 
 .pyramid-viz-wrapper .viz-container {
@@ -5220,9 +5220,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .pyramid-text-column {
   padding: var(--space-2) var(--space-3) !important;
   max-height: calc(100vh - 90px) !important;
-  overflow: hidden !important;
-  /* No scrolling - content must fit */
-  flex: 1 1 35% !important;
+  overflow: hidden !important; /* No scrolling – content must fit */
+  flex: 1 1 20% !important;
   min-width: 300px !important;
   font-size: 1rem !important;
 }
@@ -5240,20 +5239,46 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .pyramid-viz-column {
   max-height: calc(100vh - 90px) !important;
-  flex: 1 1 60% !important;
+  flex: 0 0 90% !important;   /* was at 60% */
   min-width: 450px !important;
 }
 
 .pyramid-viz-wrapper {
-  max-width: 900px !important;
+  max-width: 3000px !important;   /* was at 900 */
   width: 100% !important;
 }
 
 .pyramid-viz-wrapper .viz-container {
   min-height: 350px !important;
   height: calc(100vh - 120px) !important;
-  max-height: 600px !important;
+  max-height: 700px !important;   /* was at 600 */
 }
+
+/* ── Pyramid sizing tweaks ───────────────────────────────── */
+.scene-pyramid .pyramid-container {
+  /* let the whole scene row be wider */
+  max-width: 2000px;        /* try 1300–1400; tweak as needed */
+  margin-inline: auto;
+  column-gap: 1.5rem;         /* slightly smaller gap between text + viz */
+}
+
+/* make the text column a bit narrower */
+.scene-pyramid .pyramid-text-column {
+  flex: 0 0 10%;
+  max-width: 2500px;           /* hard cap so it doesn't grow too wide */
+}
+
+/* give more width to the viz panel */
+.scene-pyramid .pyramid-viz-column {
+  flex: 0 0 90%;
+}
+
+/* remove the width cap on the dark panel itself */
+.scene-pyramid .pyramid-viz-wrapper {
+  max-width: none;
+  width: 100%;
+}
+
 
 /* 6. EMOTION VIZ - No sizing changes, use natural dimensions */
 /* (Reverted - no custom sizing needed) */
