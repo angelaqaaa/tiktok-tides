@@ -233,11 +233,7 @@ export class RecordPlayerViz {
         this.setupScales();
         this.renderRings({ animate });
 
-        // Clear bound flags before rebinding to ensure fresh event bindings
-        const ringNodes = this.container.querySelectorAll('.record-ring');
-        ringNodes.forEach((ringEl) => {
-            ringEl.dataset.bound = 'false';
-        });
+        // Event bindings will be refreshed in bindRingEvents
 
         // Use requestAnimationFrame to ensure DOM is updated before binding events
         requestAnimationFrame(() => {
@@ -391,8 +387,8 @@ export class RecordPlayerViz {
         const ringCount = Math.max(this.data.length, 1);
         const ringStep = (OUTER_RADIUS - INNER_RADIUS) / ringCount;
         this.radiusScale = (index) => OUTER_RADIUS - (index + 0.75) * ringStep;
-        const maxAngle = 32;
-        const minAngle = 6;
+        const maxAngle = 37;
+        const minAngle = 8;
         const domainEnd = Math.max(ringCount - 1, 1);
         this.angleScale = d3.scaleLinear().domain([0, domainEnd]).range([minAngle, maxAngle]);
     }
@@ -416,6 +412,8 @@ export class RecordPlayerViz {
             .attr('transform', `translate(${CENTER}, ${CENTER})`)
             .style('opacity', 0);
 
+        // Add transparent hit area circle first (for better hover detection)
+        ringsEnter.append('circle').attr('class', 'record-ring-hit-area');
         ringsEnter.append('circle').attr('class', 'record-ring-arc');
         ringsEnter.append('text').attr('class', 'record-ring-label').append('textPath');
 
@@ -433,8 +431,26 @@ export class RecordPlayerViz {
                 const radius = Math.max(14, this.radiusScale(i));
                 const ringCount = Math.max(this.totalRings, 1);
                 const ringStep = (OUTER_RADIUS - INNER_RADIUS) / ringCount;
-                const strokeWidth = ringStep * 1.0;
+                const strokeWidth = ringStep * 1.3; /* Increased from 1.0 to make rings thicker */
                 const ringSel = d3.select(nodes[i]);
+
+                // Set up hit area circle (larger transparent circle for better hover detection)
+                const hitArea = ringSel.select('.record-ring-hit-area');
+                const hitAreaRadius = radius + strokeWidth * 0.6; // Extend beyond stroke for better detection
+                if (transition) {
+                    hitArea.transition(transition)
+                        .attr('r', hitAreaRadius)
+                        .attr('fill', 'transparent')
+                        .attr('stroke', 'none')
+                        .style('pointer-events', 'all');
+                } else {
+                    hitArea
+                        .attr('r', hitAreaRadius)
+                        .attr('fill', 'transparent')
+                        .attr('stroke', 'none')
+                        .style('pointer-events', 'all');
+                }
+
                 const arc = ringSel.select('.record-ring-arc');
 
                 if (transition) {
@@ -447,8 +463,8 @@ export class RecordPlayerViz {
                         .attr('stroke-width', strokeWidth);
                 }
 
-                const labelRadius = Math.max(12, radius - strokeWidth * 0.35);
-                const sweep = Math.PI * 0.72;
+                const labelRadius = Math.max(12, radius - strokeWidth * 0.1); /* Further increased to move text more outward/up */
+                const sweep = Math.PI * 1.2; /* Increased from 0.72 to 1.2 for maximum coverage (~216 degrees) */
                 const baseStart = -Math.PI / 2 - sweep / 2;
                 const startAngle = baseStart + (i % 2 === 0 ? -0.05 : 0.05);
                 const endAngle = startAngle + sweep;
@@ -468,14 +484,14 @@ export class RecordPlayerViz {
 
                 const isInner = i >= this.data.length - 2;
                 textPath
-                    .attr('startOffset', '50%')
+                    .attr('startOffset', '0%') /* Start from beginning for maximum coverage */
                     .attr('href', `#${pathId}`)
-                    .attr('text-anchor', 'middle')
+                    .attr('text-anchor', 'start')
                     .attr('dominant-baseline', 'middle')
-                    .attr('method', 'stretch')
-                    .attr('dy', 0)
+                    .attr('method', 'spacingAndGlyphs') /* Use spacingAndGlyphs to show all text naturally */
+                    .attr('dy', -4) /* Move text up more */
                     .classed('inner-label', isInner)
-                    .attr('textLength', isInner ? sweep * labelRadius * 1.1 : null)
+                    .attr('textLength', null) /* Remove text length limit to allow full text display */
                     .text(() => {
                         const millions = d.totalPlayCount / 1_000_000;
                         const metric = millions >= 100 ? Math.round(millions) : millions.toFixed(1);
@@ -531,18 +547,16 @@ export class RecordPlayerViz {
     bindRingEvents() {
         const ringNodes = this.container.querySelectorAll('.record-ring');
         ringNodes.forEach((ringEl) => {
-            if (ringEl.dataset.bound === 'true') return;
-            ringEl.dataset.bound = 'true';
-
             const index = Number(ringEl.dataset.songIndex);
             if (isNaN(index) || index < 0 || index >= this.data.length) return;
 
-            ringEl.addEventListener('mouseenter', () => {
+            // Use pointerenter/pointerleave for better sensitivity and device support
+            ringEl.addEventListener('pointerenter', () => {
                 if (this.lockedIndex !== null && this.lockedIndex !== index) return;
                 this.activateRingImmediate(index, { locked: false, source: 'hover' });
-            });
+            }, { passive: true });
 
-            ringEl.addEventListener('mouseleave', () => {
+            ringEl.addEventListener('pointerleave', () => {
                 if (this.lockedIndex !== null && this.lockedIndex !== index) {
                     this.activateRingImmediate(this.lockedIndex, { locked: true, source: 'tonearm' });
                     return;
@@ -550,7 +564,7 @@ export class RecordPlayerViz {
                 if (this.activeIndex === index) {
                     this.deactivateRingImmediate(index);
                 }
-            });
+            }, { passive: true });
 
             ringEl.addEventListener('click', () => {
                 this.handleFirstGesture();

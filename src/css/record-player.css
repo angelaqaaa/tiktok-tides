@@ -44,12 +44,14 @@
 .record-player-layout {
  display: flex;
  align-items: center;
- justify-content: center;
+ justify-content: flex-start; /* Changed from center to flex-start to move left */
  gap: clamp(2rem, 4vw, 3.5rem);
  flex: 0 0 auto;
  width: 100%;
- max-width: min(85vw, 1100px); /* Match wrapper sizing */
- margin: 0 auto;
+ max-width: min(60vw, 800px); /* Reduced width to leave space for narrative */
+ margin: 0;
+ margin-left: clamp(3rem, 5vw, 5rem); /* Left margin to move section left */
+ margin-right: clamp(10rem, 15vw, 10rem); /* Right margin for spacing before narrative */
  position: relative;
 }
 
@@ -86,7 +88,7 @@
 
 .year-range-control {
     position: absolute;
-    right: clamp(1rem, 2vw, 2rem);
+    right: clamp(4rem, 6vw, 5rem); /* Moved further left */
     top: clamp(1rem, 2vw, 2rem); /* SWITCHED: Now at top-right */
     width: clamp(180px, 20vw, 260px);
     display: flex;
@@ -281,7 +283,7 @@
 
 .record-ring:nth-child(even) .record-ring-arc { stroke: var(--color-accent-cyan); } 
 
-.record-ring-label { font-family: var(--font-family-sans); font-size: clamp(0.65rem, 0.95vw, 0.9rem); letter-spacing: 0.1em; text-transform: uppercase; fill: rgba(39, 35, 35, 0.95); } 
+.record-ring-label { font-family: var(--font-family-sans); font-size: clamp(0.8rem, 1.2vw, 1.1rem); letter-spacing: 0.1em; text-transform: uppercase; fill: rgba(39, 35, 35, 0.95); } 
 
 .record-ring-label textPath {
  dominant-baseline: middle;
@@ -298,16 +300,16 @@
  transition: opacity 180ms ease;
 }
 
-.record-ring.is-hovered, .record-ring.is-active { opacity: 1; filter: saturate(1.4); } 
+.record-ring.is-hovered, .record-ring.is-active { opacity: 1; filter: saturate(1.8) brightness(1.3); } 
 
-.record-ring.is-hovered .record-ring-arc, .record-ring.is-active .record-ring-arc { stroke-width: calc(var(--ring-width, 22px) + 4px); } @keyframes record-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.record-ring.is-hovered .record-ring-arc, .record-ring.is-active .record-ring-arc { stroke-width: calc(var(--ring-width, 28px) + 8px); filter: drop-shadow(0 0 8px currentColor) drop-shadow(0 0 12px currentColor); } @keyframes record-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 .record-center-cap { position: absolute;
     top: 50%;
     left: 50%;
     /* Fixed size to ensure perfect circle */
-    width: clamp(60px, 12vw, 80px);
-    height: clamp(60px, 12vw, 80px);
+    width: clamp(55px, 10vw, 65px);
+    height: clamp(55px, 10vw, 65px);
     transform: translate(-50%, -50%);
     border-radius: 50%;
     background: radial-gradient(circle at 30% 30%, rgba(80, 82, 110, 0.75), rgba(12, 13, 26, 0.98));
@@ -320,27 +322,27 @@
     z-index: 5;
     box-shadow: inset 0 4px 8px rgba(255, 255, 255, 0.3), inset 0 -6px 12px rgba(0, 0, 0, 0.7), 0 2px 4px rgba(0, 0, 0, 0.3); } 
 
-.record-center-year { transform: rotate(0deg); font-size: 0.70rem; justify-content: center; } 
+.record-center-year { transform: rotate(0deg); font-size: 0.55rem; justify-content: center; } 
 
 .tonearm {
-   --hinge-size: clamp(48px, 5.5vw, 66px);
-    --arm-width: clamp(2px, 11vw, 15px); 
-    --arm-length: clamp(250px, 250vw, 300px); 
+   --hinge-size: clamp(33px, 3.3vw, 60px);
+    --arm-width: clamp(1px, 8vw, 13px); 
+    --arm-length: clamp(1px, 170vw, 190px); 
     position: absolute; 
     top: clamp(2%, 3vw, 4%); 
-    right: clamp(4%, 6vw, 8%); 
+    right: clamp(25%, 30vw, 35%); /* Moved right */
     width: var(--arm-length); 
     height: var(--arm-length); 
     pointer-events: none;
-     z-index: 4;
+     z-index: 4; 
      transform: translateY(clamp(0.5rem, 1.5vw, 1.5rem));
 } 
 
 /* .tonearm-back { width: 3px; height: 40px; background: silver; position: absolute; top: 100%; left: 50%; transform: translateX(-50%) rotate(20deg); } */ 
 
 .tonearm-hinge { position: absolute; 
-   top: -4%; 
-   right: clamp(20%, 100vw, 100%); 
+   top: 20%; 
+   right: clamp(20%, 120vw, 100%); 
    width: var(--hinge-size); 
    height: var(--hinge-size);
    border-radius: 50%; 
@@ -416,7 +418,7 @@
         
 .record-player-notes { position: absolute; 
        top: clamp(8%, 9vw, 12%); 
-       right: clamp(10%, 22.5vw, 40%); 
+       right: clamp(15%, 28vw, 45%); /* Moved left */ 
        display: flex; 
        flex-direction: column; 
        gap: 0.55rem; 
@@ -453,7 +455,7 @@
    .record-player-layout { flex-direction: column; width: 100%; gap: var(--space-5); }
    .player-intro { max-width: 90vw; }
    .record-player-wrapper { width: min(100vw, 620px); padding: 0rem; height: 100%; }
-   .tonearm { --hinge-size: clamp(38px, 7vw, 54px); --arm-width: clamp(10px, 3vw, 16px); --arm-length: clamp(180px, 48vw, 260px); top: clamp(2%, 3vw, 4%); right: clamp(0%, 2vw, 8%); }
+   .tonearm { --hinge-size: clamp(38px, 7vw, 54px); --arm-width: clamp(8px, 2vw, 10px); --arm-length: clamp(180px, 48vw, 260px); top: clamp(2%, 3vw, 4%); right: clamp(20px, 20vw, 30%); } 
    .mute-toggle-button {
        top: clamp(5rem, 15vw, 9rem);
        left: clamp(3.2rem, 9vw, 5rem);
@@ -565,13 +567,11 @@
 .song-info-screen {
     position: absolute;
     bottom: clamp(2rem, 3vw, 4rem); /* Moved down - reduced bottom value */
-    right: 0vw;
+    right: 2vw;
     left: auto;
     transform: none;
-    min-width: clamp(110px, 10vw, 170px);
-    max-width: clamp(200px, 25vw, 300px); /* Allow expansion for long titles */
-    width: auto; /* Auto width based on content */
-    min-height: clamp(90px, 11vw, 140px);
+    width: clamp(40px, 3vw, 70px); 
+    min-height: clamp(70px, 8vw, 110px); 
     height: auto; /* Auto height to accommodate wrapped text */
     border-radius: clamp(0.6rem, 1vw, 1rem);
     background: linear-gradient(158deg, rgba(20, 22, 35, 0.98) -8%, rgba(8, 9, 18, 0.99) 92%);
@@ -612,13 +612,12 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: clamp(1rem, 1.5vw, 1.5rem);
-    gap: clamp(0.5rem, 0.8vw, 0.8rem);
+    padding-left: clamp(1rem, 1.5vw, 1.5rem);
 }
 
 .song-info-screen__title {
     font-family: var(--font-family-sans);
-    font-size: clamp(0.9rem, 1.2vw, 1.2rem); /* Smaller for compact layout */
+    font-size: clamp(0.7rem, 1.1vw, 1.1rem); /* Smaller for compact layout */
     font-weight: var(--font-weight-bold);
     color: var(--color-text-primary);
     margin: 0;
