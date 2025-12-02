@@ -582,7 +582,7 @@
 }
 
 .song-info-screen__left {
-    flex: 0 0 105px; /* Wider fixed width for larger album cover */
+    flex: 0 0 115px; /* Slightly wider - increased from 105px */
     display: flex;
     flex-direction: column;
     justify-content: center;
