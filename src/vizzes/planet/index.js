@@ -1,4 +1,4 @@
-import { EventEmitter, prefersReducedMotion } from '../shared/utils.js';
+import { EventEmitter, prefersReducedMotion, getDataPath } from '../shared/utils.js';
 import { VIZ_EVENTS, DEFAULT_OPTIONS } from '../shared/types.js';
 
 export class PlanetViz extends EventEmitter {
@@ -40,10 +40,10 @@ export class PlanetViz extends EventEmitter {
   async loadData() {
     try {
       const [data2019, data2020, data2021, data2022] = await Promise.all([
-        d3.csv('/data/TikTok_songs_2019.csv'),
-        d3.csv('/data/TikTok_songs_2020.csv'),
-        d3.csv('/data/TikTok_songs_2021.csv'),
-        d3.csv('/data/TikTok_songs_2022.csv')
+        d3.csv(getDataPath('data/TikTok_songs_2019.csv')),
+        d3.csv(getDataPath('data/TikTok_songs_2020.csv')),
+        d3.csv(getDataPath('data/TikTok_songs_2021.csv')),
+        d3.csv(getDataPath('data/TikTok_songs_2022.csv'))
       ]);
 
       this.data = {
