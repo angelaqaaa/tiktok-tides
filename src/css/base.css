@@ -72,18 +72,18 @@ body {
   /* Dark base - merged from line 201 */
   overflow-x: hidden;
   position: relative;
-  /* UFO custom cursor - using smaller size for better usability */
-  cursor: url('/assets/UFO.png'), auto;
+  /* Custom alien cursor - using 32x32 resized version */
+  cursor: url('/assets/Alien_Cursor_32.png') 16 16, auto;
 }
 
-/* UFO cursor for clickable elements */
+/* Alien pointer cursor for clickable elements */
 a,
 button,
 [role="button"],
 .clickable,
 input[type="button"],
 input[type="submit"] {
-  cursor: url('/assets/UFO.png'), pointer;
+  cursor: url('/assets/Alien_Pointer_32.png') 16 16, pointer;
 }
 
 /* Fallback: ensure cursor works on all elements */
@@ -3871,7 +3871,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   align-items: center;
   justify-content: flex-start;
   padding-top: calc(64px + var(--space-4));
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* Background layers - Lab theme */
@@ -3958,7 +3958,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-6);
+  gap: 100000;
   flex: 1;
   min-height: 100%;
   justify-content: flex-start;
@@ -3974,6 +3974,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   background: rgba(45, 220, 211, 0.15);
   border: 1px solid rgba(45, 220, 211, 0.3);
   z-index: 100;
+  margin-bottom: 2rem;
 }
 
 /* Question panel - glassmorphic card */
@@ -3981,7 +3982,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   width: 100%;
   max-width: 700px;
   text-align: center;
-  padding: var(--space-5) var(--space-6);
+  padding: var(--space-3) var(--space-6);
+  margin-bottom: -1rem;
   background: rgba(26, 10, 46, 0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -4015,10 +4017,12 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .scene-quiz #viz-conveyor {
   width: 100%;
   flex: 1;
-  min-height: 400px;
+  min-height: 600px;
+  margin-top: 5rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: visible;
 }
 
 /* Alien narrator - Quiz/Lab scene */
@@ -5592,4 +5596,68 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   .section-subquestion {
     font-size: 1.1rem !important;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GLOBAL CURSOR OVERRIDE - Must be at end to override all other cursor styles
+   ═══════════════════════════════════════════════════════════════ */
+* {
+  cursor: url('/assets/Alien_Cursor_32.png') 16 16, auto !important;
+}
+
+a,
+a *,
+button,
+button *,
+[role="button"],
+[role="button"] *,
+.clickable,
+.clickable *,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+.btn,
+.btn *,
+svg[cursor="pointer"],
+[onclick],
+[data-clickable],
+.record-ring,
+.planet-node,
+.nav-dot,
+.progress-segment,
+.emotion-bar,
+.stopwatch-control,
+.ranking-item,
+.conveyor-item {
+  cursor: url('/assets/Alien_Pointer_32.png') 16 16, pointer !important;
+}
+
+/* Show pointer on hover for interactive elements */
+a:hover,
+a:hover *,
+button:hover,
+button:hover *,
+[role="button"]:hover,
+[role="button"]:hover *,
+.clickable:hover,
+.clickable:hover *,
+.btn:hover,
+.btn:hover *,
+svg:hover,
+circle:hover,
+rect:hover,
+path:hover,
+g:hover,
+.record-ring:hover,
+.planet-node:hover,
+.nav-dot:hover,
+.progress-segment:hover,
+.emotion-bar:hover,
+.stopwatch-control:hover,
+.ranking-item:hover,
+.conveyor-item:hover,
+[data-song]:hover,
+[data-planet]:hover,
+[data-clickable]:hover {
+  cursor: url('/assets/Alien_Pointer_32.png') 16 16, pointer !important;
 }
