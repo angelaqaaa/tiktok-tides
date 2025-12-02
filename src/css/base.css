@@ -8327,46 +8327,7 @@ body:not([data-scene="cosmos"]) .alien-narrator--hero {
   margin: 0 0 var(--space-3);
 }
 
-/* Viral sounds stats - TikTok style */
-.viral-sounds-stats {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  margin-top: var(--space-4);
-}
 
-.viral-sounds-stats .stat-item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  text-align: left;
-  padding: var(--space-3);
-  background: linear-gradient(135deg, rgba(255, 0, 80, 0.1), rgba(0, 242, 234, 0.05));
-  border: 1px solid rgba(255, 0, 80, 0.2);
-  border-radius: 12px;
-  transition: all 250ms ease;
-}
-
-.viral-sounds-stats .stat-item:hover {
-  background: linear-gradient(135deg, rgba(255, 0, 80, 0.15), rgba(0, 242, 234, 0.08));
-  border-color: rgba(255, 0, 80, 0.35);
-  transform: translateX(4px);
-}
-
-.stat-bullet {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #FF0050, #00F2EA);
-  flex-shrink: 0;
-  box-shadow: 0 0 8px rgba(255, 0, 80, 0.5);
-}
-
-.stat-text {
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
-}
 
 
 /* Alien narrator variants for scenes */
