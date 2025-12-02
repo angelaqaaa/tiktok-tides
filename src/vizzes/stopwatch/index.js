@@ -1,5 +1,5 @@
 // Stopwatch Visualization Adapter - Wraps legacy implementation with Canonical API
-import { EventEmitter, prefersReducedMotion } from '../shared/utils.js';
+import { EventEmitter, prefersReducedMotion, getDataPath } from '../shared/utils.js';
 import { VIZ_EVENTS, DEFAULT_OPTIONS } from '../shared/types.js';
 
 export class StopwatchViz extends EventEmitter {
@@ -73,7 +73,7 @@ export class StopwatchViz extends EventEmitter {
   async loadData() {
     try {
       const [data] = await Promise.all([
-        d3.csv('/data/cleaned_tiktok_data.csv', d3.autoType),
+        d3.csv(getDataPath('data/cleaned_tiktok_data.csv'), d3.autoType),
       ]);
       this.rawData = data;
 

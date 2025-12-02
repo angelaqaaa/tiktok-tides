@@ -1,5 +1,6 @@
 // RankingBubbleChart.js
 // Secondary view for RankingViz: top creators within a selected category.
+import { getDataPath } from '../shared/utils.js';
 
 export class RankingBubbleChart {
   /**
@@ -28,7 +29,7 @@ export class RankingBubbleChart {
       margin: { top: 40, right: 10, bottom: 25, left: 10 },
       minRadius: 30,
       maxRadius: 75,
-      dataPath: '/data/youtube_shorts_tiktok_trends_2025.csv',
+      dataPath: getDataPath('data/youtube_shorts_tiktok_trends_2025.csv'),
       ...options
     };
 
