@@ -110,13 +110,13 @@ export class StopwatchViz extends EventEmitter {
           return binEnd; // numeric key: 10, 20, 30, 40, 50, 60
         }
       )
-      // Flatten to [binEnd, meanPlayCount, meanDuration]
-      .map(([binEnd, stats]) => [binEnd, stats.meanPlayCount, stats.meanDuration])
-      .filter(d =>
-        Number.isFinite(d[0]) && // binEnd
-        Number.isFinite(d[1]) && // meanPlayCount
-        Number.isFinite(d[2])    // meanDuration
-      );
+        // Flatten to [binEnd, meanPlayCount, meanDuration]
+        .map(([binEnd, stats]) => [binEnd, stats.meanPlayCount, stats.meanDuration])
+        .filter(d =>
+          Number.isFinite(d[0]) && // binEnd
+          Number.isFinite(d[1]) && // meanPlayCount
+          Number.isFinite(d[2])    // meanDuration
+        );
 
       // Sort by binEnd ascending for consistent angle mapping
       binned.sort((a, b) => d3.ascending(a[0], b[0]));
@@ -618,7 +618,7 @@ export class StopwatchViz extends EventEmitter {
         const binEnd = d[0];
         const binStart = binEnd - binSize;
         const overlaps = binEnd >= min && binStart <= max;
-        return overlaps ? 'var(--color-accent-cyan)' : 'none';
+        return overlaps ? 'var(--color-glint)' : 'none';
       })
       .attr('stroke-width', d => {
         const binEnd = d[0];
@@ -681,7 +681,7 @@ export class StopwatchViz extends EventEmitter {
       .attr('y1', 0)
       .attr('x2', 0)
       .attr('y2', -this._geom.R * 0.8)
-      .attr('stroke', 'var(--color-accent-cyan)')
+      .attr('stroke', 'var(--color-glint)')
       .attr('stroke-width', 3)
       .attr('opacity', 0.8);
 

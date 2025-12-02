@@ -14,17 +14,15 @@ function formatPlayCount(count) {
 }
 
 // Default album cover when no song is selected
-const DEFAULT_ALBUM_COVER = "/data/record_music_cover/noSong.jpg";
+const DEFAULT_ALBUM_COVER = "/assets/images/sound-covers/Sound_Default.png";
 
 // Album cover paths - randomly shuffled
 const albumCoverPaths = [
-    "/data/record_music_cover/premium_vector-1711922642822-695731cfcb4a.avif",
-    "/data/record_music_cover/premium_vector-1711987689675-439d95531384.avif",
-    "/data/record_music_cover/premium_vector-1717009247018-b153fdffe0d7.avif",
-    "/data/record_music_cover/premium_vector-1725675010771-4bc9e0c22249.avif",
-    "/data/record_music_cover/premium_vector-1745509208269-c7a2d8c1ac6e.avif",
-    "/data/record_music_cover/premium_vector-1758194439297-68d0d2577abb.avif",
-    "/data/record_music_cover/premium_vector-1762261283518-65c1081da634.avif"
+    "/assets/images/sound-covers/Sound_1.png",
+    "/assets/images/sound-covers/Sound_2.png",
+    "/assets/images/sound-covers/Sound_3.png",
+    "/assets/images/sound-covers/Sound_4.png",
+    "/assets/images/sound-covers/Sound_5.png"
 ];
 
 // Shuffle array function
@@ -977,8 +975,8 @@ export class RecordPlayerViz {
 
             if (isTop3) {
                 // Highlight top 3 with cyan glow
-                arc.style('filter', 'drop-shadow(0 0 8px var(--color-accent-cyan))');
-                arc.style('stroke', 'var(--color-accent-cyan)');
+                arc.style('filter', 'drop-shadow(0 0 8px var(--color-glint))');
+                arc.style('stroke', 'var(--color-glint)');
                 arc.style('opacity', 1);
                 label.style('opacity', 1);
                 label.style('font-weight', 'bold');

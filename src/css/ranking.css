@@ -155,7 +155,7 @@
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 8px;
-    color: #e8fcff;
+    color: #ffffff;
     letter-spacing: 0.4px;
 
     text-shadow:
@@ -166,16 +166,16 @@
 .viz-info-tooltip .body {
     font-size: 14px;
     line-height: 1.55;
-    color: #d8edf3;
+    color: #ffffff;
 }
 
 .viz-info-tooltip a {
-    color: #7ee9ef;
+    color: #2DCCD3;
     transition: color 0.25s ease, transform 0.2s ease;
 }
 
 .viz-info-tooltip a:hover {
-    color: #b7fcff;
+    color: #BAF6F0;
     transform: translateX(2px);
 }
 
