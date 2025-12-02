@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
-export default defineConfig({
-  base: '/tiktok-tides/',
+export default defineConfig(({ command }) => ({
+  base: command === 'build' ? '/tiktok-tides/' : '/',
   build: {
     outDir: 'dist',
     rollupOptions: {
@@ -14,4 +14,4 @@ export default defineConfig({
     port: 3000,
     open: true
   }
-});
+}));
