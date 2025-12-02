@@ -150,24 +150,19 @@ export class ConveyorViz extends EventEmitter {
     this.container.innerHTML = '';
     this.container.className = 'conveyor-container';
 
-    // Create header with score
-    const header = document.createElement('div');
-    header.className = 'conveyor-header';
-    header.innerHTML = `
-      <div class="conveyor-score">
-        <span class="score-label">Score:</span>
-        <span class="score-value">${this.state.score}/${this.data ? this.data.length : 0}</span>
-      </div>
-    `;
-    this.container.appendChild(header);
+    // (Score header removed)
 
-    // Create controls (moved above belt)
+    // Create controls (moved above belt) with score to the right of Start
     const controls = document.createElement('div');
     controls.className = 'conveyor-controls';
     controls.innerHTML = `
       <button class="btn btn--primary start-btn" aria-label="Start conveyor belt">
         Start Conveyor
       </button>
+      <div class="conveyor-score" aria-live="polite" aria-label="Current score">
+        <span class="score-label">Score:</span>
+        <span class="score-value">${this.state.score}/${this.data ? this.data.length : 0}</span>
+      </div>
       <button class="btn btn--secondary restart-btn" aria-label="Restart from beginning" style="display:none;">
         Restart
       </button>
@@ -335,6 +330,10 @@ export class ConveyorViz extends EventEmitter {
     // Hide quiz-question-panel to make room for interaction panel
     const quizPanel = document.querySelector('.quiz-question-panel');
     if (quizPanel) quizPanel.style.display = 'none';
+
+    // Mark quiz container as started to adjust layout (e.g., score position)
+    const quizContainer = this.container.closest('.quiz-container');
+    if (quizContainer) quizContainer.classList.add('quiz-started');
 
     const panel = this.container.querySelector('.interaction-panel');
     panel.style.display = 'block';
@@ -674,13 +673,20 @@ export class ConveyorViz extends EventEmitter {
         <h3>🎊 Complete!</h3>
         <p class="final-score">Your Score: ${this.state.score}/${this.data ? this.data.length : 0}</p>
         <p class="score-message">${this.getScoreMessage()}</p>
+        <button class="btn btn--secondary restart-btn" aria-label="Restart from beginning">Restart</button>
       </div>
     `;
 
-    // Show restart button
-    const restartBtn = this.container.querySelector('.restart-btn');
-    if (restartBtn) {
-      restartBtn.style.display = 'inline-block';
+    // Add event listener to the completion panel restart button
+    const completionRestartBtn = panel.querySelector('.restart-btn');
+    if (completionRestartBtn) {
+      completionRestartBtn.addEventListener('click', () => this.restart());
+    }
+
+    // Hide the controls area restart button if present (we use the one in completion box)
+    const controlsRestartBtn = this.container.querySelector('.conveyor-controls .restart-btn');
+    if (controlsRestartBtn) {
+      controlsRestartBtn.style.display = 'none';
     }
   }
 
@@ -724,6 +730,10 @@ export class ConveyorViz extends EventEmitter {
     // Restore quiz-question-panel visibility
     const quizPanel = document.querySelector('.quiz-question-panel');
     if (quizPanel) quizPanel.style.display = '';
+
+    // Remove started class so layout returns to initial state
+    const quizContainer = this.container.closest('.quiz-container');
+    if (quizContainer) quizContainer.classList.remove('quiz-started');
 
     // Re-render
     this.render();
