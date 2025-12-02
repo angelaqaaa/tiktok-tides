@@ -106,24 +106,6 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   visibility: visible !important;
 }
 
-/* Scene 8: Wrapup */
-body[data-scene="wrapup"] .alien-narrator--wrapup {
-  display: flex !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: translateY(0) !important;
-  pointer-events: auto !important;
-}
-body[data-scene="wrapup"] .alien-narrator--wrapup .alien-avatar {
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
 /* ─────────────────────────────────────────────────────────────────────────────
    KEYFRAME ANIMATIONS (defined once, used by all variants)
    ───────────────────────────────────────────────────────────────────────────── */
@@ -483,16 +465,6 @@ body[data-scene="lab"] .alien-narrator--quiz {
   transform: translateY(0) !important;
 }
 body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
-  opacity: 1 !important;
-  transform: scale(1) translateY(0) !important;
-}
-
-/* Scene 8: Wrapup - show container AND speech bubble */
-body[data-scene="wrapup"] .alien-narrator--wrapup {
-  opacity: 1 !important;
-  transform: translateY(0) !important;
-}
-body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
   opacity: 1 !important;
   transform: scale(1) translateY(0) !important;
 }

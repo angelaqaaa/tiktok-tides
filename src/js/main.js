@@ -178,7 +178,7 @@ class TikTokTidesApp {
     const io = new IntersectionObserver((entries) => {
       // Find sections that are > 50% visible
       const dominantSections = entries
-        .filter(e => e.isIntersecting && e.intersectionRatio > 0.5)
+        .filter(e => e.isIntersecting && e.intersectionRatio > 0.3) // Lowered from 0.5 to prevent black flash
         .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
 
       if (dominantSections.length > 0) {
@@ -198,7 +198,7 @@ class TikTokTidesApp {
         // (moved outside scene change condition to fix tracking issue)
         this.updateJourneyMapHighlight(mostVisible.target.id);
       }
-    }, { root: null, rootMargin: '0px', threshold: 0.5 });
+    }, { root: null, rootMargin: '0px', threshold: [0, 0.3, 0.5, 1] }); // Multiple thresholds for smoother transitions
 
     Object.keys(SCENE_MAP).forEach(sel => {
       const el = document.querySelector(sel);
