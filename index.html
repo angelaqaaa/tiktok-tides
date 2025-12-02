@@ -1466,6 +1466,9 @@
       // Initialize fullPage.js for slide-snap behavior across entire site
       // Pattern from STEAMulating Trends and Smoking & Lung Cancer examples
       var fullPageInstance = new fullpage('#fullpage', {
+        // License key (using open-source GPL-compatible option)
+        licenseKey: 'gplv3-license',
+        
         // Mark fullPage as ready once initialized
         afterRender: function () {
           console.log('[fullPage] afterRender - marking ready');
