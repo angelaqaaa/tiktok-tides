@@ -3654,7 +3654,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   align-items: center;
   justify-content: flex-start;
   padding-top: calc(64px + var(--space-4));
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* Background layers - Lab theme */
@@ -3799,11 +3799,12 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .scene-quiz #viz-conveyor {
   width: 100%;
   flex: 1;
-  min-height: 0;
+  min-height: 600px;
   margin-top: 5rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: visible;
 }
 
 /* Alien narrator - Quiz/Lab scene */
