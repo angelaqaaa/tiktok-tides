@@ -884,6 +884,13 @@
         <!-- Scene label (top-left) -->
         <span class="scene-label-badge">Scene 3 — Viral Sounds</span>
 
+        <!-- Centered scene title and intro -->
+        <div class="scene-header">
+          <h1 class="scene-title">Viral Sounds</h1>
+          <p class="scene-subtitle">A handful of sounds spin through every feed</p>
+          <p class="scene-description">For any chosen year range, the top seven sounds are stacked as rings. The outermost ring is the most played sound. Inner rings are still strong, but a little weaker.</p>
+        </div>
+
         <!-- Collapsible chart instructions -->
         <div class="chart-instructions chart-instructions--record-player" role="complementary" aria-label="How to read this chart" data-info-panel>
           <button class="chart-instructions__toggle" aria-expanded="false" data-info-toggle>
@@ -996,40 +1003,32 @@
 
       <!-- TEXT OVERLAY (right side) - Shows one step at a time based on horizontal slide -->
       <div class="viral-sounds-text-overlay">
-        <!-- Step 1: Meet the stack of sounds -->
+        <!-- Step 1: Comparing songs within a year -->
         <div class="step-content step-content--sounds" data-slide-step="0">
-          <h2 id="viral-sounds-title" class="step-heading step-heading--question">A handful of sounds spin through every feed</h2>
-          <p>For any chosen year range, the top seven sounds are stacked as rings. The outermost ring is the most played sound. Inner rings are still strong, but a little weaker. Even here, a tiny group of sounds collects most of the plays.</p>
-          <p class="step-prompt">Move your mouse over the largest ring and watch the tonearm swing to it. Read how many plays that sound has.</p>
-        </div>
-
-        <!-- Step 2: Comparing songs within a year -->
-        <div class="step-content step-content--sounds" data-slide-step="1" style="display: none;">
           <h3 class="step-subheading">A few sounds tower over the rest</h3>
           <p>Hover across the rings from outermost to innermost. Notice how the play counts drop. A couple of sounds usually dominate, while the rest have much smaller but still impressive numbers.</p>
           <p class="step-prompt">Try hovering the second or third ring yourself. Look at how quickly the play count shrinks compared to the top sound.</p>
         </div>
 
-        <!-- Step 3: Watching the stack change over time -->
-        <div class="step-content step-content--sounds" data-slide-step="2" style="display: none;">
+        <!-- Step 2: Watching the stack change over time -->
+        <div class="step-content step-content--sounds" data-slide-step="1" style="display: none;">
           <h3 class="step-subheading">Viral sounds churn over time</h3>
           <p>Drag the year slider to slide across different years. The entire stack of rings reshuffles. Titles and artists change, and sometimes the same artist reappears with a new sound. This tells us that virality is not only about one eternal hit. The sound landscape keeps refreshing.</p>
           <p class="step-prompt">Pick two different year ranges manually and compare the top sound for each. Are they from the same artists you saw in the music galaxy?</p>
         </div>
 
-        <!-- Step 4: Transition to Scene 4 -->
-        <div class="step-content step-content--sounds" data-slide-step="3" style="display: none;">
+        <!-- Step 3: Transition to Scene 4 -->
+        <div class="step-content step-content--sounds" data-slide-step="2" style="display: none;">
           <h3 class="step-subheading">Zooming in to timing</h3>
           <p>So far, we know that viral videos ride on a small set of artists and sounds, and those favorites change over time. Next, we test whether timing also matters: how long should a short video be.</p>
           <p class="step-transition">Scroll to continue to the stopwatch, where we'll explore the ideal video duration.</p>
         </div>
       </div><!-- End text-overlay -->
 
-      <!-- HORIZONTAL SLIDES - 4 slides for fullPage navigation tracking -->
+      <!-- HORIZONTAL SLIDES - 3 slides for fullPage navigation tracking -->
       <div class="slide viral-sounds-slide" data-slide-index="0"></div>
       <div class="slide viral-sounds-slide" data-slide-index="1"></div>
       <div class="slide viral-sounds-slide" data-slide-index="2"></div>
-      <div class="slide viral-sounds-slide" data-slide-index="3"></div>
 
     </section>
 
@@ -1046,6 +1045,13 @@
       <div class="timing-viz-overlay">
         <!-- Scene label (top-left) -->
         <span class="scene-label-badge">Scene 4 — Timing</span>
+
+        <!-- Centered scene title and intro -->
+        <div class="scene-header">
+          <h1 class="scene-title">Timing</h1>
+          <p class="scene-subtitle">Do the shortest TikToks always go the most viral?</p>
+          <p class="scene-description">Each slice shows a group of videos inside a duration range. The further a slice reaches from the center, the more views videos in that bucket get on average.</p>
+        </div>
 
         <!-- Collapsible chart instructions -->
         <div class="chart-instructions chart-instructions--stopwatch" role="complementary" aria-label="How to read this chart" data-info-panel>
@@ -1136,42 +1142,34 @@
 
       <!-- TEXT OVERLAY (right side) - Shows one step at a time based on horizontal slide -->
       <div class="timing-text-overlay">
-        <!-- Step 1: Do shorter videos always win -->
+        <!-- Step 1: Sweet spot highlight -->
         <div class="step-content step-content--timing" data-slide-step="0">
-          <h2 id="duration-title" class="step-heading step-heading--question">Do the shortest TikToks always go the most viral?</h2>
-          <p>Each slice shows a group of videos inside a duration range. The further a slice reaches from the center, the more views videos in that bucket get on average.</p>
-          <p class="step-prompt">Watch the whole sweep once. Try to guess which duration buckets seem strongest before reading the next step.</p>
-        </div>
-
-        <!-- Step 2: Sweet spot highlight -->
-        <div class="step-content step-content--timing" data-slide-step="1" style="display: none;">
           <h3 class="step-subheading">A sweet spot around 15 to 30 seconds</h3>
           <p>Highlight the slices between roughly 15 and 30 seconds. These slices usually form the outer band of the stopwatch. Very short clips under 10 seconds stay closer to the center.</p>
           <p>That suggests viral videos in this dataset tend to be short, but not extremely short. There is enough time to set up a moment before the swipe.</p>
           <p class="step-prompt">Toggle between the short, sweet spot, and long buttons and compare how far each group reaches.</p>
         </div>
 
-        <!-- Step 3: Long clips fall behind -->
-        <div class="step-content step-content--timing" data-slide-step="2" style="display: none;">
+        <!-- Step 2: Long clips fall behind -->
+        <div class="step-content step-content--timing" data-slide-step="1" style="display: none;">
           <h3 class="step-subheading">Very long clips lose steam</h3>
           <p>Now highlight clips longer than about 30 seconds. In many buckets, these slices sit closer to the center than the sweet spot ones.</p>
           <p>Longer videos are not impossible to make viral, but on average they attract fewer views here.</p>
           <p class="step-prompt">Move your mouse along the long range arcs and compare their average views to the sweet spot arcs you saw earlier.</p>
         </div>
 
-        <!-- Step 4: Transition to Scene 5 -->
-        <div class="step-content step-content--timing" data-slide-step="3" style="display: none;">
+        <!-- Step 3: Transition to Scene 5 -->
+        <div class="step-content step-content--timing" data-slide-step="2" style="display: none;">
           <h3 class="step-subheading">Moving beyond timing</h3>
           <p>So far, we know that viral videos often use dominant sounds from key artists and stay within a sweet duration range. Next, we look at what humans actually do in these clips: which topics rise to the top.</p>
           <p class="step-transition">Scroll to continue to the trend pyramid, where we'll explore topic categories.</p>
         </div>
       </div><!-- End text-overlay -->
 
-      <!-- HORIZONTAL SLIDES - 4 slides for fullPage navigation tracking -->
+      <!-- HORIZONTAL SLIDES - 3 slides for fullPage navigation tracking -->
       <div class="slide timing-slide" data-slide-index="0"></div>
       <div class="slide timing-slide" data-slide-index="1"></div>
       <div class="slide timing-slide" data-slide-index="2"></div>
-      <div class="slide timing-slide" data-slide-index="3"></div>
 
     </section>
 
@@ -1483,9 +1481,6 @@
     <section id="scene-summary" class="section scene-wrapup" data-scene-id="summary" role="region"
       aria-labelledby="summary-title">
 
-      <!-- Scene label -->
-      <span class="scene-label-badge">Scene 8 — Wrap-up</span>
-
       <!-- Two-column layout: Recipe Card + Team Credits side by side -->
       <div class="wrapup-columns">
         <!-- Left column: Recipe Card -->
@@ -1632,22 +1627,25 @@
         </div>
       </div>
 
-      <!-- Alien narrator -->
-      <div class="alien-narrator alien-narrator--wrapup" data-scene="wrapup" aria-hidden="true">
-        <div class="alien-avatar">
-          <img src="/assets/alien.PNG"
-               alt="" width="64" height="64" loading="lazy"
-               onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
-        </div>
-        <div class="alien-speech-bubble" data-speech-state="hidden">
-          <p class="alien-speech-text">Here's the formula we discovered together. Not a guarantee—but a strong signal.</p>
-        </div>
-      </div>
     </section>
 
     </div><!-- End #fullpage -->
   </main>
 
+  <!-- Wrapup Alien - Outside fullPage container for proper fixed positioning -->
+  <div class="alien-narrator alien-narrator--wrapup" data-scene="wrapup" aria-hidden="true">
+    <div class="alien-avatar">
+      <img src="/assets/alien.PNG"
+           alt="" width="64" height="64" loading="lazy"
+           onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
+    </div>
+    <div class="alien-speech-bubble" data-speech-state="hidden">
+      <p class="alien-speech-text">Here's the formula we discovered together. Not a guarantee—but a strong signal.</p>
+    </div>
+  </div>
+
+  <!-- Wrapup Scene Badge - Outside fullPage container for proper fixed positioning -->
+  <span class="scene-label-badge scene-label-badge--wrapup">Scene 8 — Wrap-up</span>
 
   <!-- Live Region for Screen Readers -->
   <div role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>

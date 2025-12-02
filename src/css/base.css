@@ -1503,10 +1503,18 @@ circle[data-type="bubble"] {
 }
 
 /* Scene-specific chart instructions positioning */
-.chart-instructions--pyramid,
-.chart-instructions--emotion {
+.chart-instructions--pyramid {
   margin-bottom: var(--space-4);
   max-width: 100%;
+}
+
+.chart-instructions--emotion {
+  position: absolute;
+  right: auto;
+  left: calc(100% - 310px);
+  top: calc(50% - 220px);
+  max-width: 180px;
+  z-index: 15;
 }
 
 .chart-instructions--quiz {
@@ -1517,50 +1525,15 @@ circle[data-type="bubble"] {
   margin-right: auto;
 }
 
-/* Emotion narrative steps */
+/* Emotion narrative steps - LEGACY, kept for non-overlay contexts */
 .emotion-narrative-steps {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
 }
 
-.step-content--emotion {
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: var(--radius-lg);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: var(--space-3);
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.step-content--emotion::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 3px;
-  height: 100%;
-  background: linear-gradient(180deg, #FE2C55 0%, #25F4EE 100%);
-  border-radius: 3px 0 0 3px;
-  opacity: 0.6;
-}
-
-/* Removed hover - not interactive */
-
-.step-content--emotion p {
-  color: var(--color-text-secondary);
-  line-height: 1.6;
-  margin-bottom: var(--space-2);
-}
-
-.step-content--emotion .step-subheading {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin: 0 0 var(--space-2) 0;
-}
+/* Note: .step-content--emotion inside .emotion-text-overlay inherits from
+   .emotion-text-overlay .step-content rules defined below. */
 
 /* Guided Steps Component */
 .guided-steps {
@@ -2061,14 +2034,40 @@ circle[data-type="bubble"] {
   z-index: 15;
 }
 
+/* Centered scene title (above viz, below nav) */
+.viral-sounds-viz-overlay .scene-title {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  text-align: center;
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  margin: 0;
+  padding: 0 var(--space-4);
+}
+
 /* TEXT OVERLAY - Shows one step at a time, right side (matches music-galaxy style) */
 .viral-sounds-text-overlay {
   position: absolute !important;
   top: 50%;
-  right: 100px; /* Moved left to reduce clustering */
+  right: 150px; /* Moved left to reduce clustering */
   width: 38%;
   transform: translateY(-50%);
+  min-width: 320px;
   max-width: 550px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(64px + var(--space-6)) var(--space-4) var(--space-6);
   z-index: 70 !important;
   pointer-events: auto;
 }
@@ -2161,11 +2160,15 @@ circle[data-type="bubble"] {
   position: relative !important;
   bottom: auto !important;
   top: auto !important;
-  left: auto !important;
+  left: 0 !important;
   right: auto !important;
   transform: none !important;
   margin-top: var(--space-4) !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
   display: block !important;
+  width: 88% !important;
+  max-width: 550px !important;
 }
 
 /* Hide default section nav for these sections (before JS moves it) */
@@ -2631,36 +2634,112 @@ circle[data-type="bubble"] {
   z-index: 15;
 }
 
-/* TEXT OVERLAY - Shows one step at a time, positioned to the side */
-.timing-text-overlay {
+/* Centered scene title (above viz, below nav) */
+.timing-viz-overlay .scene-title {
   position: absolute;
-  top: 50%;
-  right: 100px; /* Moved left to reduce clustering */
-  transform: translateY(-50%);
-  width: clamp(280px, 28vw, 380px);
-  max-width: 35%;
-  padding: var(--space-5);
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-xl);
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 15;
-  box-shadow:
-    0 0 30px rgba(37, 244, 238, 0.08),
-    0 0 60px rgba(254, 44, 85, 0.04);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  text-align: center;
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  margin: 0;
+  padding: 0 var(--space-4);
 }
 
-.timing-text-overlay::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, #25F4EE 0%, #FE2C55 100%);
-  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-  opacity: 0.6;
+/* TEXT OVERLAY - Shows one step at a time, right side (matches music-galaxy style) */
+.timing-text-overlay {
+  position: absolute !important;
+  top: 50%;
+  right: 150px; /* Moved left to reduce clustering */
+  width: 38%;
+  transform: translateY(-50%);
+  min-width: 320px;
+  max-width: 550px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(64px + var(--space-6)) var(--space-4) var(--space-6);
+  z-index: 70 !important;
+  pointer-events: auto;
+}
+
+/* Step content cards inside text overlay */
+.timing-text-overlay .step-content {
+  width: 88%;
+  max-width: 550px;
+  opacity: 1;
+  visibility: visible;
+  background: linear-gradient(
+    135deg,
+    rgba(10, 10, 30, 0.92) 0%,
+    rgba(20, 20, 50, 0.88) 100%
+  );
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(45, 204, 211, 0.2);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 60px rgba(45, 204, 211, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: var(--color-text-primary);
+}
+
+/* Headings in text overlay */
+.timing-text-overlay .step-heading {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 var(--space-4);
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.timing-text-overlay .step-subheading {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 700;
+  margin: 0 0 var(--space-3);
+  color: var(--color-glint);
+}
+
+.timing-text-overlay .step-content p {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: var(--space-3);
+}
+
+.timing-text-overlay .step-content p:last-child {
+  margin-bottom: 0;
+}
+
+.timing-text-overlay .step-content p strong {
+  color: var(--color-glint);
+  font-weight: 600;
+}
+
+.timing-text-overlay .step-prompt {
+  font-size: 0.9375rem;
+  color: #25F4EE;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.timing-text-overlay .step-transition {
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
 }
 
 /* Top half: Narrative header */
@@ -2882,54 +2961,14 @@ circle[data-type="bubble"] {
   margin-bottom: var(--space-3);
 }
 
-/* Timing Narrative Steps */
+/* Timing Narrative Steps - LEGACY, kept for non-overlay contexts */
 .timing-narrative-steps {
   margin-bottom: var(--space-4);
 }
 
-.step-content--timing {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.step-content--timing {
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: var(--radius-lg);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: var(--space-4);
-  margin-bottom: var(--space-3);
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.step-content--timing::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 3px;
-  height: 100%;
-  background: linear-gradient(180deg, #25F4EE 0%, #FE2C55 100%);
-  border-radius: 3px 0 0 3px;
-  opacity: 0.6;
-}
-
-/* Removed hover - not interactive */
-
-.step-content--timing p {
-  color: var(--color-text-secondary);
-  line-height: 1.6;
-  margin-bottom: var(--space-2);
-}
-
-.step-content--timing .step-subheading {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin: 0 0 var(--space-2) 0;
-}
+/* Note: .step-content--timing inside .timing-text-overlay inherits from
+   .timing-text-overlay .step-content rules defined above. These rules are
+   for any legacy non-overlay contexts only. */
 
 /* Alien narrator for timing scene */
 /* Per spec: "bottom center of the scene, slightly overlapping the empty area under the clock" */
@@ -3111,6 +3150,14 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   padding-top: calc(64px + var(--space-4));
 }
 
+/* Scene label badge positioning (matches music-galaxy) */
+.pyramid-viz-overlay .scene-label-badge {
+  position: absolute;
+  top: 100px;
+  left: 35px;
+  z-index: 15;
+}
+
 /* TEXT OVERLAY - Shows one step at a time, positioned to the left (matches music-galaxy style) */
 .pyramid-text-overlay {
   position: absolute !important;
@@ -3118,7 +3165,14 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   left: 30px;
   width: 38%;
   transform: translateY(-50%);
+  min-width: 320px;
   max-width: 550px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(64px + var(--space-6)) var(--space-4) var(--space-6);
   z-index: 70 !important;
   pointer-events: auto;
 }
@@ -3351,17 +3405,16 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Alien narrator for pyramid scene - v3 spec: bottom center, standing on ground */
+/* Alien narrator for pyramid scene - bottom-left to avoid covering visualization */
 .alien-narrator--pyramid {
   position: absolute;
-  left: 50%;
-  bottom: 10%;
-  transform: translateX(-50%);
+  left: var(--space-6);
+  bottom: var(--space-6);
   z-index: 100;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-2);
+  flex-direction: row;
+  align-items: flex-end;
+  gap: var(--space-3);
 }
 
 .alien-narrator--pyramid .alien-avatar {
@@ -3381,10 +3434,10 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-avatar {
 body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
   opacity: 1 !important;
   visibility: visible !important;
-  transform: translateY(0) !important;
+  transform: translateX(0) !important;
 }
 
-/* Speech bubble above alien (centered layout) */
+/* Speech bubble beside alien (row layout) */
 .alien-narrator--pyramid .alien-speech-bubble {
   position: relative;
   width: max-content;
@@ -3396,21 +3449,19 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateX(-10px);
   transition: opacity 400ms ease, transform 400ms ease;
-  order: -1; /* Place speech bubble before avatar in flex column */
-  margin-bottom: var(--space-2);
 }
 
-/* Arrow points down toward alien */
+/* Arrow points left toward alien avatar */
 .alien-narrator--pyramid .alien-speech-bubble::before {
   content: '';
   position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
   border: 8px solid transparent;
-  border-top-color: rgba(255, 255, 255, 0.98); /* Match white background */
+  border-right-color: rgba(255, 255, 255, 0.98); /* Match white background */
 }
 
 .alien-narrator--pyramid .alien-speech-text {
@@ -3445,9 +3496,8 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
   }
 
   .alien-narrator--pyramid {
-    left: 50%;
-    bottom: 5%;
-    transform: translateX(-50%);
+    left: var(--space-4);
+    bottom: var(--space-4);
   }
 
   .alien-tree-hide {
@@ -3520,6 +3570,14 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
   padding-top: calc(64px + var(--space-4));
 }
 
+/* Scene label badge positioning (matches music-galaxy) */
+.emotion-viz-overlay .scene-label-badge {
+  position: absolute;
+  top: 100px;
+  left: 35px;
+  z-index: 15;
+}
+
 /* Controls panel - positioned to the right of visualization */
 .emotion-controls-panel {
   position: absolute;
@@ -3540,7 +3598,14 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
   left: 30px;
   width: 38%;
   transform: translateY(-50%);
+  min-width: 320px;
   max-width: 550px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(64px + var(--space-6)) var(--space-4) var(--space-6);
   z-index: 70 !important;
   pointer-events: auto;
 }
@@ -4591,14 +4656,20 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   }
 }
 
-/* Scene label */
-.scene-wrapup .scene-label-badge {
-  position: absolute;
-  top: 55px; /* Below nav bar */
+/* Scene label badge for wrapup - outside fullPage container */
+.scene-label-badge--wrapup {
+  position: fixed;
+  top: calc(64px + var(--space-3)); /* Below nav bar (64px) + spacing */
   left: var(--space-4);
   background: rgba(45, 220, 211, 0.15);
   border: 1px solid rgba(45, 220, 211, 0.3);
-  z-index: 100;
+  z-index: 9999;
+  display: none; /* Hidden by default */
+}
+
+/* Show badge only on wrapup scene */
+body[data-scene="wrapup"] .scene-label-badge--wrapup {
+  display: inline-flex !important;
 }
 
 /* Recipe card header */
@@ -4771,15 +4842,14 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   position: fixed;
   left: var(--space-6);
   bottom: var(--space-6);
-  display: flex;
+  display: none; /* Hidden by default, shown via display:flex when scene active */
   flex-direction: row;
   align-items: flex-end;
   gap: var(--space-3);
-  z-index: 100;
+  z-index: 9999; /* Very high to ensure visibility above all content */
   opacity: 0;
-  visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition: opacity 0.6s ease;
 }
 
 .alien-narrator--wrapup .alien-speech-bubble {
@@ -4806,6 +4876,7 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
 
 /* Activate alien on scene enter - show only on wrapup scene */
 body[data-scene="wrapup"] .alien-narrator--wrapup {
+  display: flex !important;
   opacity: 1 !important;
   visibility: visible !important;
   pointer-events: auto !important;
@@ -5052,7 +5123,7 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
 }
 
 #viz-emotion {
-  width: 60% !important;
+  width: 100% !important;
   min-height: auto !important;
   height: calc(100vh - 140px) !important; /* Taller to fill more of viewport */
   max-height: 700px !important; /* Higher cap for larger screens */
@@ -6202,4 +6273,80 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
   .bridge-topic-label {
     font-size: 0.7rem;
   }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   SCENE HEADER STYLES (title + subtitle + description)
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Scene header container for viral-sounds */
+.viral-sounds-viz-overlay .scene-header {
+  position: absolute;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  text-align: center;
+  max-width: 700px;
+  padding: 0 var(--space-4);
+}
+
+.viral-sounds-viz-overlay .scene-header .scene-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 var(--space-2);
+}
+
+.viral-sounds-viz-overlay .scene-subtitle {
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-weight: 600;
+  color: var(--color-glint);
+  margin: 0 0 var(--space-3);
+}
+
+.viral-sounds-viz-overlay .scene-description {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Scene header container for timing */
+.timing-viz-overlay .scene-header {
+  position: absolute;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  text-align: center;
+  max-width: 700px;
+  padding: 0 var(--space-4);
+}
+
+.timing-viz-overlay .scene-header .scene-title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 var(--space-2);
+}
+
+.timing-viz-overlay .scene-subtitle {
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-weight: 600;
+  color: var(--color-glint);
+  margin: 0 0 var(--space-3);
+}
+
+.timing-viz-overlay .scene-description {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin: 0;
 }

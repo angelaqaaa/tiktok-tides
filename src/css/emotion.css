@@ -311,8 +311,11 @@
 }
 
 .emotion-viz-wrapper {
-  position: relative;
-  width: 100%;
+  position: absolute;
+  left: 540px;
+  right: 320px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /* Task C: Lightened viz-container - transparent with subtle border */
@@ -472,6 +475,11 @@ body[data-scene="air"] .alien-narrator--emotion .alien-speech-bubble {
     top: 12%;
     right: 150px;
   }
+
+  .emotion-viz-wrapper {
+    left: 32%;
+    right: 180px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -491,5 +499,16 @@ body[data-scene="air"] .alien-narrator--emotion .alien-speech-bubble {
 
   .alien-narrator--emotion .alien-speech-bubble {
     max-width: 200px;
+  }
+
+  .emotion-viz-wrapper {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    transform: none;
+    min-width: auto;
+    max-width: 100%;
+    width: 100%;
   }
 }
