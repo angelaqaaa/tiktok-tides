@@ -37,6 +37,7 @@ export class EmotionViz extends EventEmitter {
     this.zoomLayer = null;
     this.zoom = null;
     this.currentTransform = null;
+    this.preSortTransform = null; // <-- store zoom state before entering sorted view
 
     // separate layer for hover connection lines
     this.linkLayer = null;
@@ -999,9 +1000,23 @@ export class EmotionViz extends EventEmitter {
 
   /**
    * Set up zoom + pan behavior on the SVG, transforming zoomLayer.
+   * When in sorted (column) view, we disable zoom/pan and lock to identity
+   * to keep the columns perfectly aligned.
    */
   setupZoom(width, height) {
     if (!this.svg || !this.zoomLayer) return;
+
+    // If we're in sorted view, temporarily disable zoom/pan and reset transform
+    if (this.state?.sortedView) {
+      if (this.zoom) {
+        // Remove all zoom-related listeners
+        this.svg.on(".zoom", null);
+      }
+      // Lock zoom layer to identity so columns align with the viewport
+      this.currentTransform = d3.zoomIdentity;
+      this.zoomLayer.attr("transform", this.currentTransform);
+      return;
+    }
 
     // Preserve previous transform if we have one, otherwise start at identity
     const initialTransform = this.currentTransform || d3.zoomIdentity;
@@ -1083,6 +1098,9 @@ export class EmotionViz extends EventEmitter {
   }
 
   /**
+   * Arrange visible emotions into neat columns for comparison.
+   */
+    /**
    * Arrange visible emotions into neat columns for comparison.
    */
   applySortedLayout() {
@@ -1178,7 +1196,11 @@ export class EmotionViz extends EventEmitter {
             .attr("y", 20)
             .style("font-size", "12px")
             .style("font-weight", "600")
-            .style("fill", "var(--color-text-primary, #e5e7eb)")
+            // 🔧 FIXED: removed stray backtick, proper string
+            .style(
+              "fill",
+              "var(--color-text-primary, #e5e7eb)"
+            )
             .text((d) => d),
         (update) => update,
         (exit) => exit.remove()
@@ -1194,11 +1216,30 @@ export class EmotionViz extends EventEmitter {
 
   /**
    * Public helper to enable/disable sorted view.
+   * While sorted, zoom/pan is disabled and the transform is reset to identity.
+   * On returning to the cloud view, the previous zoom transform is restored.
    */
   setSortedView(enabled) {
     const sorted = !!enabled;
     if (!this.state) return;
     if (this.state.sortedView === sorted) return;
+
+    // When turning sorted view ON, capture current zoom state and disable zoom
+    if (sorted) {
+      // Store current zoom transform so we can restore later
+      this.preSortTransform = this.currentTransform || d3.zoomIdentity;
+
+      // Disable zoom interactions on the SVG
+      if (this.svg && this.zoom) {
+        this.svg.on(".zoom", null);
+      }
+
+      // Reset zoom layer transform to identity so columns are aligned
+      if (this.zoomLayer) {
+        this.currentTransform = d3.zoomIdentity;
+        this.zoomLayer.attr("transform", this.currentTransform);
+      }
+    }
 
     this.state.sortedView = sorted;
 
@@ -1207,7 +1248,14 @@ export class EmotionViz extends EventEmitter {
     if (sorted) {
       this.applySortedLayout();
     } else {
-      // re-render original cloud layout
+      // Leaving sorted view: restore previous zoom transform (if any)
+      if (this.preSortTransform) {
+        this.currentTransform = this.preSortTransform;
+      } else if (!this.currentTransform) {
+        this.currentTransform = d3.zoomIdentity;
+      }
+
+      // Re-render original cloud layout; setupZoom will re-enable zoom
       this.render();
       this.applyEmotionFilter();
     }
