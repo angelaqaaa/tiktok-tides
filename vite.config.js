@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: './',
+  base: '/tiktok-tides/',
   build: {
     outDir: 'dist',
     rollupOptions: {
