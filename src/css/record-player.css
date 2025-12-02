@@ -582,7 +582,7 @@
 }
 
 .song-info-screen__left {
-    flex: 0 0 90px; /* Wider fixed width for album cover */
+    flex: 0 0 105px; /* Wider fixed width for larger album cover */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -612,14 +612,14 @@
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically */
-    padding: clamp(0.7rem, 1.2vw, 1.1rem);
-    gap: clamp(0.3rem, 0.5vw, 0.5rem); /* Tighter gap */
+    padding: clamp(0.4rem, 0.7vw, 0.7rem); /* Reduced padding for tighter layout */
+    gap: clamp(0.25rem, 0.4vw, 0.4rem); /* Tighter gap */
     overflow: hidden; /* Prevent overflow causing extra space */
 }
 
 .song-info-screen__title {
     font-family: var(--font-family-sans);
-    font-size: clamp(0.85rem, 1.1vw, 1.05rem); /* Larger and more readable */
+    font-size: clamp(1.05rem, 1.35vw, 1.3rem); /* Even larger for better readability */
     font-weight: var(--font-weight-bold);
     color: var(--color-text-primary);
     margin: 0;
@@ -637,7 +637,7 @@
 
 .song-info-screen__description {
     font-family: var(--font-family-sans);
-    font-size: clamp(0.6rem, 0.75vw, 0.72rem);
+    font-size: clamp(0.8rem, 0.95vw, 0.9rem); /* Even larger for readability */
     line-height: 1.35; /* Tighter line height */
     color: rgba(240, 242, 245, 0.75);
     margin: 0;

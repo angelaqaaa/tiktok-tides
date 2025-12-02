@@ -386,19 +386,6 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
   position: relative;
 }
 
-/* Speech bubble tail - pointing left (default) */
-.alien-narrator--scene .alien-speech-bubble::before {
-  content: '';
-  position: absolute;
-  bottom: 12px;
-  left: -8px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 8px 10px 8px 0;
-  border-color: transparent rgba(255, 255, 255, 0.98) transparent transparent;
-}
-
 /* Speech text - Dark text for white/light background */
 .alien-narrator--scene .alien-speech-text,
 .alien-speech-text {

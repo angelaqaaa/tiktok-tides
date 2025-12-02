@@ -1475,19 +1475,6 @@
   transform: scale(1) translateX(0);
 }
 
-/* Speech bubble tail */
-.alien-speech-bubble::before {
-  content: '';
-  position: absolute;
-  bottom: 8px;
-  left: -8px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 8px 10px 8px 0;
-  border-color: transparent rgba(45, 204, 211, 0.4) transparent transparent;
-}
-
 .alien-speech-text {
   font-size: 0.9375rem;
   color: var(--color-text-primary);

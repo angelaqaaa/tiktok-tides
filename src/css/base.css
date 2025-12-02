@@ -2991,17 +2991,6 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   margin-bottom: var(--space-2);
 }
 
-/* Arrow pointing down (toward alien below) */
-.alien-narrator--timing .alien-speech-bubble::before {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 8px solid transparent;
-  border-top-color: rgba(255, 255, 255, 0.98);
-}
-
 .alien-narrator--timing .alien-speech-text {
   font-size: 0.875rem;
   color: #1a1a2e; /* Dark text for white background */
@@ -3078,10 +3067,6 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
     transform: none;
     margin-left: 0;
     margin-top: var(--space-2);
-  }
-
-  .alien-narrator--timing .alien-speech-bubble::before {
-    display: none;
   }
 
   /* Adjust timing overlay for mobile */
@@ -3432,17 +3417,6 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
   transition: opacity 400ms ease, transform 400ms ease;
 }
 
-/* Arrow points left toward alien avatar */
-.alien-narrator--pyramid .alien-speech-bubble::before {
-  content: '';
-  position: absolute;
-  left: -10px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 8px solid transparent;
-  border-right-color: rgba(255, 255, 255, 0.98); /* Match white background */
-}
-
 .alien-narrator--pyramid .alien-speech-text {
   font-size: 0.875rem;
   color: #1a1a2e; /* Dark text for white background */
@@ -3508,10 +3482,6 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
     left: auto;
     bottom: auto;
     margin-top: var(--space-2);
-  }
-
-  .alien-narrator--pyramid .alien-speech-bubble::before {
-    display: none;
   }
 }
 
@@ -4027,19 +3997,6 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 /* Triangle pointing RIGHT toward alien (like Scene 3) */
-.alien-narrator--scene2 .alien-speech-bubble::before {
-  content: '';
-  position: absolute;
-  right: -10px;
-  left: auto;
-  top: 50%;
-  bottom: auto;
-  transform: translateY(-50%);
-  border-width: 10px 0 10px 12px;
-  border-style: solid;
-  border-color: transparent transparent transparent rgba(255, 255, 255, 0.98);
-}
-
 /* ═══════════════════════════════════════════════════════════════════════════
    Scene 2 Speech Bubble - Tracking position (step 1)
    Alien tracks planet, speech bubble to the RIGHT with triangle pointing left
@@ -4053,14 +4010,6 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   margin-left: 15px; /* Gap between bubble and alien */
 }
 
-/* Triangle pointing LEFT toward alien */
-.alien-narrator--scene2.alien-tracking .alien-speech-bubble::before {
-  right: auto;
-  left: -10px;
-  border-width: 10px 12px 10px 0;
-  border-color: transparent rgba(255, 255, 255, 0.98) transparent transparent;
-}
-
 /* @keyframes alienEnterFromBelow - MOVED TO alien-narrator.css */
 
 /* .alien-mini-planet and @keyframes miniPlanetGlow - MOVED TO alien-narrator.css */
@@ -4069,14 +4018,18 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .alien-narrator--scene3.alien-narrator--scene {
   position: absolute !important;
   /* Position lower and closer to record player */
-  top: 90% !important; /* Move down - increased from 50% */
-  bottom: auto !important;
-  left: 70% !important; /* Move left - closer to record player, from 58% */
+  top: auto !important;
+  bottom: 60px !important; /* Fixed distance from bottom */
+  left: 70% !important; /* Position from left edge */
   right: auto !important;
-  transform: translateY(-50%) translateX(0) translateY(150px);
-  flex-direction: row-reverse; /* Alien on right, speech bubble on left */
-  align-items: center;
-  gap: var(--space-2); /* Smaller gap - tighter spacing */
+  transform: translateY(150px);
+  /* Use grid to stack avatar+platform vertically while keeping speech bubble separate */
+  display: grid !important;
+  grid-template-columns: auto auto; /* speech bubble column | alien column */
+  grid-template-rows: auto auto; /* avatar row | platform row */
+  column-gap: var(--space-2);
+  row-gap: 0; /* No gap - avatar overlaps platform */
+  align-items: end; /* Align to bottom */
   /* Start hidden off-screen - will animate in when scene is active */
   opacity: 0;
   transition: transform 0.5s ease-out, opacity 0.3s ease-out;
@@ -4087,29 +4040,42 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   animation: alienEnterFromBelowCentered 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
 }
 
-/* Enter from below animation for Scene 3 - vertically centered version */
+/* Enter from below animation for Scene 3 - bottom position version */
 @keyframes alienEnterFromBelowCentered {
   0% {
     opacity: 0;
-    transform: translateY(-50%) translateY(100px);
+    transform: translateY(100px);
   }
   70% {
     opacity: 1;
-    transform: translateY(-50%) translateY(-8px);
+    transform: translateY(-8px);
   }
   85% {
-    transform: translateY(-50%) translateY(4px);
+    transform: translateY(4px);
   }
   100% {
     opacity: 1;
-    transform: translateY(-50%) translateY(0);
+    transform: translateY(0);
   }
 }
 
 .alien-narrator--scene3 .alien-avatar {
-  position: relative;
+  /* Avatar in column 2, stacked with platform */
+  grid-column: 2;
+  grid-row: 1;
   z-index: 2;
-  /* No margin - horizontal layout with gap */
+  align-self: end;
+  justify-self: center;
+  margin-bottom: -20px; /* Overlap onto platform so alien "stands" on it */
+}
+
+/* Platform positioning - row 2, below avatar */
+.alien-narrator--scene3 .alien-floating-platform {
+  grid-column: 2;
+  grid-row: 2; /* Second row - below avatar */
+  z-index: 1;
+  align-self: start;
+  justify-self: center;
 }
 
 /* Float animation only starts after enter animation completes (0.3s delay + 1.2s anim = 1.5s) */
@@ -4131,25 +4097,15 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .alien-narrator--scene3 .alien-speech-bubble {
-  position: relative; /* Relative in flex layout */
+  /* Position in grid column 1 (left side) */
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  position: relative; /* Relative positioning in grid */
   border-radius: 16px;
   white-space: normal;
   max-width: 200px; /* Compact width */
   width: max-content;
-  margin-right: 0; /* No margin, gap is handled by parent */
-}
-
-/* Speech bubble tail - pointing RIGHT toward alien */
-.alien-narrator--scene3 .alien-speech-bubble::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: -10px; /* Point to the right toward alien */
-  left: auto;
-  bottom: auto;
-  transform: translateY(-50%);
-  border-width: 10px 0 10px 12px;
-  border-color: transparent transparent transparent rgba(255, 255, 255, 0.98);
 }
 
 /* .alien-floating-platform, @keyframes platformFloat, platformNeonGlow - MOVED TO alien-narrator.css */
@@ -4520,18 +4476,6 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   color: #1a1a2e; /* Dark text for white background */
 }
 
-/* Arrow pointing right (bubble is left of avatar in row-reverse layout) */
-.alien-narrator--quiz .alien-speech-bubble::before {
-  content: '';
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 8px solid transparent;
-  border-left-color: rgba(255, 255, 255, 0.98);
-  border-left-width: 8px;
-}
-
 /* Activate alien on scene enter */
 body[data-scene="lab"] .alien-narrator--quiz {
   opacity: 1 !important;
@@ -4611,17 +4555,17 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 900px;
+  max-width: 700px; /* Reduced from 900px */
   background: rgba(10, 12, 18, 0.92);
   backdrop-filter: blur(var(--glass-frosted-blur));
   -webkit-backdrop-filter: blur(var(--glass-frosted-blur));
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-lg); /* Reduced from var(--radius-xl) */
   border: 1px solid rgba(45, 204, 211, 0.3);
   box-shadow:
     0 24px 64px rgba(0, 0, 0, 0.5),
     0 0 0 1px rgba(255, 255, 255, 0.03) inset,
     0 0 80px rgba(45, 204, 211, 0.12);
-  padding: var(--space-8);
+  padding: var(--space-6); /* Reduced from var(--space-8) */
   animation: cardFadeIn 0.8s ease-out;
 }
 
@@ -4661,14 +4605,14 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
 }
 
 .recipe-title {
-  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  font-size: clamp(1.2rem, 2.8vw, 1.6rem); /* Reduced from 1.5rem/3.5vw/2rem */
   font-weight: 700;
   color: var(--color-text-primary);
   margin-bottom: var(--space-2);
 }
 
 .recipe-subtitle {
-  font-size: var(--font-size-body-sm);
+  font-size: 0.8rem; /* Reduced from var(--font-size-body-sm) */
   color: rgba(255, 255, 255, 0.6);
   font-style: italic;
 }
@@ -4677,8 +4621,8 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
 .recipe-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-6);
-  margin-bottom: var(--space-6);
+  gap: var(--space-5); /* Reduced from var(--space-6) */
+  margin-bottom: var(--space-5); /* Reduced from var(--space-6) */
 }
 
 /* Column styling */
@@ -4689,7 +4633,7 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
 }
 
 .recipe-column-title {
-  font-size: var(--font-size-body-lg);
+  font-size: 1rem; /* Reduced from var(--font-size-body-lg) */
   font-weight: 600;
   color: var(--color-glint, #2DCCD3);
   padding-bottom: var(--space-2);
@@ -4722,19 +4666,19 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
 
 .ingredient-icon {
   flex-shrink: 0;
-  width: 32px;
-  height: 32px;
+  width: 28px; /* Reduced from 32px */
+  height: 28px; /* Reduced from 32px */
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(45, 220, 211, 0.15);
   border-radius: var(--radius-sm);
-  font-size: 1rem;
+  font-size: 0.85rem; /* Reduced from 1rem */
 }
 
 .ingredient-text {
   flex: 1;
-  font-size: var(--font-size-body-sm);
+  font-size: 0.85rem; /* Reduced from var(--font-size-body-sm) */
   color: rgba(255, 255, 255, 0.85);
   line-height: 1.5;
 }
@@ -4762,13 +4706,13 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
 
 .evidence-icon {
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  width: 34px; /* Reduced from 40px */
+  height: 34px; /* Reduced from 40px */
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-sm);
-  font-size: 1.25rem;
+  font-size: 1.05rem; /* Reduced from 1.25rem */
 }
 
 .evidence-icon--sound {
@@ -4792,7 +4736,7 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
 }
 
 .evidence-label {
-  font-size: var(--font-size-body-sm);
+  font-size: 0.85rem; /* Reduced from var(--font-size-body-sm) */
   color: rgba(255, 255, 255, 0.7);
 }
 
@@ -4804,7 +4748,7 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
 }
 
 .recipe-closing p {
-  font-size: var(--font-size-body-reg);
+  font-size: 0.9rem; /* Reduced from var(--font-size-body-reg) */
   color: rgba(255, 255, 255, 0.75);
   max-width: 600px;
   margin: 0 auto;
@@ -4841,17 +4785,6 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
 
 .alien-narrator--wrapup .alien-speech-text {
   color: #1a1a2e; /* Dark text for white background */
-}
-
-/* Arrow pointing left (toward alien avatar in row layout) */
-.alien-narrator--wrapup .alien-speech-bubble::before {
-  content: '';
-  position: absolute;
-  left: -10px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 8px solid transparent;
-  border-right-color: rgba(255, 255, 255, 0.98);
 }
 
 /* Activate alien on scene enter - show only on wrapup scene */
@@ -5445,14 +5378,14 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
 }
 
 .song-info-screen__title {
-  font-size: 1.05rem !important; /* Larger and more readable */
+  font-size: 1.25rem !important; /* Much larger for better readability */
   white-space: nowrap !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
 }
 
 .song-info-screen__description {
-  font-size: 0.7rem !important; /* Smaller to reduce space */
+  font-size: 0.9rem !important; /* Larger for better readability */
   white-space: normal !important;
   word-wrap: break-word !important;
   line-height: 1.4 !important; /* Tighter line height */
@@ -5468,19 +5401,6 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
 .alien-narrator--scene3 .alien-speech-bubble .alien-speech-text {
   font-size: 0.85rem !important;
   line-height: 1.4 !important;
-}
-
-/* Speech bubble tail points DOWN, aligned left */
-.alien-narrator--scene3 .alien-speech-bubble::before {
-  top: auto !important;
-  bottom: -10px !important;
-  left: 20px !important; /* Offset from left edge */
-  right: auto !important;
-  transform: none !important;
-  border-left: 10px solid transparent !important;
-  border-right: 10px solid transparent !important;
-  border-top: 10px solid rgba(255, 255, 255, 0.98) !important; /* Match white bubble */
-  border-bottom: none !important;
 }
 
 /* 4. SCENE 4 TIMING - Alien at bottom center per spec */
