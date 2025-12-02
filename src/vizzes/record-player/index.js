@@ -72,6 +72,7 @@ export class RecordPlayerViz {
         this.currentAudio = null;
         this.currentAudioIndex = null;
         this.isMuted = true; // mute state - default to muted
+        this.hasUnmutedOnce = false; // Track if user has unmuted at least once
 
         this.yearSliderEl = null;
         this.yearSelectionEl = null;
@@ -122,6 +123,7 @@ export class RecordPlayerViz {
 
         // Mute toggle button
         this.muteToggleButton = this.container.querySelector('[data-mute-toggle]');
+        this.muteHelperText = this.container.querySelector('[data-mute-helper]');
 
         // Year range slider elements
         this.yearSliderEl = this.container.querySelector('[data-year-slider]');
@@ -1138,7 +1140,16 @@ export class RecordPlayerViz {
     }
 
     handleMuteToggle() {
+        const wasMuted = this.isMuted;
         this.isMuted = !this.isMuted;
+
+        // Hide helper text when user unmutes for the first time
+        if (wasMuted && !this.isMuted && !this.hasUnmutedOnce) {
+            this.hasUnmutedOnce = true;
+            if (this.muteHelperText) {
+                this.muteHelperText.classList.add('is-hidden');
+            }
+        }
 
         // Update button visual state
         if (this.muteToggleButton) {

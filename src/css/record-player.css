@@ -749,3 +749,9 @@
     padding: 0;
     flex-shrink: 0;
 }
+
+.mute-toggle-helper.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 300ms ease, visibility 300ms ease;
+}
