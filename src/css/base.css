@@ -3741,7 +3741,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-6);
+  gap: 100000;
   flex: 1;
   min-height: 100%;
   justify-content: flex-start;
@@ -3764,7 +3764,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   width: 100%;
   max-width: 700px;
   text-align: center;
-  padding: var(--space-5) var(--space-6);
+  padding: var(--space-3) var(--space-6);
+  margin-bottom: -1rem;
   background: rgba(26, 10, 46, 0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -3798,7 +3799,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .scene-quiz #viz-conveyor {
   width: 100%;
   flex: 1;
-  min-height: 400px;
+  min-height: 0;
+  margin-top: 5rem;
   display: flex;
   align-items: center;
   justify-content: center;
