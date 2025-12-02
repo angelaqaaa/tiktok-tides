@@ -4691,12 +4691,10 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
    Per spec: "right side of the quiz panel, like a TV game show host" */
 .alien-narrator--quiz {
   position: absolute;
-  right: var(--space-6);
-  /* Changed from left per spec */
+  left: var(--space-6); /* Moved to left from right */
   bottom: 120px;
   display: flex;
-  flex-direction: row-reverse;
-  /* Bubble left, avatar right */
+  flex-direction: row; /* Bubble right, avatar left (normal order) */
   align-items: flex-end;
   gap: var(--space-3);
   z-index: 10;
