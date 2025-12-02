@@ -826,37 +826,31 @@
               <h2 id="viral-sounds-title" class="viral-sounds-heading">A handful of sounds spin through every feed</h2>
             </div>
 
-        <!-- Main content: Central focus layout per v2 spec 5.3.2 -->
-        <!-- Record centered but slightly left, text panel overlays top-right -->
-        <div class="viral-sounds-main viral-sounds-main--central">
-          <!-- Record visualization (centered, slightly left of center) -->
-          <div class="viral-sounds-record-area viral-sounds-record-area--central record-player-section">
-            <div class="record-player-layout" data-player-layout>
-              <div class="record-player-wrapper">
-                <!-- Mute Toggle Button - Top Left -->
-                <button class="mute-toggle-button" type="button" aria-label="Toggle mute" data-mute-toggle>
-                  <svg class="mute-toggle-button__icon" viewBox="0 0 24 24" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
-                  </svg>
-                </button>
-                <span class="mute-toggle-helper" data-mute-helper>Unmute the sound tracks!</span>
-                <div class="record-player-base">
-                  <div class="record-disc-area">
-                    <div class="record-indicator-line record-indicator-line--max" aria-hidden="true">higher popularity</div>
-                    <svg class="record-disc" viewBox="0 0 700 700" role="img">
-                      <g class="record-rings" data-record-rings></g>
-                    </svg>
-                    <div class="record-center-cap" aria-hidden="true">
-                      <span class="record-center-year" data-year-range-display>2020–2025</span>
-                    </div>
-                  </div>
-                  <div class="tonearm" data-tonearm>
-                    <div class="tonearm-hinge">
-                      <div class="tonearm-arm" data-tonearm-arm>
-                        <div class="tonearm-back">
-                          <div class="tonearm-head"></div>
+            <!-- Main content: Central focus layout per v2 spec 5.3.2 -->
+            <!-- Record centered but slightly left, text panel overlays top-right -->
+            <div class="viral-sounds-main viral-sounds-main--central">
+              <!-- Record visualization (centered, slightly left of center) -->
+              <div class="viral-sounds-record-area viral-sounds-record-area--central record-player-section">
+                <div class="record-player-layout" data-player-layout>
+                  <div class="record-player-wrapper">
+                    <!-- Mute Toggle Button - Top Left -->
+                    <button class="mute-toggle-button" type="button" aria-label="Toggle mute" data-mute-toggle>
+                      <svg class="mute-toggle-button__icon" viewBox="0 0 24 24" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                      </svg>
+                    </button>
+                    <span class="mute-toggle-helper" data-mute-helper>Unmute the sound tracks!</span>
+                    <div class="record-player-base">
+                      <div class="record-disc-area">
+                        <div class="record-indicator-line record-indicator-line--max" aria-hidden="true">higher
+                          popularity</div>
+                        <svg class="record-disc" viewBox="0 0 700 700" role="img">
+                          <g class="record-rings" data-record-rings></g>
+                        </svg>
+                        <div class="record-center-cap" aria-hidden="true">
+                          <span class="record-center-year" data-year-range-display>2020–2025</span>
                         </div>
                       </div>
                       <div class="tonearm" data-tonearm>
@@ -866,94 +860,106 @@
                               <div class="tonearm-head"></div>
                             </div>
                           </div>
+                          <div class="tonearm" data-tonearm>
+                            <div class="tonearm-hinge">
+                              <div class="tonearm-arm" data-tonearm-arm>
+                                <div class="tonearm-back">
+                                  <div class="tonearm-head"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- Song Info Screen - Bottom Right -->
+                          <div class="song-info-screen" data-song-info-screen>
+                            <div class="song-info-screen__left">
+                              <img class="song-info-screen__album-cover" src="" alt="Album cover" data-album-cover>
+                            </div>
+                            <div class="song-info-screen__right">
+                              <h3 class="song-info-screen__title" data-song-title>No song selected</h3>
+                              <p class="song-info-screen__description" data-song-description>🎧 Play Count: —<br>✨
+                                Author: —
+                              </p>
+                            </div>
+                          </div>
+                          <!-- Year Range Control (dual-handle slider from main) -->
+                          <div class="year-range-control" data-year-range>
+                            <div class="year-range-control__header">
+                              <span class="year-range-control__label">Year Range</span>
+                              <span class="year-range-control__value" data-year-range-label>2020 – 2025</span>
+                            </div>
+                            <div class="year-range-slider" data-year-slider>
+                              <div class="year-range-slider__glow"></div>
+                              <div class="year-range-slider__track"></div>
+                              <div class="year-range-slider__selection" data-year-range-selection></div>
+                              <button class="year-range-slider__handle year-range-slider__handle--start" type="button"
+                                aria-label="Select start year" data-year-handle-start></button>
+                              <button class="year-range-slider__handle year-range-slider__handle--end" type="button"
+                                aria-label="Select end year" data-year-handle-end></button>
+                            </div>
+                            <div class="year-range-slider__ticks" data-year-slider-ticks></div>
+                          </div>
                         </div>
-                      </div>
-                      <!-- Song Info Screen - Bottom Right -->
-                      <div class="song-info-screen" data-song-info-screen>
-                        <div class="song-info-screen__left">
-                          <img class="song-info-screen__album-cover" src="" alt="Album cover" data-album-cover>
+                        <!-- Floating musical notes (from main) -->
+                        <div class="record-player-notes" aria-hidden="true">
+                          <span class="note note--cyan">♪</span>
+                          <span class="note note--magenta">♫</span>
+                          <span class="note note--black">♬</span>
+                          <span class="note note--black">♬</span>
+                          <span class="note note--black">♬</span>
+                          <span class="note note--black">♬</span>
                         </div>
-                        <div class="song-info-screen__right">
-                          <h3 class="song-info-screen__title" data-song-title>No song selected</h3>
-                          <p class="song-info-screen__description" data-song-description>🎧 Play Count: —<br>✨ Author: —
-                          </p>
-                        </div>
-                      </div>
-                      <!-- Year Range Control (dual-handle slider from main) -->
-                      <div class="year-range-control" data-year-range>
-                        <div class="year-range-control__header">
-                          <span class="year-range-control__label">Year Range</span>
-                          <span class="year-range-control__value" data-year-range-label>2020 – 2025</span>
-                        </div>
-                        <div class="year-range-slider" data-year-slider>
-                          <div class="year-range-slider__glow"></div>
-                          <div class="year-range-slider__track"></div>
-                          <div class="year-range-slider__selection" data-year-range-selection></div>
-                          <button class="year-range-slider__handle year-range-slider__handle--start" type="button"
-                            aria-label="Select start year" data-year-handle-start></button>
-                          <button class="year-range-slider__handle year-range-slider__handle--end" type="button"
-                            aria-label="Select end year" data-year-handle-end></button>
-                        </div>
-                        <div class="year-range-slider__ticks" data-year-slider-ticks></div>
                       </div>
                     </div>
-                    <!-- Floating musical notes (from main) -->
-                    <div class="record-player-notes" aria-hidden="true">
-                      <span class="note note--cyan">♪</span>
-                      <span class="note note--magenta">♫</span>
-                      <span class="note note--black">♬</span>
-                      <span class="note note--black">♬</span>
-                      <span class="note note--black">♬</span>
-                      <span class="note note--black">♬</span>
+                  </div>
+
+                </div>
+
+                <!-- Text panel overlay (top-right, ~30% width per v3 spec) -->
+                <div class="viral-sounds-text-panel viral-sounds-text-panel--overlay">
+                  <!-- Step markers with v3 spec content -->
+                  <div class="viral-sounds-steps">
+                    <div class="step-item" data-step="1">
+                      <span class="step-marker">1</span>
+                      <p class="step-text">This turntable stacks the biggest viral sounds. Each ring is a track; the
+                        center
+                        holds the current hit.</p>
                     </div>
+                    <div class="step-item" data-step="2">
+                      <span class="step-marker">2</span>
+                      <p class="step-text">Watch which songs appear again and again across years by sliding the year
+                        range.
+                        Some artists stay on the deck.</p>
+                    </div>
+                    <div class="step-item" data-step="3">
+                      <span class="step-marker">3</span>
+                      <p class="step-text">Durations and energy levels of these tracks line up with the sweet spot you
+                        saw
+                        in the stopwatch.</p>
+                    </div>
+                  </div>
+
+                  <!-- Top 3 auto-sequence banner (hidden initially, shown during auto-sequence) -->
+                  <div class="viral-sounds-top3-banner" data-top3-banner aria-hidden="true">
+                    Top 3 viral sounds in this range
                   </div>
                 </div>
               </div>
 
-            </div>
-
-            <!-- Text panel overlay (top-right, ~30% width per v3 spec) -->
-            <div class="viral-sounds-text-panel viral-sounds-text-panel--overlay">
-              <!-- Step markers with v3 spec content -->
-              <div class="viral-sounds-steps">
-                <div class="step-item" data-step="1">
-                  <span class="step-marker">1</span>
-                  <p class="step-text">This turntable stacks the biggest viral sounds. Each ring is a track; the center
-                    holds the current hit.</p>
+              <!-- Alien narrator for Scene 3 (v3 spec: DJ at bottom-right with head bob) -->
+              <div class="alien-narrator alien-narrator--scene alien-narrator--scene3" data-scene="sounds">
+                <!-- Avatar FIRST so it renders on TOP in column layout -->
+                <div class="alien-avatar alien-avatar--dj">
+                  <img src="/assets/alien.PNG" alt="" width="64" height="64" loading="lazy"
+                    onerror="this.parentElement.classList.add('alien-avatar--fallback')" />
                 </div>
-                <div class="step-item" data-step="2">
-                  <span class="step-marker">2</span>
-                  <p class="step-text">Watch which songs appear again and again across years by sliding the year range.
-                    Some artists stay on the deck.</p>
-                </div>
-                <div class="step-item" data-step="3">
-                  <span class="step-marker">3</span>
-                  <p class="step-text">Durations and energy levels of these tracks line up with the sweet spot you saw
-                    in the stopwatch.</p>
+                <!-- Floating platform SECOND so it renders BELOW -->
+                <div class="alien-floating-platform alien-floating-platform--dj"></div>
+                <div class="alien-speech-bubble" data-speech-state="visible">
+                  <p class="alien-speech-text">These are the sounds that everyone reuses. They match the energy and
+                    duration
+                    sweet spots you saw earlier.</p>
                 </div>
               </div>
-
-              <!-- Top 3 auto-sequence banner (hidden initially, shown during auto-sequence) -->
-              <div class="viral-sounds-top3-banner" data-top3-banner aria-hidden="true">
-                Top 3 viral sounds in this range
-              </div>
-            </div>
-          </div>
-
-          <!-- Alien narrator for Scene 3 (v3 spec: DJ at bottom-right with head bob) -->
-          <div class="alien-narrator alien-narrator--scene alien-narrator--scene3" data-scene="sounds">
-            <!-- Avatar FIRST so it renders on TOP in column layout -->
-            <div class="alien-avatar alien-avatar--dj">
-              <img src="/assets/alien.PNG" alt="" width="64" height="64" loading="lazy"
-                onerror="this.parentElement.classList.add('alien-avatar--fallback')" />
-            </div>
-            <!-- Floating platform SECOND so it renders BELOW -->
-            <div class="alien-floating-platform alien-floating-platform--dj"></div>
-            <div class="alien-speech-bubble" data-speech-state="visible">
-              <p class="alien-speech-text">These are the sounds that everyone reuses. They match the energy and duration
-                sweet spots you saw earlier.</p>
-            </div>
-          </div>
         </section>
 
         <!-- ════════════════════════════════════════════════════════════════════════
@@ -962,89 +968,96 @@
          Layout: Centered with top text, bottom viz (vertical stack)
          Background: Dawn gradient (deep blue top to warm yellow bottom)
          ════════════════════════════════════════════════════════════════════════ -->
-    <section id="scene-duration" class="section scene-timing" data-scene-id="duration" role="region"
-      aria-labelledby="duration-title">
+        <section id="scene-duration" class="section scene-timing" data-scene-id="duration" role="region"
+          aria-labelledby="duration-title">
 
-      <!-- Background layers per v3 spec - dawn theme -->
-      <div class="timing-bg timing-bg--gradient" aria-hidden="true"></div>
-      <div class="timing-bg timing-bg--glow" aria-hidden="true"></div>
+          <!-- Background layers per v3 spec - dawn theme -->
+          <div class="timing-bg timing-bg--gradient" aria-hidden="true"></div>
+          <div class="timing-bg timing-bg--glow" aria-hidden="true"></div>
 
-      <!-- Top half: Narrative text -->
-      <div class="timing-header">
-        <span class="scene-label-badge">Scene 4 — Timing</span>
-        <h2 id="duration-title" class="timing-title">Timing is the tide of attention</h2>
-        <p class="timing-subtitle">
-          Short videos cannot be infinitely long. Viewers swipe away fast.
-          The stopwatch below shows where viral songs cluster inside that time limit.
-        </p>
+          <!-- Top half: Narrative text -->
+          <div class="timing-header">
+            <span class="scene-label-badge">Scene 4 — Timing</span>
+            <h2 id="duration-title" class="timing-title">Timing is the tide of attention</h2>
+            <p class="timing-subtitle">
+              Short videos cannot be infinitely long. Viewers swipe away fast.
+              The stopwatch below shows where viral songs cluster inside that time limit.
+            </p>
 
-        <!-- Icon row with timing concepts (v3 spec 5.2.4) - CLICKABLE FILTERS -->
-        <div class="timing-icons-row" role="list" aria-label="Duration concepts - click to filter">
-          <button class="timing-icon-item" role="listitem" data-timing-filter="short" aria-label="Filter to short clips under 15 seconds">
-            <div class="timing-icon-circle timing-icon-circle--short">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-              </svg>
+            <!-- Icon row with timing concepts (v3 spec 5.2.4) - CLICKABLE FILTERS -->
+            <div class="timing-icons-row" role="list" aria-label="Duration concepts - click to filter">
+              <button class="timing-icon-item" role="listitem" data-timing-filter="short"
+                aria-label="Filter to short clips under 15 seconds">
+                <div class="timing-icon-circle timing-icon-circle--short">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                  </svg>
+                </div>
+                <span class="timing-icon-label">Too short</span>
+                <span class="timing-icon-desc">Under 15s</span>
+              </button>
+              <button class="timing-icon-item timing-icon-item--highlight" role="listitem" data-timing-filter="mid"
+                aria-label="Filter to mid-length clips 15 to 30 seconds">
+                <div class="timing-icon-circle timing-icon-circle--sweet">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
+                </div>
+                <span class="timing-icon-label">Just right</span>
+                <span class="timing-icon-desc">15-30s sweet spot</span>
+              </button>
+              <button class="timing-icon-item" role="listitem" data-timing-filter="long"
+                aria-label="Filter to long clips over 30 seconds">
+                <div class="timing-icon-circle timing-icon-circle--long">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2">
+                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+                  </svg>
+                </div>
+                <span class="timing-icon-label">Too long</span>
+                <span class="timing-icon-desc">Over 30s</span>
+              </button>
             </div>
-            <span class="timing-icon-label">Too short</span>
-            <span class="timing-icon-desc">Under 15s</span>
-          </button>
-          <button class="timing-icon-item timing-icon-item--highlight" role="listitem" data-timing-filter="mid" aria-label="Filter to mid-length clips 15 to 30 seconds">
-            <div class="timing-icon-circle timing-icon-circle--sweet">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
-              </svg>
-            </div>
-            <span class="timing-icon-label">Just right</span>
-            <span class="timing-icon-desc">15-30s sweet spot</span>
-          </button>
-          <button class="timing-icon-item" role="listitem" data-timing-filter="long" aria-label="Filter to long clips over 30 seconds">
-            <div class="timing-icon-circle timing-icon-circle--long">
-              <svg viewBox="0 0 24 24" fill="black" stroke="currentColor" stroke-width="0">
-                <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
-              </svg>
-            </div>
-          </div>
 
-          <!-- Bottom half: Stopwatch visualization -->
-          <div class="timing-viz-area">
-            <div class="timing-viz-wrapper">
-              <!-- D3 stopwatch visualization mounts here -->
-              <div id="chart" class="viz-container"
-                aria-label="Stopwatch-style radial visualization showing duration sweet spots"></div>
+            <!-- Bottom half: Stopwatch visualization -->
+            <div class="timing-viz-area">
+              <div class="timing-viz-wrapper">
+                <!-- D3 stopwatch visualization mounts here -->
+                <div id="chart" class="viz-container"
+                  aria-label="Stopwatch-style radial visualization showing duration sweet spots"></div>
 
-              <!-- Callout annotation (appears during highlight) -->
-              <div class="timing-callout" data-timing-callout aria-hidden="true">
-                <div class="callout-arrow"></div>
-                <p class="callout-text">Most viral songs live here.</p>
+                <!-- Callout annotation (appears during highlight) -->
+                <div class="timing-callout" data-timing-callout aria-hidden="true">
+                  <div class="callout-arrow"></div>
+                  <p class="callout-text">Most viral songs live here.</p>
+                </div>
+              </div>
+
+              <!-- Legend panel (positioned to side of viz) -->
+              <div class="timing-legend" role="complementary" aria-label="Visualization legend">
+                <div class="legend-item-inline">
+                  <span class="legend-dot legend-dot--arc"></span>
+                  <span>Arc length = Duration (seconds)</span>
+                </div>
+                <div class="legend-item-inline">
+                  <span class="legend-dot legend-dot--radius"></span>
+                  <span>Arc position = Average play count</span>
+                </div>
               </div>
             </div>
 
-            <!-- Legend panel (positioned to side of viz) -->
-            <div class="timing-legend" role="complementary" aria-label="Visualization legend">
-              <div class="legend-item-inline">
-                <span class="legend-dot legend-dot--arc"></span>
-                <span>Arc length = Duration (seconds)</span>
+            <!-- Alien narrator (upper right of clock per v3 spec 5.2.5) -->
+            <div class="alien-narrator alien-narrator--timing" data-scene="dawn" aria-hidden="true">
+              <div class="alien-avatar">
+                <img src="/assets/alien.PNG" alt="" width="64" height="64" loading="lazy"
+                  onerror="this.parentElement.classList.add('alien-avatar--fallback')" />
               </div>
-              <div class="legend-item-inline">
-                <span class="legend-dot legend-dot--radius"></span>
-                <span>Arc position = Average play count</span>
+              <div class="alien-speech-bubble" data-speech-state="visible">
+                <p class="alien-speech-text">See how dots pack into some bands more than others. Virality loves
+                  certain
+                  durations.</p>
               </div>
             </div>
-          </div>
-
-          <!-- Alien narrator (upper right of clock per v3 spec 5.2.5) -->
-          <div class="alien-narrator alien-narrator--timing" data-scene="dawn" aria-hidden="true">
-            <div class="alien-avatar">
-              <img src="/assets/alien.PNG" alt="" width="64" height="64" loading="lazy"
-                onerror="this.parentElement.classList.add('alien-avatar--fallback')" />
-            </div>
-            <div class="alien-speech-bubble" data-speech-state="visible">
-              <p class="alien-speech-text">See how dots pack into some bands more than others. Virality loves certain
-                durations.</p>
-            </div>
-          </div>
         </section>
 
         <!-- ════════════════════════════════════════════════════════════════════════
@@ -1152,11 +1165,12 @@
                   each other. Hover on any word to see its connections.</p>
               </div>
 
-          <!-- Guided interaction prompt -->
-          <div class="emotion-guided-step">
-            <p class="guided-prompt">Try clicking on the legend to filter by emotion, hover on bubbles to explore word connections.</p>
-            <p class="guided-prompt">Left click and drag to pan, and scroll wheel to zoom.</p>
-          </div>
+              <!-- Guided interaction prompt -->
+              <div class="emotion-guided-step">
+                <p class="guided-prompt">Try clicking on the legend to filter by emotion, hover on bubbles to explore
+                  word connections.</p>
+                <p class="guided-prompt">Left click and drag to pan, and scroll wheel to zoom.</p>
+              </div>
 
               <!-- Insight callout (shown after interaction) -->
               <div class="emotion-insight-callout" data-insight-state="hidden">
@@ -1472,7 +1486,7 @@
       var fullPageInstance = new fullpage('#fullpage', {
         // License key (using open-source GPL-compatible option)
         licenseKey: 'gplv3-license',
-        
+
         // Mark fullPage as ready once initialized
         afterRender: function () {
           console.log('[fullPage] afterRender - marking ready');
