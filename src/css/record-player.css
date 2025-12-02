@@ -69,7 +69,8 @@
  width: 100%;
  max-width: min(85vw, 1100px); /* Match wrapper sizing */
  margin: 0 auto;
- position: relative;
+ position: absolute;
+    right: 800px;
 }
 
 .record-player-wrapper {

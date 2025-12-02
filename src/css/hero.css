@@ -145,12 +145,12 @@
 }
 
 .hero-container {
-  display: grid;
-  grid-template-columns: 55% 45%;
-  gap: var(--space-7);
-  align-items: center;
-  max-width: 1200px;
-  width: 100%;
+    display: grid;
+    grid-template-columns: 60% 40%;
+    gap: var(--space-8);
+    align-items: center;
+    max-width: 1400px;
+    width: 100%;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -991,7 +991,7 @@
   height: auto;
   object-fit: contain;
   position: absolute;
-  bottom: 20%;
+  bottom: 15%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 5;
@@ -1014,7 +1014,7 @@
   position: absolute;
   top: 22%; /* Lower together with content */
   left: 10px;
-  right: 50px;
+  right: 20px;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
   padding: 10px 12px;

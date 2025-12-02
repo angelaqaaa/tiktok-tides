@@ -539,15 +539,23 @@ body[data-scene="air"] .scene--bubbles {
   }
 }
 
-/* Viz Containers */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Viz Containers - REFINED (Task C)
+   - Removed heavy opaque backgrounds that fight scene backgrounds
+   - Removed thick borders
+   - Removed scanning animation (was too busy)
+   - Containers are now transparent by default, letting scene backgrounds show
+   ═══════════════════════════════════════════════════════════════════════════ */
 .viz-container {
   width: 100%;
   min-height: 80vh;
   height: calc(100vh - 160px);
-  border: 1px solid var(--color-border-interactive);
+  /* Task C: Transparent background - let scene backgrounds show through */
+  background: transparent;
+  /* Task C: Remove border - rely on scene-specific subtle framing */
+  border: none;
   border-radius: 8px;
-  background: var(--color-background-secondary);
-  padding: var(--space-6);
+  padding: var(--space-4);
   position: relative;
   overflow: hidden;
   transition: all var(--duration-macro) var(--easing-standard);
@@ -556,7 +564,14 @@ body[data-scene="air"] .scene--bubbles {
   justify-content: center;
 }
 
+/* Task C: Scanning animation removed - was too busy and distracting
+   The ::before pseudo-element is now used for subtle scene-specific accents only */
 .viz-container::before {
+  content: none; /* Disabled by default */
+}
+
+/* Task C: Opt-in scanning animation for scenes that want it */
+.viz-container--with-scan::before {
   content: '';
   position: absolute;
   top: 0;
@@ -573,6 +588,54 @@ body[data-scene="air"] .scene--bubbles {
 
 @keyframes scan {
   to { transform: translateX(100%); }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Viz Container Variants - Scene-specific subtle framing (Task C)
+   Light frames that enhance metaphor without creating opaque rectangles
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Subtle glass panel - for scenes that need minimal container definition */
+.viz-container--glass {
+  background: rgba(10, 12, 18, 0.2);
+  border: 1px solid rgba(45, 204, 211, 0.15);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Orbital frame - for planet/galaxy visualization */
+.viz-container--orbital {
+  background: transparent;
+  border: none;
+  position: relative;
+}
+
+.viz-container--orbital::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 1px dashed rgba(45, 204, 211, 0.2);
+  pointer-events: none;
+  animation: orbital-rotate 60s linear infinite;
+}
+
+@keyframes orbital-rotate {
+  to { transform: rotate(360deg); }
+}
+
+/* Record frame - thin circular rim */
+.viz-container--record {
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+}
+
+/* Lab/quiz style - very subtle tech panel */
+.viz-container--lab {
+  background: rgba(10, 12, 18, 0.3);
+  border: 1px solid rgba(74, 77, 94, 0.2);
+  border-radius: 12px;
 }
 
 /* Year Selector - REMOVED (class not in HTML, Dec 2025 cleanup) */
@@ -1253,6 +1316,252 @@ circle[data-type="bubble"] {
   margin-bottom: var(--space-6);
 }
 
+/* ─────────────────────────────────────────────────────────────────────────
+   Chart Instructions Component (Static "How to read this chart" panels)
+   Per narrative-alien-redesign.md - Always visible, never changes with steps
+   ───────────────────────────────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────────────
+   Chart Instructions — Collapsible Info Panel
+   Minimalist info button that expands to show instructions
+   ───────────────────────────────────────────────────────────────────────── */
+.chart-instructions {
+  position: relative;
+  font-size: var(--font-size-small);
+}
+
+/* Toggle button - TikTok-inspired glassmorphism */
+.chart-instructions__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  padding: var(--space-2) var(--space-3);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-instructions__toggle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(37, 244, 238, 0.1) 0%, transparent 50%, rgba(254, 44, 85, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.chart-instructions__toggle:hover {
+  background: rgba(0, 0, 0, 0.5);
+  color: #25F4EE;
+  border-color: rgba(37, 244, 238, 0.3);
+  box-shadow: 0 0 15px rgba(37, 244, 238, 0.15);
+}
+
+.chart-instructions__toggle:hover::before {
+  opacity: 1;
+}
+
+.chart-instructions__toggle-icon {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+/* Content panel - hidden by default, TikTok-inspired styling */
+.chart-instructions__content {
+  display: none;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-top: var(--space-2);
+  max-width: 300px;
+  animation: infoSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  box-shadow:
+    0 0 30px rgba(37, 244, 238, 0.08),
+    0 0 60px rgba(254, 44, 85, 0.04);
+}
+
+.chart-instructions__content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #25F4EE 0%, #FE2C55 100%);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  opacity: 0.6;
+}
+
+.chart-instructions.is-open .chart-instructions__content {
+  display: block;
+}
+
+@keyframes infoSlideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chart-instructions__title {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.75rem;
+  font-weight: var(--font-semibold);
+  margin: 0 0 var(--space-3) 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.chart-instructions__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.6;
+}
+
+.chart-instructions__list li {
+  position: relative;
+  padding-left: var(--space-4);
+  margin-bottom: var(--space-2);
+  font-size: 0.8rem;
+}
+
+.chart-instructions__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--glint);
+  opacity: 0.5;
+}
+
+.chart-instructions__list li:last-child {
+  margin-bottom: 0;
+}
+
+/* Close button inside panel */
+.chart-instructions__close {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  border-radius: var(--radius-full);
+  transition: all 0.15s ease;
+}
+
+.chart-instructions__close:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Step prompt styling (interaction hints) */
+.step-prompt {
+  color: var(--color-accent-cyan);
+  font-style: italic;
+  font-size: var(--font-size-small);
+  margin-top: var(--space-2);
+  opacity: 0.9;
+}
+
+/* Step transition text (scene-to-scene connector) */
+.step-transition {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+  border-top: 1px solid rgba(45, 204, 211, 0.2);
+  padding-top: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+/* Question heading variant */
+.step-heading--question {
+  color: var(--color-text-primary);
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
+/* Scene-specific chart instructions positioning */
+.chart-instructions--pyramid,
+.chart-instructions--emotion {
+  margin-bottom: var(--space-4);
+  max-width: 100%;
+}
+
+.chart-instructions--quiz {
+  margin-top: var(--space-3);
+  margin-bottom: var(--space-4);
+  max-width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Emotion narrative steps */
+.emotion-narrative-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.step-content--emotion {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: var(--space-3);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.step-content--emotion::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, #FE2C55 0%, #25F4EE 100%);
+  border-radius: 3px 0 0 3px;
+  opacity: 0.6;
+}
+
+/* Removed hover - not interactive */
+
+.step-content--emotion p {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--space-2);
+}
+
+.step-content--emotion .step-subheading {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-2) 0;
+}
+
 /* Guided Steps Component */
 .guided-steps {
   background: var(--glass-subtle-background);
@@ -1732,15 +2041,247 @@ circle[data-type="bubble"] {
   margin-right: 280px; /* Leave space for text panel (~250px + gap) */
 }
 
-/* Text panel as overlay on far right (not covering record player) */
+/* VIZ OVERLAY - Persists across horizontal slides */
+.viral-sounds-viz-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-4);
+}
+
+/* Scene label badge positioning (matches music-galaxy) */
+.viral-sounds-viz-overlay .scene-label-badge {
+  position: absolute;
+  top: 100px;
+  left: 35px;
+  z-index: 15;
+}
+
+/* TEXT OVERLAY - Shows one step at a time, right side (matches music-galaxy style) */
+.viral-sounds-text-overlay {
+  position: absolute !important;
+  top: 50%;
+  right: 100px; /* Moved left to reduce clustering */
+  width: 38%;
+  transform: translateY(-50%);
+  max-width: 550px;
+  z-index: 70 !important;
+  pointer-events: auto;
+}
+
+/* Step content cards inside text overlay */
+.viral-sounds-text-overlay .step-content {
+  width: 88%;
+  max-width: 550px;
+  opacity: 1;
+  visibility: visible;
+  background: linear-gradient(
+    135deg,
+    rgba(10, 10, 30, 0.92) 0%,
+    rgba(20, 20, 50, 0.88) 100%
+  );
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(45, 204, 211, 0.2);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 60px rgba(45, 204, 211, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: var(--color-text-primary);
+}
+
+/* Headings in text overlay */
+.viral-sounds-text-overlay .step-heading {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 var(--space-4);
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.viral-sounds-text-overlay .step-subheading {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 700;
+  margin: 0 0 var(--space-3);
+  color: var(--color-glint);
+}
+
+.viral-sounds-text-overlay .step-content p {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: var(--space-3);
+}
+
+.viral-sounds-text-overlay .step-content p:last-child {
+  margin-bottom: 0;
+}
+
+.viral-sounds-text-overlay .step-content p strong {
+  color: var(--color-glint);
+  font-weight: 600;
+}
+
+.viral-sounds-text-overlay .step-prompt {
+  font-size: 0.9375rem;
+  color: #25F4EE;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.viral-sounds-text-overlay .step-transition {
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+}
+
+@keyframes stepFadeIn {
+  from { opacity: 0; transform: translateX(10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Horizontal Slide Navigation Dots (matches music-galaxy style)
+   fullPage.js generates .fp-slidesNav for each section with slides
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Navigation dots styling for all horizontal slide sections */
+.viral-sounds-text-overlay .fp-slidesNav,
+.timing-text-overlay .fp-slidesNav,
+.pyramid-text-overlay .fp-slidesNav,
+.emotion-text-overlay .fp-slidesNav {
+  position: relative !important;
+  bottom: auto !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  margin-top: var(--space-4) !important;
+  display: block !important;
+}
+
+/* Hide default section nav for these sections (before JS moves it) */
+#scene-viral-sounds > .fp-slidesNav,
+#scene-duration > .fp-slidesNav,
+#scene-category > .fp-slidesNav,
+#scene-emotion > .fp-slidesNav {
+  display: none !important;
+}
+
+/* Nav dot list styling */
+.viral-sounds-text-overlay .fp-slidesNav ul,
+.timing-text-overlay .fp-slidesNav ul,
+.pyramid-text-overlay .fp-slidesNav ul,
+.emotion-text-overlay .fp-slidesNav ul,
+#scene-viral-sounds .fp-slidesNav ul,
+#scene-duration .fp-slidesNav ul,
+#scene-category .fp-slidesNav ul,
+#scene-emotion .fp-slidesNav ul {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.viral-sounds-text-overlay .fp-slidesNav ul li,
+.timing-text-overlay .fp-slidesNav ul li,
+.pyramid-text-overlay .fp-slidesNav ul li,
+.emotion-text-overlay .fp-slidesNav ul li,
+#scene-viral-sounds .fp-slidesNav ul li,
+#scene-duration .fp-slidesNav ul li,
+#scene-category .fp-slidesNav ul li,
+#scene-emotion .fp-slidesNav ul li {
+  margin: 0 !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* Nav dot button styling */
+.viral-sounds-text-overlay .fp-slidesNav ul li a,
+.timing-text-overlay .fp-slidesNav ul li a,
+.pyramid-text-overlay .fp-slidesNav ul li a,
+.emotion-text-overlay .fp-slidesNav ul li a,
+#scene-viral-sounds .fp-slidesNav ul li a,
+#scene-duration .fp-slidesNav ul li a,
+#scene-category .fp-slidesNav ul li a,
+#scene-emotion .fp-slidesNav ul li a {
+  display: block !important;
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+  border: 2px solid rgba(45, 204, 211, 0.4) !important;
+  transition: all 250ms ease !important;
+  cursor: pointer !important;
+}
+
+/* Hover state */
+.viral-sounds-text-overlay .fp-slidesNav ul li a:hover,
+.timing-text-overlay .fp-slidesNav ul li a:hover,
+.pyramid-text-overlay .fp-slidesNav ul li a:hover,
+.emotion-text-overlay .fp-slidesNav ul li a:hover,
+#scene-viral-sounds .fp-slidesNav ul li a:hover,
+#scene-duration .fp-slidesNav ul li a:hover,
+#scene-category .fp-slidesNav ul li a:hover,
+#scene-emotion .fp-slidesNav ul li a:hover {
+  background: rgba(45, 204, 211, 0.4) !important;
+  border-color: rgba(45, 204, 211, 0.7) !important;
+  transform: scale(1.15) !important;
+}
+
+/* Active state */
+.viral-sounds-text-overlay .fp-slidesNav ul li a.active,
+.viral-sounds-text-overlay .fp-slidesNav ul li.active a,
+.timing-text-overlay .fp-slidesNav ul li a.active,
+.timing-text-overlay .fp-slidesNav ul li.active a,
+.pyramid-text-overlay .fp-slidesNav ul li a.active,
+.pyramid-text-overlay .fp-slidesNav ul li.active a,
+.emotion-text-overlay .fp-slidesNav ul li a.active,
+.emotion-text-overlay .fp-slidesNav ul li.active a,
+#scene-viral-sounds .fp-slidesNav ul li a.active,
+#scene-viral-sounds .fp-slidesNav ul li.active a,
+#scene-duration .fp-slidesNav ul li a.active,
+#scene-duration .fp-slidesNav ul li.active a,
+#scene-category .fp-slidesNav ul li a.active,
+#scene-category .fp-slidesNav ul li.active a,
+#scene-emotion .fp-slidesNav ul li a.active,
+#scene-emotion .fp-slidesNav ul li.active a {
+  background: var(--color-glint, #2DCCD3) !important;
+  border-color: var(--color-glint, #2DCCD3) !important;
+  box-shadow: 0 0 12px rgba(45, 204, 211, 0.6) !important;
+}
+
+/* Hide the inner span that fullPage adds */
+.viral-sounds-text-overlay .fp-slidesNav ul li a span,
+.timing-text-overlay .fp-slidesNav ul li a span,
+.pyramid-text-overlay .fp-slidesNav ul li a span,
+.emotion-text-overlay .fp-slidesNav ul li a span,
+#scene-viral-sounds .fp-slidesNav ul li a span,
+#scene-duration .fp-slidesNav ul li a span,
+#scene-category .fp-slidesNav ul li a span,
+#scene-emotion .fp-slidesNav ul li a span {
+  display: none !important;
+}
+
+/* Text panel as overlay on far right (not covering record player) - LEGACY */
 .viral-sounds-text-panel--overlay {
   position: absolute;
   top: 50%;
   right: 60px; /* Far right edge - leave space for fullPage navigation dots */
   transform: translateY(-50%); /* Vertically center the panel */
-  width: clamp(180px, 18vw, 250px);
-  max-width: 20%;
-  padding: var(--space-3);
+  width: clamp(280px, 28vw, 400px); /* Wider panel for better readability */
+  max-width: 35%;
+  padding: var(--space-4);
   background: rgba(10, 10, 20, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
@@ -1757,6 +2298,21 @@ circle[data-type="bubble"] {
 
 .viral-sounds-text-panel--overlay p:last-of-type {
   margin-bottom: var(--space-3);
+}
+
+/* Chart Instructions for Record Player Scene (per narrative-alien-redesign.md) */
+.chart-instructions--record-player {
+  margin-bottom: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  max-width: 100%;
+}
+
+.viral-sounds-steps .step-heading {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-1);
+  line-height: 1.3;
 }
 
 /* Step items for v3 narrative (Scene 3) */
@@ -2054,6 +2610,59 @@ circle[data-type="bubble"] {
   overflow: visible; /* Allow fullPage.js scroll events */
 }
 
+/* VIZ OVERLAY - Persists across horizontal slides for timing scene */
+.timing-viz-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+}
+
+/* Scene label badge positioning (matches music-galaxy) */
+.timing-viz-overlay .scene-label-badge {
+  position: absolute;
+  top: 100px;
+  left: 35px;
+  z-index: 15;
+}
+
+/* TEXT OVERLAY - Shows one step at a time, positioned to the side */
+.timing-text-overlay {
+  position: absolute;
+  top: 50%;
+  right: 100px; /* Moved left to reduce clustering */
+  transform: translateY(-50%);
+  width: clamp(280px, 28vw, 380px);
+  max-width: 35%;
+  padding: var(--space-5);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  z-index: 15;
+  box-shadow:
+    0 0 30px rgba(37, 244, 238, 0.08),
+    0 0 60px rgba(254, 44, 85, 0.04);
+}
+
+.timing-text-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #25F4EE 0%, #FE2C55 100%);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  opacity: 0.6;
+}
+
 /* Top half: Narrative header */
 .timing-header {
   position: relative;
@@ -2268,18 +2877,73 @@ circle[data-type="bubble"] {
   background: linear-gradient(135deg, var(--color-glint), var(--color-shimmer));
 }
 
+/* Chart Instructions for Stopwatch Scene (per narrative-alien-redesign.md) */
+.chart-instructions--stopwatch {
+  margin-bottom: var(--space-3);
+}
+
+/* Timing Narrative Steps */
+.timing-narrative-steps {
+  margin-bottom: var(--space-4);
+}
+
+.step-content--timing {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.step-content--timing {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: var(--space-4);
+  margin-bottom: var(--space-3);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.step-content--timing::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, #25F4EE 0%, #FE2C55 100%);
+  border-radius: 3px 0 0 3px;
+  opacity: 0.6;
+}
+
+/* Removed hover - not interactive */
+
+.step-content--timing p {
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--space-2);
+}
+
+.step-content--timing .step-subheading {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-2) 0;
+}
+
 /* Alien narrator for timing scene */
+/* Per spec: "bottom center of the scene, slightly overlapping the empty area under the clock" */
 .alien-narrator--timing {
   position: absolute;
-  right: 15%;
-  top: 35%;
+  left: 50%;
+  bottom: 8%;
+  transform: translateX(-50%);
   z-index: 100;
   display: flex;
-  flex-direction: row; /* Changed to row for side-by-side layout */
+  flex-direction: column; /* Bubble above alien */
   align-items: center;
   gap: var(--space-2);
   opacity: 0;
-  transform: translateY(100px);
   transition: opacity 600ms ease, transform 600ms ease;
 }
 
@@ -2287,7 +2951,7 @@ circle[data-type="bubble"] {
 body[data-scene="dawn"] .alien-narrator--timing {
   opacity: 1 !important;
   visibility: visible !important;
-  transform: translateY(0) !important;
+  transform: translateX(-50%) !important; /* Maintain center positioning */
   animation: alienFloat 3s ease-in-out 1.5s infinite;
 }
 
@@ -2303,10 +2967,11 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   flex-shrink: 0;
 }
 
+/* Bubble above alien in column layout */
 .alien-narrator--timing .alien-speech-bubble {
-  position: relative; /* Changed from absolute for natural flow */
+  position: relative;
   width: max-content;
-  max-width: 200px;
+  max-width: 220px;
   padding: var(--space-3);
   /* White/light per redesign spec section 0.2 */
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
@@ -2315,18 +2980,19 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
   opacity: 0;
   transition: opacity 400ms ease, transform 400ms ease;
-  margin-left: var(--space-2); /* Small gap between alien and bubble */
+  order: -1; /* Bubble appears ABOVE alien in column flex */
+  margin-bottom: var(--space-2);
 }
 
+/* Arrow pointing down (toward alien below) */
 .alien-narrator--timing .alien-speech-bubble::before {
   content: '';
   position: absolute;
-  left: -12px; /* Pointer connects to left edge */
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
   border: 8px solid transparent;
-  border-right-color: rgba(255, 255, 255, 0.98); /* Match white background */
-  border-right-width: 8px;
+  border-top-color: rgba(255, 255, 255, 0.98);
 }
 
 .alien-narrator--timing .alien-speech-text {
@@ -2353,8 +3019,7 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   }
 
   .alien-narrator--timing {
-    right: 5%;
-    top: 25%;
+    bottom: 5%;
   }
 
   .timing-callout {
@@ -2432,12 +3097,108 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   overflow: hidden;
 }
 
-/* Main container - split layout */
+/* VIZ OVERLAY - Persists across horizontal slides for pyramid scene */
+.pyramid-viz-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  padding-top: calc(64px + var(--space-4));
+}
+
+/* TEXT OVERLAY - Shows one step at a time, positioned to the left (matches music-galaxy style) */
+.pyramid-text-overlay {
+  position: absolute !important;
+  top: 50%;
+  left: 30px;
+  width: 38%;
+  transform: translateY(-50%);
+  max-width: 550px;
+  z-index: 70 !important;
+  pointer-events: auto;
+}
+
+/* Step content cards inside text overlay */
+.pyramid-text-overlay .step-content {
+  width: 88%;
+  max-width: 550px;
+  opacity: 1;
+  visibility: visible;
+  background: linear-gradient(
+    135deg,
+    rgba(10, 10, 30, 0.92) 0%,
+    rgba(20, 20, 50, 0.88) 100%
+  );
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(45, 204, 211, 0.2);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 60px rgba(45, 204, 211, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: var(--color-text-primary);
+}
+
+/* Headings in text overlay */
+.pyramid-text-overlay .step-heading {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 var(--space-4);
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.pyramid-text-overlay .step-subheading {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 700;
+  margin: 0 0 var(--space-3);
+  color: var(--color-glint);
+}
+
+.pyramid-text-overlay .step-content p {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: var(--space-3);
+}
+
+.pyramid-text-overlay .step-content p:last-child {
+  margin-bottom: 0;
+}
+
+.pyramid-text-overlay .step-content p strong {
+  color: var(--color-glint);
+  font-weight: 600;
+}
+
+.pyramid-text-overlay .step-prompt {
+  font-size: 0.9375rem;
+  color: #25F4EE;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.pyramid-text-overlay .step-transition {
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+}
+
+/* Main container - split layout (LEGACY - kept for fallback) */
 .pyramid-container {
   position: relative;
   z-index: 10;
   display: grid;
-  grid-template-columns: 35% 65%;
+  grid-template-columns: 42% 58%; /* Wider text column for better readability */
   gap: var(--space-6);
   width: 100%;
   max-width: 1200px;
@@ -2476,16 +3237,27 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   gap: var(--space-3);
   padding: var(--space-3);
   background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(var(--glass-subtle-blur));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: var(--radius-lg);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: background 300ms ease, border-color 300ms ease;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
 }
 
-.pyramid-step:hover {
-  background: rgba(0, 0, 0, 0.4);
-  border-color: rgba(186, 246, 240, 0.3);
+.pyramid-step::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, #25F4EE 0%, #FE2C55 100%);
+  border-radius: 3px 0 0 3px;
+  opacity: 0.6;
 }
+
+/* Removed hover - not interactive */
 
 .step-marker {
   flex-shrink: 0;
@@ -2579,50 +3351,44 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Alien narrator for pyramid scene */
+/* Alien narrator for pyramid scene - v3 spec: bottom center, standing on ground */
 .alien-narrator--pyramid {
   position: absolute;
-  left: 8%;
-  bottom: 15%;
+  left: 50%;
+  bottom: 10%;
+  transform: translateX(-50%);
   z-index: 100;
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: center;
   gap: var(--space-2);
-}
-
-.alien-tree-hide {
-  position: absolute;
-  left: -30px;
-  bottom: 0;
-  z-index: 1;
 }
 
 .alien-narrator--pyramid .alien-avatar {
   position: relative;
   z-index: 2;
   opacity: 0;
-  transform: translateX(-40px);
   transition: opacity 600ms ease, transform 600ms ease;
 }
 
 /* Show alien when scene is active */
-[data-scene="forest"] .alien-narrator--pyramid .alien-avatar {
-  opacity: 1;
-  transform: translateX(0);
+body[data-scene="forest"] .alien-narrator--pyramid .alien-avatar {
+  opacity: 1 !important;
+  visibility: visible !important;
   animation: alienFloat 3s ease-in-out 1s infinite;
 }
 
-[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble[data-speech-state="visible"] {
-  opacity: 1;
-  transform: translateY(0);
+body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
 }
 
+/* Speech bubble above alien (centered layout) */
 .alien-narrator--pyramid .alien-speech-bubble {
-  position: absolute;
-  left: 80px;
-  bottom: 40px;
+  position: relative;
   width: max-content;
-  max-width: 200px;
+  max-width: 240px;
   padding: var(--space-3);
   /* White/light per redesign spec section 0.2 */
   background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
@@ -2632,15 +3398,19 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   opacity: 0;
   transform: translateY(10px);
   transition: opacity 400ms ease, transform 400ms ease;
+  order: -1; /* Place speech bubble before avatar in flex column */
+  margin-bottom: var(--space-2);
 }
 
+/* Arrow points down toward alien */
 .alien-narrator--pyramid .alien-speech-bubble::before {
   content: '';
   position: absolute;
-  left: -8px;
-  bottom: 20px;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
   border: 8px solid transparent;
-  border-right-color: rgba(255, 255, 255, 0.98); /* Match white background */
+  border-top-color: rgba(255, 255, 255, 0.98); /* Match white background */
 }
 
 .alien-narrator--pyramid .alien-speech-text {
@@ -2736,6 +3506,115 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   overflow: hidden;
 }
 
+/* VIZ OVERLAY - Persists across horizontal slides for emotion scene */
+.emotion-viz-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  padding-top: calc(64px + var(--space-4));
+}
+
+/* Controls panel - positioned to the right of visualization */
+.emotion-controls-panel {
+  position: absolute;
+  top: 50%;
+  right: 130px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  z-index: 10;
+  max-width: 180px;
+}
+
+/* TEXT OVERLAY - Shows one step at a time, positioned to the left (matches music-galaxy style) */
+.emotion-text-overlay {
+  position: absolute !important;
+  top: 50%;
+  left: 30px;
+  width: 38%;
+  transform: translateY(-50%);
+  max-width: 550px;
+  z-index: 70 !important;
+  pointer-events: auto;
+}
+
+/* Step content cards inside text overlay */
+.emotion-text-overlay .step-content {
+  width: 88%;
+  max-width: 550px;
+  opacity: 1;
+  visibility: visible;
+  background: linear-gradient(
+    135deg,
+    rgba(10, 10, 30, 0.92) 0%,
+    rgba(20, 20, 50, 0.88) 100%
+  );
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(45, 204, 211, 0.2);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 60px rgba(45, 204, 211, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: var(--color-text-primary);
+}
+
+/* Headings in text overlay */
+.emotion-text-overlay .step-heading {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 var(--space-4);
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.emotion-text-overlay .step-subheading {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 700;
+  margin: 0 0 var(--space-3);
+  color: var(--color-glint);
+}
+
+.emotion-text-overlay .step-content p {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: var(--space-3);
+}
+
+.emotion-text-overlay .step-content p:last-child {
+  margin-bottom: 0;
+}
+
+.emotion-text-overlay .step-content p strong {
+  color: var(--color-glint);
+  font-weight: 600;
+}
+
+.emotion-text-overlay .step-prompt {
+  font-size: 0.9375rem;
+  color: #25F4EE;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.emotion-text-overlay .step-transition {
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+}
+
 /* ─────────────────────────────────────────────────────────────────────────
    Additional Scene 2 & 3 Styles (match HTML class names)
    ───────────────────────────────────────────────────────────────────────── */
@@ -2779,7 +3658,7 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 /* Persistent year controls positioned at bottom of viz overlay */
 .music-galaxy-year-controls--persistent {
   position: absolute;
-  bottom: var(--space-4);
+  bottom: var(--space-6);
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -3035,10 +3914,12 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
    ───────────────────────────────────────────────────────────────────────── */
 
 /* Scene 2: Bottom-left with mini-planet (default) */
+/* Per spec: "bottom right of the scene, just outside the main viz area" */
 .alien-narrator--scene2 {
   position: absolute; /* Relative to viz overlay */
-  bottom: 80px; /* Moved further down */
-  left: calc(var(--space-6) + 40px); /* Moved further from viz center */
+  bottom: 80px;
+  right: calc(var(--space-6) + 40px); /* Changed from left to right per spec */
+  left: auto;
   flex-direction: column; /* Avatar first (top), planet second (bottom) */
   align-items: center;
   gap: 0;
@@ -3047,7 +3928,9 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   display: none;
   opacity: 0;
   transform: translateY(150px);
-  transition: left 600ms cubic-bezier(0.22, 1, 0.36, 1),
+  transition: top 100ms ease-out,
+              left 100ms ease-out,
+              right 600ms cubic-bezier(0.22, 1, 0.36, 1),
               bottom 600ms cubic-bezier(0.22, 1, 0.36, 1); /* Smooth tracking */
 }
 
@@ -3069,6 +3952,11 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   position: relative;
   z-index: 2;
   margin-bottom: -30px; /* Overlap onto mini-planet so alien "stands" on it */
+  align-self: center; /* Ensure centered on mini-planet */
+}
+
+.alien-narrator--scene2 .alien-mini-planet {
+  align-self: center; /* Ensure centered under avatar */
 }
 
 /* Float animation only starts after enter animation completes (0.3s delay + 1.2s anim = 1.5s) */
@@ -3076,39 +3964,56 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   animation: alienFloat 3s ease-in-out 1.5s infinite;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   Scene 2 Speech Bubble - Default position (steps 0, 2, 3)
+   Alien is at bottom-right, speech bubble to the LEFT with triangle pointing right
+   ═══════════════════════════════════════════════════════════════════════════ */
 .alien-narrator--scene2 .alien-speech-bubble {
   position: absolute;
-  left: 130px;
-  bottom: 100px;
-  border-radius: 20px 20px 20px 6px;
+  right: 100%; /* Position to the left of alien */
+  left: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 15px; /* Gap between bubble and alien */
+  border-radius: 16px;
+  white-space: normal;
+  max-width: 280px;
+  width: max-content;
 }
 
-/* Secondary speech bubble for Scene 2 (step 2) - hidden by default */
-.alien-narrator--scene2 .alien-speech-bubble--secondary {
-  left: 130px;
-  bottom: 100px;
-  border-radius: 20px 20px 20px 6px;
-  display: none !important; /* Hide secondary bubble to prevent overlap */
-}
-
-/* Only show primary bubble */
-.alien-narrator--scene2 .alien-speech-bubble--primary {
-  display: block;
-}
-
-/* Pointing animation for Scene 2 when slide 2 is active */
-.alien-narrator--scene2.alien-pointing .alien-avatar {
-  animation: alienPointUp 1.5s ease-in-out infinite !important;
-}
-
-/* @keyframes alienPointUp - MOVED TO alien-narrator.css */
-
-/* Slide 3: Move alien to top-left corner */
-.alien-narrator--scene2.alien-top-left {
+/* Triangle pointing RIGHT toward alien (like Scene 3) */
+.alien-narrator--scene2 .alien-speech-bubble::before {
+  content: '';
+  position: absolute;
+  right: -10px;
+  left: auto;
+  top: 50%;
   bottom: auto;
-  top: 150px;
-  left: var(--space-7);
-  transition: all 800ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(-50%);
+  border-width: 10px 0 10px 12px;
+  border-style: solid;
+  border-color: transparent transparent transparent rgba(255, 255, 255, 0.98);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Scene 2 Speech Bubble - Tracking position (step 1)
+   Alien tracks planet, speech bubble to the RIGHT with triangle pointing left
+   ═══════════════════════════════════════════════════════════════════════════ */
+.alien-narrator--scene2.alien-tracking .alien-speech-bubble {
+  right: auto;
+  left: 100%; /* Position to the right of alien */
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 0;
+  margin-left: 15px; /* Gap between bubble and alien */
+}
+
+/* Triangle pointing LEFT toward alien */
+.alien-narrator--scene2.alien-tracking .alien-speech-bubble::before {
+  right: auto;
+  left: -10px;
+  border-width: 10px 12px 10px 0;
+  border-color: transparent rgba(255, 255, 255, 0.98) transparent transparent;
 }
 
 /* @keyframes alienEnterFromBelow - MOVED TO alien-narrator.css */
@@ -3190,7 +4095,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   width: max-content;
 }
 
-/* Speech bubble tail points right for Scene 3 (bottom-right position) */
+/* Speech bubble tail - Original definition (now overridden in mobile section below)
+   Kept for desktop fallback, matches white bubble per spec section 0.2 */
 .alien-narrator--scene3 .alien-speech-bubble::before {
   right: -10px;
   left: auto;
@@ -3198,7 +4104,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   bottom: auto;
   transform: translateY(-50%);
   border-width: 10px 0 10px 12px;
-  border-color: transparent transparent transparent rgba(0, 242, 234, 0.45);
+  border-color: transparent transparent transparent rgba(255, 255, 255, 0.98);
 }
 
 /* .alien-floating-platform, @keyframes platformFloat, platformNeonGlow - MOVED TO alien-narrator.css */
@@ -3409,6 +4315,18 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   height: 14px;
 }
 
+/* Chart Instructions for Music Galaxy Scene (per narrative-alien-redesign.md) */
+/* Positioned below the legend panel in top-right area */
+.music-galaxy-viz-overlay .chart-instructions {
+  position: absolute;
+  top: 320px; /* Below legend panel */
+  right: 0;
+  left: auto;
+  bottom: auto;
+  z-index: 12;
+  max-width: 200px; /* Match legend width */
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    SCENE 7: QUIZ LAB
    v3 spec 5.7 - Conveyor quiz in the lab
@@ -3465,7 +4383,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 /* Question panel - glassmorphic card */
 .quiz-question-panel {
   width: 100%;
-  max-width: 700px;
+  max-width: 300px;
   text-align: center;
   padding: var(--space-5) var(--space-6);
   background: rgba(26, 10, 46, 0.7);
@@ -3493,7 +4411,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .quiz-intro {
   font-size: var(--font-size-body-reg);
   color: rgba(255, 255, 255, 0.7);
-  max-width: 500px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -3507,12 +4425,14 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   justify-content: center;
 }
 
-/* Alien narrator - Quiz/Lab scene */
+/* Alien narrator - Quiz/Lab scene
+   Per spec: "right side of the quiz panel, like a TV game show host" */
 .alien-narrator--quiz {
   position: absolute;
-  left: var(--space-6);
+  right: var(--space-6); /* Changed from left per spec */
   bottom: 120px;
   display: flex;
+  flex-direction: row-reverse; /* Bubble left, avatar right */
   align-items: flex-end;
   gap: var(--space-3);
   z-index: 10;
@@ -3555,11 +4475,29 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   color: #1a1a2e; /* Dark text for white background */
 }
 
+/* Arrow pointing right (bubble is left of avatar in row-reverse layout) */
+.alien-narrator--quiz .alien-speech-bubble::before {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 8px solid transparent;
+  border-left-color: rgba(255, 255, 255, 0.98);
+  border-left-width: 8px;
+}
+
 /* Activate alien on scene enter */
-[data-scene="lab"] .alien-narrator--quiz {
-  opacity: 1;
-  transform: translateY(0);
+body[data-scene="lab"] .alien-narrator--quiz {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
   animation: labAlienFloat 3s ease-in-out 1s infinite;
+}
+
+body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 @keyframes labAlienFloat {
@@ -3826,18 +4764,21 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   margin-top: var(--space-2);
 }
 
-/* Alien narrator - Wrap-up scene */
+/* Alien narrator - Wrap-up scene
+   Fixed position at bottom-left of VIEWPORT (not relative to any container)
+   Hidden by default, shown only when data-scene="wrapup" is active */
 .alien-narrator--wrapup {
-  position: absolute;
-  right: var(--space-6);
-  bottom: var(--space-8);
+  position: fixed;
+  left: var(--space-6);
+  bottom: var(--space-6);
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   align-items: flex-end;
   gap: var(--space-3);
-  z-index: 10;
+  z-index: 100;
   opacity: 0;
-  transform: translateY(30px);
+  visibility: hidden;
+  pointer-events: none;
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
@@ -3852,12 +4793,28 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   color: #1a1a2e; /* Dark text for white background */
 }
 
-/* Activate alien on scene enter */
-[data-scene="wrapup"] .alien-narrator--wrapup,
-[data-scene="lab"] .alien-narrator--wrapup {
-  opacity: 1;
-  transform: translateY(0);
+/* Arrow pointing left (toward alien avatar in row layout) */
+.alien-narrator--wrapup .alien-speech-bubble::before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 8px solid transparent;
+  border-right-color: rgba(255, 255, 255, 0.98);
+}
+
+/* Activate alien on scene enter - show only on wrapup scene */
+body[data-scene="wrapup"] .alien-narrator--wrapup {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
   animation: alienFloat 3s ease-in-out 1.5s infinite;
+}
+
+body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 /* Responsive adjustments */
@@ -3871,7 +4828,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   }
 
   .alien-narrator--quiz {
-    left: var(--space-4);
+    right: var(--space-4);
     bottom: 80px;
   }
 
@@ -3890,7 +4847,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   }
 
   .alien-narrator--wrapup {
-    right: var(--space-4);
+    left: var(--space-4); /* Smaller margin on mobile */
     bottom: var(--space-4);
   }
 }
@@ -4074,8 +5031,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .emotion-container {
   display: grid !important;
-  grid-template-columns: 280px 1fr 180px !important; /* Text | Viz | Controls */
-  gap: var(--space-3) !important;
+  grid-template-columns: 360px 1fr 180px !important; /* Wider text column | Viz | Controls */
+  gap: var(--space-4) !important;
   width: 100% !important;
   max-width: none !important; /* Remove max-width - fill available space */
   margin: 0 !important;
@@ -4084,8 +5041,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .emotion-text-column {
-  min-width: 250px !important;
-  max-width: 320px !important;
+  min-width: 320px !important;
+  max-width: 400px !important;
 }
 
 .emotion-viz-column {
@@ -4095,7 +5052,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 #viz-emotion {
-  width: 100% !important;
+  width: 60% !important;
   min-height: auto !important;
   height: calc(100vh - 140px) !important; /* Taller to fill more of viewport */
   max-height: 700px !important; /* Higher cap for larger screens */
@@ -4175,21 +5132,11 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   SCENE 2 - Move alien lower in step 4
+   SCENE 2 - Alien positioning overrides (cleaned up)
+   Default position is bottom-right (step 0)
+   .alien-top-left moves near year controls (steps 2-3)
+   Step 1 uses inline JS positioning to track planets
    ───────────────────────────────────────────────────────────────────────── */
-.alien-narrator--scene2 {
-  bottom: 20px !important; /* Even lower to avoid content cutoff */
-}
-
-.alien-narrator--scene2 .alien-speech-bubble {
-  bottom: 80px !important; /* Lower speech bubble too */
-}
-
-/* When in top-left mode, keep normal positioning */
-.alien-narrator--scene2.alien-top-left {
-  bottom: auto !important;
-  top: 120px !important;
-}
 
 /* ─────────────────────────────────────────────────────────────────────────
    QUIZ CONTAINER - Make 90% wide
@@ -4201,7 +5148,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .quiz-question-panel {
   max-width: none !important;
-  width: 100% !important;
+  width: 40% !important;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -4436,20 +5383,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   z-index: 50 !important;
 }
 
-/* 2. SCENE 2 - Move alien and speech bubble MUCH lower */
-.alien-narrator--scene2 {
-  bottom: 5px !important; /* Very bottom */
-}
-
-.alien-narrator--scene2 .alien-speech-bubble {
-  bottom: 40px !important; /* Much lower */
-  left: 100px !important;
-}
-
-.alien-narrator--scene2 .alien-speech-bubble--primary,
-.alien-narrator--scene2 .alien-speech-bubble--secondary {
-  bottom: 40px !important;
-}
+/* 2. SCENE 2 - Speech bubble positioning handled in main section (line ~3375) */
 
 /* 3. SCENE 3 - Fix song info panel (correct class names) */
 .song-info-screen,
@@ -4507,21 +5441,16 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   bottom: -10px !important;
   left: 20px !important; /* Offset from left edge */
   right: auto !important;
-  transform: rotate(180deg) !important;
+  transform: none !important;
   border-left: 10px solid transparent !important;
   border-right: 10px solid transparent !important;
-  border-top: 10px solid rgba(15, 23, 42, 0.95) !important;
+  border-top: 10px solid rgba(255, 255, 255, 0.98) !important; /* Match white bubble */
   border-bottom: none !important;
 }
 
-/* 4. SCENE 4 TIMING - Move alien/speech bubble to better position */
-.alien-narrator--timing {
-  right: 5% !important;
-  top: 25% !important;
-}
-
+/* 4. SCENE 4 TIMING - Alien at bottom center per spec */
 .alien-narrator--timing .alien-speech-bubble {
-  max-width: 180px !important;
+  max-width: 200px !important;
 }
 
 /* 5. RANKING VIZ - Compact to fit on one page without scrolling */
@@ -4688,7 +5617,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .scene-hero .hero-bottom-band {
   position: absolute !important;
-  bottom: 20px !important; /* At the bottom of the scene */
+  bottom: 10px !important; /* At the bottom of the scene */
   left: 50% !important;
   transform: translateX(-50%) !important;
   margin: 0 !important;
@@ -4984,5 +5913,293 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
   h2, .section-subquestion {
     font-size: 1.1rem !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Stacked Narrative Steps Styling
+   (For non-slideshow scenes where all steps are visible at once)
+   ───────────────────────────────────────────────────────────────────────── */
+.pyramid-steps .pyramid-step + .pyramid-step,
+.viral-sounds-steps .step-item + .step-item,
+.timing-narrative-steps .step-content + .step-content,
+.emotion-narrative-steps .step-content + .step-content {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid rgba(45, 204, 211, 0.15);
+}
+
+/* Transition step styling */
+.step-content--transition,
+.step-item--transition {
+  background: rgba(45, 204, 211, 0.05);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-4);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Bridge Pages — TikTok-Inspired Creative Design
+   Vibrant neon glows, glassmorphism, chromatic aberration effects
+   ───────────────────────────────────────────────────────────────────────── */
+.section--bridge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated gradient orbs - TikTok signature look */
+.section--bridge::before,
+.section--bridge::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  animation: orbFloat 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.section--bridge::before {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #25F4EE 0%, transparent 70%);
+  top: -100px;
+  left: -100px;
+  animation-delay: 0s;
+}
+
+.section--bridge::after {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, #FE2C55 0%, transparent 70%);
+  bottom: -80px;
+  right: -80px;
+  animation-delay: -4s;
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -20px) scale(1.05); }
+  50% { transform: translate(-20px, 30px) scale(0.95); }
+  75% { transform: translate(-30px, -10px) scale(1.02); }
+}
+
+.bridge-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: var(--space-8);
+  position: relative;
+  z-index: 1;
+}
+
+/* Glassmorphism card with glowing border */
+.bridge-message {
+  max-width: 600px;
+  text-align: center;
+  padding: var(--space-8);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 0 40px rgba(37, 244, 238, 0.1),
+    0 0 80px rgba(254, 44, 85, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: bridgeCardIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+/* Animated border glow effect */
+.bridge-message::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(37, 244, 238, 0.5) 0%,
+    transparent 40%,
+    transparent 60%,
+    rgba(254, 44, 85, 0.5) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: borderGlow 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes borderGlow {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+.bridge-message--minimal {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--space-8);
+}
+
+@keyframes bridgeCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Eyebrow label with neon accent */
+.bridge-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #25F4EE;
+  margin-bottom: var(--space-4);
+  text-shadow: 0 0 20px rgba(37, 244, 238, 0.5);
+}
+
+/* Title with chromatic aberration effect */
+.bridge-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: var(--font-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  position: relative;
+}
+
+/* Removed glitch hover - bridge is not interactive */
+
+@keyframes glitchText {
+  0%, 100% {
+    text-shadow: none;
+  }
+  20% {
+    text-shadow: -2px 0 #FE2C55, 2px 0 #25F4EE;
+  }
+  40% {
+    text-shadow: 2px 0 #FE2C55, -2px 0 #25F4EE;
+  }
+  60% {
+    text-shadow: -1px 0 #FE2C55, 1px 0 #25F4EE;
+  }
+}
+
+/* Body text - enhanced readability */
+.bridge-text {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Topic icons grid - neon hover effects */
+.bridge-topics {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+}
+
+.bridge-topic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
+}
+
+/* Removed hover - bridge topics are not interactive */
+
+.bridge-topic-icon {
+  width: 36px;
+  height: 36px;
+  stroke: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 0 0 transparent);
+}
+
+/* Static TikTok colors for topic icons - no hover since not interactive */
+.bridge-topic:nth-child(1) .bridge-topic-icon {
+  stroke: #25F4EE;
+}
+
+.bridge-topic:nth-child(2) .bridge-topic-icon {
+  stroke: #FE2C55;
+}
+
+.bridge-topic:nth-child(3) .bridge-topic-icon {
+  stroke: #25F4EE;
+}
+
+.bridge-topic:nth-child(4) .bridge-topic-icon {
+  stroke: #FE2C55;
+}
+
+.bridge-topic-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: var(--font-medium);
+  transition: color 0.3s ease;
+}
+
+/* Removed hover - not interactive */
+
+/* Responsive */
+@media (max-width: 640px) {
+  .section--bridge::before,
+  .section--bridge::after {
+    width: 250px;
+    height: 250px;
+    filter: blur(60px);
+  }
+
+  .bridge-container {
+    padding: var(--space-4);
+  }
+
+  .bridge-message {
+    padding: var(--space-6);
+  }
+
+  .bridge-topics {
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .bridge-topic {
+    padding: var(--space-3);
+  }
+
+  .bridge-topic-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .bridge-topic-label {
+    font-size: 0.7rem;
   }
 }

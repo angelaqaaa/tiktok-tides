@@ -300,7 +300,7 @@
 
 /* Bottom-right corner accent */
 .music-galaxy-viz-overlay::after {
-  bottom: calc(var(--space-4) + 40px);
+  bottom: calc(var(--space-4) + 100px);
   right: calc(var(--space-4) - 20px);
   border-right: 2px solid rgba(255, 0, 80, 0.3);
   border-bottom: 2px solid rgba(255, 0, 80, 0.3);
@@ -402,7 +402,7 @@
 .music-galaxy-text-overlay {
   position: absolute !important;
   top: 50%;
-  right: 0;
+  right: 30px;
   width: 38%;
   transform: translateY(-50%);
   min-width: 320px;
