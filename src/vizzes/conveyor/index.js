@@ -677,6 +677,12 @@ export class ConveyorViz extends EventEmitter {
       </div>
     `;
 
+    // Add event listener to the completion panel restart button
+    const completionRestartBtn = panel.querySelector('.restart-btn');
+    if (completionRestartBtn) {
+      completionRestartBtn.addEventListener('click', () => this.restart());
+    }
+
     // Hide the controls area restart button if present (we use the one in completion box)
     const controlsRestartBtn = this.container.querySelector('.conveyor-controls .restart-btn');
     if (controlsRestartBtn) {
