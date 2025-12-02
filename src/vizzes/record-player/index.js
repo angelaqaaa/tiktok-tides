@@ -52,7 +52,6 @@ export class RecordPlayerViz {
         this.data = [];
         this.songInfo = []; // song info data
         this.radiusScale = null;
-        this.angleScale = null;
         this.shuffledAlbumCovers = shuffleArray(albumCoverPaths); // Randomly shuffled album covers
 
         this.allSongs = [];
@@ -389,10 +388,6 @@ export class RecordPlayerViz {
         const ringCount = Math.max(this.data.length, 1);
         const ringStep = (OUTER_RADIUS - INNER_RADIUS) / ringCount;
         this.radiusScale = (index) => OUTER_RADIUS - (index + 0.75) * ringStep;
-        const maxAngle = 37;
-        const minAngle = 6;
-        const domainEnd = Math.max(ringCount - 1, 1);
-        this.angleScale = d3.scaleLinear().domain([0, domainEnd]).range([minAngle, maxAngle]);
     }
 
     renderRings({ animate = false } = {}) {
@@ -696,11 +691,9 @@ export class RecordPlayerViz {
         // STEP 6: Start audio playback (with mute state)
         this.playSongImmediate(index, { autoplay: isHover || locked });
 
-        // STEP 7: Update tonearm
-        if (isHover) {
-            this.setTonearmToIndex(index, { silent: true });
-        } else {
-            this.setTonearmToIndex(index, { silent: !locked });
+        // STEP 7: Update tonearm - always set to 20 degrees regardless of which ring
+        if (this.tonearmArm) {
+            this.tonearmArm.style.transform = 'rotate(20deg)';
         }
     }
 
@@ -727,6 +720,11 @@ export class RecordPlayerViz {
 
         // STEP 5: Reset hover state
         this.setHoverState(false);
+
+        // STEP 6: Reset tonearm to default position when leaving hover
+        if (this.tonearmArm && this.lockedIndex === null) {
+            this.tonearmArm.style.transform = 'rotate(-1.5deg)';
+        }
     }
 
     // Legacy method for backward compatibility
@@ -750,24 +748,6 @@ export class RecordPlayerViz {
         this.setHoverState(false);
     }
 
-    setTonearmToIndex(index, { silent = false } = {}) {
-        if (!this.tonearmArm || index == null || index < 0 || index >= this.data.length) return;
-
-        // Use angleScale from setupScales()
-        const angle = this.angleScale(index);
-
-        this.tonearmArm.style.transform = `rotate(${angle}deg)`;
-        if (!silent) {
-            this.lockedIndex = index;
-        }
-    }
-
-    clampTonearmAngle(angle) {
-        const range = this.angleScale.range();
-        const min = Math.min(...range);
-        const max = Math.max(...range);
-        return Math.max(min, Math.min(max, angle));
-    }
 
     updateSongInfo(index) {
         if (index == null || index < 0 || index >= this.data.length) {
