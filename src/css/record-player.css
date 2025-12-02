@@ -298,9 +298,9 @@
     filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.25)); 
     transition: stroke-width var(--duration-micro) var(--easing-standard); } 
 
-.record-ring:nth-child(odd) .record-ring-arc { stroke: var(--color-accent-magenta); } 
+.record-ring:nth-child(odd) .record-ring-arc { stroke: #F1204A; } 
 
-.record-ring:nth-child(even) .record-ring-arc { stroke: var(--color-accent-cyan); } 
+.record-ring:nth-child(even) .record-ring-arc { stroke: #2DCCD3; } 
 
 .record-ring-label { font-family: var(--font-family-sans); font-size: clamp(0.8rem, 1.2vw, 1.1rem); letter-spacing: 0.1em; text-transform: uppercase; fill: rgba(39, 35, 35, 0.95); } 
 
