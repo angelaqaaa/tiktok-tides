@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="TikTok Tides - Decoding viral short videos through data">
-    <title>TikTok Tides | Decoding viral short videos</title>
+    <title>TikTok Tides</title>
+    <link rel="icon" type="image/png" href="/assets/Alien_Icon.png">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -93,13 +94,8 @@
               </linearGradient>
             </defs>
             <rect x="2" y="2" width="32" height="32" rx="8" fill="none" stroke="url(#logo-gradient)" stroke-width="2" />
-            <!-- Simple alien head silhouette -->
-            <ellipse cx="18" cy="16" rx="8" ry="9" fill="#BAF6F0" opacity="0.9" />
-            <ellipse cx="14" cy="14" rx="2.5" ry="3" fill="#033624" />
-            <ellipse cx="22" cy="14" rx="2.5" ry="3" fill="#033624" />
-            <path d="M16 20 Q18 22 20 20" stroke="#033624" fill="none" stroke-width="1.5" stroke-linecap="round" />
-            <!-- Lab coat collar hint -->
-            <path d="M12 25 L18 28 L24 25" stroke="#F0F2F5" fill="none" stroke-width="1.5" />
+            <image href="/assets/Alien_Icon.png" x="7" y="7" width="22" height="22"
+              preserveAspectRatio="xMidYMid meet" />
           </svg>
         </div>
         <span class="logo-text">TikTok Tides</span>
@@ -656,46 +652,52 @@
             <!-- Scene label (top-left) -->
             <span class="scene-label-badge">Scene 2 — Music Galaxy</span>
 
-        <!-- Legend panel (top-right) -->
-        <div class="music-galaxy-legend" role="complementary" aria-label="Visualization legend">
-          <div class="legend-section legend-section--text-only">
-            <span class="legend-label legend-label--primary">
-              Distance from sun = Energy level
-              <span class="info-icon" data-tooltip="energy">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="7" cy="7" r="6.5" stroke="currentColor" stroke-width="1"/>
-                  <text x="7" y="10.5" text-anchor="middle" font-size="10" font-weight="600" fill="currentColor">?</text>
-                </svg>
-                <span class="info-tooltip">
-                  Energy measures the perceptual intensity and activity of a track. High-energy songs typically feature loudness, speed, fast tempo, and noisy characteristics. Death metal scores high (≈1.0), while soft ballads score low (≈0.0). Based on dynamic range, perceived loudness, timbre, onset rate, and general entropy.
+            <!-- Legend panel (top-right) -->
+            <div class="music-galaxy-legend" role="complementary" aria-label="Visualization legend">
+              <div class="legend-section legend-section--text-only">
+                <span class="legend-label legend-label--primary">
+                  Distance from sun = Energy level
+                  <span class="info-icon" data-tooltip="energy">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="7" cy="7" r="6.5" stroke="currentColor" stroke-width="1" />
+                      <text x="7" y="10.5" text-anchor="middle" font-size="10" font-weight="600"
+                        fill="currentColor">?</text>
+                    </svg>
+                    <span class="info-tooltip">
+                      Energy measures the perceptual intensity and activity of a track. High-energy songs typically
+                      feature loudness, speed, fast tempo, and noisy characteristics. Death metal scores high (≈1.0),
+                      while soft ballads score low (≈0.0). Based on dynamic range, perceived loudness, timbre, onset
+                      rate, and general entropy.
+                    </span>
+                  </span>
                 </span>
-              </span>
-            </span>
-            <span class="legend-sublabel">(Low energy near sun)</span>
-          </div>
-
-          <div class="legend-section">
-            <span class="legend-label legend-label--primary">
-              Color = Danceability
-              <span class="info-icon" data-tooltip="danceability">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="7" cy="7" r="6.5" stroke="currentColor" stroke-width="1"/>
-                  <text x="7" y="10.5" text-anchor="middle" font-size="10" font-weight="600" fill="currentColor">?</text>
-                </svg>
-                <span class="info-tooltip">
-                  Measures how suitable a track is for dancing based on tempo, rhythm stability, beat strength, and overall regularity.
-                </span>
-              </span>
-            </span>
-            <div class="legend-gradient-wrap">
-              <div class="legend-dance-bar"></div>
-              <div class="legend-gradient-labels">
-                <span>0.0</span>
-                <span>0.5</span>
-                <span>1.0</span>
+                <span class="legend-sublabel">(Low energy near sun)</span>
               </div>
-            </div>
-          </div>
+
+              <div class="legend-section">
+                <span class="legend-label legend-label--primary">
+                  Color = Danceability
+                  <span class="info-icon" data-tooltip="danceability">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="7" cy="7" r="6.5" stroke="currentColor" stroke-width="1" />
+                      <text x="7" y="10.5" text-anchor="middle" font-size="10" font-weight="600"
+                        fill="currentColor">?</text>
+                    </svg>
+                    <span class="info-tooltip">
+                      Measures how suitable a track is for dancing based on tempo, rhythm stability, beat strength, and
+                      overall regularity.
+                    </span>
+                  </span>
+                </span>
+                <div class="legend-gradient-wrap">
+                  <div class="legend-dance-bar"></div>
+                  <div class="legend-gradient-labels">
+                    <span>0.0</span>
+                    <span>0.5</span>
+                    <span>1.0</span>
+                  </div>
+                </div>
+              </div>
 
               <div class="legend-section legend-section--size">
                 <div class="legend-row">
