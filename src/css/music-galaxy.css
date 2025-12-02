@@ -193,6 +193,8 @@
    ───────────────────────────────────────────────────────────────────────── */
 .music-galaxy-viz-overlay #viz-planets {
   position: absolute;
+  top: 80px;
+  left: 15px;
   width: 100%;
   height: 88%;
 
@@ -227,6 +229,9 @@
 
   /* Container for pseudo-elements */
   overflow: hidden;
+
+  /* Keep viz below labels and legends */
+  z-index: 5;
 }
 
 /* Animated gradient border overlay */
@@ -285,7 +290,7 @@
   width: 80px;
   height: 80px;
   pointer-events: none;
-  z-index: 60;
+  z-index: 15; /* Above viz panel, below interactive elements */
 }
 
 /* Top-left corner accent */
@@ -387,12 +392,12 @@
   border-radius: 24px;
 }
 
-/* Scene label badge */
+/* Scene label badge - positioned relative to viz panel */
 .music-galaxy-viz-overlay .scene-label-badge {
   position: absolute;
   top: 100px;
   left: 35px;
-  z-index: 15;
+  z-index: 20; /* Above viz panel and corner accents */
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -402,24 +407,25 @@
 .music-galaxy-text-overlay {
   position: absolute !important;
   top: 50%;
-  right: 30px;
-  width: 38%;
+  /* Reserve space for narrower sidebar - match new sidebar width */
+  right: clamp(50px, calc(10px + 3vw), 80px);
+  width: 35%; /* Slightly wider since sidebar is narrower */
   transform: translateY(-50%);
-  min-width: 320px;
+  min-width: 280px;
   height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: calc(64px + var(--space-6)) var(--space-4) var(--space-6);
+  padding: calc(64px + var(--space-4)) var(--space-3) var(--space-4); /* Reduced padding */
   z-index: 70 !important;
   pointer-events: auto;
 }
 
 /* Step content cards inside text overlay */
 .music-galaxy-text-overlay .step-content {
-  width: 88%;
-  max-width: 550px;
+  width: 90%;
+  max-width: 480px; /* Reduced from 550px */
   opacity: 1;
   visibility: visible;
   background: linear-gradient(
@@ -428,8 +434,8 @@
     rgba(10, 10, 18, 0.98) 100%
   );
   border: 1px solid rgba(45, 204, 211, 0.3);
-  border-radius: 20px;
-  padding: var(--space-5);
+  border-radius: 16px; /* Reduced from 20px */
+  padding: var(--space-5); /* Reduced from var(--space-5) */
   backdrop-filter: blur(var(--glass-frosted-blur));
   box-shadow:
     0 4px 24px rgba(0, 0, 0, 0.4),
@@ -440,10 +446,10 @@
 
 /* Headings in text overlay */
 .music-galaxy-text-overlay .step-heading {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-size: clamp(1.5rem, 3.5vw, 1.9rem); /* Reduced from clamp(1.75rem, 4vw, 2.25rem) */
   font-weight: 800;
   line-height: 1.15;
-  margin: 0 0 var(--space-4);
+  margin: 0 0 var(--space-3); /* Reduced from var(--space-4) */
   background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -451,17 +457,17 @@
 }
 
 .music-galaxy-text-overlay .step-subheading {
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem); /* Reduced from clamp(1.25rem, 3vw, 1.75rem) */
   font-weight: 700;
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--space-2); /* Reduced from var(--space-3) */
   color: var(--color-glint);
 }
 
 .music-galaxy-text-overlay .step-content p {
-  font-size: 1.0625rem;
-  line-height: 1.7;
+  font-size: 0.95rem; /* Reduced from 1.0625rem */
+  line-height: 1.65; /* Slightly reduced from 1.7 */
   color: rgba(255, 255, 255, 0.85);
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-2); /* Reduced from var(--space-3) */
 }
 
 .music-galaxy-text-overlay .step-content p:last-child {

@@ -734,11 +734,11 @@
 .mission-sidebar {
   position: fixed;
   top: 50%;
-  right: 12px;
+  right: 5px;
   transform: translateY(-50%);
   z-index: 1500;
-  width: clamp(70px, 8vw, 95px); /* Responsive width */
-  height: clamp(400px, 60vh, 560px); /* Responsive height - never exceeds 60% of viewport */
+  width: clamp(55px, 6vw, 75px); /* Narrower sidebar - reduced from 70-95px */
+  height: clamp(400px, 60vh, 560px); /* Slightly shorter to match narrower width */
   max-height: calc(100vh - 120px); /* Always leave space for nav */
   background: linear-gradient(180deg,
     rgba(10, 10, 20, 0.98) 0%,

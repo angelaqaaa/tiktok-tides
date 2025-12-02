@@ -312,8 +312,8 @@
 
 .emotion-viz-wrapper {
   position: absolute;
-  left: 540px;
-  right: 320px;
+  left: 420px; /* Reduced from 540px to expand leftward closer to text-overlay */
+  right: 280px; /* Reduced from 320px to expand rightward */
   top: 50%;
   transform: translateY(-50%);
 }
@@ -375,7 +375,7 @@
    ───────────────────────────────────────────────────────────────────────── */
 .alien-narrator--emotion {
   position: absolute;
-  bottom: 8%;
+  bottom: 4%; /* Moved down from 8% */
   left: 40px;
   top: auto;
   right: auto;

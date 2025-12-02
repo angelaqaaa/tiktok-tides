@@ -458,8 +458,6 @@
 
       <!-- Top band: Navigation (handled by TopNavBar) - padding only -->
       <div class="hero-nav-spacer" aria-hidden="true"></div>
-        <!-- Scene label (top-left) -->
-        <span class="scene-label-badge">Scene 1 — Hero: "Arrival"</span>
 
       <!-- Middle band: Main hero content (70% vh) -->
       <div class="hero-content-band">
@@ -844,8 +842,7 @@
 
         <!-- Centered scene title and intro -->
         <div class="scene-header">
-          <h1 class="scene-title">Viral Sounds</h1>
-          <p class="scene-subtitle">A handful of sounds spin through every feed</p>
+          <h1 class="scene-title">A handful of sounds spin through every feed</h1>
           <p class="scene-description">For any chosen year range, the top seven sounds are stacked as rings. The outermost ring is the most played sound. Inner rings are still strong, but a little weaker.</p>
         </div>
 
@@ -1006,8 +1003,7 @@
 
         <!-- Centered scene title and intro -->
         <div class="scene-header">
-          <h1 class="scene-title">Timing</h1>
-          <p class="scene-subtitle">Do the shortest TikToks always go the most viral?</p>
+          <h1 class="scene-title">Do the shortest TikToks always go the most viral?</h1>
           <p class="scene-description">Each slice shows a group of videos inside a duration range. The further a slice reaches from the center, the more views videos in that bucket get on average.</p>
         </div>
 
@@ -1065,12 +1061,6 @@
         <!-- Stopwatch visualization (centered) -->
         <div class="timing-viz-wrapper">
           <div id="chart" class="viz-container" aria-label="Stopwatch-style radial visualization showing duration sweet spots"></div>
-
-          <!-- Callout annotation (appears during highlight) -->
-          <div class="timing-callout" data-timing-callout aria-hidden="true">
-            <div class="callout-arrow"></div>
-            <p class="callout-text">Most viral songs live here.</p>
-          </div>
         </div>
 
         <!-- Legend panel -->
@@ -1347,49 +1337,6 @@
     </section>
 
     <!-- ════════════════════════════════════════════════════════════════════════
-         BRIDGE 3 - QUIZ INTRODUCTION
-         Minimalist transition preparing for the quiz
-         ════════════════════════════════════════════════════════════════════════ -->
-    <section id="bridge-quiz" class="section section--bridge" data-scene-id="bridge-quiz" role="region"
-      aria-labelledby="bridge-quiz-title">
-      <div class="bridge-container">
-        <div class="bridge-message bridge-message--enhanced bridge-message--quiz">
-          <!-- Challenge framing -->
-          <p class="bridge-challenge-intro">You've seen the data. You know the patterns.</p>
-
-          <!-- Main hook -->
-          <h2 id="bridge-quiz-title" class="bridge-title">Now prove it.</h2>
-
-          <!-- What you learned recap -->
-          <div class="bridge-recap">
-            <div class="bridge-recap-item">
-              <span class="bridge-recap-check">✓</span>
-              <span>Which sounds dominate the feed</span>
-            </div>
-            <div class="bridge-recap-item">
-              <span class="bridge-recap-check">✓</span>
-              <span>The sweet spot for video length</span>
-            </div>
-            <div class="bridge-recap-item">
-              <span class="bridge-recap-check">✓</span>
-              <span>What topics rise to the top</span>
-            </div>
-            <div class="bridge-recap-item">
-              <span class="bridge-recap-check">✓</span>
-              <span>Which emotions make captions pop</span>
-            </div>
-          </div>
-
-          <!-- Call to action -->
-          <p class="bridge-text">Five questions stand between you and viral mastery. Can you apply what you've learned—or will you need to scroll back for a refresher?</p>
-
-          <!-- Scroll prompt -->
-          <p class="bridge-scroll-hint">Scroll to start the quiz</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════════════════════════════════
          SCENE 7 - QUIZ: "Can you spot a viral recipe?"
          v3 spec 5.7 - Conveyor quiz in the lab
          Layout: Question panel top, conveyor card middle, belt bottom
@@ -1637,7 +1584,6 @@
       'duration': 'dawn',
       'category': 'forest',
       'emotion': 'air',
-      'bridge-quiz': 'lab',           // Quiz intro bridge
       'quiz': 'lab',
       'summary': 'wrapup'
     };
@@ -1691,7 +1637,7 @@
       // Navigation
       navigation: true,              // Show right-side navigation dots
       navigationPosition: 'right',
-      navigationTooltips: ['Arrival', 'Music Galaxy', 'Viral Sounds', 'Timing', 'Trend Pyramid', 'Captions & Emotion', 'Quiz Intro', 'Quiz', 'Wrap-up'],
+      navigationTooltips: ['Arrival', 'Music Galaxy', 'Viral Sounds', 'Timing', 'Trend Pyramid', 'Captions & Emotion', 'Quiz', 'Wrap-up'],
       showActiveTooltip: false,
 
       // Accessibility

@@ -2007,13 +2007,13 @@ circle[data-type="bubble"] {
 
 .viral-sounds-record-area--central .record-player-wrapper {
   width: 100%;
-  max-width: min(55vw, 800px); /* Smaller to leave room for text panel on right */
+  max-width: min(52vw, 760px); /* Slightly smaller than original 55vw/800px */
   /* Record takes ~70% of available viewport height */
   height: 70vh;
   min-height: 450px;
   max-height: 750px;
   aspect-ratio: 1.5;
-  padding: clamp(1.5rem, 3vw, 2.5rem);
+  padding: clamp(0.8rem, 1.6vw, 1.3rem); /* Reduced padding to make record bigger */
   /* Shift left to make room for text panel */
   margin: 0 auto;
   margin-right: 280px; /* Leave space for text panel (~250px + gap) */
@@ -2028,16 +2028,17 @@ circle[data-type="bubble"] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Prevent overlap with absolute header */
+  justify-content: center; /* Center vertically for laptop screens */
   padding: var(--space-4);
-  padding-top: 240px; /* Reduced to move record player up */
+  padding-top: calc(64px + var(--space-6)); /* Reserve space for nav + scene label */
+  padding-bottom: var(--space-6);
   gap: var(--space-4);
 }
 
 /* Scene label badge positioning (matches music-galaxy) */
 .viral-sounds-viz-overlay .scene-label-badge {
   position: absolute;
-  top: 100px;
+  top: 75px;
   left: 35px;
   z-index: 15;
 }
@@ -2048,26 +2049,27 @@ circle[data-type="bubble"] {
 /* TEXT OVERLAY - Shows one step at a time, right side (matches music-galaxy style) */
 .viral-sounds-text-overlay {
   position: absolute !important;
-  top: 60%; /* Moved up to align with record player center */
-  right: 150px; /* Moved left to reduce clustering */
-  width: 38%;
-  transform: translateY(-50%);
-  min-width: 320px;
-  max-width: 550px;
+  top: 58%; /* Move down from center */
+  /* Move much closer to sidebar - match music-galaxy spacing */
+  right: clamp(30px, calc(15px + 6vw), 60px);
+  width: 28%; /* Narrower for more compact layout */
+  transform: translateY(-50%) scale(0.9); /* Scale down entire overlay by 10% */
+  min-width: 240px;
+  max-width: 400px;
   height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--space-4);
+  padding: var(--space-3); /* Reduced padding */
   z-index: 70 !important;
   pointer-events: auto;
 }
 
 /* Step content cards inside text overlay */
 .viral-sounds-text-overlay .step-content {
-  width: 88%;
-  max-width: 550px;
+  width: 100%;
+  max-width: 100%;
   opacity: 1;
   visibility: visible;
   background: linear-gradient(
@@ -2089,10 +2091,10 @@ circle[data-type="bubble"] {
 
 /* Headings in text overlay */
 .viral-sounds-text-overlay .step-heading {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-size: clamp(1.5rem, 3.5vw, 1.95rem); /* Slightly reduced by ~12% */
   font-weight: 800;
   line-height: 1.15;
-  margin: 0 0 var(--space-4);
+  margin: 0 0 var(--space-3); /* Moderate spacing */
   background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -2100,17 +2102,17 @@ circle[data-type="bubble"] {
 }
 
 .viral-sounds-text-overlay .step-subheading {
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-size: clamp(1.15rem, 2.6vw, 1.5rem); /* Slightly reduced by ~12% */
   font-weight: 700;
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--space-2); /* Tighter spacing */
   color: var(--color-glint);
 }
 
 .viral-sounds-text-overlay .step-content p {
-  font-size: 1.0625rem;
-  line-height: 1.7;
+  font-size: 0.9375rem; /* Slightly reduced from 1.0625rem (~12% smaller) */
+  line-height: 1.65; /* Comfortable reading */
   color: rgba(255, 255, 255, 0.85);
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-2); /* Tighter spacing */
 }
 
 .viral-sounds-text-overlay .step-content p:last-child {
@@ -2123,13 +2125,14 @@ circle[data-type="bubble"] {
 }
 
 .viral-sounds-text-overlay .step-prompt {
-  font-size: 0.9375rem;
+  font-size: 0.8125rem; /* Reduced from 0.9375rem (~13% smaller) */
   color: #25F4EE;
   font-style: italic;
   opacity: 0.9;
 }
 
 .viral-sounds-text-overlay .step-transition {
+  font-size: 0.8125rem; /* Add explicit smaller size */
   color: rgba(255, 255, 255, 0.7);
   font-style: italic;
 }
@@ -2397,14 +2400,17 @@ circle[data-type="bubble"] {
 /* Ensure record player layout fills the available space */
 .viral-sounds-record-area .record-player-layout {
   width: 100%;
-  max-width: min(85vw, 1100px); /* Match record-player.css sizing */
+  max-width: min(80vw, 1050px); /* Slightly smaller than original */
 }
 
 .viral-sounds-record-area .record-player-wrapper {
   width: 100%;
-  max-width: min(80vw, 1000px); /* Match record-player.css sizing - thinner */
+  max-width: min(75vw, 920px); /* Keep original size */
   aspect-ratio: 1.5;
   margin: 0 auto;
+  /* Shift right significantly to get closer to sidebar */
+  position: relative;
+  left: 22%;
 }
 
 .viral-sounds-viz-wrapper {
@@ -2481,8 +2487,6 @@ circle[data-type="bubble"] {
   line-height: 1.6;
   margin: 0;
 }
-
-/* Track Legend Strip removed per plan.md - auto-sequence handles track display */
 
 /* ─────────────────────────────────────────────────────────────────────────
    Scene 2 & 3 Responsive Styles
@@ -2629,14 +2633,14 @@ circle[data-type="bubble"] {
   align-items: center;
   justify-content: flex-start; /* Changed from center to prevent overlap */
   padding: var(--space-4);
-  padding-top: 370px; /* Space for header (90+150) + icons (~100) at top */
+  padding-top: 280px; /* Space for header (90+150) + icons (~100) at top */
   gap: var(--space-4);
 }
 
 /* Scene label badge positioning (matches music-galaxy) */
 .timing-viz-overlay .scene-label-badge {
   position: absolute;
-  top: 100px;
+  top: 80px;
   left: 35px;
   z-index: 15;
 }
@@ -2644,19 +2648,20 @@ circle[data-type="bubble"] {
 /* NOTE: .scene-title styling is now inside .scene-header block (lines 6330+) */
 /* Removed duplicate absolute positioning that was conflicting with header */
 
-/* TEXT OVERLAY - Shows one step at a time, right side (matches music-galaxy style) */
+/* TEXT OVERLAY - Shows one step at a time, left side */
 .timing-text-overlay {
   position: absolute !important;
-  top: 50%;
-  right: 150px; /* Moved left to reduce clustering */
-  width: 38%;
+  top: 55%; /* Moved down from 50% */
+  /* Position on left side */
+  left: var(--space-4);
+  width: 36%;
   transform: translateY(-50%);
-  min-width: 320px;
-  max-width: 550px;
+  min-width: 300px;
+  max-width: 500px;
   height: fit-content;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start; /* Align content to left */
   justify-content: center;
   padding: calc(64px + var(--space-6)) var(--space-4) var(--space-6);
   z-index: 70 !important;
@@ -2666,7 +2671,7 @@ circle[data-type="bubble"] {
 /* Step content cards inside text overlay */
 .timing-text-overlay .step-content {
   width: 88%;
-  max-width: 550px;
+  max-width: 420px; /* Reduced from 550px to proportionally match smaller fonts */
   opacity: 1;
   visibility: visible;
   background: linear-gradient(
@@ -2677,8 +2682,8 @@ circle[data-type="bubble"] {
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(45, 204, 211, 0.2);
-  border-radius: var(--radius-xl);
-  padding: var(--space-5);
+  border-radius: var(--radius-lg); /* Reduced from var(--radius-xl) */
+  padding: var(--space-5); /* Padding kept as requested */
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.4),
     0 0 60px rgba(45, 204, 211, 0.1),
@@ -2688,7 +2693,7 @@ circle[data-type="bubble"] {
 
 /* Headings in text overlay */
 .timing-text-overlay .step-heading {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-size: clamp(1.3rem, 3vw, 1.7rem); /* Reduced from 1.75rem/4vw/2.25rem */
   font-weight: 800;
   line-height: 1.15;
   margin: 0 0 var(--space-4);
@@ -2699,14 +2704,14 @@ circle[data-type="bubble"] {
 }
 
 .timing-text-overlay .step-subheading {
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-size: clamp(1rem, 2.3vw, 1.3rem); /* Reduced from 1.25rem/3vw/1.75rem */
   font-weight: 700;
   margin: 0 0 var(--space-3);
   color: var(--color-glint);
 }
 
 .timing-text-overlay .step-content p {
-  font-size: 1.0625rem;
+  font-size: 0.9rem; /* Reduced from 1.0625rem */
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.85);
   margin-bottom: var(--space-3);
@@ -2722,13 +2727,14 @@ circle[data-type="bubble"] {
 }
 
 .timing-text-overlay .step-prompt {
-  font-size: 0.9375rem;
+  font-size: 0.8rem; /* Reduced from 0.9375rem */
   color: #25F4EE;
   font-style: italic;
   opacity: 0.9;
 }
 
 .timing-text-overlay .step-transition {
+  font-size: 0.85rem; /* Added reduced font size */
   color: rgba(255, 255, 255, 0.7);
   font-style: italic;
 }
@@ -2765,7 +2771,7 @@ circle[data-type="bubble"] {
 /* Icon row - timing concepts (compact layout - consolidated from Layout Fixes) */
 .timing-icons-row {
   position: absolute;
-  top: 270px; /* Below scene-header (header ~150px tall starting at 90px) */
+  top: 190px; /* Below scene-header (header ~150px tall starting at 90px) */
   left: 50%;
   transform: translateX(-50%);
   z-index: 15;
@@ -2870,6 +2876,7 @@ circle[data-type="bubble"] {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 0; /* Remove any bottom margin */
 }
 
 .timing-viz-wrapper .viz-container {
@@ -2877,50 +2884,13 @@ circle[data-type="bubble"] {
   height: 100%;
 }
 
-/* Callout annotation */
-.timing-callout {
-  position: absolute;
-  right: -20px;
-  top: 50%;
-  transform: translateY(-50%) translateX(100%);
-  opacity: 0;
-  transition: opacity 400ms ease, transform 400ms ease;
-  pointer-events: none;
-}
-
-.timing-callout[aria-hidden="false"] {
-  opacity: 1;
-  transform: translateY(-50%) translateX(calc(100% + 20px));
-}
-
-.timing-callout .callout-arrow {
-  position: absolute;
-  left: -8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-right: 8px solid rgba(251, 235, 53, 0.9);
-}
-
-.timing-callout .callout-text {
-  background: rgba(251, 235, 53, 0.9);
-  color: #1a1a2e;
-  font-size: 0.875rem;
-  font-weight: 600;
-  padding: var(--space-2) var(--space-3);
-  border-radius: 8px;
-  white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
 /* Legend panel */
 .timing-legend {
   display: flex;
   gap: var(--space-4);
-  margin-top: var(--space-4);
+  position: relative; /* Enable relative positioning */
+  top: -50px; /* Force move upward, overlapping with viz */
+  margin-top: 0;
   padding: var(--space-3) var(--space-4);
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(var(--glass-subtle-blur));
@@ -3060,9 +3030,6 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
     bottom: 24px;
   }
 
-  .timing-callout {
-    display: none; /* Hide on mobile, info is in legend */
-  }
 }
 
 @media (max-width: 768px) {
@@ -3119,7 +3086,7 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 
   /* Adjust timing overlay for mobile */
   .timing-viz-overlay {
-    padding-top: 320px;
+    padding-top: 250px;
   }
 
   .timing-icons-row {
@@ -3155,10 +3122,11 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   pointer-events: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end; /* Align to right instead of center */
   justify-content: center;
   padding: var(--space-4);
   padding-top: calc(64px + var(--space-4));
+  padding-right: clamp(80px, 10vw, 110px); /* Reduced padding to move viz more to the right */
 }
 
 /* Scene label badge positioning (matches music-galaxy) */
@@ -3173,7 +3141,7 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 .pyramid-text-overlay {
   position: absolute !important;
   top: 50%;
-  left: 30px;
+  left: -25px; /* Moved left from 30px */
   width: 38%;
   transform: translateY(-50%);
   min-width: 320px;
@@ -3191,7 +3159,7 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 /* Step content cards inside text overlay */
 .pyramid-text-overlay .step-content {
   width: 88%;
-  max-width: 550px;
+  max-width: 420px; /* Reduced from 550px to match scene 4 */
   opacity: 1;
   visibility: visible;
   background: linear-gradient(
@@ -3202,8 +3170,8 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(45, 204, 211, 0.2);
-  border-radius: var(--radius-xl);
-  padding: var(--space-5);
+  border-radius: var(--radius-lg); /* Reduced from var(--radius-xl) */
+  padding: var(--space-5); /* Padding kept as requested */
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.4),
     0 0 60px rgba(45, 204, 211, 0.1),
@@ -3213,7 +3181,7 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 
 /* Headings in text overlay */
 .pyramid-text-overlay .step-heading {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-size: clamp(1.3rem, 3vw, 1.7rem); /* Reduced from 1.75rem/4vw/2.25rem to match scene 4 */
   font-weight: 800;
   line-height: 1.15;
   margin: 0 0 var(--space-4);
@@ -3224,14 +3192,14 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 }
 
 .pyramid-text-overlay .step-subheading {
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-size: clamp(1rem, 2.3vw, 1.3rem); /* Reduced from 1.25rem/3vw/1.75rem to match scene 4 */
   font-weight: 700;
   margin: 0 0 var(--space-3);
   color: var(--color-glint);
 }
 
 .pyramid-text-overlay .step-content p {
-  font-size: 1.0625rem;
+  font-size: 0.9rem; /* Reduced from 1.0625rem to match scene 4 */
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.85);
   margin-bottom: var(--space-3);
@@ -3247,7 +3215,7 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 }
 
 .pyramid-text-overlay .step-prompt {
-  font-size: 0.9375rem;
+  font-size: 0.8rem; /* Reduced from 0.9375rem to match scene 4 */
   color: #25F4EE;
   font-style: italic;
   opacity: 0.9;
@@ -3593,7 +3561,7 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
 .emotion-controls-panel {
   position: absolute;
   top: 50%;
-  right: 130px;
+  right: 90px; /* Reduced from 130px to move panel right */
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
@@ -3606,11 +3574,11 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
 .emotion-text-overlay {
   position: absolute !important;
   top: 50%;
-  left: 30px;
+  left: -40px; /* Moved to match scene 5 position */
   width: 38%;
   transform: translateY(-50%);
   min-width: 320px;
-  max-width: 550px;
+  max-width: 500px;
   height: fit-content;
   display: flex;
   flex-direction: column;
@@ -3624,7 +3592,7 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
 /* Step content cards inside text overlay */
 .emotion-text-overlay .step-content {
   width: 88%;
-  max-width: 550px;
+  max-width: 420px; /* Reduced from 550px to match scene 4 & 5 */
   opacity: 1;
   visibility: visible;
   background: linear-gradient(
@@ -3635,8 +3603,8 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(45, 204, 211, 0.2);
-  border-radius: var(--radius-xl);
-  padding: var(--space-5);
+  border-radius: var(--radius-lg); /* Reduced from var(--radius-xl) */
+  padding: var(--space-5); /* Padding kept as requested */
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.4),
     0 0 60px rgba(45, 204, 211, 0.1),
@@ -3646,7 +3614,7 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
 
 /* Headings in text overlay */
 .emotion-text-overlay .step-heading {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-size: clamp(1.3rem, 3vw, 1.7rem); /* Reduced from 1.75rem/4vw/2.25rem to match scene 4 & 5 */
   font-weight: 800;
   line-height: 1.15;
   margin: 0 0 var(--space-4);
@@ -3657,14 +3625,14 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
 }
 
 .emotion-text-overlay .step-subheading {
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-size: clamp(1rem, 2.3vw, 1.3rem); /* Reduced from 1.25rem/3vw/1.75rem to match scene 4 & 5 */
   font-weight: 700;
   margin: 0 0 var(--space-3);
   color: var(--color-glint);
 }
 
 .emotion-text-overlay .step-content p {
-  font-size: 1.0625rem;
+  font-size: 0.9rem; /* Reduced from 1.0625rem to match scene 4 & 5 */
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.85);
   margin-bottom: var(--space-3);
@@ -3680,13 +3648,14 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
 }
 
 .emotion-text-overlay .step-prompt {
-  font-size: 0.9375rem;
+  font-size: 0.8rem; /* Reduced from 0.9375rem to match scene 4 & 5 */
   color: #25F4EE;
   font-style: italic;
   opacity: 0.9;
 }
 
 .emotion-text-overlay .step-transition {
+  font-size: 0.85rem; /* Added reduced font size to match scene 4 & 5 */
   color: rgba(255, 255, 255, 0.7);
   font-style: italic;
 }
@@ -3989,12 +3958,12 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
    Scene-specific Alien Positioning (v3 spec sections 5.2.5 and 5.3.5)
    ───────────────────────────────────────────────────────────────────────── */
 
-/* Scene 2: Bottom-left with mini-planet (default) */
+/* Scene 2: Bottom-right with mini-planet */
 /* Per spec: "bottom right of the scene, just outside the main viz area" */
 .alien-narrator--scene2 {
   position: absolute; /* Relative to viz overlay */
-  bottom: 80px;
-  right: calc(var(--space-6) + 40px); /* Changed from left to right per spec */
+  bottom: 30px; /* Closer to bottom - reduced from 80px */
+  right: -150px; /* Closer to right edge - reduced from calc(var(--space-6) + 40px) */
   left: auto;
   flex-direction: column; /* Avatar first (top), planet second (bottom) */
   align-items: center;
@@ -4096,16 +4065,18 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 /* .alien-mini-planet and @keyframes miniPlanetGlow - MOVED TO alien-narrator.css */
 
-/* Scene 3: Bottom-right as DJ (v3 spec) */
+/* Scene 3: To the right of record player, speech bubble on left */
 .alien-narrator--scene3.alien-narrator--scene {
   position: absolute !important;
-  bottom: 8% !important; /* Near bottom of screen */
-  right: 5% !important; /* Bottom right corner */
-  left: auto !important;
-  transform: translateY(150px);
-  flex-direction: column; /* Avatar first (top), platform second (bottom) - matches HTML order */
+  /* Position lower and closer to record player */
+  top: 90% !important; /* Move down - increased from 50% */
+  bottom: auto !important;
+  left: 70% !important; /* Move left - closer to record player, from 58% */
+  right: auto !important;
+  transform: translateY(-50%) translateX(0) translateY(150px);
+  flex-direction: row-reverse; /* Alien on right, speech bubble on left */
   align-items: center;
-  gap: 0;
+  gap: var(--space-2); /* Smaller gap - tighter spacing */
   /* Start hidden off-screen - will animate in when scene is active */
   opacity: 0;
   transition: transform 0.5s ease-out, opacity 0.3s ease-out;
@@ -4116,29 +4087,29 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   animation: alienEnterFromBelowCentered 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
 }
 
-/* Enter from below animation for Scene 3 - bottom-right version */
+/* Enter from below animation for Scene 3 - vertically centered version */
 @keyframes alienEnterFromBelowCentered {
   0% {
     opacity: 0;
-    transform: translateY(100px);
+    transform: translateY(-50%) translateY(100px);
   }
   70% {
     opacity: 1;
-    transform: translateY(-8px);
+    transform: translateY(-50%) translateY(-8px);
   }
   85% {
-    transform: translateY(4px);
+    transform: translateY(-50%) translateY(4px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(-50%) translateY(0);
   }
 }
 
 .alien-narrator--scene3 .alien-avatar {
   position: relative;
   z-index: 2;
-  margin-bottom: -15px; /* Overlap onto floating platform so alien "stands" on it */
+  /* No margin - horizontal layout with gap */
 }
 
 /* Float animation only starts after enter animation completes (0.3s delay + 1.2s anim = 1.5s) */
@@ -4160,23 +4131,21 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .alien-narrator--scene3 .alien-speech-bubble {
-  position: absolute;
-  right: 100%; /* To the left of the alien */
-  top: 50%;
-  transform: translateY(-50%);
-  margin-right: 15px;
+  position: relative; /* Relative in flex layout */
   border-radius: 16px;
   white-space: normal;
-  max-width: 280px;
+  max-width: 200px; /* Compact width */
   width: max-content;
+  margin-right: 0; /* No margin, gap is handled by parent */
 }
 
-/* Speech bubble tail - Original definition (now overridden in mobile section below)
-   Kept for desktop fallback, matches white bubble per spec section 0.2 */
+/* Speech bubble tail - pointing RIGHT toward alien */
 .alien-narrator--scene3 .alien-speech-bubble::before {
-  right: -10px;
-  left: auto;
+  content: '';
+  position: absolute;
   top: 50%;
+  right: -10px; /* Point to the right toward alien */
+  left: auto;
   bottom: auto;
   transform: translateY(-50%);
   border-width: 10px 0 10px 12px;
@@ -4195,7 +4164,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   position: absolute;
   top: 90px;
   right: 0;
-  z-index: 10;
+  z-index: 20; /* Above viz panel, same level as scene-label-badge */
   max-width: 200px;
 
   /* Glassmorphism base matching viz panel */
@@ -4459,9 +4428,9 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 /* Question panel - glassmorphic card */
 .quiz-question-panel {
   width: 100%;
-  max-width: 300px;
+  max-width: 600px;
   text-align: center;
-  padding: var(--space-5) var(--space-6);
+  padding: var(--space-3) var(--space-5); /* Reduced from var(--space-5) var(--space-6) */
   background: rgba(26, 10, 46, 0.7);
   backdrop-filter: blur(var(--glass-medium-blur));
   -webkit-backdrop-filter: blur(var(--glass-medium-blur));
@@ -5095,7 +5064,7 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
 #chart {
   min-height: auto !important;
   height: 100% !important;
-  max-height: calc(100vh - 250px) !important;
+  max-height: calc(100vh - 200px) !important;
 }
 
 .timing-legend {
@@ -5164,7 +5133,7 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
 }
 
 .quiz-question-panel {
-  max-width: 900px !important;
+  max-width: 600px !important;
 }
 
 #viz-conveyor {
@@ -5230,7 +5199,7 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
 
 .quiz-question-panel {
   max-width: none !important;
-  width: 40% !important;
+  width: 60% !important;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -5476,40 +5445,24 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
 }
 
 .song-info-screen__title {
-  font-size: 1.25rem !important;
-  white-space: normal !important;
-  word-wrap: break-word !important;
-  overflow-wrap: break-word !important;
+  font-size: 1.05rem !important; /* Larger and more readable */
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 .song-info-screen__description {
-  font-size: 0.95rem !important;
+  font-size: 0.7rem !important; /* Smaller to reduce space */
   white-space: normal !important;
   word-wrap: break-word !important;
-  line-height: 1.6 !important;
+  line-height: 1.4 !important; /* Tighter line height */
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important; /* Remove overflow-y auto */
 }
 
-/* Scene 3 alien - bottom left */
-.alien-narrator--scene3.alien-narrator--scene {
-  right: auto !important;
-  left: 3% !important;
-  bottom: 5% !important;
-}
-
-/* Speech bubble ABOVE alien, shifted right to stay in view */
-.alien-narrator--scene3 .alien-speech-bubble {
-  position: absolute !important;
-  bottom: 100% !important; /* Above the alien */
-  left: 0 !important; /* Align to left edge of alien, not centered */
-  right: auto !important;
-  transform: none !important;
-  margin-bottom: 15px !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  max-width: 220px !important; /* Narrower to fit */
-  min-width: 180px !important;
-  top: auto !important;
-}
+/* Scene 3 alien and speech bubble use main definition at lines 4068-4151 */
+/* No overrides needed here */
 
 /* Speech bubble text - wrap nicely */
 .alien-narrator--scene3 .alien-speech-bubble .alien-speech-text {
@@ -5691,10 +5644,6 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
   align-items: center !important; /* Center vertically */
   justify-content: center !important;
   padding-top: 0 !important;
-}
-
-.scene-hero .hero-container {
-  margin-top: 2rem !important; /* Shift down */
 }
 
 .scene-hero .hero-bottom-band {
@@ -6544,63 +6493,69 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
 /* Scene header container for viral-sounds */
 .viral-sounds-viz-overlay .scene-header {
   position: absolute;
-  top: 90px;
+  top: 75px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 15;
-  text-align: center;
-  max-width: 700px;
+  text-align: center; /* Center aligned for description */
+  max-width: 100%; /* Full width to prevent title wrapping */
+  width: 55%; /* Use most of available space */
   padding: 0 var(--space-4);
 }
 
 .viral-sounds-viz-overlay .scene-header .scene-title {
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(1.5rem, 3.8vw, 2.2rem); /* Medium size - between original and previous */
   font-weight: 800;
   background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0 0 var(--space-2);
+  /* Removed max-width to fill parent container */
 }
 
 .viral-sounds-viz-overlay .scene-subtitle {
-  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-size: clamp(1.05rem, 2.5vw, 1.3rem); /* Slightly larger */
   font-weight: 600;
   color: var(--color-glint);
   margin: 0 0 var(--space-3);
 }
 
 .viral-sounds-viz-overlay .scene-description {
-  font-size: 1rem;
+  font-size: 1rem; /* Back to original size */
+  font-weight: 500; /* Add some weight */
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.6;
   margin: 0;
+  /* Removed max-width to fill parent container */
 }
 
 /* Scene header container for timing */
 .timing-viz-overlay .scene-header {
   position: absolute;
-  top: 90px;
+  top: 80px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 15;
-  text-align: center;
-  max-width: 700px;
+  text-align: center; /* Center aligned for description */
+  max-width: 100%; /* Full width to prevent title wrapping */
+  width: 60%; /* Use most of available space */
   padding: 0 var(--space-4);
 }
 
 .timing-viz-overlay .scene-header .scene-title {
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(1.5rem, 3.8vw, 2.2rem); /* Medium size - between original and previous */
   font-weight: 800;
   background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0 0 var(--space-2);
+  /* Removed max-width to fill parent container */
 }
 
 .timing-viz-overlay .scene-subtitle {
-  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-size: clamp(1.05rem, 2.5vw, 1.3rem); /* Match viral-sounds sizing */
   font-weight: 600;
   color: var(--color-glint);
   margin: 0 0 var(--space-3);
@@ -6608,6 +6563,7 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
 
 .timing-viz-overlay .scene-description {
   font-size: 1rem;
+  font-weight: 500;
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.6;
   margin: 0;

@@ -21,7 +21,7 @@ import { RecordPlayerViz } from '../vizzes/record-player/index.js';
 import { ConveyorViz } from '../vizzes/conveyor/index.js';
 import { initMicroInteractions } from './micro-interactions.js';
 
-// Scene mapping for semantic worlds (8 scenes + 3 bridge pages)
+// Scene mapping for semantic worlds
 // Maps section IDs to scene attribute values for body[data-scene]
 const SCENE_MAP = {
   '#scene-hero': 'cosmos',
@@ -31,7 +31,6 @@ const SCENE_MAP = {
   '#bridge-topics': 'dawn',          // Mid-point bridge
   '#scene-category': 'forest',
   '#scene-emotion': 'air',
-  '#bridge-quiz': 'lab',             // Quiz intro bridge
   '#scene-quiz': 'lab',
   '#scene-summary': 'wrapup'
 };
@@ -391,19 +390,6 @@ class TikTokTidesApp {
       sw?.update(1);
       setTimeout(() => sw?.update(2), 1600);
       this._stopwatchResize?.();
-
-      // v3 spec: Show callout annotation after highlight sequence
-      const callout = document.querySelector('[data-timing-callout]');
-      if (callout) {
-        // Show callout 2 seconds after entering (after highlight animation)
-        setTimeout(() => {
-          callout.setAttribute('aria-hidden', 'false');
-        }, 2200);
-        // Auto-hide after 4 more seconds
-        setTimeout(() => {
-          callout.setAttribute('aria-hidden', 'true');
-        }, 6200);
-      }
     }
 
     // Special-case: Record player auto-sequence for Scene 3
