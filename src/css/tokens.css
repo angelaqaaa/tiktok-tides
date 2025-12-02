@@ -20,19 +20,27 @@
   --color-accent-red: #EF4444;
 
   /* Semantic color roles (used throughout base.css) */
-  --color-glint: #2DCCD3;       /* Subtle highlights, interactive accents */
-  --color-glint-light: #3DDDE4; /* Lighter glint for hover states */
-  --color-glint-dark: #1BA8AE;  /* Darker glint for gradients */
-  --color-blaze: #F1204A;       /* High energy, alerts, TikTok red */
-  --color-shimmer: #FF00E0;     /* Gradients, transitions (pairs with glint) */
+  --color-glint: #2DCCD3;
+  /* Subtle highlights, interactive accents */
+  --color-glint-light: #3DDDE4;
+  /* Lighter glint for hover states */
+  --color-glint-dark: #1BA8AE;
+  /* Darker glint for gradients */
+  --color-blaze: #F1204A;
+  /* High energy, alerts, TikTok red */
+  --color-shimmer: #FF00E0;
+  /* Gradients, transitions (pairs with glint) */
 
   /* Feedback colors (used in quiz/conveyor) */
-  --color-success: #00ff64;     /* Correct answers, positive feedback */
-  --color-warning: #ff9500;     /* Warnings, caution states */
-  --color-error-soft: #ff8080;  /* Incorrect answers, soft error states */
+  --color-success: #00ff64;
+  /* Correct answers, positive feedback */
+  --color-warning: #ff9500;
+  /* Warnings, caution states */
+  --color-error-soft: #ff8080;
+  /* Incorrect answers, soft error states */
 
   /* Typography */
-  --font-family-sans: "Inter", "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  --font-family-sans: "TikTok Sans", "SF Pro Text", "Segoe UI", system-ui, sans-serif;
   --font-family-mono: "JetBrains Mono", monospace;
 
   --font-weight-regular: 400;
@@ -60,8 +68,8 @@
   --space-8: 4rem;
 
   /* Shadows */
-  --shadow-100: 0px 4px 8px rgba(0,0,0,0.2), 0px 2px 4px rgba(0,0,0,0.1);
-  --shadow-200: 0px 8px 16px rgba(0,0,0,0.25), 0px 4px 8px rgba(0,0,0,0.15);
+  --shadow-100: 0px 4px 8px rgba(0, 0, 0, 0.2), 0px 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-200: 0px 8px 16px rgba(0, 0, 0, 0.25), 0px 4px 8px rgba(0, 0, 0, 0.15);
   --shadow-glow-cyan: 0 0 8px #00FFE0, 0 0 16px rgba(0, 255, 224, 0.3);
   --shadow-glow-magenta: 0 0 8px #FF00E0, 0 0 16px rgba(255, 0, 224, 0.3);
   --shadow-glow-yellow: 0 0 8px #FFEB3B, 0 0 16px rgba(255, 235, 59, 0.35);
