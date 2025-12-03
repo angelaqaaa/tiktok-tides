@@ -388,7 +388,7 @@ export class RecordPlayerViz {
         const ringStep = (OUTER_RADIUS - INNER_RADIUS) / ringCount;
         this.radiusScale = (index) => OUTER_RADIUS - (index + 0.75) * ringStep;
     }
-    
+
 
     renderRings({ animate = false } = {}) {
         // reset timers/angles when rendering
@@ -455,9 +455,9 @@ export class RecordPlayerViz {
                         .attr('r', radius)
                         .attr('stroke-width', strokeWidth);
                 } else {
-                    arc
-                        .attr('r', radius)
-                        .attr('stroke-width', strokeWidth);
+                arc
+                    .attr('r', radius)
+                    .attr('stroke-width', strokeWidth);
                 }
 
                 const labelRadius = Math.max(12, radius - strokeWidth * 0.1); /* Further increased to move text more outward/up */
@@ -502,7 +502,7 @@ export class RecordPlayerViz {
         if (transition) {
             rings.exit().transition(transition).style('opacity', 0).remove();
         } else {
-            rings.exit().remove();
+        rings.exit().remove();
         }
     }
 
@@ -544,7 +544,7 @@ export class RecordPlayerViz {
     bindRingEvents() {
         const ringNodes = this.container.querySelectorAll('.record-ring');
         ringNodes.forEach((ringEl) => {
-            const index = Number(ringEl.dataset.songIndex);
+                const index = Number(ringEl.dataset.songIndex);
             if (isNaN(index) || index < 0 || index >= this.data.length) return;
 
             // Use pointerenter/pointerleave for better sensitivity and device support
@@ -671,7 +671,7 @@ export class RecordPlayerViz {
 
         // STEP 2: Update locked state if needed
         if (locked) {
-            if (this.lockedIndex !== null && this.lockedIndex !== index) {
+                if (this.lockedIndex !== null && this.lockedIndex !== index) {
                 const prevLocked = this.getRingSelection(this.lockedIndex);
                 if (prevLocked.node()) {
                     this.stopRingRotation(this.lockedIndex);
@@ -840,8 +840,8 @@ export class RecordPlayerViz {
         }
 
         // Set current audio reference immediately
-        this.currentAudio = audio;
-        this.currentAudioIndex = index;
+            this.currentAudio = audio;
+            this.currentAudioIndex = index;
 
         // Set mute state immediately
         audio.muted = this.isMuted;
@@ -862,19 +862,19 @@ export class RecordPlayerViz {
                     audio.muted = this.isMuted;
                     this.autoplayUnlocked = true;
                     requestAnimationFrame(() => {
-                        audio.play().then(() => {
-                            this.toggleNotes(true);
-                        }).catch(() => {
-                            this.toggleNotes(false);
-                        });
-                    });
+                audio.play().then(() => {
+                    this.toggleNotes(true);
                 }).catch(() => {
+                    this.toggleNotes(false);
+                        });
+                });
+            }).catch(() => {
                     // First play failed, wait for user gesture
                     audio.pause();
                     audio.currentTime = 0;
-                    this.pendingAudioIndex = index;
-                    this.toggleNotes(false);
-                    document.addEventListener('pointerdown', this.handleFirstGesture, { once: true });
+                this.pendingAudioIndex = index;
+                this.toggleNotes(false);
+                document.addEventListener('pointerdown', this.handleFirstGesture, { once: true });
                 });
             });
             return;
@@ -884,11 +884,11 @@ export class RecordPlayerViz {
         if (autoplay || force) {
             this.toggleNotes(true);
             requestAnimationFrame(() => {
-                audio.play().catch(() => {
-                    this.pendingAudioIndex = index;
-                    this.toggleNotes(false);
-                    this.autoplayUnlocked = false;
-                    document.addEventListener('pointerdown', this.handleFirstGesture, { once: true });
+            audio.play().catch(() => {
+                this.pendingAudioIndex = index;
+                this.toggleNotes(false);
+                this.autoplayUnlocked = false;
+                document.addEventListener('pointerdown', this.handleFirstGesture, { once: true });
                 });
             });
         } else {
@@ -906,8 +906,8 @@ export class RecordPlayerViz {
     stopSongImmediate() {
         if (this.currentAudio) {
             // Stop audio immediately - no async operations
-            this.currentAudio.pause();
-            this.currentAudio.currentTime = 0;
+        this.currentAudio.pause();
+        this.currentAudio.currentTime = 0;
             this.currentAudio.muted = true;
 
             // Remove event listeners that might cause issues
@@ -915,8 +915,8 @@ export class RecordPlayerViz {
             this.currentAudio.onpause = null;
             this.currentAudio.onended = null;
 
-            this.currentAudio = null;
-            this.currentAudioIndex = null;
+        this.currentAudio = null;
+        this.currentAudioIndex = null;
         }
 
         this.toggleNotes(false);
@@ -1137,8 +1137,8 @@ export class RecordPlayerViz {
         const wasMuted = this.isMuted;
         this.isMuted = !this.isMuted;
 
-        // Hide helper text when user unmutes for the first time
-        if (wasMuted && !this.isMuted && !this.hasUnmutedOnce) {
+        // Hide helper text when user clicks the button for the first time
+        if (!this.hasUnmutedOnce) {
             this.hasUnmutedOnce = true;
             if (this.muteHelperText) {
                 this.muteHelperText.classList.add('is-hidden');

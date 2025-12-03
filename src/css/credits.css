@@ -7,9 +7,11 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 720px; /* Enlarged from 480px for 3 columns */
+  max-width: 720px;
+  /* Enlarged from 480px for 3 columns */
   margin-top: var(--space-6);
-  padding: var(--space-6); /* Restored padding */
+  padding: var(--space-6);
+  /* Restored padding */
   background: rgba(20, 20, 35, 0.7);
   backdrop-filter: blur(var(--glass-medium-blur));
   -webkit-backdrop-filter: blur(var(--glass-medium-blur));
@@ -48,8 +50,8 @@
 }
 
 .credits-title {
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  font-weight: 600;
+  font-size: clamp(1.2rem, 2.8vw, 1.6rem);
+  font-weight: 700;
   color: var(--color-text-primary);
   letter-spacing: 0.02em;
   margin: 0;
@@ -57,7 +59,8 @@
 
 .credits-team {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Fixed 3 columns */
+  grid-template-columns: repeat(3, 1fr);
+  /* Fixed 3 columns */
   gap: var(--space-4);
   margin-bottom: var(--space-5);
 }
@@ -106,7 +109,8 @@
 }
 
 .avatar-initial {
-  font-size: 1.2rem; /* Reduced from 1.5rem */
+  font-size: 1.2rem;
+  /* Reduced from 1.5rem */
   font-weight: 700;
   color: white;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -126,18 +130,21 @@
 }
 
 .member-name {
-  font-size: 0.9rem; /* Reduced from var(--font-size-body-reg) */
+  font-size: 0.9rem;
+  /* Reduced from var(--font-size-body-reg) */
   font-weight: 600;
   color: var(--color-text-primary);
 }
 
 .member-role {
-  font-size: 0.8rem; /* Reduced from var(--font-size-body-sm) */
+  font-size: 0.8rem;
+  /* Reduced from var(--font-size-body-sm) */
   color: rgba(255, 255, 255, 0.6);
 }
 
 .credits-course {
-  font-size: 0.8rem; /* Reduced from var(--font-size-body-sm) */
+  font-size: 0.8rem;
+  /* Reduced from var(--font-size-body-sm) */
   color: rgba(255, 255, 255, 0.5);
   margin-bottom: var(--space-4);
   font-style: italic;
@@ -147,13 +154,15 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-3); /* Reduced horizontal padding */
+  padding: var(--space-2) var(--space-3);
+  /* Reduced horizontal padding */
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 9999px;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  font-size: 0.8rem; /* Reduced from var(--font-size-body-sm) */
+  font-size: 0.8rem;
+  /* Reduced from var(--font-size-body-sm) */
   transition: all 0.3s ease;
 }
 

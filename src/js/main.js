@@ -54,65 +54,65 @@ const SCENE_NAMES = ['cosmos', 'galaxy', 'sounds', 'dawn', 'forest', 'air', 'lab
 
 // --- util: tiny debounce (used for stopwatch resize) ------------------------
 function debounce(fn, ms = 150) {
-  let t;
-  return (...args) => {
-    clearTimeout(t);
-    t = setTimeout(() => fn(...args), ms);
-  };
+    let t;
+    return (...args) => {
+        clearTimeout(t);
+        t = setTimeout(() => fn(...args), ms);
+    };
 }
 
 /**
  * TASK 0 - Keyboard QA: Keys 1-7 force scenes (dev-only)
  */
 function setupSceneKeyboardQA() {
-  const isProd = document.documentElement.dataset.env === 'prod';
-  if (isProd) return;
+    const isProd = document.documentElement.dataset.env === 'prod';
+    if (isProd) return;
 
-  document.addEventListener('keydown', (e) => {
-    const key = parseInt(e.key);
-    if (key >= 1 && key <= 7) {
-      const scene = SCENE_NAMES[key - 1];
-      document.body.dataset.scene = scene;
-      console.log(`[QA] Force scene: ${scene}`);
-    }
-  });
+    document.addEventListener('keydown', (e) => {
+        const key = parseInt(e.key);
+        if (key >= 1 && key <= 7) {
+            const scene = SCENE_NAMES[key - 1];
+            document.body.dataset.scene = scene;
+            console.log(`[QA] Force scene: ${scene}`);
+        }
+    });
 }
 
 /**
  * TASK 1 - Ensure scene layers exist (runtime injection)
  */
 function ensureSceneLayers() {
-  const needs = {
+    const needs = {
     'scene-hero': 'scene--stars',
     'scene-music-galaxy': 'scene--orbits',
     'scene-category': 'scene--canopy',
     'scene-emotion': 'scene--bubbles'
-  };
+    };
 
-  Object.entries(needs).forEach(([id, cls]) => {
-    const host = document.getElementById(id);
-    if (!host) return;
+    Object.entries(needs).forEach(([id, cls]) => {
+        const host = document.getElementById(id);
+        if (!host) return;
 
-    if (!host.querySelector(`.scene-layer.${cls}`)) {
-      const layer = document.createElement('div');
-      layer.className = `scene-layer ${cls}`;
-      layer.setAttribute('aria-hidden', 'true');
-      host.appendChild(layer);
-      console.log(`[SceneLayer] Injected ${cls} into #${id}`);
-    }
-  });
+        if (!host.querySelector(`.scene-layer.${cls}`)) {
+            const layer = document.createElement('div');
+            layer.className = `scene-layer ${cls}`;
+            layer.setAttribute('aria-hidden', 'true');
+            host.appendChild(layer);
+            console.log(`[SceneLayer] Injected ${cls} into #${id}`);
+        }
+    });
 }
 
 class TikTokTidesApp {
-  constructor() {
-    this.vizControllers = {};
-    this.currentSection = null;
-    this.liveRegion = document.querySelector('[role="status"]');
-    this.audioMuted = true;
+    constructor() {
+        this.vizControllers = {};
+        this.currentSection = null;
+        this.liveRegion = document.querySelector('[role="status"]');
+        this.audioMuted = true;
 
-    // Section metadata for transitions
+        // Section metadata for transitions
     // Maps section IDs to background classes, display names, and node numbers
-    this.sectionMeta = {
+        this.sectionMeta = {
       'scene-hero': { bg: 'bg-cosmos', name: 'Arrival', scene: 'hero', nodeNum: 1 },
       'scene-music-galaxy': { bg: 'bg-galaxy', name: 'Music Galaxy', scene: 'music-galaxy', nodeNum: 2 },
       'scene-viral-sounds': { bg: 'bg-sounds', name: 'Viral Sounds', scene: 'viral-sounds', nodeNum: 3 },
@@ -126,36 +126,36 @@ class TikTokTidesApp {
     // Insight callout state (track which have been revealed)
     this.insightRevealed = {};
 
-    // bound handlers
-    this._stopwatchResize = null;
+        // bound handlers
+        this._stopwatchResize = null;
 
-    this.init();
-  }
+        this.init();
+    }
 
-  async init() {
-    // Initialize visualizations
-    await this.initVisualizations();
+    async init() {
+        // Initialize visualizations
+        await this.initVisualizations();
 
-    // Install scene observer (semantic world switcher)
-    this.installSceneObserver();
+        // Install scene observer (semantic world switcher)
+        this.installSceneObserver();
 
-    // Setup scroll observer
-    this.setupScrollObserver();
+        // Setup scroll observer
+        this.setupScrollObserver();
 
-    // Setup navigation
-    this.setupNavigation();
+        // Setup navigation
+        this.setupNavigation();
 
     // Setup journey map
     this.setupJourneyMap();
 
-    // Setup progress bar
-    this.setupProgressBar();
+        // Setup progress bar
+        this.setupProgressBar();
 
-    // Setup keyboard navigation
-    this.setupKeyboardNav();
+        // Setup keyboard navigation
+        this.setupKeyboardNav();
 
-    // Setup reduced motion
-    this.setupReducedMotion();
+        // Setup reduced motion
+        this.setupReducedMotion();
 
     // Setup guided step buttons
     this.setupGuidedSteps();
@@ -166,33 +166,33 @@ class TikTokTidesApp {
     // Initialize Music Galaxy scrollytelling (v3 spec 5.2.4)
     this.setupMusicGalaxyScrollytelling();
 
-    // Initialize micro-interactions
-    initMicroInteractions();
+        // Initialize micro-interactions
+        initMicroInteractions();
 
-    // Announce ready
-    this.announce('TikTok Tides loaded and ready');
+        // Announce ready
+        this.announce('TikTok Tides loaded and ready');
 
-    // Mark app as ready for splash screen
-    if (window.markAppReady) {
-      window.markAppReady();
+        // Mark app as ready for splash screen
+        if (window.markAppReady) {
+            window.markAppReady();
+        }
     }
-  }
 
-  installSceneObserver() {
-    // Scene switches when section is > 50% visible (stable, no thrashing)
-    const io = new IntersectionObserver((entries) => {
-      // Find sections that are > 50% visible
-      const dominantSections = entries
+    installSceneObserver() {
+        // Scene switches when section is > 50% visible (stable, no thrashing)
+        const io = new IntersectionObserver((entries) => {
+            // Find sections that are > 50% visible
+            const dominantSections = entries
         .filter(e => e.isIntersecting && e.intersectionRatio > 0.3) // Lowered from 0.5 to prevent black flash
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+                .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
 
-      if (dominantSections.length > 0) {
-        const mostVisible = dominantSections[0];
-        const id = '#' + mostVisible.target.id;
-        const scene = SCENE_MAP[id];
-        if (scene && document.body.dataset.scene !== scene) {
+            if (dominantSections.length > 0) {
+                const mostVisible = dominantSections[0];
+                const id = '#' + mostVisible.target.id;
+                const scene = SCENE_MAP[id];
+                if (scene && document.body.dataset.scene !== scene) {
           const previousScene = document.body.dataset.scene;
-          document.body.dataset.scene = scene;
+                    document.body.dataset.scene = scene;
           console.log('Scene changed from:', previousScene, '→', scene, '(ratio:', mostVisible.intersectionRatio.toFixed(2), ')');
 
           // NOTE: .alien-narrator--hero transition code REMOVED - HTML element was removed (Dec 2025 cleanup)
@@ -205,72 +205,72 @@ class TikTokTidesApp {
       }
     }, { root: null, rootMargin: '0px', threshold: [0, 0.3, 0.5, 1] }); // Multiple thresholds for smoother transitions
 
-    Object.keys(SCENE_MAP).forEach(sel => {
-      const el = document.querySelector(sel);
-      if (el) io.observe(el);
-    });
-  }
+        Object.keys(SCENE_MAP).forEach(sel => {
+            const el = document.querySelector(sel);
+            if (el) io.observe(el);
+        });
+    }
 
-  async initVisualizations() {
-    // Register visualization controllers
-    this.vizControllers.stopwatch = new StopwatchViz();
-    this.vizControllers.planets = new PlanetViz();
-    this.vizControllers.ranking = new RankingViz();
-    this.vizControllers.emotion = new EmotionViz();
-    this.vizControllers.recordPlayer = new RecordPlayerViz();
-    this.vizControllers.conveyor = new ConveyorViz();
+    async initVisualizations() {
+        // Register visualization controllers
+        this.vizControllers.stopwatch = new StopwatchViz();
+        this.vizControllers.planets = new PlanetViz();
+        this.vizControllers.ranking = new RankingViz();
+        this.vizControllers.emotion = new EmotionViz();
+        this.vizControllers.recordPlayer = new RecordPlayerViz();
+        this.vizControllers.conveyor = new ConveyorViz();
 
-    // Initialize each viz with canonical API
-    for (const [key, viz] of Object.entries(this.vizControllers)) {
-      try {
+        // Initialize each viz with canonical API
+        for (const [key, viz] of Object.entries(this.vizControllers)) {
+            try {
         // SPECIAL-CASE: Stopwatch mounts into #chart
         // SPECIAL-CASE: Record player mounts into .record-player-section
-        const selector =
-          key === 'stopwatch'
-            ? '#chart'
-            : key === 'recordPlayer'
-              ? '.record-player-section'
-              : `#viz-${key === 'planets' ? 'planets' : key}`;
+                const selector =
+                    key === 'stopwatch'
+                        ? '#chart'
+                        : key === 'recordPlayer'
+                            ? '.record-player-section'
+                            : `#viz-${key === 'planets' ? 'planets' : key}`;
 
-        await viz.init(selector, {
-          reducedMotion: this.prefersReducedMotion(),
-          animationSpeed: 1,
-          colorScheme: 'default'
-        });
+                await viz.init(selector, {
+                    reducedMotion: this.prefersReducedMotion(),
+                    animationSpeed: 1,
+                    colorScheme: 'default'
+                });
 
         // For stopwatch, mount immediately and wire resize
-        if (key === 'stopwatch') {
-          viz.mount();
-          viz.mounted = true;
+                if (key === 'stopwatch') {
+                    viz.mount();
+                    viz.mounted = true;
 
           // Debounced resize
-          this._stopwatchResize = debounce(() => {
-            const el = document.getElementById('chart');
-            if (!el) return;
-            const { width, height } = el.getBoundingClientRect();
-            const size = Math.max(320, Math.min(width, height || width));
-            viz.resize(size, size);
-          }, 150);
+                    this._stopwatchResize = debounce(() => {
+                        const el = document.getElementById('chart');
+                        if (!el) return;
+                        const { width, height } = el.getBoundingClientRect();
+                        const size = Math.max(320, Math.min(width, height || width));
+                        viz.resize(size, size);
+                    }, 150);
 
-          window.addEventListener('resize', this._stopwatchResize);
-          this._stopwatchResize();
+                    window.addEventListener('resize', this._stopwatchResize);
+                    this._stopwatchResize();
         }
 
         // Record player mounts immediately
-        if (key === 'recordPlayer') {
-          viz.mount?.();
-          viz.mounted = true;
-        }
+                if (key === 'recordPlayer') {
+                    viz.mount?.();
+                    viz.mounted = true;
+                }
 
         // Setup event listeners
-        this.setupVizEvents(key, viz);
-      } catch (err) {
-        console.warn(`Failed to init ${key}:`, err);
-      }
+                this.setupVizEvents(key, viz);
+            } catch (err) {
+                console.warn(`Failed to init ${key}:`, err);
+            }
+        }
     }
-  }
 
-  setupVizEvents(key, viz) {
+    setupVizEvents(key, viz) {
     // Conveyor: Quiz completion (detect when completion message is shown)
     if (key === 'conveyor') {
       // Poll for completion message to show insight callout
@@ -329,53 +329,53 @@ class TikTokTidesApp {
         }
       });
     });
-  }
+    }
 
-  setupScrollObserver() {
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: [0, 0.25, 0.5, 0.75, 1]
-    };
+    setupScrollObserver() {
+        const options = {
+            root: null,
+            rootMargin: '0px',
+            threshold: [0, 0.25, 0.5, 0.75, 1]
+        };
 
-    this.observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-          this.handleSectionEnter(entry.target);
-        }
-      });
-    }, options);
+        this.observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                    this.handleSectionEnter(entry.target);
+                }
+            });
+        }, options);
 
-    // Observe all sections
-    document.querySelectorAll('.section').forEach(section => {
-      this.observer.observe(section);
-    });
-  }
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            this.observer.observe(section);
+        });
+    }
 
-  handleSectionEnter(section) {
-    const sectionId = section.id;
-    if (this.currentSection === sectionId) return;
+    handleSectionEnter(section) {
+        const sectionId = section.id;
+        if (this.currentSection === sectionId) return;
 
-    const prevSection = this.currentSection;
-    this.currentSection = sectionId;
+        const prevSection = this.currentSection;
+        this.currentSection = sectionId;
 
-    // Update navigation
-    this.updateNavigation(sectionId);
+        // Update navigation
+        this.updateNavigation(sectionId);
 
-    // Update background
-    this.updateBackground(sectionId);
+        // Update background
+        this.updateBackground(sectionId);
 
     // Mount visualization if needed
-    const vizContainer = section.querySelector('.viz-container');
-    if (vizContainer) {
-      const vizType = vizContainer.dataset.viz;
-      const viz = this.vizControllers[vizType];
-      if (viz && !viz.mounted) {
+        const vizContainer = section.querySelector('.viz-container');
+        if (vizContainer) {
+            const vizType = vizContainer.dataset.viz;
+            const viz = this.vizControllers[vizType];
+            if (viz && !viz.mounted) {
         console.log(`[Viz] Mounting ${vizType} into`, vizContainer.id || vizContainer.className);
-        viz.mount();
-        viz.mounted = true;
-      }
-    }
+                viz.mount();
+                viz.mounted = true;
+            }
+        }
 
     // Special-case: Music Galaxy planet viz
     if (sectionId === 'scene-music-galaxy') {
@@ -389,35 +389,35 @@ class TikTokTidesApp {
 
     // Special-case: ensure Stopwatch is mounted
     if (sectionId === 'scene-duration') {
-      const sw = this.vizControllers.stopwatch;
-      if (sw && !sw.mounted) {
-        sw.mount();
-        sw.mounted = true;
-      }
-      sw?.update(1);
-      setTimeout(() => sw?.update(2), 1600);
+            const sw = this.vizControllers.stopwatch;
+            if (sw && !sw.mounted) {
+                sw.mount();
+                sw.mounted = true;
+            }
+            sw?.update(1);
+            setTimeout(() => sw?.update(2), 1600);
       this._stopwatchResize?.();
-    }
+        }
 
     // Live region announcement
-    const meta = this.sectionMeta[sectionId];
-    if (meta) {
+        const meta = this.sectionMeta[sectionId];
+        if (meta) {
       this.announce(`${meta.name} section entered`);
       console.log(`[Section] Entered: ${meta.name}`);
+        }
     }
-  }
 
-  updateBackground(sectionId) {
-    const meta = this.sectionMeta[sectionId];
-    if (!meta) return;
+    updateBackground(sectionId) {
+        const meta = this.sectionMeta[sectionId];
+        if (!meta) return;
 
-    // Remove all bg classes
-    Object.values(this.sectionMeta).forEach(m => {
-      document.body.classList.remove(m.bg);
-    });
+        // Remove all bg classes
+        Object.values(this.sectionMeta).forEach(m => {
+            document.body.classList.remove(m.bg);
+        });
 
-    // Add new bg class
-    document.body.classList.add(meta.bg);
+        // Add new bg class
+        document.body.classList.add(meta.bg);
   }
 
   updateNavigation(sectionId) {
@@ -613,7 +613,7 @@ class TikTokTidesApp {
       node.addEventListener('click', () => {
         const targetId = node.dataset.target;
         const target = document.getElementById(targetId);
-        if (target) {
+                if (target) {
           // Update navigation states
           this.updateNavigation(targetId);
           this.updateAlienMarkerPosition(targetId);
@@ -633,14 +633,14 @@ class TikTokTidesApp {
             window._navigatedViaNodeClick = true;
             window.fullpage_api.moveTo(sectionIndex);
           } else {
-            target.scrollIntoView({
-              behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
-              block: 'start'
-            });
+                    target.scrollIntoView({
+                        behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
+                        block: 'start'
+                    });
           }
-        }
-      });
-    });
+                }
+            });
+        });
 
     // Mobile list item clicks
     document.querySelectorAll('.map-list-item').forEach(item => {
@@ -819,38 +819,38 @@ class TikTokTidesApp {
     if (sidebarNode) {
       sidebarNode.classList.add('visited');
     }
-  }
+    }
 
-  setupProgressBar() {
-    const progressBar = document.querySelector('.progress-bar');
+    setupProgressBar() {
+        const progressBar = document.querySelector('.progress-bar');
 
-    const updateProgress = () => {
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight - windowHeight;
-      const scrolled = window.scrollY;
-      const progress = (scrolled / documentHeight) * 100;
+        const updateProgress = () => {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight - windowHeight;
+            const scrolled = window.scrollY;
+            const progress = (scrolled / documentHeight) * 100;
 
-      progressBar.style.width = `${progress}%`;
-    };
+            progressBar.style.width = `${progress}%`;
+        };
 
-    // Throttle scroll updates
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          updateProgress();
-          ticking = false;
+        // Throttle scroll updates
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    updateProgress();
+                    ticking = false;
+                });
+                ticking = true;
+            }
         });
-        ticking = true;
-      }
-    });
-  }
+    }
 
-  setupKeyboardNav() {
-    // Global keyboard shortcuts
-    document.addEventListener('keydown', (e) => {
+    setupKeyboardNav() {
+        // Global keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
       // Number keys jump to sections
-      const sections = [
+                const sections = [
         'scene-hero',
         'scene-music-galaxy',
         'scene-viral-sounds',
@@ -864,40 +864,40 @@ class TikTokTidesApp {
       const index = parseInt(e.key, 10) - 1;
       if (!Number.isNaN(index) && sections[index]) {
         const target = document.getElementById(sections[index]);
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
 
-      // ? shows help
-      if (e.key === '?') {
-        this.showKeyboardHelp();
-      }
-    });
-  }
-
-  setupReducedMotion() {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    // Initial check
-    if (mediaQuery.matches) {
-      document.body.classList.add('reduced-motion');
+            // ? shows help
+            if (e.key === '?') {
+                this.showKeyboardHelp();
+            }
+        });
     }
 
-    // Listen for changes
-    mediaQuery.addEventListener('change', (e) => {
-      if (e.matches) {
-        document.body.classList.add('reduced-motion');
-      } else {
-        document.body.classList.remove('reduced-motion');
-      }
+    setupReducedMotion() {
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-      // Update all visualizations
-      Object.values(this.vizControllers).forEach(viz => {
-        viz.setState?.({ reducedMotion: e.matches });
-      });
-    });
-  }
+        // Initial check
+        if (mediaQuery.matches) {
+            document.body.classList.add('reduced-motion');
+        }
+
+        // Listen for changes
+        mediaQuery.addEventListener('change', (e) => {
+            if (e.matches) {
+                document.body.classList.add('reduced-motion');
+            } else {
+                document.body.classList.remove('reduced-motion');
+            }
+
+            // Update all visualizations
+            Object.values(this.vizControllers).forEach(viz => {
+                viz.setState?.({ reducedMotion: e.matches });
+            });
+        });
+    }
 
   setupGuidedSteps() {
     // Wire up all guided step buttons to trigger viz actions
@@ -1049,9 +1049,9 @@ class TikTokTidesApp {
         if (mutation.attributeName === 'data-scene') {
           const currentScene = document.body.dataset.scene;
           this.updateAlienNarrator(currentScene);
-        }
-      });
-    });
+                }
+            });
+        });
 
     observer.observe(document.body, {
       attributes: true,
@@ -1084,7 +1084,7 @@ class TikTokTidesApp {
       if (scene !== 'galaxy' && scene !== 'cosmos') {
         const speechBubble = sceneNarrator.querySelector('.alien-speech-bubble');
         if (speechBubble) {
-          setTimeout(() => {
+            setTimeout(() => {
             speechBubble.setAttribute('data-speech-state', 'visible');
           }, 1200); // Slightly longer delay for animations to complete
         }
@@ -1473,39 +1473,39 @@ class TikTokTidesApp {
   handleMusicGalaxySlide(slideIndex) {
     if (this._musicGalaxySlideHandler) {
       this._musicGalaxySlideHandler(slideIndex);
+        }
     }
-  }
 
-  showKeyboardHelp() {
-    console.log('Keyboard shortcuts:');
-    console.log('1-7: Jump to sections');
-    console.log('Esc: Close overlays');
-    console.log('?: Show this help');
-    console.log('Tab: Navigate interactive elements');
-    console.log('Enter: Activate buttons/links');
-  }
-
-  announce(message) {
-    if (this.liveRegion) {
-      this.liveRegion.textContent = message;
+    showKeyboardHelp() {
+        console.log('Keyboard shortcuts:');
+        console.log('1-7: Jump to sections');
+        console.log('Esc: Close overlays');
+        console.log('?: Show this help');
+        console.log('Tab: Navigate interactive elements');
+        console.log('Enter: Activate buttons/links');
     }
-  }
 
-  prefersReducedMotion() {
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }
+    announce(message) {
+        if (this.liveRegion) {
+            this.liveRegion.textContent = message;
+        }
+    }
+
+    prefersReducedMotion() {
+        return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
 }
 
 // Initialize app on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
-  // TASK 0 - Dev-only sanity hooks
-  setupSceneKeyboardQA();
+    // TASK 0 - Dev-only sanity hooks
+    setupSceneKeyboardQA();
 
-  // TASK 1 - Ensure scene layers exist
-  ensureSceneLayers();
+    // TASK 1 - Ensure scene layers exist
+    ensureSceneLayers();
 
-  // Initialize main app
-  window.app = new TikTokTidesApp();
+    // Initialize main app
+    window.app = new TikTokTidesApp();
 });
 
 /**
