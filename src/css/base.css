@@ -218,7 +218,7 @@ input[type="submit"] {
   font-family: 'TikTok Sans', 'Inter', system-ui, sans-serif;
   font-size: 24px;
   font-weight: 600;
-  background: linear-gradient(90deg, #25F4EE, #FE2C55);
+  background: linear-gradient(90deg, var(--color-glint), var(--color-blaze));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -244,7 +244,7 @@ input[type="submit"] {
 .splash-loader-fill {
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #25F4EE, #FE2C55);
+  background: linear-gradient(90deg, var(--color-glint), var(--color-blaze));
   border-radius: 2px;
   animation: splashLoaderFill 2s ease-in-out forwards;
 }
@@ -333,7 +333,7 @@ h3 {
   position: absolute;
   top: -40px;
   left: 0;
-  background: var(--color-accent-cyan);
+  background: var(--color-glint);
   color: var(--color-background-primary);
   padding: var(--space-2) var(--space-4);
   text-decoration: none;
@@ -350,7 +350,7 @@ h3 {
   top: 0;
   left: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-magenta));
+  background: linear-gradient(90deg, var(--color-glint), var(--color-blaze));
   width: 0%;
   z-index: 9999;
   transition: width 100ms ease-out;
@@ -396,9 +396,9 @@ h3 {
 
 /* Semantic Backgrounds - Scene-based */
 :root {
-  --accent-cyan: #00FFE0;
-  --accent-magenta: #FF00E0;
-  --gold: #FFEB3B;
+  --accent-glint: #2DCCD3;
+  --accent-blaze: #F1204A;
+  --accent-glow: #FBEB35;
 }
 
 /* Scene Background System - Smooth, Creative Transitions */
@@ -663,7 +663,7 @@ body[data-scene="air"] .scene--bubbles {
   height: 2px;
   background: linear-gradient(90deg,
       transparent,
-      var(--color-accent-cyan),
+      var(--color-glint),
       transparent);
   transform: translateX(-100%);
   animation: scan 3s infinite;
@@ -748,9 +748,9 @@ body[data-scene="air"] .scene--bubbles {
 
 /* Emotion sort toggle pressed state */
 .emotion-sort-toggle[aria-pressed="true"] {
-  background: linear-gradient(135deg, var(--color-accent-magenta), var(--color-accent-cyan));
+  background: linear-gradient(135deg, var(--color-blaze), var(--color-glint));
   color: #000;
-  border-color: var(--color-accent-magenta);
+  border-color: var(--color-blaze);
   box-shadow: 0 0 20px rgba(241, 32, 74, 0.6), 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
   font-weight: 700;
   transform: scale(1.05);
@@ -849,7 +849,7 @@ circle[data-type="bubble"] {
   color: #fff;
   padding: 12px 16px;
   border-radius: 8px;
-  border: 1px solid var(--color-accent-cyan);
+  border: 1px solid var(--color-glint);
   font-size: 0.8rem;
   line-height: 1.5;
   width: 320px;
@@ -880,7 +880,7 @@ circle[data-type="bubble"] {
 }
 
 .legend-tooltip strong {
-  color: var(--color-accent-cyan);
+  color: var(--color-glint);
   display: inline;
   margin-bottom: 0;
 }
@@ -908,7 +908,7 @@ circle[data-type="bubble"] {
 
 .color-legend-title strong {
   display: block;
-  color: var(--color-accent-magenta);
+  color: var(--color-blaze);
   margin-bottom: 8px;
   font-size: 1.3rem;
 }
@@ -1471,7 +1471,7 @@ circle[data-type="bubble"] {
   display: block;
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-accent-cyan);
+  color: var(--color-glint);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: var(--space-2);
@@ -1495,7 +1495,7 @@ circle[data-type="bubble"] {
 .section-transition {
   padding: var(--space-4);
   background: var(--glass-subtle-background);
-  border-left: 3px solid var(--color-accent-magenta);
+  border-left: 3px solid var(--color-blaze);
   border-radius: 4px;
   margin-bottom: var(--space-5);
 }
@@ -1549,7 +1549,7 @@ circle[data-type="bubble"] {
 
 .chart-instructions__toggle:hover {
   background: rgba(0, 0, 0, 0.5);
-  color: #25F4EE;
+  color: var(--color-glint);
   border-color: rgba(37, 244, 238, 0.3);
   box-shadow: 0 0 15px rgba(37, 244, 238, 0.15);
 }
@@ -1596,7 +1596,7 @@ circle[data-type="bubble"] {
   left: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, #25F4EE 0%, #FE2C55 100%);
+  background: linear-gradient(90deg, var(--color-glint) 0%, var(--color-blaze) 100%);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   opacity: 0.6;
 }
@@ -1682,7 +1682,7 @@ circle[data-type="bubble"] {
 
 /* Step prompt styling (interaction hints) */
 .step-prompt {
-  color: var(--color-accent-cyan);
+  color: var(--color-glint);
   font-style: italic;
   font-size: var(--font-size-small);
   margin-top: var(--space-2);
@@ -1775,7 +1775,7 @@ circle[data-type="bubble"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-magenta));
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
   color: var(--color-background-primary);
   border-radius: 50%;
   font-weight: var(--font-weight-bold);
@@ -1810,13 +1810,13 @@ circle[data-type="bubble"] {
 
 .step-button:hover {
   background: var(--glass-standard-background);
-  border-color: var(--color-accent-cyan);
-  color: var(--color-accent-cyan);
+  border-color: var(--color-glint);
+  color: var(--color-glint);
   transform: translateX(4px);
 }
 
 .step-button:focus {
-  outline: 2px solid var(--color-accent-cyan);
+  outline: 2px solid var(--color-glint);
   outline-offset: 2px;
 }
 
@@ -1845,11 +1845,11 @@ circle[data-type="bubble"] {
 }
 
 .legend-marker--size {
-  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-magenta));
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
 }
 
 .legend-marker--distance {
-  background: var(--color-accent-yellow);
+  background: var(--color-glow);
 }
 
 .legend-marker--color {
@@ -1861,7 +1861,7 @@ circle[data-type="bubble"] {
 .legend-marker--radius,
 .legend-marker--rank,
 .legend-marker--tile {
-  background: var(--color-accent-cyan);
+  background: var(--color-glint);
 }
 
 .legend-title {
@@ -1886,7 +1886,7 @@ circle[data-type="bubble"] {
 
 .summary-block h3 {
   font-size: var(--font-size-h3);
-  color: var(--color-accent-cyan);
+  color: var(--color-glint);
   margin-bottom: var(--space-4);
 }
 
@@ -1915,18 +1915,18 @@ circle[data-type="bubble"] {
   content: "→";
   position: absolute;
   left: 0;
-  color: var(--color-accent-cyan);
+  color: var(--color-glint);
   font-weight: var(--font-weight-bold);
 }
 
 .summary-list a {
-  color: var(--color-accent-cyan);
+  color: var(--color-glint);
   text-decoration: none;
   transition: color var(--duration-micro) var(--easing-standard);
 }
 
 .summary-list a:hover {
-  color: var(--color-accent-magenta);
+  color: var(--color-blaze);
   text-decoration: underline;
 }
 
@@ -1934,7 +1934,7 @@ circle[data-type="bubble"] {
   font-size: var(--font-size-h1);
   text-align: center;
   margin-bottom: var(--space-8);
-  background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-magenta));
+  background: linear-gradient(90deg, var(--color-glint), var(--color-blaze));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -2195,28 +2195,33 @@ circle[data-type="bubble"] {
 .viral-sounds-record-area--central {
   position: relative;
   display: flex;
-  justify-content: flex-start; /* Align to left */
+  justify-content: flex-start;
+  /* Align to left */
   align-items: center;
   width: 100%;
   height: 100%;
-  padding-left: clamp(2rem, 4vw, 4rem); /* Left padding */
+  padding-left: clamp(2rem, 4vw, 4rem);
+  /* Left padding */
 }
 
 .viral-sounds-record-area--central .record-player-layout {
   width: 100%;
   max-width: none;
-  justify-content: flex-start; /* Align left */
+  justify-content: flex-start;
+  /* Align left */
 }
 
 .viral-sounds-record-area--central .record-player-wrapper {
   width: 100%;
-  max-width: min(48vw, 700px); /* Reduced to leave room for text overlay */
+  max-width: min(48vw, 700px);
+  /* Reduced to leave room for text overlay */
   height: 65vh;
   min-height: 400px;
   max-height: 650px;
   aspect-ratio: 1.5;
   padding: clamp(0.8rem, 1.6vw, 1.3rem);
-  margin: 0; /* No auto margin - stay on left */
+  margin: 0;
+  /* No auto margin - stay on left */
 }
 
 /* VIZ OVERLAY - Persists across horizontal slides */
@@ -2301,7 +2306,7 @@ circle[data-type="bubble"] {
   line-height: 1.15;
   margin: 0 0 var(--space-3);
   /* Moderate spacing */
-  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  background: linear-gradient(135deg, var(--color-glint) 0%, var(--color-blaze) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -2338,7 +2343,7 @@ circle[data-type="bubble"] {
 .viral-sounds-text-overlay .step-prompt {
   font-size: 0.8125rem;
   /* Reduced from 0.9375rem (~13% smaller) */
-  color: #25F4EE;
+  color: var(--color-glint);
   font-style: italic;
   opacity: 0.9;
 }
@@ -2570,7 +2575,7 @@ circle[data-type="bubble"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-glint), var(--color-shimmer));
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
   color: #1a1a2e;
   font-size: 0.75rem;
   font-weight: 700;
@@ -2674,7 +2679,7 @@ circle[data-type="bubble"] {
   height: 16px;
   background: linear-gradient(90deg,
       var(--color-glint) 0%,
-      var(--color-shimmer) 50%,
+      var(--color-blaze) 50%,
       var(--color-glint) 100%);
   border-radius: 8px;
   position: absolute;
@@ -2981,7 +2986,7 @@ circle[data-type="bubble"] {
 .timing-text-overlay .step-prompt {
   font-size: 0.8rem;
   /* Reduced from 0.9375rem */
-  color: #25F4EE;
+  color: var(--color-glint);
   font-style: italic;
   opacity: 0.9;
 }
@@ -3131,7 +3136,8 @@ circle[data-type="bubble"] {
 .timing-viz-wrapper {
   position: relative;
   width: 100%;
-  max-width: 450px; /* Reduced from 600px */
+  max-width: 450px;
+  /* Reduced from 600px */
   aspect-ratio: 1;
   display: flex;
   align-items: center;
@@ -3181,7 +3187,7 @@ circle[data-type="bubble"] {
 }
 
 .legend-dot--radius {
-  background: linear-gradient(135deg, var(--color-glint), var(--color-shimmer));
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
 }
 
 /* Chart Instructions for Stopwatch Scene (per narrative-alien-redesign.md) */
@@ -3499,7 +3505,7 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 .pyramid-text-overlay .step-prompt {
   font-size: 0.8rem;
   /* Reduced from 0.9375rem to match scene 4 */
-  color: #25F4EE;
+  color: var(--color-glint);
   font-style: italic;
   opacity: 0.9;
 }
@@ -3569,7 +3575,7 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   left: 0;
   width: 3px;
   height: 100%;
-  background: linear-gradient(180deg, #25F4EE 0%, #FE2C55 100%);
+  background: linear-gradient(180deg, var(--color-glint) 0%, var(--color-blaze) 100%);
   border-radius: 3px 0 0 3px;
   opacity: 0.6;
 }
@@ -3583,7 +3589,7 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-glint), var(--color-shimmer));
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
   color: #1a1a2e;
   font-size: 0.875rem;
   font-weight: 700;
@@ -3601,7 +3607,8 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 .pyramid-legend {
   position: absolute;
   bottom: 80px;
-  right: 120px;  /* Matches pyramid-viz-wrapper right value */
+  right: 120px;
+  /* Matches pyramid-viz-wrapper right value */
   max-width: 320px;
   padding: var(--space-3);
   background: rgba(0, 0, 0, 0.3);
@@ -3613,7 +3620,8 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 
 @media (max-width: 1200px) {
   .pyramid-legend {
-    right: 80px;  /* Matches pyramid-viz-wrapper media query */
+    right: 80px;
+    /* Matches pyramid-viz-wrapper media query */
   }
 }
 
@@ -3632,8 +3640,10 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 /* Pyramid viz wrapper - uses absolute positioning like emotion scene for responsive layout */
 .pyramid-viz-wrapper {
   position: absolute;
-  left: 420px;   /* Start after text overlay */
-  right: 120px;  /* Gap from right edge */
+  left: 420px;
+  /* Start after text overlay */
+  right: 120px;
+  /* Gap from right edge */
   top: 50%;
   transform: translateY(-50%);
 }
@@ -3949,7 +3959,7 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
 .emotion-text-overlay .step-prompt {
   font-size: 0.8rem;
   /* Reduced from 0.9375rem to match scene 4 & 5 */
-  color: #25F4EE;
+  color: var(--color-glint);
   font-style: italic;
   opacity: 0.9;
 }
@@ -4054,7 +4064,7 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
 
 .legend-icon--color {
   background: linear-gradient(135deg,
-      var(--color-shimmer) 0%,
+      var(--color-blaze) 0%,
       var(--color-glint) 50%,
       var(--color-blaze) 100%);
 }
@@ -4166,7 +4176,7 @@ body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
   height: 10px;
   background: linear-gradient(90deg,
       var(--color-glint) 0%,
-      var(--color-shimmer) 50%,
+      var(--color-blaze) 50%,
       var(--color-glint) 100%);
   border-radius: 5px;
   box-shadow:
@@ -4897,16 +4907,17 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Center vertically to allow room at top and bottom */
+  justify-content: center;
+  /* Center vertically to allow room at top and bottom */
   padding: calc(64px + var(--space-4)) var(--space-6) var(--space-4);
-  overflow: hidden; /* Prevent content from blocking fullPage scroll detection */
+  overflow: hidden;
+  /* Prevent content from blocking fullPage scroll detection */
   /* Add fallback background matching wrapup theme */
   background: linear-gradient(180deg,
-    #0a0b14 0%,
-    #12141f 40%,
-    #1a1c2e 70%,
-    #0f1018 100%
-  );
+      #0a0b14 0%,
+      #12141f 40%,
+      #1a1c2e 70%,
+      #0f1018 100%);
 }
 
 /* Ensure fullPage overflow container is properly sized */
@@ -4918,10 +4929,12 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
 /* Centered wrapper for recipe card */
 .wrapup-center {
   display: flex;
-  align-items: center; /* Center vertically */
+  align-items: center;
+  /* Center vertically */
   justify-content: center;
   width: 100%;
-  height: 100%; /* Take full height to enable centering */
+  height: 100%;
+  /* Take full height to enable centering */
 }
 
 /* Scene for team credits (standalone page) */
@@ -4935,12 +4948,12 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   padding: calc(64px + var(--space-4)) var(--space-6) var(--space-6);
   /* Add fallback background in case body::before hasn't updated yet */
   background: linear-gradient(180deg,
-    #0a0b14 0%,
-    #12141f 40%,
-    #1a1c2e 70%,
-    #0f1018 100%
-  );
-  overflow: hidden; /* Match wrapup scene */
+      #0a0b14 0%,
+      #12141f 40%,
+      #1a1c2e 70%,
+      #0f1018 100%);
+  overflow: hidden;
+  /* Match wrapup scene */
 }
 
 /* Centered wrapper for team credits */
@@ -4957,8 +4970,10 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   z-index: 1;
   width: 100%;
   max-width: 700px;
-  max-height: calc(100vh - 120px); /* Constrain to viewport to prevent blocking scroll */
-  overflow-y: auto; /* Allow internal scrolling on smaller screens */
+  max-height: calc(100vh - 120px);
+  /* Constrain to viewport to prevent blocking scroll */
+  overflow-y: auto;
+  /* Allow internal scrolling on smaller screens */
   /* Reduced from 900px */
   background: rgba(10, 12, 18, 0.92);
   backdrop-filter: blur(var(--glass-frosted-blur));
@@ -5420,14 +5435,17 @@ body[data-scene="wrapup"] .alien-narrator--wrapup {
 
 .timing-viz-wrapper {
   height: 100% !important;
-  max-width: 450px !important; /* Reduced from 600px */
-  max-height: calc(100vh - 280px) !important; /* Reduced to make viz smaller */
+  max-width: 450px !important;
+  /* Reduced from 600px */
+  max-height: calc(100vh - 280px) !important;
+  /* Reduced to make viz smaller */
 }
 
 #chart {
   min-height: auto !important;
   height: 100% !important;
-  max-height: calc(100vh - 260px) !important; /* Reduced to make viz smaller */
+  max-height: calc(100vh - 260px) !important;
+  /* Reduced to make viz smaller */
 }
 
 /* Stopwatch viz and text overlay larger on external monitors */
@@ -5943,9 +5961,12 @@ body[data-scene="wrapup"] .alien-narrator--wrapup {
 /* pyramid-viz-wrapper now uses absolute positioning with left/right - no max-width needed */
 
 .pyramid-viz-wrapper .viz-container {
-  min-height: 500px !important; /* Increased from 450px */
-  height: calc(100vh - 100px) !important; /* Extended height */
-  max-height: 650px !important; /* Increased from 550px */
+  min-height: 500px !important;
+  /* Increased from 450px */
+  height: calc(100vh - 100px) !important;
+  /* Extended height */
+  max-height: 650px !important;
+  /* Increased from 550px */
 }
 
 /* 6. EMOTION VIZ - No sizing changes, use natural dimensions */
@@ -6414,7 +6435,7 @@ body[data-scene="wrapup"] .alien-narrator--wrapup {
 .section--bridge::before {
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, #25F4EE 0%, transparent 70%);
+  background: radial-gradient(circle, var(--color-glint) 0%, transparent 70%);
   top: -100px;
   left: -100px;
   animation-delay: 0s;
@@ -6423,7 +6444,7 @@ body[data-scene="wrapup"] .alien-narrator--wrapup {
 .section--bridge::after {
   width: 350px;
   height: 350px;
-  background: radial-gradient(circle, #FE2C55 0%, transparent 70%);
+  background: radial-gradient(circle, var(--color-blaze) 0%, transparent 70%);
   bottom: -80px;
   right: -80px;
   animation-delay: -4s;
@@ -6537,7 +6558,7 @@ body[data-scene="wrapup"] .alien-narrator--wrapup {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: #25F4EE;
+  color: var(--color-glint);
   margin-bottom: var(--space-4);
   text-shadow: 0 0 20px rgba(37, 244, 238, 0.5);
 }
@@ -6564,15 +6585,15 @@ body[data-scene="wrapup"] .alien-narrator--wrapup {
   }
 
   20% {
-    text-shadow: -2px 0 #FE2C55, 2px 0 #25F4EE;
+    text-shadow: -2px 0 var(--color-blaze), 2px 0 var(--color-glint);
   }
 
   40% {
-    text-shadow: 2px 0 #FE2C55, -2px 0 #25F4EE;
+    text-shadow: 2px 0 var(--color-blaze), -2px 0 var(--color-glint);
   }
 
   60% {
-    text-shadow: -1px 0 #FE2C55, 1px 0 #25F4EE;
+    text-shadow: -1px 0 var(--color-blaze), 1px 0 var(--color-glint);
   }
 }
 
@@ -6615,19 +6636,19 @@ body[data-scene="wrapup"] .alien-narrator--wrapup {
 
 /* Static TikTok colors for topic icons - no hover since not interactive */
 .bridge-topic:nth-child(1) .bridge-topic-icon {
-  stroke: #25F4EE;
+  stroke: var(--color-glint);
 }
 
 .bridge-topic:nth-child(2) .bridge-topic-icon {
-  stroke: #FE2C55;
+  stroke: var(--color-blaze);
 }
 
 .bridge-topic:nth-child(3) .bridge-topic-icon {
-  stroke: #25F4EE;
+  stroke: var(--color-glint);
 }
 
 .bridge-topic:nth-child(4) .bridge-topic-icon {
-  stroke: #FE2C55;
+  stroke: var(--color-blaze);
 }
 
 .bridge-topic-label {
@@ -6666,7 +6687,7 @@ body[data-scene="wrapup"] .alien-narrator--wrapup {
   font-family: var(--font-display);
   font-size: clamp(2.5rem, 8vw, 4rem);
   font-weight: var(--font-bold);
-  background: linear-gradient(135deg, #25F4EE 0%, #FE2C55 100%);
+  background: linear-gradient(135deg, var(--color-glint) 0%, var(--color-blaze) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -6740,7 +6761,7 @@ body[data-scene="wrapup"] .alien-narrator--wrapup {
 
 .bridge-journey-item[data-factor="music"] .bridge-journey-icon svg,
 .bridge-journey-item[data-factor="topics"] .bridge-journey-icon svg {
-  stroke: #25F4EE;
+  stroke: var(--color-glint);
 }
 
 .bridge-journey-item[data-factor="duration"] .bridge-journey-icon,
@@ -6750,7 +6771,7 @@ body[data-scene="wrapup"] .alien-narrator--wrapup {
 
 .bridge-journey-item[data-factor="duration"] .bridge-journey-icon svg,
 .bridge-journey-item[data-factor="captions"] .bridge-journey-icon svg {
-  stroke: #FE2C55;
+  stroke: var(--color-blaze);
 }
 
 .bridge-journey-item:hover .bridge-journey-icon {
@@ -6818,7 +6839,7 @@ body[data-scene="wrapup"] .alien-narrator--wrapup {
 
 .bridge-message--quiz .bridge-title {
   font-size: clamp(2rem, 6vw, 3rem);
-  background: linear-gradient(135deg, #25F4EE 0%, #fff 50%, #FE2C55 100%);
+  background: linear-gradient(135deg, var(--color-glint) 0%, #fff 50%, var(--color-blaze) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -6846,7 +6867,7 @@ body[data-scene="wrapup"] .alien-narrator--wrapup {
 }
 
 .bridge-recap-check {
-  color: #25F4EE;
+  color: var(--color-glint);
   font-weight: var(--font-bold);
   font-size: 0.85rem;
 }
