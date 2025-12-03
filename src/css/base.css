@@ -2584,8 +2584,9 @@ circle[data-type="bubble"] {
 .viral-sounds-record-area .record-player-wrapper {
   width: clamp(700px, 70vw, 950px);
   max-width: none;
-  height: clamp(650px, 75vh, 800px);
-  aspect-ratio: auto;
+  height: auto; /* Let aspect-ratio control height */
+  aspect-ratio: 1.4; /* Match the record-player-base aspect ratio */
+  max-height: calc(100vh - 180px); /* Prevent overflow on smaller screens */
   margin: 0;
   margin-top: clamp(3rem, 5vh, 5rem);
   margin-left: clamp(2rem, 4vw, 4rem);
@@ -3320,15 +3321,9 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   inset: 0;
   z-index: 5;
   pointer-events: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  /* Align to right instead of center */
-  justify-content: center;
+  /* Viz wrapper now uses absolute positioning, no flex needed */
   padding: var(--space-4);
   padding-top: calc(64px + var(--space-4));
-  padding-right: clamp(80px, 10vw, 110px);
-  /* Reduced padding to move viz more to the right */
 }
 
 /* Scene label badge positioning (matches music-galaxy) */
@@ -3522,14 +3517,24 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   line-height: 1.5;
 }
 
-/* Legend */
+/* Legend - positioned absolutely, right-aligned with viz container */
 .pyramid-legend {
-  margin-top: var(--space-4); /* Increased from space-2 to move legend lower */
+  position: absolute;
+  bottom: 80px;
+  right: 120px;  /* Matches pyramid-viz-wrapper right value */
+  max-width: 320px;
   padding: var(--space-3);
   background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(var(--glass-subtle-blur));
   border-radius: var(--radius-md);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+}
+
+@media (max-width: 1200px) {
+  .pyramid-legend {
+    right: 80px;  /* Matches pyramid-viz-wrapper media query */
+  }
 }
 
 .pyramid-legend .legend-dot--position {
@@ -3544,17 +3549,28 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   justify-content: center;
 }
 
+/* Pyramid viz wrapper - uses absolute positioning like emotion scene for responsive layout */
 .pyramid-viz-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 550px;
+  position: absolute;
+  left: 420px;   /* Start after text overlay */
+  right: 120px;  /* Gap from right edge */
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .pyramid-viz-wrapper .viz-container {
   width: 100%;
-  min-height: 500px; /* Increased from 450px */
-  height: calc(100vh - 100px); /* Extended height */
-  max-height: 650px; /* Increased from 550px */
+  min-height: 500px;
+  height: calc(100vh - 100px);
+  max-height: 650px;
+}
+
+/* Responsive adjustment for medium screens */
+@media (max-width: 1200px) {
+  .pyramid-viz-wrapper {
+    left: 38%;
+    right: 80px;
+  }
 }
 
 /* Callout annotation */
@@ -4803,6 +4819,7 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   align-items: center;
   justify-content: center; /* Center vertically to allow room at top and bottom */
   padding: calc(64px + var(--space-4)) var(--space-6) var(--space-4);
+  overflow: hidden; /* Prevent content from blocking fullPage scroll detection */
   /* Add fallback background matching wrapup theme */
   background: linear-gradient(180deg,
     #0a0b14 0%,
@@ -4810,6 +4827,12 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
     #1a1c2e 70%,
     #0f1018 100%
   );
+}
+
+/* Ensure fullPage overflow container is properly sized */
+.scene-wrapup .fp-overflow {
+  overflow: hidden !important;
+  height: 100% !important;
 }
 
 /* Centered wrapper for recipe card */
@@ -4854,6 +4877,8 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   z-index: 1;
   width: 100%;
   max-width: 700px;
+  max-height: calc(100vh - 120px); /* Constrain to viewport to prevent blocking scroll */
+  overflow-y: auto; /* Allow internal scrolling on smaller screens */
   /* Reduced from 900px */
   background: rgba(10, 12, 18, 0.92);
   backdrop-filter: blur(var(--glass-frosted-blur));
@@ -5750,10 +5775,7 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
   min-width: 450px !important;
 }
 
-.pyramid-viz-wrapper {
-  max-width: 900px !important;
-  width: 100% !important;
-}
+/* pyramid-viz-wrapper now uses absolute positioning with left/right - no max-width needed */
 
 .pyramid-viz-wrapper .viz-container {
   min-height: 500px !important; /* Increased from 450px */
