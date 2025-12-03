@@ -93,8 +93,8 @@ export class PlanetViz extends EventEmitter {
   danceabilityToColor(danceability) {
     const colors = [
       { value: 0.0, color: '#FFFFFF' },  // White at bottom
-      { value: 0.35, color: '#2af0ea' },  // TikTok blue in lower-middle
-      { value: 1.0, color: '#fe2858' }   // TikTok pink at top
+      { value: 0.35, color: '#2DCCD3' },  // TikTok blue in lower-middle
+      { value: 1.0, color: '#F1204A' }   // TikTok red at top
     ];
 
     for (let i = 0; i < colors.length - 1; i++) {
@@ -204,7 +204,7 @@ export class PlanetViz extends EventEmitter {
       .attr('id', 'sunGradient');
     sunGradient.append('stop')
       .attr('offset', '0%')
-      .attr('stop-color', '#FFD700');
+      .attr('stop-color', 'var(--color-glow)');
     sunGradient.append('stop')
       .attr('offset', '50%')
       .attr('stop-color', '#FFA500');
@@ -232,8 +232,8 @@ export class PlanetViz extends EventEmitter {
       .style('pointer-events', 'none')
       .style('transition', 'all 0.2s ease')
       .style('font-size', '16px')
-      .style('color', '#00F2EA')
-      .style('text-shadow', '0 0 8px rgba(0, 242, 234, 0.8)')
+      .style('color', 'var(--color-glint)')
+      .style('text-shadow', '0 0 8px rgba(45, 204, 211, 0.8)')
       .text('▲');
   }
 
@@ -595,7 +595,7 @@ export class PlanetViz extends EventEmitter {
       .duration(600)
       .attr('opacity', d => repeatedArtists.includes(d.name) ? 1 : 0.2)
       .attr('stroke-width', d => repeatedArtists.includes(d.name) ? 4 : 2)
-      .attr('stroke', d => repeatedArtists.includes(d.name) ? '#FBEB35' : '#fff'); // Yellow glow for repeated
+      .attr('stroke', d => repeatedArtists.includes(d.name) ? 'var(--color-glow)' : '#fff'); // Yellow glow for repeated
   }
 
   /**
@@ -632,9 +632,9 @@ export class PlanetViz extends EventEmitter {
       .duration(600)
       .attr('opacity', d => isInSweetSpot(d.name) ? 1 : 0.15)
       .attr('stroke-width', d => isInSweetSpot(d.name) ? 5 : 2)
-      .attr('stroke', d => isInSweetSpot(d.name) ? '#00F2EA' : '#fff')
+      .attr('stroke', d => isInSweetSpot(d.name) ? 'var(--color-glint)' : '#fff')
       .style('filter', d => isInSweetSpot(d.name) ?
-        'drop-shadow(0 0 12px rgba(0, 242, 234, 0.8)) drop-shadow(0 0 20px rgba(255, 92, 231, 0.5))' :
+        'drop-shadow(0 0 12px rgba(45, 204, 211, 0.8)) drop-shadow(0 0 20px rgba(241, 32, 74, 0.5))' :
         'none');
 
     // Keep orbits normal - don't highlight bands

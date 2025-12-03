@@ -4587,34 +4587,22 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   letter-spacing: 0.02em;
 }
 
-.music-galaxy-legend .legend-energy-bar {
-  height: 8px;
-  border-radius: 4px;
-  background: linear-gradient(to right,
-      #00F2EA 0%,
-      #1DE5DD 25%,
-      #5FD4C8 50%,
-      #FF6B8A 75%,
-      #FF0050 100%);
-  box-shadow: 0 2px 8px rgba(0, 242, 234, 0.3);
-}
-
 .music-galaxy-legend .legend-dance-bar {
   height: 10px;
   border-radius: 5px;
   /* Gradient matching actual viz danceabilityToColor() scale:
-     0.0 = White, 0.35 = TikTok blue (#2af0ea), 1.0 = TikTok pink (#fe2858) */
+     0.0 = White, 0.35 = TikTok blue, 1.0 = TikTok red */
   background: linear-gradient(to right,
       #FFFFFF 0%,
       /* 0.0 - White (low danceability) */
-      #2af0ea 35%,
+      var(--color-glint) 35%,
       /* 0.35 - TikTok blue */
-      #fe2858 100%
-      /* 1.0 - TikTok pink (high danceability) */
+      var(--color-blaze) 100%
+      /* 1.0 - TikTok red (high danceability) */
     );
   box-shadow:
-    0 2px 12px rgba(42, 240, 234, 0.4),
-    0 0 20px rgba(254, 40, 88, 0.3);
+    0 2px 12px rgba(45, 204, 211, 0.4),
+    0 0 20px rgba(241, 32, 74, 0.3);
 }
 
 /* New text-only legend style (for Distance = Energy) */
@@ -4657,8 +4645,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .music-galaxy-legend .size-dot {
   border-radius: 50%;
-  background: linear-gradient(135deg, #00F2EA, #FF0050);
-  box-shadow: 0 0 6px rgba(0, 242, 234, 0.4);
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
+  box-shadow: 0 0 6px rgba(45, 204, 211, 0.4);
 }
 
 .music-galaxy-legend .size-dot--sm {
