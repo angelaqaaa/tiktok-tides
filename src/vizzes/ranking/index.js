@@ -1,4 +1,4 @@
-import { EventEmitter, prefersReducedMotion } from '../shared/utils.js';
+import { EventEmitter, prefersReducedMotion, getDataPath } from '../shared/utils.js';
 import { VIZ_EVENTS, DEFAULT_OPTIONS } from '../shared/types.js';
 import { RankingBubbleChart } from './rankingBubbleChart.js';
 
@@ -44,7 +44,7 @@ export class RankingViz extends EventEmitter {
 
   async loadData() {
     try {
-      const rawData = await d3.csv('/data/youtube_shorts_tiktok_trends_2025.csv'); // load csv
+      const rawData = await d3.csv(getDataPath('data/youtube_shorts_tiktok_trends_2025.csv')); // load csv
 
       const categoryViews = {};
 

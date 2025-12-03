@@ -31,3 +31,7 @@ export function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+export function getDataPath(relativePath) {
+  const base = import.meta.env.BASE_URL || '/';
+  return `${base}${relativePath}`.replace(/\/+/g, '/');
+}

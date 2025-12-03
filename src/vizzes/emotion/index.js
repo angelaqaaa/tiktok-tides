@@ -1,5 +1,5 @@
 // Language/Emotion vs Engagement Visualization - Word Cloud Version
-import { EventEmitter, prefersReducedMotion } from "../shared/utils.js";
+import { EventEmitter, prefersReducedMotion, getDataPath } from "../shared/utils.js";
 import { VIZ_EVENTS, DEFAULT_OPTIONS } from "../shared/types.js";
 
 import "../../css/emotion.css";
@@ -317,7 +317,7 @@ export class EmotionViz extends EventEmitter {
       await this.initNLP();
 
       const [data] = await Promise.all([
-        d3.csv("/data/cleaned_tiktok_data.csv", d3.autoType),
+        d3.csv(getDataPath("data/cleaned_tiktok_data.csv"), d3.autoType),
       ]);
 
       this.rawData = data;

@@ -1,4 +1,5 @@
 import * as d3 from 'd3';
+import { getDataPath } from '../shared/utils.js';
 
 const VIEWBOX_SIZE = 700;
 const CENTER = VIEWBOX_SIZE / 2;
@@ -155,7 +156,7 @@ export class RecordPlayerViz {
     }
 
     async loadData() {
-        const parsed = await d3.csv('/data/top_music.csv', (d) => {
+        const parsed = await d3.csv(getDataPath('data/top_music.csv'), (d) => {
             const year = +d.year || +d.Year;
             const name = d.music_name || d['musicMeta/musicName'] || d['music_name'] || d.name;
             const playUrl = d.music_url || d['musicMeta/playUrl'] || d.play_url || d.playUrl || '';
@@ -387,6 +388,7 @@ export class RecordPlayerViz {
         const ringStep = (OUTER_RADIUS - INNER_RADIUS) / ringCount;
         this.radiusScale = (index) => OUTER_RADIUS - (index + 0.75) * ringStep;
     }
+    
 
     renderRings({ animate = false } = {}) {
         // reset timers/angles when rendering
