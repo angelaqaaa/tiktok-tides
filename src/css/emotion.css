@@ -22,7 +22,8 @@
 
 /* Rounded pill + shadow */
 .word-bubble .bubble-body {
-  stroke: rgba(15, 23, 42, 0.9); /* dark outline */
+  stroke: rgba(15, 23, 42, 0.9);
+  /* dark outline */
   stroke-width: 1.5;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
 }
@@ -34,10 +35,7 @@
 
 /* Text style inside bubble */
 .word-bubble text {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
   font-weight: 600;
-  letter-spacing: 0.01em;
 }
 
 /* Hover outline enhancement (kept subtle, main effect is scale in JS) */
@@ -101,11 +99,10 @@
   border-radius: 999px;
   border: 1px solid var(--checkbox-border);
   background: var(--checkbox-bg);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
   font-size: 0.8rem;
   line-height: 1;
-  color: #f0f8ff; /* Light color for dark theme */
+  color: white;
+  /* Light color for dark theme */
   transition: background-color 150ms ease-out, border-color 150ms ease-out,
     box-shadow 150ms ease-out, transform 120ms ease-out;
 }
@@ -115,8 +112,7 @@
   width: 14px;
   height: 14px;
   border-radius: 4px;
-  border: 1.5px solid rgba(148, 163, 184, 0.9);
-  background: #f9fafb;
+  border: 1px solid white;
   box-sizing: border-box;
   position: relative;
   flex-shrink: 0;
@@ -140,40 +136,36 @@
 }
 
 /* Checked state – driven by the hidden checkbox */
-.emotion-legend-checkbox:checked + .emotion-legend-chip {
-  --checkbox-border: var(--emotion-color, #6366f1);
+.emotion-legend-checkbox:checked+.emotion-legend-chip {
+  --checkbox-border: var(--emotion-color);
   --checkbox-bg: rgba(15, 23, 42, 0.8);
 
-  box-shadow: 0 0 0 2px var(--emotion-color, #6366f1);
+  box-shadow: 0 0 0 2px var(--emotion-color);
 }
 
 /* Fill the checkmark box with the emotion color when checked */
-.emotion-legend-checkbox:checked
-  + .emotion-legend-chip
-  .emotion-legend-checkmark {
-  background: var(--emotion-color, #6366f1);
-  border-color: var(--emotion-color, #6366f1);
+.emotion-legend-checkbox:checked+.emotion-legend-chip .emotion-legend-checkmark {
+  background: var(--emotion-color);
+  border-color: var(--emotion-color);
   box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.25);
 }
 
 /* Draw the tick */
-.emotion-legend-checkbox:checked
-  + .emotion-legend-chip
-  .emotion-legend-checkmark::after {
+.emotion-legend-checkbox:checked+.emotion-legend-chip .emotion-legend-checkmark::after {
   content: "";
   position: absolute;
   left: 3px;
   top: 1px;
   width: 5px;
   height: 8px;
-  border-right: 2px solid #f9fafb;
-  border-bottom: 2px solid #f9fafb;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
   transform: rotate(45deg);
 }
 
 /* Focus-visible ring for keyboard navigation */
-.emotion-legend-checkbox:focus-visible + .emotion-legend-chip {
-  outline: 2px solid #0f766e;
+.emotion-legend-checkbox:focus-visible+.emotion-legend-chip {
+  outline: 2px solid rgba(45, 204, 211, 0.3);
   outline-offset: 2px;
 }
 
@@ -181,23 +173,24 @@
    Sort Toggle Button
    ───────────────────────────────────────────────────────────────────────────── */
 .emotion-sort-toggle {
-  margin-top: 0; /* Removed - gap from parent controls-panel handles spacing */
+  margin-top: 0;
+  /* Removed - gap from parent controls-panel handles spacing */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  align-self: flex-start; /* Align to left of controls panel */
+  align-self: flex-start;
+  /* Align to left of controls panel */
 
   padding: 0.55rem 1.3rem;
   min-width: 150px;
-  white-space: nowrap; /* keep "Sort into columns" on one line */
+  white-space: nowrap;
+  /* keep "Sort into columns" on one line */
 
   border-radius: 999px;
-  border: 1px solid rgba(148, 163, 184, 0.9);
+  border: 1px solid rgba(45, 204, 211, 0.8);
   background: rgba(15, 23, 42, 0.7);
-  color: #e5e7eb;
-  font-size: 0.95rem;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+  color: rgba(45, 204, 211, 0.8);
+  font-family: 'TikTok Sans';
   /* cursor inherited from base.css */
   transition: background-color 140ms ease-out, border-color 140ms ease-out,
     transform 120ms ease-out, box-shadow 140ms ease-out;
@@ -205,15 +198,10 @@
 
 .emotion-sort-toggle:hover {
   background: rgba(15, 23, 42, 0.9);
-  border-color: rgba(248, 250, 252, 0.8);
+  border-color: var(--color-shimmer);
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(15, 23, 42, 0.5);
-}
-
-.emotion-sort-toggle[aria-pressed="true"] {
-  background: #0f766e;
-  border-color: #a7f3d0;
-  box-shadow: 0 0 0 1px rgba(167, 243, 208, 0.4);
+  color: var(--color-shimmer);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -245,7 +233,7 @@
 .emotion-title {
   font-size: clamp(1.25rem, 3vw, 1.75rem);
   font-weight: 800;
-  color: #f0f8ff;
+  color: white;
   line-height: 1.3;
   margin: 0;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -259,7 +247,7 @@
 
 .emotion-paragraphs p {
   font-size: 0.9375rem;
-  color: #baf6f0;
+  color: var(--color-shimmer);
   line-height: 1.6;
   margin: 0;
 }
@@ -270,12 +258,12 @@
   padding: var(--space-3);
   background: rgba(45, 204, 211, 0.15);
   border-radius: 8px;
-  border-left: 3px solid #2dccd3;
+  border-left: 3px solid var(--color-glint);
 }
 
 .emotion-guided-step .guided-prompt {
   font-size: 0.875rem;
-  color: #baf6f0;
+  color: var(--color-shimmer);
   margin: 0;
   font-style: italic;
 }
@@ -286,7 +274,7 @@
   padding: var(--space-3);
   background: rgba(251, 235, 53, 0.15);
   border-radius: 8px;
-  border-left: 3px solid #fbeb35;
+  border-left: 3px solid var(--color-glow);
   opacity: 0;
   transform: translateY(10px);
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
@@ -299,7 +287,7 @@
 
 .emotion-insight-callout .insight-text {
   font-size: 0.875rem;
-  color: #fbeb35;
+  color: var(--color-glow);
   margin: 0;
   font-weight: 500;
 }
@@ -313,8 +301,10 @@
 
 .emotion-viz-wrapper {
   position: absolute;
-  left: 420px; /* Reduced from 540px to expand leftward closer to text-overlay */
-  right: 280px; /* Reduced from 320px to expand rightward */
+  left: 420px;
+  /* Reduced from 540px to expand leftward closer to text-overlay */
+  right: 280px;
+  /* Reduced from 320px to expand rightward */
   top: 50%;
   transform: translateY(-50%);
 }
@@ -323,9 +313,11 @@
 .emotion-viz-wrapper .viz-container {
   width: 100%;
   min-height: 400px;
-  background: transparent; /* Let scene background show */
+  background: transparent;
+  /* Let scene background show */
   border-radius: 16px;
-  border: 1px solid rgba(45, 204, 211, 0.15); /* Subtle border */
+  border: 1px solid rgba(45, 204, 211, 0.15);
+  /* Subtle border */
 }
 
 /* Right column: Controls and Legend */
@@ -350,7 +342,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: #baf6f0;
+  color: var(--color-shimmer);
   margin: 0 0 var(--space-3);
 }
 
@@ -369,7 +361,8 @@
    ───────────────────────────────────────────────────────────────────────── */
 .alien-narrator--emotion {
   position: absolute;
-  bottom: 20px; /* Fixed position near bottom */
+  bottom: 20px;
+  /* Fixed position near bottom */
   left: 40px;
   top: auto;
   right: auto;
@@ -406,7 +399,8 @@ body[data-scene="air"] .alien-narrator--emotion .alien-speech-bubble {
 
 .alien-narrator--emotion .alien-speech-bubble {
   position: absolute;
-  bottom: 100%; /* Changed from top: 100% to place above the alien */
+  bottom: 100%;
+  /* Changed from top: 100% to place above the alien */
   left: 50%;
   transform: translateX(-50%);
   width: max-content;
@@ -424,7 +418,8 @@ body[data-scene="air"] .alien-narrator--emotion .alien-speech-bubble {
 
 .alien-narrator--emotion .alien-speech-text {
   font-size: 0.875rem;
-  color: #1a1a2e; /* Dark text for white background */
+  color: #1a1a2e;
+  /* Dark text for white background */
   line-height: 1.6;
   margin: 0;
   text-align: center;

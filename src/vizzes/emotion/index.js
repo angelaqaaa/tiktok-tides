@@ -197,7 +197,7 @@ export class EmotionViz extends EventEmitter {
     } else {
       console.warn(
         "Sentiment library not found; using manual lexicon for emotions. " +
-          'Include it via <script src="https://cdn.jsdelivr.net/npm/sentiment@5.0.1/dist/sentiment.min.js"></script>'
+        'Include it via <script src="https://cdn.jsdelivr.net/npm/sentiment@5.0.1/dist/sentiment.min.js"></script>'
       );
     }
   }
@@ -589,13 +589,13 @@ export class EmotionViz extends EventEmitter {
 
       // --- Emotion colors: more categories + more colors --------------------
       const emotionColors = {
-        anger: "#dc2626", // red
-        sadness: "#2563eb", // blue
-        disappointment: "#f1204a",
-        neutral: "#6b7280", // gray
-        hope: "#033624", //
-        joy: "#2dccd3", // lime
-        excitement: "#d1c328ff", // orange
+        anger: 'var(--color-ember)',
+        sadness: 'var(--color-shimmer)',
+        disappointment: 'var(--color-thrive)',
+        neutral: 'var(--color-muse)',
+        hope: 'var(--color-glint)',
+        joy: '#e8d500',
+        excitement: 'var(--color-blaze)',
       };
       const emotionCategories = new Set();
 
@@ -927,7 +927,7 @@ export class EmotionViz extends EventEmitter {
       .attr("height", (d) => d.boxHeight)
       .attr("rx", 16)
       .attr("ry", 16)
-      .attr("fill", (d) => emotionColors[d.emotion] || "#e5e7eb")
+      .attr("fill", (d) => emotionColors[d.emotion] || "#ffffffff")
       .attr("stroke", "transparent")
       .attr("opacity", 0.95);
 
@@ -959,7 +959,7 @@ export class EmotionViz extends EventEmitter {
                 L ${tipX} ${tipY}
                 Z`;
       })
-      .attr("fill", (d) => emotionColors[d.emotion] || "#e5e7eb")
+      .attr("fill", (d) => emotionColors[d.emotion] || "#ffffffff")
       .attr("stroke", "transparent")
       .attr("opacity", 0.95);
 
@@ -970,7 +970,7 @@ export class EmotionViz extends EventEmitter {
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "middle")
       .style("font-size", (d) => `${d.fontSize}px`)
-      .style("fill", "var(--color-text-primary, #020617)")
+      .style("fill", "var(--color-text-primary, #000000)")
       .style("pointer-events", "none");
 
     // Interactions (hover only)
@@ -1100,9 +1100,9 @@ export class EmotionViz extends EventEmitter {
   /**
    * Arrange visible emotions into neat columns for comparison.
    */
-    /**
-   * Arrange visible emotions into neat columns for comparison.
-   */
+  /**
+ * Arrange visible emotions into neat columns for comparison.
+ */
   applySortedLayout() {
     if (!this.svg || !this.data) return;
 
@@ -1516,8 +1516,7 @@ export class EmotionViz extends EventEmitter {
       detailContent.innerHTML = `
         <h3>${data.word}</h3>
         <p>Emotion bucket: <strong>${data.emotion}</strong></p>
-        <p>Sentiment score: ${
-          data.sentiment?.toFixed ? data.sentiment.toFixed(2) : data.sentiment
+        <p>Sentiment score: ${data.sentiment?.toFixed ? data.sentiment.toFixed(2) : data.sentiment
         }</p>
         <p>Frequency (word count): ${data.count}</p>
       `;
