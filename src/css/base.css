@@ -2576,18 +2576,19 @@ circle[data-type="bubble"] {
 /* Ensure record player layout fills the available space */
 .viral-sounds-record-area .record-player-layout {
   width: 100%;
-  max-width: min(80vw, 1050px);
-  /* Slightly smaller than original */
+  max-width: none;
 }
 
 .viral-sounds-record-area .record-player-wrapper {
-  width: 100%;
-  max-width: min(65vw, 800px); /* Reduced from 75vw/920px */
-  aspect-ratio: 1.5;
+  width: clamp(700px, 70vw, 950px);
+  max-width: none;
+  height: clamp(650px, 75vh, 800px);
+  aspect-ratio: auto;
   margin: 0;
-  margin-left: clamp(2rem, 4vw, 4rem); /* Left margin to position on left side */
+  margin-top: clamp(3rem, 5vh, 5rem);
+  margin-left: clamp(2rem, 4vw, 4rem);
   position: relative;
-  left: 0; /* Reset - no shift */
+  left: 0;
 }
 
 .viral-sounds-viz-wrapper {
