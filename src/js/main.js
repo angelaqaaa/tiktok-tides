@@ -20,19 +20,20 @@ import { EmotionViz } from '../vizzes/emotion/index.js';
 import { RecordPlayerViz } from '../vizzes/record-player/index.js';
 import { ConveyorViz } from '../vizzes/conveyor/index.js';
 import { initMicroInteractions } from './micro-interactions.js';
-import { installIllustrations } from '../illustrations/index.js';
 
-// Scene mapping for semantic worlds (8 scenes)
+// Scene mapping for semantic worlds
 // Maps section IDs to scene attribute values for body[data-scene]
 const SCENE_MAP = {
   '#scene-hero': 'cosmos',
   '#scene-music-galaxy': 'galaxy',
   '#scene-viral-sounds': 'sounds',
   '#scene-duration': 'dawn',
+  '#bridge-topics': 'dawn',          // Mid-point bridge
   '#scene-category': 'forest',
   '#scene-emotion': 'air',
   '#scene-quiz': 'lab',
-  '#scene-summary': 'wrapup'
+  '#scene-summary': 'wrapup',
+  '#scene-credits': 'credits'          // Team credits page (separate from wrapup so alien doesn't show)
 };
 
 // Node positions for alien marker on map canvas
@@ -44,7 +45,8 @@ const NODE_POSITIONS = {
   'scene-category': { x: '58%', y: '60%' },
   'scene-emotion': { x: '42%', y: '72%' },
   'scene-quiz': { x: '28%', y: '82%' },
-  'scene-summary': { x: '50%', y: '90%' }
+  'scene-summary': { x: '50%', y: '90%' },
+  'scene-credits': { x: '50%', y: '95%' }  // Credits page below summary
 };
 
 // Scene names for keyboard shortcuts (includes new scene values)
@@ -52,65 +54,65 @@ const SCENE_NAMES = ['cosmos', 'galaxy', 'sounds', 'dawn', 'forest', 'air', 'lab
 
 // --- util: tiny debounce (used for stopwatch resize) ------------------------
 function debounce(fn, ms = 150) {
-  let t;
-  return (...args) => {
-    clearTimeout(t);
-    t = setTimeout(() => fn(...args), ms);
-  };
+    let t;
+    return (...args) => {
+        clearTimeout(t);
+        t = setTimeout(() => fn(...args), ms);
+    };
 }
 
 /**
  * TASK 0 - Keyboard QA: Keys 1-7 force scenes (dev-only)
  */
 function setupSceneKeyboardQA() {
-  const isProd = document.documentElement.dataset.env === 'prod';
-  if (isProd) return;
+    const isProd = document.documentElement.dataset.env === 'prod';
+    if (isProd) return;
 
-  document.addEventListener('keydown', (e) => {
-    const key = parseInt(e.key);
-    if (key >= 1 && key <= 7) {
-      const scene = SCENE_NAMES[key - 1];
-      document.body.dataset.scene = scene;
-      console.log(`[QA] Force scene: ${scene}`);
-    }
-  });
+    document.addEventListener('keydown', (e) => {
+        const key = parseInt(e.key);
+        if (key >= 1 && key <= 7) {
+            const scene = SCENE_NAMES[key - 1];
+            document.body.dataset.scene = scene;
+            console.log(`[QA] Force scene: ${scene}`);
+        }
+    });
 }
 
 /**
  * TASK 1 - Ensure scene layers exist (runtime injection)
  */
 function ensureSceneLayers() {
-  const needs = {
+    const needs = {
     'scene-hero': 'scene--stars',
     'scene-music-galaxy': 'scene--orbits',
     'scene-category': 'scene--canopy',
     'scene-emotion': 'scene--bubbles'
-  };
+    };
 
-  Object.entries(needs).forEach(([id, cls]) => {
-    const host = document.getElementById(id);
-    if (!host) return;
+    Object.entries(needs).forEach(([id, cls]) => {
+        const host = document.getElementById(id);
+        if (!host) return;
 
-    if (!host.querySelector(`.scene-layer.${cls}`)) {
-      const layer = document.createElement('div');
-      layer.className = `scene-layer ${cls}`;
-      layer.setAttribute('aria-hidden', 'true');
-      host.appendChild(layer);
-      console.log(`[SceneLayer] Injected ${cls} into #${id}`);
-    }
-  });
+        if (!host.querySelector(`.scene-layer.${cls}`)) {
+            const layer = document.createElement('div');
+            layer.className = `scene-layer ${cls}`;
+            layer.setAttribute('aria-hidden', 'true');
+            host.appendChild(layer);
+            console.log(`[SceneLayer] Injected ${cls} into #${id}`);
+        }
+    });
 }
 
 class TikTokTidesApp {
-  constructor() {
-    this.vizControllers = {};
-    this.currentSection = null;
-    this.liveRegion = document.querySelector('[role="status"]');
-    this.audioMuted = true;
+    constructor() {
+        this.vizControllers = {};
+        this.currentSection = null;
+        this.liveRegion = document.querySelector('[role="status"]');
+        this.audioMuted = true;
 
-    // Section metadata for transitions
+        // Section metadata for transitions
     // Maps section IDs to background classes, display names, and node numbers
-    this.sectionMeta = {
+        this.sectionMeta = {
       'scene-hero': { bg: 'bg-cosmos', name: 'Arrival', scene: 'hero', nodeNum: 1 },
       'scene-music-galaxy': { bg: 'bg-galaxy', name: 'Music Galaxy', scene: 'music-galaxy', nodeNum: 2 },
       'scene-viral-sounds': { bg: 'bg-sounds', name: 'Viral Sounds', scene: 'viral-sounds', nodeNum: 3 },
@@ -124,36 +126,36 @@ class TikTokTidesApp {
     // Insight callout state (track which have been revealed)
     this.insightRevealed = {};
 
-    // bound handlers
-    this._stopwatchResize = null;
+        // bound handlers
+        this._stopwatchResize = null;
 
-    this.init();
-  }
+        this.init();
+    }
 
-  async init() {
-    // Initialize visualizations
-    await this.initVisualizations();
+    async init() {
+        // Initialize visualizations
+        await this.initVisualizations();
 
-    // Install scene observer (semantic world switcher)
-    this.installSceneObserver();
+        // Install scene observer (semantic world switcher)
+        this.installSceneObserver();
 
-    // Setup scroll observer
-    this.setupScrollObserver();
+        // Setup scroll observer
+        this.setupScrollObserver();
 
-    // Setup navigation
-    this.setupNavigation();
+        // Setup navigation
+        this.setupNavigation();
 
     // Setup journey map
     this.setupJourneyMap();
 
-    // Setup progress bar
-    this.setupProgressBar();
+        // Setup progress bar
+        this.setupProgressBar();
 
-    // Setup keyboard navigation
-    this.setupKeyboardNav();
+        // Setup keyboard navigation
+        this.setupKeyboardNav();
 
-    // Setup reduced motion
-    this.setupReducedMotion();
+        // Setup reduced motion
+        this.setupReducedMotion();
 
     // Setup guided step buttons
     this.setupGuidedSteps();
@@ -164,55 +166,36 @@ class TikTokTidesApp {
     // Initialize Music Galaxy scrollytelling (v3 spec 5.2.4)
     this.setupMusicGalaxyScrollytelling();
 
-    // Initialize micro-interactions
-    initMicroInteractions();
+        // Initialize micro-interactions
+        initMicroInteractions();
 
-    // Announce ready
-    this.announce('TikTok Tides loaded and ready');
-  }
+        // Announce ready
+        this.announce('TikTok Tides loaded and ready');
 
-  installSceneObserver() {
-    // Scene switches when section is > 50% visible (stable, no thrashing)
-    const io = new IntersectionObserver((entries) => {
-      // Find sections that are > 50% visible
-      const dominantSections = entries
-        .filter(e => e.isIntersecting && e.intersectionRatio > 0.5)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        // Mark app as ready for splash screen
+        if (window.markAppReady) {
+            window.markAppReady();
+        }
+    }
 
-      if (dominantSections.length > 0) {
-        const mostVisible = dominantSections[0];
-        const id = '#' + mostVisible.target.id;
-        const scene = SCENE_MAP[id];
-        if (scene && document.body.dataset.scene !== scene) {
+    installSceneObserver() {
+        // Scene switches when section is > 50% visible (stable, no thrashing)
+        const io = new IntersectionObserver((entries) => {
+            // Find sections that are > 50% visible
+            const dominantSections = entries
+        .filter(e => e.isIntersecting && e.intersectionRatio > 0.3) // Lowered from 0.5 to prevent black flash
+                .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+            if (dominantSections.length > 0) {
+                const mostVisible = dominantSections[0];
+                const id = '#' + mostVisible.target.id;
+                const scene = SCENE_MAP[id];
+                if (scene && document.body.dataset.scene !== scene) {
           const previousScene = document.body.dataset.scene;
-          document.body.dataset.scene = scene;
+                    document.body.dataset.scene = scene;
           console.log('Scene changed from:', previousScene, '→', scene, '(ratio:', mostVisible.intersectionRatio.toFixed(2), ')');
 
-          // CRITICAL: Explicitly hide Scene 1 alien when leaving hero
-          if (previousScene === 'cosmos' && scene !== 'cosmos') {
-            const heroAlien = document.querySelector('.alien-narrator--hero');
-            if (heroAlien) {
-              console.log('[Scene Transition] Hiding Scene 1 alien');
-              heroAlien.style.display = 'none';
-              heroAlien.style.opacity = '0';
-            }
-          }
-
-          // Show Scene 1 alien when RETURNING to hero (not on initial load)
-          // We know it's a return if previousScene exists and is not 'cosmos'
-          if (scene === 'cosmos' && previousScene && previousScene !== 'cosmos') {
-            const heroAlien = document.querySelector('.alien-narrator--hero');
-            if (heroAlien) {
-              console.log('[Scene Transition] Showing Scene 1 alien (returning)');
-              heroAlien.style.display = 'flex';
-              heroAlien.style.opacity = '1';
-              // Also ensure speech bubble is visible when returning
-              const speechBubble = heroAlien.querySelector('.alien-speech-bubble');
-              if (speechBubble) {
-                speechBubble.setAttribute('data-speech-state', 'visible');
-              }
-            }
-          }
+          // NOTE: .alien-narrator--hero transition code REMOVED - HTML element was removed (Dec 2025 cleanup)
 
           // Update journey map highlighting (inside scene change block for scene-specific updates)
         }
@@ -220,74 +203,74 @@ class TikTokTidesApp {
         // (moved outside scene change condition to fix tracking issue)
         this.updateJourneyMapHighlight(mostVisible.target.id);
       }
-    }, { root: null, rootMargin: '0px', threshold: 0.5 });
+    }, { root: null, rootMargin: '0px', threshold: [0, 0.3, 0.5, 1] }); // Multiple thresholds for smoother transitions
 
-    Object.keys(SCENE_MAP).forEach(sel => {
-      const el = document.querySelector(sel);
-      if (el) io.observe(el);
-    });
-  }
+        Object.keys(SCENE_MAP).forEach(sel => {
+            const el = document.querySelector(sel);
+            if (el) io.observe(el);
+        });
+    }
 
-  async initVisualizations() {
-    // Register visualization controllers
-    this.vizControllers.stopwatch = new StopwatchViz();
-    this.vizControllers.planets = new PlanetViz();
-    this.vizControllers.ranking = new RankingViz();
-    this.vizControllers.emotion = new EmotionViz();
-    this.vizControllers.recordPlayer = new RecordPlayerViz();
-    this.vizControllers.conveyor = new ConveyorViz();
+    async initVisualizations() {
+        // Register visualization controllers
+        this.vizControllers.stopwatch = new StopwatchViz();
+        this.vizControllers.planets = new PlanetViz();
+        this.vizControllers.ranking = new RankingViz();
+        this.vizControllers.emotion = new EmotionViz();
+        this.vizControllers.recordPlayer = new RecordPlayerViz();
+        this.vizControllers.conveyor = new ConveyorViz();
 
-    // Initialize each viz with canonical API
-    for (const [key, viz] of Object.entries(this.vizControllers)) {
-      try {
+        // Initialize each viz with canonical API
+        for (const [key, viz] of Object.entries(this.vizControllers)) {
+            try {
         // SPECIAL-CASE: Stopwatch mounts into #chart
         // SPECIAL-CASE: Record player mounts into .record-player-section
-        const selector =
-          key === 'stopwatch'
-            ? '#chart'
-            : key === 'recordPlayer'
-              ? '.record-player-section'
-              : `#viz-${key === 'planets' ? 'planets' : key}`;
+                const selector =
+                    key === 'stopwatch'
+                        ? '#chart'
+                        : key === 'recordPlayer'
+                            ? '.record-player-section'
+                            : `#viz-${key === 'planets' ? 'planets' : key}`;
 
-        await viz.init(selector, {
-          reducedMotion: this.prefersReducedMotion(),
-          animationSpeed: 1,
-          colorScheme: 'default'
-        });
+                await viz.init(selector, {
+                    reducedMotion: this.prefersReducedMotion(),
+                    animationSpeed: 1,
+                    colorScheme: 'default'
+                });
 
         // For stopwatch, mount immediately and wire resize
-        if (key === 'stopwatch') {
-          viz.mount();
-          viz.mounted = true;
+                if (key === 'stopwatch') {
+                    viz.mount();
+                    viz.mounted = true;
 
           // Debounced resize
-          this._stopwatchResize = debounce(() => {
-            const el = document.getElementById('chart');
-            if (!el) return;
-            const { width, height } = el.getBoundingClientRect();
-            const size = Math.max(320, Math.min(width, height || width));
-            viz.resize(size, size);
-          }, 150);
+                    this._stopwatchResize = debounce(() => {
+                        const el = document.getElementById('chart');
+                        if (!el) return;
+                        const { width, height } = el.getBoundingClientRect();
+                        const size = Math.max(320, Math.min(width, height || width));
+                        viz.resize(size, size);
+                    }, 150);
 
-          window.addEventListener('resize', this._stopwatchResize);
-          this._stopwatchResize();
+                    window.addEventListener('resize', this._stopwatchResize);
+                    this._stopwatchResize();
         }
 
         // Record player mounts immediately
-        if (key === 'recordPlayer') {
-          viz.mount?.();
-          viz.mounted = true;
-        }
+                if (key === 'recordPlayer') {
+                    viz.mount?.();
+                    viz.mounted = true;
+                }
 
         // Setup event listeners
-        this.setupVizEvents(key, viz);
-      } catch (err) {
-        console.warn(`Failed to init ${key}:`, err);
-      }
+                this.setupVizEvents(key, viz);
+            } catch (err) {
+                console.warn(`Failed to init ${key}:`, err);
+            }
+        }
     }
-  }
 
-  setupVizEvents(key, viz) {
+    setupVizEvents(key, viz) {
     // Conveyor: Quiz completion (detect when completion message is shown)
     if (key === 'conveyor') {
       // Poll for completion message to show insight callout
@@ -346,53 +329,53 @@ class TikTokTidesApp {
         }
       });
     });
-  }
+    }
 
-  setupScrollObserver() {
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: [0, 0.25, 0.5, 0.75, 1]
-    };
+    setupScrollObserver() {
+        const options = {
+            root: null,
+            rootMargin: '0px',
+            threshold: [0, 0.25, 0.5, 0.75, 1]
+        };
 
-    this.observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-          this.handleSectionEnter(entry.target);
-        }
-      });
-    }, options);
+        this.observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                    this.handleSectionEnter(entry.target);
+                }
+            });
+        }, options);
 
-    // Observe all sections
-    document.querySelectorAll('.section').forEach(section => {
-      this.observer.observe(section);
-    });
-  }
+        // Observe all sections
+        document.querySelectorAll('.section').forEach(section => {
+            this.observer.observe(section);
+        });
+    }
 
-  handleSectionEnter(section) {
-    const sectionId = section.id;
-    if (this.currentSection === sectionId) return;
+    handleSectionEnter(section) {
+        const sectionId = section.id;
+        if (this.currentSection === sectionId) return;
 
-    const prevSection = this.currentSection;
-    this.currentSection = sectionId;
+        const prevSection = this.currentSection;
+        this.currentSection = sectionId;
 
-    // Update navigation
-    this.updateNavigation(sectionId);
+        // Update navigation
+        this.updateNavigation(sectionId);
 
-    // Update background
-    this.updateBackground(sectionId);
+        // Update background
+        this.updateBackground(sectionId);
 
     // Mount visualization if needed
-    const vizContainer = section.querySelector('.viz-container');
-    if (vizContainer) {
-      const vizType = vizContainer.dataset.viz;
-      const viz = this.vizControllers[vizType];
-      if (viz && !viz.mounted) {
+        const vizContainer = section.querySelector('.viz-container');
+        if (vizContainer) {
+            const vizType = vizContainer.dataset.viz;
+            const viz = this.vizControllers[vizType];
+            if (viz && !viz.mounted) {
         console.log(`[Viz] Mounting ${vizType} into`, vizContainer.id || vizContainer.className);
-        viz.mount();
-        viz.mounted = true;
-      }
-    }
+                viz.mount();
+                viz.mounted = true;
+            }
+        }
 
     // Special-case: Music Galaxy planet viz
     if (sectionId === 'scene-music-galaxy') {
@@ -406,59 +389,35 @@ class TikTokTidesApp {
 
     // Special-case: ensure Stopwatch is mounted
     if (sectionId === 'scene-duration') {
-      const sw = this.vizControllers.stopwatch;
-      if (sw && !sw.mounted) {
-        sw.mount();
-        sw.mounted = true;
-      }
-      sw?.update(1);
-      setTimeout(() => sw?.update(2), 1600);
+            const sw = this.vizControllers.stopwatch;
+            if (sw && !sw.mounted) {
+                sw.mount();
+                sw.mounted = true;
+            }
+            sw?.update(1);
+            setTimeout(() => sw?.update(2), 1600);
       this._stopwatchResize?.();
-
-      // v3 spec: Show callout annotation after highlight sequence
-      const callout = document.querySelector('[data-timing-callout]');
-      if (callout) {
-        // Show callout 2 seconds after entering (after highlight animation)
-        setTimeout(() => {
-          callout.setAttribute('aria-hidden', 'false');
-        }, 2200);
-        // Auto-hide after 4 more seconds
-        setTimeout(() => {
-          callout.setAttribute('aria-hidden', 'true');
-        }, 6200);
-      }
-    }
-
-    // Special-case: Record player auto-sequence for Scene 3
-    if (sectionId === 'scene-viral-sounds') {
-      const rp = this.vizControllers.recordPlayer;
-      if (rp && !rp.autoSequenceTriggered) {
-        setTimeout(() => {
-          rp.startAutoSequence?.();
-          rp.autoSequenceTriggered = true;
-        }, 500);
-      }
-    }
+        }
 
     // Live region announcement
-    const meta = this.sectionMeta[sectionId];
-    if (meta) {
+        const meta = this.sectionMeta[sectionId];
+        if (meta) {
       this.announce(`${meta.name} section entered`);
       console.log(`[Section] Entered: ${meta.name}`);
+        }
     }
-  }
 
-  updateBackground(sectionId) {
-    const meta = this.sectionMeta[sectionId];
-    if (!meta) return;
+    updateBackground(sectionId) {
+        const meta = this.sectionMeta[sectionId];
+        if (!meta) return;
 
-    // Remove all bg classes
-    Object.values(this.sectionMeta).forEach(m => {
-      document.body.classList.remove(m.bg);
-    });
+        // Remove all bg classes
+        Object.values(this.sectionMeta).forEach(m => {
+            document.body.classList.remove(m.bg);
+        });
 
-    // Add new bg class
-    document.body.classList.add(meta.bg);
+        // Add new bg class
+        document.body.classList.add(meta.bg);
   }
 
   updateNavigation(sectionId) {
@@ -470,6 +429,12 @@ class TikTokTidesApp {
 
     // Update v3 journey map navigation active states
     document.querySelectorAll('.map-node[data-target]').forEach(node => {
+      const target = node.getAttribute('data-target');
+      node.classList.toggle('active', target === sectionId);
+    });
+
+    // Update mission sidebar navigation active states (Task B)
+    document.querySelectorAll('.sidebar-node[data-target]').forEach(node => {
       const target = node.getAttribute('data-target');
       node.classList.toggle('active', target === sectionId);
     });
@@ -489,6 +454,8 @@ class TikTokTidesApp {
           if (window.fullpage_api) {
             const sectionIndex = Array.from(document.querySelectorAll('.section')).indexOf(target);
             if (sectionIndex >= 0) {
+              // Set flag so Scene 2 knows to start at Step 1
+              window._navigatedViaNodeClick = true;
               window.fullpage_api.moveTo(sectionIndex + 1);
             }
           } else {
@@ -519,6 +486,8 @@ class TikTokTidesApp {
               }
             });
             console.log('[CTA Button] Navigating to section', sectionIndex, 'via fullPage API');
+            // Set flag so Scene 2 knows to start at Step 1
+            window._navigatedViaNodeClick = true;
             window.fullpage_api.moveTo(sectionIndex);
           } else {
             // Fallback to native scroll
@@ -569,6 +538,33 @@ class TikTokTidesApp {
       }
     });
 
+    // Logo click - return to hero section
+    const logoCluster = document.querySelector('.nav-logo-cluster[data-nav-home]');
+    if (logoCluster) {
+      logoCluster.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = 'scene-hero';
+
+        // Update navigation states
+        this.updateNavigation(targetId);
+        this.updateAlienMarkerPosition(targetId);
+        this.updateJourneyMapHighlight(targetId);
+
+        // Use fullPage API if available
+        if (window.fullpage_api) {
+          // Set flag so Scene 2 knows to start at Step 1
+          window._navigatedViaNodeClick = true;
+          window.fullpage_api.moveTo(1); // Section 1 is hero
+        } else {
+          const target = document.getElementById(targetId);
+          target?.scrollIntoView({
+            behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    }
+
     // Map node clicks (desktop cartoon map)
     document.querySelectorAll('.map-node').forEach(node => {
       node.addEventListener('click', () => {
@@ -589,6 +585,8 @@ class TikTokTidesApp {
                 sectionIndex = idx + 1;
               }
             });
+            // Set flag so Scene 2 knows to start at Step 1
+            window._navigatedViaNodeClick = true;
             window.fullpage_api.moveTo(sectionIndex);
           } else {
             target.scrollIntoView({
@@ -599,6 +597,50 @@ class TikTokTidesApp {
         }
       });
     });
+
+    // Mission sidebar toggle (collapse/expand)
+    const sidebarToggle = document.querySelector('.sidebar-toggle');
+    const missionSidebar = document.querySelector('.mission-sidebar');
+    if (sidebarToggle && missionSidebar) {
+      sidebarToggle.addEventListener('click', () => {
+        const isCollapsed = missionSidebar.classList.toggle('collapsed');
+        sidebarToggle.setAttribute('aria-expanded', !isCollapsed);
+      });
+    }
+
+    // Mission sidebar node clicks (Task B - slim vertical navigation)
+    document.querySelectorAll('.sidebar-node').forEach(node => {
+      node.addEventListener('click', () => {
+        const targetId = node.dataset.target;
+        const target = document.getElementById(targetId);
+                if (target) {
+          // Update navigation states
+          this.updateNavigation(targetId);
+          this.updateAlienMarkerPosition(targetId);
+          this.updateJourneyMapHighlight(targetId);
+
+          // Use fullPage API if available
+          if (window.fullpage_api) {
+            const sections = document.querySelectorAll('.section');
+            let sectionIndex = 1;
+            sections.forEach((section, idx) => {
+              if (section.id === targetId) {
+                sectionIndex = idx + 1;
+              }
+            });
+            console.log('[Mission Sidebar] Navigating to section', sectionIndex, targetId);
+            // Set flag so Scene 2 knows to start at Step 1
+            window._navigatedViaNodeClick = true;
+            window.fullpage_api.moveTo(sectionIndex);
+          } else {
+                    target.scrollIntoView({
+                        behavior: this.prefersReducedMotion() ? 'auto' : 'smooth',
+                        block: 'start'
+                    });
+          }
+                }
+            });
+        });
 
     // Mobile list item clicks
     document.querySelectorAll('.map-list-item').forEach(item => {
@@ -620,6 +662,8 @@ class TikTokTidesApp {
                 sectionIndex = idx + 1;
               }
             });
+            // Set flag so Scene 2 knows to start at Step 1
+            window._navigatedViaNodeClick = true;
             window.fullpage_api.moveTo(sectionIndex);
           } else {
             target.scrollIntoView({
@@ -679,6 +723,8 @@ class TikTokTidesApp {
               }
             });
             console.log('[Mini-strip] Navigating to section', sectionIndex, targetId);
+            // Set flag so Scene 2 knows to start at Step 1
+            window._navigatedViaNodeClick = true;
             window.fullpage_api.moveTo(sectionIndex);
           } else {
             target.scrollIntoView({
@@ -727,12 +773,25 @@ class TikTokTidesApp {
   updateAlienMarkerPosition(sectionId) {
     const alienMarker = document.querySelector('.map-alien-marker');
     const position = NODE_POSITIONS[sectionId];
+    const nodeNum = this.sectionMeta[sectionId]?.nodeNum || 1;
 
     if (alienMarker && position) {
       alienMarker.style.setProperty('--marker-x', position.x);
       alienMarker.style.setProperty('--marker-y', position.y);
       // Also update the data attribute for debugging
-      alienMarker.dataset.currentNode = this.sectionMeta[sectionId]?.nodeNum || 1;
+      alienMarker.dataset.currentNode = nodeNum;
+    }
+
+    // Update sidebar alien marker (Task B - mini mission map)
+    // Get position from the sidebar node's CSS custom properties
+    const sidebarAlienMarker = document.querySelector('.sidebar-alien-marker');
+    const sidebarNode = document.querySelector(`.sidebar-node[data-target="${sectionId}"]`);
+    if (sidebarAlienMarker && sidebarNode) {
+      const nodeX = sidebarNode.style.getPropertyValue('--node-x');
+      const nodeY = sidebarNode.style.getPropertyValue('--node-y');
+      sidebarAlienMarker.style.setProperty('--marker-x', nodeX);
+      sidebarAlienMarker.style.setProperty('--marker-y', nodeY);
+      sidebarAlienMarker.dataset.currentNode = nodeNum;
     }
   }
 
@@ -754,38 +813,44 @@ class TikTokTidesApp {
     if (listItem) {
       listItem.classList.add('visited');
     }
-  }
 
-  setupProgressBar() {
-    const progressBar = document.querySelector('.progress-bar');
+    // Mark sidebar node as visited (Task B - mini mission map)
+    const sidebarNode = document.querySelector(`.sidebar-node[data-target="${sectionId}"]`);
+    if (sidebarNode) {
+      sidebarNode.classList.add('visited');
+    }
+    }
 
-    const updateProgress = () => {
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight - windowHeight;
-      const scrolled = window.scrollY;
-      const progress = (scrolled / documentHeight) * 100;
+    setupProgressBar() {
+        const progressBar = document.querySelector('.progress-bar');
 
-      progressBar.style.width = `${progress}%`;
-    };
+        const updateProgress = () => {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight - windowHeight;
+            const scrolled = window.scrollY;
+            const progress = (scrolled / documentHeight) * 100;
 
-    // Throttle scroll updates
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          updateProgress();
-          ticking = false;
+            progressBar.style.width = `${progress}%`;
+        };
+
+        // Throttle scroll updates
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    updateProgress();
+                    ticking = false;
+                });
+                ticking = true;
+            }
         });
-        ticking = true;
-      }
-    });
-  }
+    }
 
-  setupKeyboardNav() {
-    // Global keyboard shortcuts
-    document.addEventListener('keydown', (e) => {
+    setupKeyboardNav() {
+        // Global keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
       // Number keys jump to sections
-      const sections = [
+                const sections = [
         'scene-hero',
         'scene-music-galaxy',
         'scene-viral-sounds',
@@ -799,40 +864,40 @@ class TikTokTidesApp {
       const index = parseInt(e.key, 10) - 1;
       if (!Number.isNaN(index) && sections[index]) {
         const target = document.getElementById(sections[index]);
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
 
-      // ? shows help
-      if (e.key === '?') {
-        this.showKeyboardHelp();
-      }
-    });
-  }
-
-  setupReducedMotion() {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    // Initial check
-    if (mediaQuery.matches) {
-      document.body.classList.add('reduced-motion');
+            // ? shows help
+            if (e.key === '?') {
+                this.showKeyboardHelp();
+            }
+        });
     }
 
-    // Listen for changes
-    mediaQuery.addEventListener('change', (e) => {
-      if (e.matches) {
-        document.body.classList.add('reduced-motion');
-      } else {
-        document.body.classList.remove('reduced-motion');
-      }
+    setupReducedMotion() {
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-      // Update all visualizations
-      Object.values(this.vizControllers).forEach(viz => {
-        viz.setState?.({ reducedMotion: e.matches });
-      });
-    });
-  }
+        // Initial check
+        if (mediaQuery.matches) {
+            document.body.classList.add('reduced-motion');
+        }
+
+        // Listen for changes
+        mediaQuery.addEventListener('change', (e) => {
+            if (e.matches) {
+                document.body.classList.add('reduced-motion');
+            } else {
+                document.body.classList.remove('reduced-motion');
+            }
+
+            // Update all visualizations
+            Object.values(this.vizControllers).forEach(viz => {
+                viz.setState?.({ reducedMotion: e.matches });
+            });
+        });
+    }
 
   setupGuidedSteps() {
     // Wire up all guided step buttons to trigger viz actions
@@ -968,29 +1033,7 @@ class TikTokTidesApp {
    * Shows speech bubble after a delay when user enters a scene
    */
   initAlienNarrator() {
-    // Show the hero alien's speech bubble after a delay
-    const heroAlien = document.querySelector('.alien-narrator--hero');
-    if (heroAlien) {
-      const speechBubble = heroAlien.querySelector('.alien-speech-bubble');
-      if (speechBubble) {
-        // Show speech bubble after 1.5 seconds
-        setTimeout(() => {
-          speechBubble.setAttribute('data-speech-state', 'visible');
-        }, 1500);
-
-        // Allow clicking the alien to toggle speech
-        const avatar = heroAlien.querySelector('.alien-avatar');
-        if (avatar) {
-          avatar.style.cursor = 'pointer';
-          avatar.addEventListener('click', () => {
-            const current = speechBubble.getAttribute('data-speech-state');
-            speechBubble.setAttribute('data-speech-state',
-              current === 'visible' ? 'hidden' : 'visible'
-            );
-          });
-        }
-      }
-    }
+    // NOTE: .alien-narrator--hero initialization REMOVED - HTML element was removed (Dec 2025 cleanup)
 
     // Setup observer for scene-specific alien narrators
     this.setupAlienSceneObserver();
@@ -1006,9 +1049,9 @@ class TikTokTidesApp {
         if (mutation.attributeName === 'data-scene') {
           const currentScene = document.body.dataset.scene;
           this.updateAlienNarrator(currentScene);
-        }
-      });
-    });
+                }
+            });
+        });
 
     observer.observe(document.body, {
       attributes: true,
@@ -1020,10 +1063,9 @@ class TikTokTidesApp {
    * Update alien narrator based on current scene
    */
   updateAlienNarrator(scene) {
-    // Hide all alien narrators first, EXCEPT the hero alien which is managed by initAlienNarrator
+    // Hide all alien narrators first
     document.querySelectorAll('.alien-narrator').forEach(narrator => {
-      // Skip hero alien - it's managed separately to avoid flickering
-      if (narrator.classList.contains('alien-narrator--hero')) return;
+      // NOTE: .alien-narrator--hero check removed - HTML element was removed (Dec 2025 cleanup)
 
       const speechBubble = narrator.querySelector('.alien-speech-bubble');
       if (speechBubble) {
@@ -1042,7 +1084,7 @@ class TikTokTidesApp {
       if (scene !== 'galaxy' && scene !== 'cosmos') {
         const speechBubble = sceneNarrator.querySelector('.alien-speech-bubble');
         if (speechBubble) {
-          setTimeout(() => {
+            setTimeout(() => {
             speechBubble.setAttribute('data-speech-state', 'visible');
           }, 1200); // Slightly longer delay for animations to complete
         }
@@ -1126,9 +1168,25 @@ class TikTokTidesApp {
   setupMusicGalaxyScrollytelling() {
     const slides = document.querySelectorAll('.music-galaxy-slide');
     const annotation = document.querySelector('.music-galaxy-annotation');
-    const primarySpeech = document.querySelector('.alien-speech-bubble--primary');
-    const secondarySpeech = document.querySelector('.alien-speech-bubble--secondary');
+    // Single speech bubble with dynamic text (v3 redesign)
+    const speechBubble = document.querySelector('.alien-narrator--scene2 .alien-speech-bubble');
+    const speechText = document.querySelector('.alien-narrator--scene2 .alien-speech-text');
     const alienNarrator = document.querySelector('.alien-narrator--scene2');
+
+    // Speech text for each step (v3 redesign)
+    const ALIEN_SPEECH = [
+      "So many planets! Each one is an artist whose sounds went viral. Let me scan the biggest ones...",
+      "These few artists fuel many viral trends. Humans really like repeating familiar sounds.",
+      "Watch what happens when I switch years. Some planets keep appearing—those artists ride every wave!",
+      "Fascinating patterns! Now let's zoom in on specific sounds humans can't stop looping..."
+    ];
+
+    // Helper to update alien speech for a step
+    const updateAlienSpeech = (stepIndex, show = true) => {
+      if (!speechBubble || !speechText) return;
+      speechText.textContent = ALIEN_SPEECH[stepIndex] || ALIEN_SPEECH[0];
+      setSpeechState(speechBubble, show ? 'visible' : 'hidden', 'Speech');
+    };
     const planetViz = this.vizControllers.planets;
 
     if (!slides.length || !planetViz) {
@@ -1154,6 +1212,10 @@ class TikTokTidesApp {
 
     // Track active speech bubble timeout to prevent overlaps
     let speechBubbleTimeout = null;
+    // Track annotation timeout to cancel if user switches slides quickly
+    let annotationTimeout = null;
+    // Track current slide index to stop annotation tracking when leaving step 4
+    let currentSlideIndex = 0;
 
     // Helper to safely set speech bubble state with debug logging
     // IMPORTANT: Temporarily disable CSS transitions AND animations to prevent flicker
@@ -1190,6 +1252,9 @@ class TikTokTidesApp {
     const handleSlideChange = (index) => {
       if (!planetViz.mounted || !planetViz.svg) return;
 
+      // Update current slide index - used to stop annotation tracking when leaving step 4
+      currentSlideIndex = index;
+
       console.log('[Music Galaxy] Slide', index + 1, 'active');
       this.announce(`Music Galaxy: Slide ${index + 1} of 4`);
 
@@ -1208,36 +1273,41 @@ class TikTokTidesApp {
         clearTimeout(speechBubbleTimeout);
         speechBubbleTimeout = null;
       }
+      // Clear any pending annotation timeout to prevent annotation appearing on wrong slide
+      if (annotationTimeout) {
+        clearTimeout(annotationTimeout);
+        annotationTimeout = null;
+      }
 
       // NOTE: Each case handles its own speech bubbles to avoid hide-then-show flicker
 
       switch (index) {
-        case 0: // Slide 1: Baseline 2019
+        case 0: // Slide 1: Landing in galaxy - default view
           planetViz.resetHighlights?.();
           planetViz.switchYear?.('2019');
           document.querySelectorAll('.year-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.year === '2019');
           });
-          // Hide and reset annotation
+          // Hide annotation
           if (annotation) {
             annotation.setAttribute('aria-hidden', 'true');
             annotation.style.left = '';
             annotation.style.top = '';
           }
-          // Hide secondary ONLY, show primary (don't hide primary first to avoid flicker)
-          setSpeechState(secondarySpeech, 'hidden', 'Secondary');
-          setSpeechState(primarySpeech, 'visible', 'Primary');
-          // Reset alien to bottom-left (default position) and ensure visible
+          // Show speech for step 0 (v3 redesign: alien at bottom-right)
+          updateAlienSpeech(0, true);
+          // Reset alien to default position (bottom-right per spec)
           if (alienNarrator) {
-            alienNarrator.classList.remove('alien-pointing', 'alien-top-left');
+            alienNarrator.classList.remove('alien-pointing', 'alien-top-left', 'alien-bottom-left', 'alien-tracking');
             alienNarrator.style.left = '';
+            alienNarrator.style.top = '';
             alienNarrator.style.bottom = '';
-            alienNarrator.style.visibility = 'visible'; // Reset after Step 2's hide
+            alienNarrator.style.right = '';
+            alienNarrator.style.visibility = 'visible';
           }
           break;
 
-        case 1: // Slide 2: 2022 + highlight top artists
-          // Reset any previous highlights (especially from Step 3's repeated artists)
+        case 1: // Slide 2: Spotlight on dominant artists
           planetViz.resetHighlights?.();
           planetViz.switchYear?.('2022');
           document.querySelectorAll('.year-btn').forEach(btn => {
@@ -1245,82 +1315,52 @@ class TikTokTidesApp {
           });
           setTimeout(() => planetViz.highlightTopArtists?.(), 600);
 
-          // IMMEDIATELY hide primary, then show secondary after delay
-          setSpeechState(primarySpeech, 'hidden', 'Primary');
-          speechBubbleTimeout = setTimeout(() => {
-            setSpeechState(secondarySpeech, 'visible', 'Secondary');
-          }, 800);
-
-          // Alien: HIDE first, position at planet, then show (prevents flickering at default position)
-          if (alienNarrator) {
-            alienNarrator.classList.remove('alien-top-left');
-            // CRITICAL: Use visibility:hidden for IMMEDIATE hiding (no transition delay like opacity)
-            alienNarrator.style.visibility = 'hidden';
-
-            // Wait for planets to highlight, then position and show alien
-            setTimeout(() => {
-              alienNarrator.classList.add('alien-pointing');
-
-              // Get initial position BEFORE showing
-              const pos = planetViz.getTopArtistPosition?.();
-              if (pos) {
-                const vizOverlay = document.querySelector('.music-galaxy-viz-overlay');
-                const overlayRect = vizOverlay?.getBoundingClientRect() || {};
-                // pos.x/y are screen coordinates, convert to overlay-relative
-                const targetLeft = pos.x - overlayRect.left - 60;
-                const targetBottom = overlayRect.bottom - pos.y - 80;
-                alienNarrator.style.left = `${targetLeft}px`;
-                alienNarrator.style.bottom = `${targetBottom}px`;
-              }
-
-              // NOW show the alien (already positioned at planet)
-              alienNarrator.style.visibility = 'visible';
-
-              // Track alien to highlighted planet (follows it as it orbits)
-              const trackAlienToPlanet = () => {
-                if (!alienNarrator.classList.contains('alien-pointing')) return;
-
-                const pos = planetViz.getTopArtistPosition?.();
-                if (pos) {
-                  // Position alien closer to the highlighted planet
-                  const vizOverlay = document.querySelector('.music-galaxy-viz-overlay');
-                  const overlayRect = vizOverlay?.getBoundingClientRect() || {};
-
-                  // pos.x/y are screen coordinates, convert to overlay-relative
-                  const targetLeft = pos.x - overlayRect.left - 125;
-                  const targetBottom = overlayRect.bottom - pos.y - 120;
-
-                  alienNarrator.style.left = `${targetLeft}px`;
-                  alienNarrator.style.bottom = `${targetBottom}px`;
-                }
-
-                // Continue tracking while in pointing state
-                if (alienNarrator.classList.contains('alien-pointing')) {
-                  requestAnimationFrame(trackAlienToPlanet);
-                }
-              };
-
-              trackAlienToPlanet();
-            }, 1200);
-          }
-
-          // Hide and reset annotation
+          // Hide annotation
           if (annotation) {
             annotation.setAttribute('aria-hidden', 'true');
             annotation.style.left = '';
             annotation.style.top = '';
           }
+
+          // Alien tracks the top highlighted planet
+          if (alienNarrator) {
+            alienNarrator.classList.remove('alien-top-left', 'alien-bottom-left');
+            alienNarrator.classList.add('alien-tracking');
+            alienNarrator.style.visibility = 'hidden';
+
+            // Wait for highlight to complete, then start tracking
+            setTimeout(() => {
+              const vizOverlay = document.querySelector('.music-galaxy-viz-overlay');
+
+              const trackAlienToPlanet = () => {
+                if (!alienNarrator.classList.contains('alien-tracking')) return;
+                const pos = planetViz.getTopArtistPosition?.();
+                if (pos && vizOverlay) {
+                  const overlayRect = vizOverlay.getBoundingClientRect();
+                  // Position alien to the bottom-left of the planet
+                  const targetLeft = pos.x - overlayRect.left - 80;
+                  const targetTop = pos.y - overlayRect.top + 20;
+                  alienNarrator.style.left = `${targetLeft}px`;
+                  alienNarrator.style.top = `${targetTop}px`;
+                  alienNarrator.style.bottom = 'auto';
+                  alienNarrator.style.right = 'auto';
+                }
+                if (alienNarrator.classList.contains('alien-tracking')) {
+                  requestAnimationFrame(trackAlienToPlanet);
+                }
+              };
+
+              trackAlienToPlanet();
+              alienNarrator.style.visibility = 'visible';
+              updateAlienSpeech(1, true);
+            }, 800);
+          }
           break;
 
-        case 2: // Slide 3: Sweet spot - highlight medium-energy band
-          // Reset previous highlights
+        case 2: // Slide 3: Comparing across years
           planetViz.resetHighlights?.();
 
-          // IMMEDIATELY hide ALL speech bubbles for this step
-          setSpeechState(primarySpeech, 'hidden', 'Primary');
-          setSpeechState(secondarySpeech, 'hidden', 'Secondary');
-
-          // Highlight medium-energy band (the "sweet spot")
+          // Highlight medium-energy band
           setTimeout(() => {
             planetViz.highlightEnergyBand?.();
             console.log('[Music Galaxy] Step 3: Highlighting medium-energy band');
@@ -1333,42 +1373,58 @@ class TikTokTidesApp {
             annotation.style.top = '';
           }
 
-          // Reset alien position
+          // Reset alien to default position (bottom-right)
           if (alienNarrator) {
-            alienNarrator.classList.remove('alien-pointing', 'alien-top-left');
+            alienNarrator.classList.remove('alien-pointing', 'alien-bottom-left', 'alien-top-left', 'alien-tracking');
             alienNarrator.style.left = '';
+            alienNarrator.style.top = '';
             alienNarrator.style.bottom = '';
+            alienNarrator.style.right = '';
             alienNarrator.style.visibility = 'visible';
           }
+          updateAlienSpeech(2, true);
           break;
 
-        case 3: // Slide 4: Sustained influence - repeated artists across years
-          // IMMEDIATELY hide ALL speech bubbles (alien just floats silently)
-          setSpeechState(primarySpeech, 'hidden', 'Primary');
-          setSpeechState(secondarySpeech, 'hidden', 'Secondary');
-
+        case 3: // Slide 4: Transition to Scene 3
           // Highlight artists who appear across multiple years (sustained influence)
-          // This gives visualization support for the "sustained influence" narrative
           setTimeout(() => {
             planetViz.highlightRepeatedArtists?.();
             console.log('[Music Galaxy] Step 4: Highlighting repeated viral artists');
           }, 300);
 
-          // Reposition alien to top-left for this slide and ensure visible
+          // Keep alien at default position (bottom-right)
           if (alienNarrator) {
-            alienNarrator.classList.remove('alien-pointing');
-            alienNarrator.classList.add('alien-top-left'); // CSS will handle positioning
+            alienNarrator.classList.remove('alien-pointing', 'alien-bottom-left', 'alien-top-left', 'alien-tracking');
             alienNarrator.style.left = '';
+            alienNarrator.style.top = '';
             alienNarrator.style.bottom = '';
-            alienNarrator.style.visibility = 'visible'; // Reset after Step 2's hide
+            alienNarrator.style.right = '';
+            alienNarrator.style.visibility = 'visible';
           }
+          updateAlienSpeech(3, true);
 
-          setTimeout(() => {
+          // Use annotationTimeout so it can be cancelled if user switches slides quickly
+          annotationTimeout = setTimeout(() => {
+            // Double-check we're still on step 4 (user might have switched quickly)
+            if (currentSlideIndex !== 3) return;
+
             if (annotation) {
-              annotation.setAttribute('aria-hidden', 'false');
+              // Ensure topArtistName is set (might not be if user jumped directly to this slide)
+              if (!planetViz.topArtistName) {
+                planetViz.highlightTopArtists?.();
+              }
 
               // Track annotation to top planet position
+              // Only show annotation once we have a valid position
               const updateAnnotationPosition = () => {
+                // Stop tracking if we're no longer on step 4
+                if (currentSlideIndex !== 3) {
+                  annotation.setAttribute('aria-hidden', 'true');
+                  annotation.style.left = '';
+                  annotation.style.top = '';
+                  return;
+                }
+
                 const pos = planetViz.getTopArtistPosition?.();
                 if (pos && annotation) {
                   const vizOverlay = document.querySelector('.music-galaxy-viz-overlay');
@@ -1381,10 +1437,15 @@ class TikTokTidesApp {
                   // Position annotation near the planet (offset to bottom-left)
                   annotation.style.left = `${relativeX - 140}px`;
                   annotation.style.top = `${relativeY + 65}px`;
+
+                  // Only make visible once we have a valid position AND still on step 4
+                  if (annotation.getAttribute('aria-hidden') !== 'false' && currentSlideIndex === 3) {
+                    annotation.setAttribute('aria-hidden', 'false');
+                  }
                 }
 
-                // Continue tracking while annotation is visible
-                if (annotation.getAttribute('aria-hidden') === 'false') {
+                // Continue tracking while annotation is visible AND still on step 4
+                if (annotation.getAttribute('aria-hidden') === 'false' && currentSlideIndex === 3) {
                   requestAnimationFrame(updateAnnotationPosition);
                 }
               };
@@ -1412,47 +1473,44 @@ class TikTokTidesApp {
   handleMusicGalaxySlide(slideIndex) {
     if (this._musicGalaxySlideHandler) {
       this._musicGalaxySlideHandler(slideIndex);
+        }
     }
-  }
 
-  showKeyboardHelp() {
-    console.log('Keyboard shortcuts:');
-    console.log('1-7: Jump to sections');
-    console.log('Esc: Close overlays');
-    console.log('?: Show this help');
-    console.log('Tab: Navigate interactive elements');
-    console.log('Enter: Activate buttons/links');
-  }
-
-  announce(message) {
-    if (this.liveRegion) {
-      this.liveRegion.textContent = message;
+    showKeyboardHelp() {
+        console.log('Keyboard shortcuts:');
+        console.log('1-7: Jump to sections');
+        console.log('Esc: Close overlays');
+        console.log('?: Show this help');
+        console.log('Tab: Navigate interactive elements');
+        console.log('Enter: Activate buttons/links');
     }
-  }
 
-  prefersReducedMotion() {
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }
+    announce(message) {
+        if (this.liveRegion) {
+            this.liveRegion.textContent = message;
+        }
+    }
+
+    prefersReducedMotion() {
+        return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
 }
 
 // Initialize app on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
-  // TASK 0 - Dev-only sanity hooks
-  setupSceneKeyboardQA();
+    // TASK 0 - Dev-only sanity hooks
+    setupSceneKeyboardQA();
 
-  // TASK 1 - Ensure scene layers exist
-  ensureSceneLayers();
+    // TASK 1 - Ensure scene layers exist
+    ensureSceneLayers();
 
-  // Initialize scene illustrations
-  installIllustrations();
-
-  // Initialize main app
-  window.app = new TikTokTidesApp();
+    // Initialize main app
+    window.app = new TikTokTidesApp();
 });
 
 /**
  * Hide splash screen once app is ready
- * Called when planet viz is mounted AND fullPage is initialized
+ * Called when: TikTokTidesApp initialized, fullPage initialized, and window loaded
  */
 function hideSplashScreen() {
   const splash = document.getElementById('tiktok-splash');
@@ -1475,12 +1533,14 @@ function hideSplashScreen() {
   }
 }
 
-// Listen for both planet viz ready AND fullPage ready
-let planetReady = false;
-let fullPageReady = false;
+// Track all initialization states
+let appReady = false;      // TikTokTidesApp.init() complete
+let fullPageReady = false; // fullPage.js initialized
+let windowReady = false;   // window.onload fired (all assets loaded)
 
-function checkAppReady() {
-  if (planetReady && fullPageReady) {
+function checkAllReady() {
+  console.log('[Splash] Checking ready state:', { appReady, fullPageReady, windowReady });
+  if (appReady && fullPageReady && windowReady) {
     hideSplashScreen();
   }
 }
@@ -1489,21 +1549,34 @@ function checkAppReady() {
 window.markFullPageReady = function() {
   fullPageReady = true;
   console.log('[Splash] fullPage.js ready');
-  checkAppReady();
+  checkAllReady();
 };
 
-// Expose for planet viz callback
-window.markPlanetVizReady = function() {
-  planetReady = true;
-  console.log('[Splash] Planet viz ready');
-  checkAppReady();
+// Expose for TikTokTidesApp.init() completion
+window.markAppReady = function() {
+  appReady = true;
+  console.log('[Splash] TikTokTidesApp ready');
+  checkAllReady();
 };
+
+// Legacy: keep for planet viz but don't block on it (it's lazy-loaded)
+window.markPlanetVizReady = function() {
+  console.log('[Splash] Planet viz ready (non-blocking)');
+};
+
+// Wait for all assets to load
+window.addEventListener('load', function() {
+  windowReady = true;
+  console.log('[Splash] Window loaded (all assets)');
+  checkAllReady();
+});
 
 // Fallback: hide splash after max timeout (in case something fails)
 setTimeout(() => {
   const splash = document.getElementById('tiktok-splash');
   if (splash && !splash.classList.contains('hidden')) {
     console.log('[Splash] Fallback timeout - hiding anyway');
+    console.log('[Splash] States at timeout:', { appReady, fullPageReady, windowReady });
     hideSplashScreen();
   }
-}, 5000); // 5 second max wait
+}, 8000); // 8 second max wait (increased for slower connections)

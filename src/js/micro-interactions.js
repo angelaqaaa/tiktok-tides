@@ -1,5 +1,6 @@
 // Micro-interactions for narrative story touches
 // All features respect prefers-reduced-motion
+import { prefersReducedMotion } from '../vizzes/shared/utils.js';
 
 /**
  * A) Planets - Comet hint on artist highlight
@@ -10,7 +11,6 @@ export class CometEffect {
   constructor(vizContainer) {
     this.container = vizContainer;
     this.overlay = null;
-    this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.init();
   }
 
@@ -23,7 +23,7 @@ export class CometEffect {
   }
 
   spawn() {
-    if (this.prefersReducedMotion) {
+    if (prefersReducedMotion()) {
       // Reduced motion: just flash a glow
       this.container.style.transition = 'box-shadow 200ms ease-out';
       this.container.style.boxShadow = '0 0 40px rgba(0, 255, 224, 0.5)';
@@ -56,20 +56,14 @@ export class LeafHintEffect {
   constructor(sectionContainer) {
     this.container = sectionContainer;
     this.hasTriggered = false;
-    this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
   trigger() {
     if (this.hasTriggered) return;
     this.hasTriggered = true;
 
-    if (this.prefersReducedMotion) {
-      // Just fade in the detail panel
-      const panel = this.container.querySelector('.detail-panel');
-      if (panel) {
-        panel.style.transition = 'opacity 400ms ease-in';
-        panel.style.opacity = '1';
-      }
+    if (prefersReducedMotion()) {
+      // Skip leaf animation for reduced-motion users
       return;
     }
 
@@ -120,7 +114,6 @@ export class LeafHintEffect {
 export class BubbleBreatheEffect {
   constructor(vizContainer) {
     this.container = vizContainer;
-    this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.throttleTimer = null;
     this.init();
   }
@@ -158,7 +151,7 @@ export class BubbleBreatheEffect {
     distances.sort((a, b) => a.distance - b.distance);
     const nearest = distances.slice(0, 3);
 
-    if (this.prefersReducedMotion) {
+    if (prefersReducedMotion()) {
       // Reduced motion: outline brightness pulse only
       nearest.forEach(({ bubble }) => {
         const currentStroke = bubble.getAttribute('stroke') || '#00FFE0';
@@ -229,16 +222,7 @@ export function initMicroInteractions() {
     }, { threshold: 0.3 });
 
     observer.observe(rankingSection);
-
-    // Also allow clicking anywhere in ranking to show detail
-    rankingViz.addEventListener('click', () => {
-      const panel = rankingSection.querySelector('.detail-panel');
-      if (panel && panel.getAttribute('aria-hidden') === 'true') {
-        panel.setAttribute('aria-hidden', 'false');
-        panel.style.opacity = '1';
-        console.log('[MicroInteraction] Ranking detail panel opened');
-      }
-    }, { once: true });
+    // NOTE: .detail-panel click handler REMOVED - element not in HTML (Dec 2025 cleanup)
   }
 
   // C) Emotion bubble breathe - trigger on section intersection, not just hover
@@ -257,10 +241,8 @@ export function initMicroInteractions() {
             const nearest = Array.from(bubbles).slice(0, 3);
 
             if (nearest.length > 0) {
-              const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
               nearest.forEach(bubble => {
-                if (prefersReducedMotion) {
+                if (prefersReducedMotion()) {
                   // Reduced motion: outline brightness pulse
                   const currentStroke = bubble.getAttribute('stroke') || '#00FFE0';
                   bubble.style.transition = 'stroke 300ms ease-out';

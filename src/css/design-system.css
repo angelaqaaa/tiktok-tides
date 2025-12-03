@@ -11,9 +11,9 @@
    - Scene Label Badge (.scene-label-badge)
    - Step Indicators (.step-dots, .step-dot, .step-indicators)
    - Legend Panel (.legend-panel, .legend-row, .legend-dot, .legend-gradient-bar)
-   - Glass Panels (.glass-panel, --standard, --frosted, --glow, --elevated)
-   - Buttons (.btn, .btn--primary, .btn--secondary, .btn--ghost, .btn--icon)
-   - Tooltips (.tooltip--standard, .tooltip--rich)
+   - Glass Panels (.glass-panel) - modifiers removed Dec 2025
+   - Buttons (.btn, .btn--primary, .btn--secondary, .btn--glow) - other modifiers removed Dec 2025
+   - Tooltips - modifiers removed Dec 2025 (vizzes use scoped styles)
 
    Naming Convention: BEM with double-dash modifiers (.block--modifier)
    ═══════════════════════════════════════════════════════════════════════════ */
@@ -40,8 +40,8 @@
     rgba(12, 12, 24, 0.8) 0%,
     rgba(8, 8, 18, 0.85) 100%
   );
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(var(--glass-medium-blur));
+  -webkit-backdrop-filter: blur(var(--glass-medium-blur));
 
   padding: var(--space-2) var(--space-4);
   border-radius: 24px;
@@ -158,7 +158,7 @@
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
   border: 2px solid transparent;
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all 200ms ease;
 }
 
@@ -197,14 +197,14 @@
 
 /* Base legend panel - glassmorphism card */
 .legend-panel {
-  background: var(--glass-subtle-background, rgba(12, 12, 24, 0.85));
-  border-radius: var(--radius-md, 8px);
-  border: var(--glass-subtle-border, 1px solid rgba(255, 255, 255, 0.1));
+  background: var(--glass-subtle-background);
+  border-radius: var(--radius-md);
+  border: var(--glass-subtle-border);
   padding: var(--space-4);
-  backdrop-filter: blur(var(--glass-subtle-blur, 16px));
-  -webkit-backdrop-filter: blur(var(--glass-subtle-blur, 16px));
+  backdrop-filter: blur(var(--glass-subtle-blur));
+  -webkit-backdrop-filter: blur(var(--glass-subtle-blur));
   max-width: 510px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-panel);
 }
 
 .legend-panel h3 {
@@ -286,38 +286,11 @@
   backdrop-filter: blur(var(--glass-subtle-blur));
   -webkit-backdrop-filter: blur(var(--glass-subtle-blur));
   border: var(--glass-subtle-border);
-  border-radius: var(--radius-md, 8px);
+  border-radius: var(--radius-md);
 }
 
-/* Standard tier - balanced blur and opacity */
-.glass-panel--standard {
-  background: var(--glass-standard-background);
-  backdrop-filter: blur(var(--glass-standard-blur));
-  -webkit-backdrop-filter: blur(var(--glass-standard-blur));
-  border: var(--glass-standard-border);
-}
-
-/* Frosted tier - maximum blur, most opaque */
-.glass-panel--frosted {
-  background: var(--glass-frosted-background);
-  backdrop-filter: blur(var(--glass-frosted-blur));
-  -webkit-backdrop-filter: blur(var(--glass-frosted-blur));
-  border: var(--glass-frosted-border);
-}
-
-/* Glass panel with glow effect */
-.glass-panel--glow {
-  box-shadow:
-    0 0 20px rgba(45, 204, 211, 0.1),
-    0 8px 32px rgba(0, 0, 0, 0.4);
-}
-
-/* Glass panel depth shadow */
-.glass-panel--elevated {
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
+/* NOTE: Glass panel modifiers (--standard, --frosted, --glow, --elevated)
+   removed Dec 2025 - defined but never used in HTML/JS */
 
 /* ─────────────────────────────────────────────────────────────────────────────
    Button System
@@ -337,7 +310,7 @@
   font-family: inherit;
   font-size: var(--font-size-body-reg, 1rem);
   font-weight: var(--font-weight-semibold, 600);
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all var(--duration-micro, 200ms) var(--easing-standard);
   text-decoration: none;
   position: relative;
@@ -408,43 +381,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
-/* Ghost button - minimal/transparent */
-.btn--ghost {
-  background: transparent;
-  color: var(--color-text-secondary, #A0A3AF);
-  border: 1px solid transparent;
-}
-
-.btn--ghost:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--color-text-primary, #F0F2F5);
-}
-
-/* Icon button - square/circular for icon-only buttons */
-.btn--icon {
-  padding: var(--space-2);
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-}
-
-.btn--icon svg {
-  width: 20px;
-  height: 20px;
-}
-
-/* Size variants */
-.btn--sm {
-  padding: var(--space-2) var(--space-3);
-  font-size: var(--font-size-label, 0.875rem);
-  border-radius: 6px;
-}
-
-.btn--lg {
-  padding: var(--space-4) var(--space-6);
-  font-size: var(--font-size-body-lg, 1.125rem);
-  border-radius: 12px;
-}
+/* NOTE: Button modifiers (--ghost, --icon, --sm, --lg) removed Dec 2025 - never used */
 
 /* Animated glow variant - for start/attention buttons */
 .btn--glow {
@@ -470,80 +407,8 @@
   }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   Legend Panel Modifiers
-   Extended variants for scene-specific legend panel needs.
-   ───────────────────────────────────────────────────────────────────────────── */
+/* NOTE: Legend panel modifiers (--compact, --embedded) removed Dec 2025 - never used */
 
-/* Compact variant - smaller for sidebars and tight spaces */
-.legend-panel--compact {
-  padding: 0.75rem 1rem;
-  max-width: 280px;
-  border-radius: 0.75rem;
-}
-
-/* Embedded variant - for inline within scene content */
-.legend-panel--embedded {
-  width: 100%;
-  max-width: none;
-  border-radius: 16px;
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   Tooltip System
-   Unified tooltip styles for consistent hover information.
-   Base .tooltip class is in base.css (minimal reset).
-   These modifiers provide the visual styling.
-   ───────────────────────────────────────────────────────────────────────────── */
-
-/* Standard tooltip - compact data tooltip with dark glassmorphism */
-.tooltip--standard {
-  background: rgba(22, 26, 34, 0.95);
-  color: var(--color-text-primary, #F0F2F5);
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(43, 50, 64, 0.8);
-  font-size: 0.75rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  white-space: nowrap;
-}
-
-/* Rich tooltip - for detailed info with accent border */
-.tooltip--rich {
-  background: rgba(0, 0, 0, 0.95);
-  color: white;
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  max-width: 280px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  border: 1px solid var(--color-glint, #2DCCD3);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.tooltip--rich strong {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 1.1rem;
-  color: var(--color-glint, #2DCCD3);
-}
-
-/* Tooltip position modifiers */
-.tooltip--above {
-  transform: translate(-50%, -100%) translateY(-8px);
-}
-
-.tooltip--below {
-  transform: translate(-50%, 100%) translateY(8px);
-}
-
-.tooltip--left {
-  transform: translate(-100%, -50%) translateX(-8px);
-}
-
-.tooltip--right {
-  transform: translate(0, -50%) translateX(8px);
-}
+/* NOTE: Tooltip system modifiers (--standard, --rich, position variants)
+   removed Dec 2025 - vizzes use their own scoped tooltip styles instead.
+   Base .tooltip class remains in base.css. */

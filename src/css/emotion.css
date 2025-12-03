@@ -16,7 +16,7 @@
 
 /* Group: whole bubble */
 .word-bubble {
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: transform 150ms ease-out;
 }
 
@@ -67,9 +67,8 @@
   padding: 0;
   margin: 0;
   display: flex;
-  flex-wrap: wrap;
-  /* increased space between items */
-  gap: 0.75rem; /* was 0.5rem */
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .emotion-legend-item {
@@ -80,7 +79,7 @@
 .emotion-legend-label-wrapper {
   display: inline-flex;
   align-items: center;
-  cursor: pointer;
+  /* cursor inherited from base.css */
 }
 
 /* Hide the native checkbox but keep it accessible */
@@ -97,16 +96,14 @@
 
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  /* increased padding to make chips larger and give more touch area */
-  padding: 8px 14px; /* was 4px 10px */
+  gap: 0.3rem;
+  padding: 5px 10px;
   border-radius: 999px;
   border: 1px solid var(--checkbox-border);
   background: var(--checkbox-bg);
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
-  /* larger text for legend chips */
-  font-size: 0.95rem; /* was 0.8rem */
+  font-size: 0.8rem;
   line-height: 1;
   color: #f0f8ff; /* Light color for dark theme */
   transition: background-color 150ms ease-out, border-color 150ms ease-out,
@@ -115,9 +112,9 @@
 
 /* Square "checkbox" inside the chip */
 .emotion-legend-checkmark {
-  width: 16px;
-  height: 16px;
-  border-radius: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
   border: 1.5px solid rgba(148, 163, 184, 0.9);
   background: #f9fafb;
   box-sizing: border-box;
@@ -131,7 +128,7 @@
 .emotion-legend-text {
   text-transform: capitalize;
   color: white;
-  font-size: 0.95rem; /* new: match chip size */
+  font-size: 0.8rem;
 }
 
 /* Hover state for the chip */
@@ -165,10 +162,10 @@
   .emotion-legend-checkmark::after {
   content: "";
   position: absolute;
-  left: 4px;
-  top: 2px;
-  width: 6px;
-  height: 10px;
+  left: 3px;
+  top: 1px;
+  width: 5px;
+  height: 8px;
   border-right: 2px solid #f9fafb;
   border-bottom: 2px solid #f9fafb;
   transform: rotate(45deg);
@@ -184,13 +181,14 @@
    Sort Toggle Button
    ───────────────────────────────────────────────────────────────────────────── */
 .emotion-sort-toggle {
-  margin-top: 1rem;
+  margin-top: 0; /* Removed - gap from parent controls-panel handles spacing */
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  align-self: flex-start; /* Align to left of controls panel */
 
-  padding: 0.55rem 1.3rem; /* more padding */
-  min-width: 150px; /* ensure it's wide enough */
+  padding: 0.55rem 1.3rem;
+  min-width: 150px;
   white-space: nowrap; /* keep "Sort into columns" on one line */
 
   border-radius: 999px;
@@ -200,7 +198,7 @@
   font-size: 0.95rem;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: background-color 140ms ease-out, border-color 140ms ease-out,
     transform 120ms ease-out, box-shadow 140ms ease-out;
 }
@@ -314,16 +312,20 @@
 }
 
 .emotion-viz-wrapper {
-  position: relative;
-  width: 100%;
+  position: absolute;
+  left: 420px; /* Reduced from 540px to expand leftward closer to text-overlay */
+  right: 280px; /* Reduced from 320px to expand rightward */
+  top: 50%;
+  transform: translateY(-50%);
 }
 
+/* Task C: Lightened viz-container - transparent with subtle border */
 .emotion-viz-wrapper .viz-container {
   width: 100%;
   min-height: 400px;
-  background: rgba(15, 23, 42, 0.4);
+  background: transparent; /* Let scene background show */
   border-radius: 16px;
-  border: 1px solid rgba(45, 204, 211, 0.3);
+  border: 1px solid rgba(45, 204, 211, 0.15); /* Subtle border */
 }
 
 /* Right column: Controls and Legend */
@@ -335,11 +337,12 @@
 
 .emotion-filter-panel,
 .emotion-legend-panel {
-  padding: var(--space-3);
+  padding: var(--space-2) var(--space-3);
   background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
+  backdrop-filter: blur(var(--glass-subtle-blur));
+  border-radius: var(--radius-lg);
   border: 1px solid rgba(45, 204, 211, 0.3);
+  width: 100%;
 }
 
 .filter-panel-title {
@@ -358,23 +361,18 @@
   margin: 0 0 var(--space-2);
 }
 
-/* Sort panel styling for dark theme */
-.emotion-sort-panel {
-  padding: var(--space-3);
-  /* background: rgba(15, 23, 42, 0.6); */
-  backdrop-filter: blur(8px);
-  /* border-radius: 12px;
-  border: 1px solid rgba(45, 204, 211, 0.3); */
-}
+/* Sort panel removed from HTML - toggle now lives inside legend panel */
 
 /* ─────────────────────────────────────────────────────────────────────────
    Alien narrator for emotion scene
+   Position: bottom-left of the scene
    ───────────────────────────────────────────────────────────────────────── */
 .alien-narrator--emotion {
   position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 20px; /* Fixed position near bottom */
+  left: 40px;
+  top: auto;
+  right: auto;
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -393,47 +391,41 @@
 }
 
 /* Show alien when scene is active */
-[data-scene="air"] .alien-narrator--emotion .alien-avatar {
-  opacity: 1;
-  transform: translateY(0);
+body[data-scene="air"] .alien-narrator--emotion .alien-avatar {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
   animation: alienFloat 3s ease-in-out 1s infinite;
 }
 
-[data-scene="air"] .alien-narrator--emotion .alien-speech-bubble[data-speech-state="visible"] {
-  opacity: 1;
-  transform: translateY(0);
+body[data-scene="air"] .alien-narrator--emotion .alien-speech-bubble {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
 }
 
 .alien-narrator--emotion .alien-speech-bubble {
   position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(10px);
-  width: max-content;
-  max-width: 240px;
-  padding: var(--space-3);
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  opacity: 0;
-  transition: opacity 400ms ease, transform 400ms ease;
-  margin-top: var(--space-2);
-}
-
-.alien-narrator--emotion .alien-speech-bubble::before {
-  content: '';
-  position: absolute;
-  top: -8px;
+  bottom: 100%; /* Changed from top: 100% to place above the alien */
   left: 50%;
   transform: translateX(-50%);
-  border: 8px solid transparent;
-  border-bottom-color: rgba(255, 255, 255, 0.95);
+  width: max-content;
+  max-width: 280px;
+  padding: var(--space-3) var(--space-4);
+  /* White/light per redesign spec section 0.2 */
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
+  border: 2px solid rgba(45, 204, 211, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: opacity 400ms ease, transform 400ms ease;
+  margin-bottom: var(--space-2);
 }
 
 .alien-narrator--emotion .alien-speech-text {
-  font-size: 0.8125rem;
-  color: #1a1a2e;
-  line-height: 1.5;
+  font-size: 0.875rem;
+  color: #1a1a2e; /* Dark text for white background */
+  line-height: 1.6;
   margin: 0;
   text-align: center;
 }
@@ -465,7 +457,13 @@
   }
 
   .alien-narrator--emotion {
-    top: 15%;
+    top: 12%;
+    right: 150px;
+  }
+
+  .emotion-viz-wrapper {
+    left: 32%;
+    right: 180px;
   }
 }
 
@@ -481,9 +479,21 @@
 
   .alien-narrator--emotion {
     top: 10%;
+    right: 100px;
   }
 
   .alien-narrator--emotion .alien-speech-bubble {
     max-width: 200px;
+  }
+
+  .emotion-viz-wrapper {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    transform: none;
+    min-width: auto;
+    max-width: 100%;
+    width: 100%;
   }
 }

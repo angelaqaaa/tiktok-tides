@@ -13,9 +13,9 @@
    6.  Text Overlay (Right 40%) .............. line ~400
    7.  fullPage Slide Wrappers ............... line ~475
    8.  Narrative Column ...................... line ~600
-   9.  Overlay Steps Article ................. line ~785
-   10. Step Indicator Dots ................... line ~880
-   11. Annotation Callout .................... line ~930
+   9.  Year Controls Label ................... line ~783
+   10. Step Indicator Dots ................... line ~795
+   11. Annotation Callout .................... line ~845
 
    ═══════════════════════════════════════════════════════════════════════════ */
 
@@ -29,7 +29,7 @@
   position: relative;
   min-height: 100vh;
   overflow: hidden;
-  background: var(--color-bg-deep);
+  background: transparent; /* Let body::before show through - per background_redesign.md */
   /* Grid layout set below after slide-scrollytelling styles */
 }
 
@@ -193,6 +193,8 @@
    ───────────────────────────────────────────────────────────────────────── */
 .music-galaxy-viz-overlay #viz-planets {
   position: absolute;
+  top: 80px;
+  left: 15px;
   width: 100%;
   height: 88%;
 
@@ -203,11 +205,11 @@
     rgba(8, 8, 18, 0.85) 50%,
     rgba(15, 10, 25, 0.8) 100%
   );
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(var(--glass-medium-blur));
+  -webkit-backdrop-filter: blur(var(--glass-medium-blur));
 
   /* Rounded corners for modern feel */
-  border-radius: 24px;
+  border-radius: var(--radius-2xl);
 
   /* Multi-layer border effect */
   border: 1px solid transparent;
@@ -227,6 +229,9 @@
 
   /* Container for pseudo-elements */
   overflow: hidden;
+
+  /* Keep viz below labels and legends */
+  z-index: 5;
 }
 
 /* Animated gradient border overlay */
@@ -285,7 +290,7 @@
   width: 80px;
   height: 80px;
   pointer-events: none;
-  z-index: 60;
+  z-index: 15; /* Above viz panel, below interactive elements */
 }
 
 /* Top-left corner accent */
@@ -300,7 +305,7 @@
 
 /* Bottom-right corner accent */
 .music-galaxy-viz-overlay::after {
-  bottom: calc(var(--space-4) + 40px);
+  bottom: calc(var(--space-4) + 100px);
   right: calc(var(--space-4) - 20px);
   border-right: 2px solid rgba(255, 0, 80, 0.3);
   border-bottom: 2px solid rgba(255, 0, 80, 0.3);
@@ -387,12 +392,12 @@
   border-radius: 24px;
 }
 
-/* Scene label badge */
+/* Scene label badge - positioned relative to viz panel */
 .music-galaxy-viz-overlay .scene-label-badge {
   position: absolute;
   top: 100px;
   left: 35px;
-  z-index: 15;
+  z-index: 20; /* Above viz panel and corner accents */
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -402,24 +407,25 @@
 .music-galaxy-text-overlay {
   position: absolute !important;
   top: 50%;
-  right: 0;
-  width: 38%;
+  /* Reserve space for narrower sidebar - match new sidebar width */
+  right: clamp(50px, calc(10px + 3vw), 80px);
+  width: 35%; /* Slightly wider since sidebar is narrower */
   transform: translateY(-50%);
-  min-width: 320px;
+  min-width: 280px;
   height: fit-content;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: calc(64px + var(--space-6)) var(--space-4) var(--space-6);
+  padding: calc(64px + var(--space-4)) var(--space-3) var(--space-4); /* Reduced padding */
   z-index: 70 !important;
   pointer-events: auto;
 }
 
 /* Step content cards inside text overlay */
 .music-galaxy-text-overlay .step-content {
-  width: 88%;
-  max-width: 550px;
+  width: 90%;
+  max-width: 480px; /* Reduced from 550px */
   opacity: 1;
   visibility: visible;
   background: linear-gradient(
@@ -428,9 +434,9 @@
     rgba(10, 10, 18, 0.98) 100%
   );
   border: 1px solid rgba(45, 204, 211, 0.3);
-  border-radius: 20px;
-  padding: var(--space-5);
-  backdrop-filter: blur(20px);
+  border-radius: 16px; /* Reduced from 20px */
+  padding: var(--space-5); /* Reduced from var(--space-5) */
+  backdrop-filter: blur(var(--glass-frosted-blur));
   box-shadow:
     0 4px 24px rgba(0, 0, 0, 0.4),
     0 0 40px rgba(0, 242, 234, 0.05),
@@ -440,10 +446,10 @@
 
 /* Headings in text overlay */
 .music-galaxy-text-overlay .step-heading {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-size: clamp(1.5rem, 3.5vw, 1.9rem); /* Reduced from clamp(1.75rem, 4vw, 2.25rem) */
   font-weight: 800;
   line-height: 1.15;
-  margin: 0 0 var(--space-4);
+  margin: 0 0 var(--space-3); /* Reduced from var(--space-4) */
   background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -451,17 +457,17 @@
 }
 
 .music-galaxy-text-overlay .step-subheading {
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem); /* Reduced from clamp(1.25rem, 3vw, 1.75rem) */
   font-weight: 700;
-  margin: 0 0 var(--space-3);
+  margin: 0 0 var(--space-2); /* Reduced from var(--space-3) */
   color: var(--color-glint);
 }
 
 .music-galaxy-text-overlay .step-content p {
-  font-size: 1.0625rem;
-  line-height: 1.7;
+  font-size: 0.95rem; /* Reduced from 1.0625rem */
+  line-height: 1.65; /* Slightly reduced from 1.7 */
   color: rgba(255, 255, 255, 0.85);
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-2); /* Reduced from var(--space-3) */
 }
 
 .music-galaxy-text-overlay .step-content p:last-child {
@@ -544,7 +550,7 @@
   background: rgba(255, 255, 255, 0.25) !important;
   border: 2px solid rgba(45, 204, 211, 0.4) !important;
   transition: all 250ms ease !important;
-  cursor: pointer !important;
+  /* cursor inherited from base.css */
 }
 
 .music-galaxy-text-overlay .fp-slidesNav ul li a:hover,
@@ -737,7 +743,7 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 24px;
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -780,90 +786,6 @@
   opacity: 0;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   Overlay Steps Article - FOREGROUND layer on top of viz
-   ───────────────────────────────────────────────────────────────────────── */
-.music-galaxy-steps-article {
-  position: relative;
-  padding: 0;
-  max-width: 30rem;
-  margin: 0 auto;
-  z-index: 1; /* FOREGROUND - above viz */
-}
-
-.music-galaxy-step {
-  margin: 0 auto 2rem auto;
-  min-height: 50vh;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 500ms ease;
-}
-
-.music-galaxy-step.is-active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.music-galaxy-step:last-child {
-  margin-bottom: 0;
-}
-
-.step-content {
-  position: relative;
-  z-index: 30; /* Highest - always on top */
-  background: rgba(10, 10, 20, 0.95); /* More opaque to block viz */
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(45, 204, 211, 0.4);
-  border-radius: 16px;
-  padding: var(--space-6);
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(45, 204, 211, 0.1) inset;
-  max-width: 550px;
-}
-
-.step-heading {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
-  font-weight: 800;
-  line-height: 1.15;
-  margin: 0 0 var(--space-4);
-  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.step-subheading {
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
-  font-weight: 700;
-  margin: 0 0 var(--space-3);
-  color: var(--color-glint);
-}
-
-.step-content p {
-  font-size: 1.0625rem;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.85);
-  margin-bottom: var(--space-3);
-}
-
-.step-content p:last-child {
-  margin-bottom: 0;
-}
-
-.step-content p strong {
-  color: var(--color-glint);
-  font-weight: 600;
-}
-
-/* Year controls within step content */
-.music-galaxy-step .music-galaxy-year-controls {
-  margin-top: var(--space-4);
-  padding-top: var(--space-4);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
 /* Component: Year Controls Label - Canonical definition for "Select Year" labels */
 .year-controls-label {
   display: block;
@@ -896,7 +818,7 @@
   border-radius: 50%;
   background: transparent;
   border: 2px solid rgba(45, 204, 211, 0.4);
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all 300ms ease;
   position: relative;
 }
@@ -956,10 +878,10 @@
 .annotation-content {
   background: linear-gradient(145deg, rgba(251, 235, 53, 0.28), rgba(251, 235, 53, 0.18));
   border: 1px solid rgba(251, 235, 53, 0.6);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   padding: var(--space-4);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(var(--glass-subtle-blur));
 }
 
 .annotation-content p {
@@ -997,5 +919,71 @@
 .step-dot.active {
   background: var(--color-glint);
   box-shadow: 0 0 8px rgba(45, 204, 211, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVE LAYOUT
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Tablet/small laptop (1024px and below) - stack vertically */
+@media (max-width: 1024px) {
+  .music-galaxy-viz-overlay {
+    position: relative !important;
+    width: 100%;
+    height: 55vh;
+    padding-top: calc(48px + var(--space-2));
+  }
+
+  .music-galaxy-text-overlay {
+    position: relative !important;
+    width: 100%;
+    height: 40vh;
+    right: 0;
+    top: 0;
+    transform: none;
+    min-width: auto;
+    padding: var(--space-4);
+  }
+
+  #viz-planets {
+    height: 100%;
+  }
+}
+
+/* Short viewports (height-based - for 16:9 screens like 1920x1080) */
+@media (max-height: 900px) {
+  .music-galaxy-viz-overlay {
+    padding-top: calc(48px + var(--space-2));
+    padding-bottom: var(--space-2);
+  }
+
+  .music-galaxy-text-overlay {
+    padding-top: calc(48px + var(--space-3));
+    padding-bottom: var(--space-3);
+  }
+
+  .music-galaxy-text-overlay .step-content {
+    padding: var(--space-5); /* Keep same as base, don't shrink */
+  }
+}
+
+/* Very short viewports */
+@media (max-height: 768px) {
+  .music-galaxy-viz-overlay {
+    padding-top: 48px;
+  }
+
+  .music-galaxy-text-overlay {
+    padding-top: 48px;
+  }
+
+  .music-galaxy-text-overlay .step-content h3 {
+    font-size: 1rem;
+    margin-bottom: var(--space-2);
+  }
+
+  .music-galaxy-text-overlay .step-content p {
+    font-size: 0.85rem;
+  }
 }
 

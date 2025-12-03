@@ -19,6 +19,93 @@
    - Wrap-up - bottom-right
    ═══════════════════════════════════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   CRITICAL FIX: Ensure fullPage sections are positioning contexts for aliens
+   ═══════════════════════════════════════════════════════════════════════════ */
+.section,
+.fp-section,
+.fp-tableCell,
+.fp-overflow {
+  position: relative !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FORCE ALIEN VISIBILITY WHEN SCENE IS ACTIVE
+   These rules override the base opacity:0 rules when the scene matches
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Scene 4: Dawn/Timing - Use body selector for specificity */
+body[data-scene="dawn"] .alien-narrator--timing {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+body[data-scene="dawn"] .alien-narrator--timing .alien-avatar {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Scene 5: Forest/Pyramid */
+body[data-scene="forest"] .alien-narrator--pyramid {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+body[data-scene="forest"] .alien-narrator--pyramid .alien-avatar {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateX(0) !important;
+}
+body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Scene 6: Air/Emotion */
+body[data-scene="air"] .alien-narrator--emotion {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+body[data-scene="air"] .alien-narrator--emotion .alien-avatar {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+}
+body[data-scene="air"] .alien-narrator--emotion .alien-speech-bubble {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Scene 7: Lab/Quiz */
+body[data-scene="lab"] .alien-narrator--quiz {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
+}
+body[data-scene="lab"] .alien-narrator--quiz .alien-avatar {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 /* ─────────────────────────────────────────────────────────────────────────────
    KEYFRAME ANIMATIONS (defined once, used by all variants)
    ───────────────────────────────────────────────────────────────────────────── */
@@ -249,7 +336,7 @@
   justify-content: center;
   overflow: visible;
   animation: alienFloat 3s ease-in-out infinite;
-  cursor: pointer;
+  /* cursor inherited from base.css */
 }
 
 /* TikTok-style gradient border on avatar */
@@ -287,40 +374,74 @@
   background: rgba(10, 10, 20, 0.8);
 }
 
-/* Speech bubble base */
+/* ─────────────────────────────────────────────────────────────────────────────
+   UNIVERSAL ALIEN AVATAR GRADIENT BORDER
+   Applies TikTok-style gradient border to ALL alien avatars
+   ───────────────────────────────────────────────────────────────────────────── */
+.alien-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,
+    rgba(0, 242, 234, 0.25) 0%,
+    rgba(255, 0, 80, 0.15) 100%
+  );
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  animation: alienFloat 3s ease-in-out infinite;
+}
+
+/* TikTok gradient border */
+.alien-avatar::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00F2EA, #FF0050);
+  z-index: -1;
+  animation: borderRotate 4s linear infinite;
+}
+
+/* Glow effect */
+.alien-avatar::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(0, 242, 234, 0.3) 0%,
+    rgba(255, 0, 80, 0.15) 50%,
+    transparent 70%
+  );
+  z-index: -2;
+  animation: glowPulse 2s ease-in-out infinite alternate;
+}
+
+/* Speech bubble base - White/light per redesign spec section 0.2 */
 .alien-narrator--scene .alien-speech-bubble,
 .alien-speech-bubble {
   max-width: 380px;
   min-width: 280px;
   padding: var(--space-4) var(--space-5);
-  background: linear-gradient(145deg, rgba(15, 15, 25, 0.98), rgba(8, 8, 16, 0.95));
-  border: 2px solid rgba(0, 242, 234, 0.45);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
+  border: 2px solid rgba(45, 204, 211, 0.4);
   border-radius: 20px 20px 20px 6px;
   box-shadow:
-    0 0 25px rgba(0, 242, 234, 0.2),
-    0 0 50px rgba(255, 0, 80, 0.1),
-    0 12px 40px rgba(0, 0, 0, 0.6);
+    0 4px 20px rgba(0, 0, 0, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
-/* Speech bubble tail - pointing left (default) */
-.alien-narrator--scene .alien-speech-bubble::before {
-  content: '';
-  position: absolute;
-  bottom: 12px;
-  left: -8px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 8px 10px 8px 0;
-  border-color: transparent rgba(0, 242, 234, 0.35) transparent transparent;
-}
-
-/* Speech text */
+/* Speech text - Dark text for white/light background */
 .alien-narrator--scene .alien-speech-text,
 .alien-speech-text {
   font-size: 1rem;
-  color: var(--color-text-primary);
+  color: #1a1a2e;
   line-height: 1.7;
   margin: 0;
   font-weight: 500;
@@ -353,48 +474,86 @@
 
 /* ─────────────────────────────────────────────────────────────────────────────
    SCENE-SPECIFIC VISIBILITY
-   Auto-show speech bubbles when scene is active via data-scene attribute
+   Auto-show alien containers AND speech bubbles when scene is active
+   Uses !important to override base opacity:0 and data-speech-state="hidden"
    ───────────────────────────────────────────────────────────────────────────── */
 
-[data-scene="cosmos"] .alien-narrator--hero .alien-speech-bubble,
-[data-scene="hero"] .alien-narrator--hero .alien-speech-bubble {
-  opacity: 1;
-  transform: scale(1) translateY(0);
-}
+/* .alien-narrator--hero rules REMOVED - HTML element was removed (Dec 2025 cleanup) */
 
+/* Scene 2: Galaxy - container shown via animation in base.css */
+/* Keep translateY(-50%) for vertical centering with alien */
 [data-scene="galaxy"] .alien-narrator--scene2 .alien-speech-bubble {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+  opacity: 1 !important;
+  transform: scale(1) translateY(-50%) !important;
 }
 
+/* Scene 3: Sounds - container shown via animation in base.css */
 [data-scene="sounds"] .alien-narrator--scene3 .alien-speech-bubble {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
 }
 
-[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+/* Scene 4: Dawn/Timing - show container AND speech bubble */
+body[data-scene="dawn"] .alien-narrator--timing {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
 }
 
-[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+/* Scene 5: Forest/Pyramid - show container, avatar AND speech bubble */
+body[data-scene="forest"] .alien-narrator--pyramid {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+body[data-scene="forest"] .alien-narrator--pyramid .alien-avatar {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+}
+body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
 }
 
-[data-scene="air"] .alien-narrator--emotion .alien-speech-bubble {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+/* Scene 6: Air/Emotion - show avatar AND speech bubble */
+body[data-scene="air"] .alien-narrator--emotion .alien-avatar {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+body[data-scene="air"] .alien-narrator--emotion .alien-speech-bubble {
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
 }
 
-[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+/* Scene 7: Lab/Quiz - show container AND speech bubble */
+body[data-scene="lab"] .alien-narrator--quiz {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
 }
 
-[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
-  opacity: 1;
-  transform: scale(1) translateY(0);
+/* Scene 8: Wrapup - show container AND speech bubble */
+body[data-scene="wrapup"] .alien-narrator--wrapup {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+body[data-scene="wrapup"] .alien-narrator--wrapup .alien-avatar {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: scale(1) !important;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────

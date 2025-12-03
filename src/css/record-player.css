@@ -63,14 +63,14 @@
 .record-player-layout {
  display: flex;
  align-items: center;
- justify-content: flex-start; /* Changed from center to flex-start to move left */
+ justify-content: flex-start;
  gap: clamp(2rem, 4vw, 3.5rem);
  flex: 0 0 auto;
  width: 100%;
- max-width: min(60vw, 800px); /* Reduced width to leave space for narrative */
+ max-width: 100%;
  margin: 0;
- margin-left: clamp(3rem, 5vw, 5rem); /* Left margin to move section left */
- margin-right: clamp(10rem, 15vw, 10rem); /* Right margin for spacing before narrative */
+ margin-left: clamp(3rem, 5vw, 5rem);
+ margin-right: clamp(10rem, 15vw, 10rem);
  position: relative;
 }
 
@@ -78,17 +78,17 @@
   position: relative;
   display: grid;
   place-items: center;
-  width: 75vw; /* 3/4 of viewport width */
-  max-width: min(75vw, 1000px);
-  aspect-ratio: 1.5; /* More square for compact layout */
-  padding: clamp(1.5rem, 3vw, 2.5rem);
+  width: clamp(450px, 50vw, 700px);
+  max-width: none;
+  aspect-ratio: 1;
+  padding: clamp(0.8rem, 1.5vw, 1.2rem);
   border-radius: clamp(1.8rem, 3vw, 2.8rem);
   background: linear-gradient(158deg, rgba(25, 28, 42, 0.95) -8%, rgba(7, 8, 15, 0.98) 92%);
   box-shadow: 0 40px 80px rgba(7, 8, 14, 0.65), inset 0 2px 8px rgba(255, 255, 255, 0.04), inset 0 -10px 20px rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(94, 102, 140, 0.24);
   overflow: visible;
   margin: 0;
-  margin-left: clamp(2rem, 4vw, 4rem); /* Left margin to move it left */
+  margin-left: clamp(2rem, 4vw, 4rem);
 } 
 
 .record-player-base { position: relative;
@@ -107,8 +107,8 @@
 
 .year-range-control {
     position: absolute;
-    right: clamp(4rem, 6vw, 5rem); /* Moved further left */
-    top: clamp(1rem, 2vw, 2rem); /* SWITCHED: Now at top-right */
+    right: clamp(1rem, 2vw, 2rem); /* Moved further left */
+    top: clamp(1.5rem, 3vw, 3rem); /* Moved down a bit */
     width: clamp(180px, 20vw, 260px);
     display: flex;
     flex-direction: column;
@@ -289,7 +289,7 @@
 
 .record-disc { width: 100%; height: 100%; filter: drop-shadow(0 18px 38px rgba(0, 0, 0, 0.58)); } 
 
-.record-ring { cursor: pointer; opacity: 0.78; transition: filter var(--duration-micro) var(--easing-standard), opacity var(--duration-micro) var(--easing-standard); transform-box: fill-box; transform-origin: center; will-change: transform; } 
+.record-ring { /* cursor inherited from base.css */ opacity: 0.78; transition: filter var(--duration-micro) var(--easing-standard), opacity var(--duration-micro) var(--easing-standard); transform-box: fill-box; transform-origin: center; will-change: transform; } 
 
 .record-ring .record-ring-arc { 
     fill: none; 
@@ -344,17 +344,17 @@
 .record-center-year { transform: rotate(0deg); font-size: 0.55rem; justify-content: center; } 
 
 .tonearm {
-   --hinge-size: clamp(33px, 3.3vw, 60px);
-    --arm-width: clamp(1px, 8vw, 13px); 
-    --arm-length: clamp(2px, 180vw, 190px); 
-    position: absolute; 
-    top: clamp(2%, 3vw, 4%); 
-    right: clamp(25%, 30vw, 35%); /* Moved right */
-    width: var(--arm-length); 
-    height: var(--arm-length); 
+   --hinge-size: clamp(40px, 4.5vw, 60px);
+    --arm-width: clamp(8px, 1vw, 12px);
+    --arm-length: clamp(160px, 18vw, 240px);
+    position: absolute;
+    top: -30px;
+    right: clamp(12%, 15vw, 20%);
+    width: var(--arm-length);
+    height: var(--arm-length);
     pointer-events: none;
-     z-index: 4; 
-     transform: translateY(clamp(0.5rem, 1.5vw, 1.5rem));
+     z-index: 4;
+     transform: translateY(clamp(0.5rem, 1.5vw, 1.5rem)) rotate(-15deg);
 } 
 
 /* .tonearm-back { width: 3px; height: 40px; background: silver; position: absolute; top: 100%; left: 50%; transform: translateX(-50%) rotate(20deg); } */ 
@@ -476,7 +476,7 @@
    .record-player-wrapper { width: min(100vw, 620px); padding: 0rem; height: 100%; }
    .tonearm { --hinge-size: clamp(38px, 7vw, 54px); --arm-width: clamp(8px, 2vw, 10px); --arm-length: clamp(180px, 48vw, 260px); top: clamp(2%, 3vw, 4%); right: clamp(20px, 20vw, 30%); } 
    .mute-toggle-button {
-       top: clamp(5rem, 15vw, 9rem);
+       top: clamp(4rem, 13vw, 8rem);
        left: clamp(3.2rem, 9vw, 5rem);
        width: clamp(46px, 14vw, 60px);
        height: clamp(46px, 14vw, 60px);
@@ -484,6 +484,11 @@
    .mute-toggle-button__icon {
        width: clamp(18px, 5vw, 24px);
        height: clamp(18px, 5vw, 24px);
+   }
+   .mute-toggle-helper {
+       top: clamp(4rem, 13.5vw, 7.5rem); /* Moved higher to avoid conflict with popularity line */
+       left: calc(clamp(3.2rem, 9vw, 5rem) + clamp(46px, 14vw, 60px) + 0px);
+       font-size: clamp(0.65rem, 0.9vw, 0.8rem);
    }
    .year-range-control {
         position: relative;
@@ -556,7 +561,7 @@
  color: #050609;
  background: linear-gradient(135deg, #00f7ff, #ff5ce7);
  box-shadow: 0 24px 48px rgba(0, 255, 224, 0.28);
- cursor: pointer;
+ /* cursor inherited from base.css */
  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
 }
 
@@ -664,7 +669,7 @@
 /* Mute Toggle Button - Top Left */
 .mute-toggle-button {
     position: absolute;
-    top: clamp(2.5rem, 5vw, 4rem);
+    top: clamp(2rem, 4.5vw, 3.5rem);
     left: clamp(2.5rem, 5vw, 4rem);
     width: clamp(44px, 5vw, 58px);
     height: clamp(44px, 5vw, 58px);
@@ -676,7 +681,7 @@
         inset 0 -8px 18px rgba(0, 0, 0, 0.55),
         0 8px 24px rgba(45, 204, 211, 0.22),
         0 0 0 3px rgba(45, 204, 211, 0.08);
-    cursor: pointer;
+    /* cursor inherited from base.css */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -743,8 +748,8 @@
 /* Mute button helper text - line and text with no spacing */
 .mute-toggle-helper {
     position: absolute;
-    top: clamp(2.5rem, 5vw, 4rem);
-    left: calc(clamp(2.5rem, 5vw, 4rem) + clamp(44px, 5vw, 58px));
+    top: clamp(2.3rem, 4.5vw, 3.3rem); /* Positioned to avoid conflict with popularity line */
+    left: calc(clamp(2.5rem, 5vw, 4rem) + clamp(44px, 5vw, 58px) + 0px); /* No gap after button */
     color: rgba(255, 255, 255, 0.9);
     font-size: clamp(0.7rem, 1vw, 0.85rem);
     font-family: var(--font-family-sans);
@@ -752,11 +757,12 @@
     z-index: 7;
     pointer-events: none;
     opacity: 0.85;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 0;
     margin: 0;
     padding: 0;
+    line-height: 1;
 }
 
 .mute-toggle-helper::before {
@@ -765,8 +771,11 @@
     height: 1px;
     background: rgba(255, 255, 255, 0.9);
     margin: 0;
+    margin-right: 0;
     padding: 0;
     flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .mute-toggle-helper.is-hidden {

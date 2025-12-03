@@ -2,40 +2,37 @@
    BASE.CSS - Global Styles & Scene Layouts
    ═══════════════════════════════════════════════════════════════════════════════
 
-   TABLE OF CONTENTS (Updated Dec 2025)
-   ─────────────────────────────────────
+   TABLE OF CONTENTS (Updated Dec 2025 - Session A Cleanup)
+   ─────────────────────────────────────────────────────────────
    GLOBAL STYLES
-   1.  Reset & Base Styles ................... line ~44
-   2.  TikTok Splash/Loading Screen .......... line ~80
-   3.  Reduced Motion ........................ line ~215
-   4.  Accessibility ......................... line ~269
-   5.  Progress Bar .......................... line ~297
-   6.  Scene Background System ............... line ~347
+   1.  Reset & Base Styles ................... line ~52
+   2.  TikTok Splash/Loading Screen .......... line ~88
+   3.  Reduced Motion ........................ line ~223
+   4.  Accessibility ......................... line ~277
+   5.  Progress Bar .......................... line ~305
+   6.  Scene Background System ............... line ~355
 
    LAYOUT & COMPONENTS
-   7.  Viz Containers ........................ line ~550
-   8.  KPI Rails ............................. line ~586
-   9.  Detail Drawer ......................... line ~674
-   10. Footer ................................ line ~712
-   11. Micro-interactions (comet, etc.) ...... line ~829
-   12. Planet Visualization Styles ........... line ~886
-   13. Scene Illustrations (SVG overlays) .... line ~1183
-   14. Summary Content Styling ............... line ~1853
+   7.  Viz Containers ........................ line ~592
+   8.  Shared Component Responsive ........... line ~794
+   9.  Scene Illustrations (SVG overlays) .... line ~816
+   10. Reusable Component Styles ............. line ~1257
+   11. Summary Content Styling ............... line ~1441
 
    SCENE-SPECIFIC LAYOUTS
-   15. Scene 3: Viral Sounds ................. line ~2006
-   16. Scene 4: Timing (Stopwatch) ........... line ~2573
-   17. Scene 5: Trend Pyramid (Ranking) ...... line ~2980
-   18. Scene 6: Emotion (Captions) ........... line ~3308
-   19. Scene 7: Quiz Lab ..................... line ~4129
-   20. Scene 8: Wrap-Up Recipe Card .......... line ~4382
+   12. Scene 3: Viral Sounds ................. line ~1589
+   13. Scene 4: Timing (Stopwatch) ........... line ~2090
+   14. Scene 5: Trend Pyramid (Ranking) ...... line ~2501
+   15. Scene 6: Emotion (Captions) ........... line ~2831
+   16. Scene 7: Quiz Lab ..................... line ~3566
+   17. Scene 8: Wrap-Up Recipe Card .......... line ~3827
 
    FIXES & OVERRIDES
-   21. V3 Missing Features ................... line ~4724
-   22. Layout Fixes .......................... line ~4796
-   23. Timing Icon Buttons ................... line ~5081
-   24. Comprehensive Layout Fixes (Nov 27) ... line ~5118
-   25. No-Scroll Enforcement ................. line ~5450
+   18. V3 Missing Features ................... line ~4169
+   19. Layout Fixes .......................... line ~4241
+   20. Timing Icon Buttons ................... line ~4505
+   21. Comprehensive Layout Fixes ............ line ~4542
+   22. No-Scroll Enforcement ................. line ~4874
 
    EXTRACTED TO SEPARATE FILES:
    - Hero section: hero.css
@@ -44,6 +41,11 @@
    - Team Credits: credits.css
    - Alien narrator: alien-narrator.css
    - Design system components: design-system.css
+
+   ARCHITECTURE NOTE:
+   Scene layouts (containers, backgrounds, responsive) remain in base.css.
+   Visualization styles (D3/SVG, bubbles, tooltips) are in viz-specific files:
+   - stopwatch.css, ranking.css, emotion.css, conveyor.css, planet.css, record-player.css
 
    ═══════════════════════════════════════════════════════════════════════════════ */
 
@@ -72,18 +74,20 @@ body {
   /* Dark base - merged from line 201 */
   overflow-x: hidden;
   position: relative;
-  /* Custom alien cursor - using 32x32 resized version */
+  /* Alien custom cursor - 32x32 version for browser compatibility */
+  /* Hotspot set to palm position (center of hand) instead of fingertip */
   cursor: url('/assets/Alien_Cursor_32.png') 16 16, auto;
 }
 
 /* Alien pointer cursor for clickable elements */
+/* Hotspot set to palm position (center of hand) instead of fingertip */
 a,
 button,
 [role="button"],
 .clickable,
 input[type="button"],
 input[type="submit"] {
-  cursor: url('/assets/Alien_Pointer_32.png') 16 16, pointer;
+  cursor: url('/assets/Alien_Pointer_32.png') 16 0, pointer;
 }
 
 /* Fallback: ensure cursor works on all elements */
@@ -312,35 +316,6 @@ h3 {
   font-size: var(--font-size-h3);
 }
 
-.hero-title {
-  font-size: clamp(3rem, 8vw, 6rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-}
-
-.lead {
-  font-size: var(--font-size-body-lg);
-  color: var(--color-text-primary);
-  margin-bottom: var(--space-4);
-}
-
-.gradient-text {
-  background: linear-gradient(90deg, var(--color-glint), var(--color-blaze));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.highlight-cyan {
-  color: var(--color-glint);
-  font-weight: var(--font-weight-semibold);
-}
-
-.highlight-magenta {
-  color: var(--color-blaze);
-  font-weight: var(--font-weight-semibold);
-}
-
 /* Accessibility */
 .sr-only {
   position: absolute;
@@ -358,7 +333,7 @@ h3 {
   position: absolute;
   top: -40px;
   left: 0;
-  background: var(--color-glint);
+  background: var(--color-accent-cyan);
   color: var(--color-background-primary);
   padding: var(--space-2) var(--space-4);
   text-decoration: none;
@@ -375,7 +350,7 @@ h3 {
   top: 0;
   left: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--color-glint), var(--color-blaze));
+  background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-magenta));
   width: 0%;
   z-index: 9999;
   transition: width 100ms ease-out;
@@ -445,107 +420,120 @@ body::before {
   /* Allow clicks to pass through */
 }
 
-/* Cosmos - Deep space with visible purple */
-body[data-scene="cosmos"]::before {
-  background: radial-gradient(ellipse 1400px 900px at 50% 30%,
-      rgba(40, 40, 80, 0.65) 0%,
-      rgba(30, 30, 60, 0.50) 40%,
-      rgba(20, 20, 40, 0.35) 70%,
-      transparent 100%);
-}
+/* ════════════════════════════════════════════════════════════════════════════
+   BACKGROUND FAMILY 1: SPACE/ORBIT (Scenes 1-3)
+   Per background_redesign.md - consistent deep space atmosphere
+   Scenes: cosmos (Hero), galaxy (Music Galaxy), sounds (Viral Sounds)
+   ════════════════════════════════════════════════════════════════════════════ */
 
-/* Dawn - Sunrise with visible horizon glow and sky gradient
-   Metaphor: The spark moment when trends ignite */
-body[data-scene="dawn"]::before {
-  background:
-    /* Bright sun on horizon - concentrated glow */
-    radial-gradient(ellipse 800px 300px at 50% 85%, rgba(255, 180, 80, 0.70) 0%, rgba(255, 140, 60, 0.45) 30%, rgba(255, 100, 80, 0.25) 60%, transparent 100%),
-    /* Warm orange sky spreading from horizon */
-    radial-gradient(ellipse 1600px 700px at 50% 80%, rgba(255, 120, 60, 0.50) 0%, rgba(240, 100, 80, 0.35) 40%, transparent 75%),
-    /* Purple-pink upper atmosphere */
-    radial-gradient(ellipse 2000px 900px at 50% 20%, rgba(180, 80, 140, 0.42) 0%, rgba(140, 60, 120, 0.28) 50%, transparent 85%),
-    /* Deep purple night sky at top */
-    linear-gradient(180deg,
-      rgba(60, 30, 80, 0.55) 0%,
-      rgba(80, 40, 100, 0.45) 20%,
-      rgba(120, 60, 100, 0.35) 50%,
-      transparent 100%);
-}
-
-/* Galaxy (Music Galaxy) - No body background, section handles it */
-body[data-scene="galaxy"]::before {
-  background: transparent;
-}
-
-/* Sounds (Viral Sounds) - No body background, section handles it */
+/* Shared Space/Orbit gradient - used by cosmos, galaxy, sounds
+   Deep navy gradient with subtle purple nebula glow */
+body[data-scene="cosmos"]::before,
+body[data-scene="galaxy"]::before,
 body[data-scene="sounds"]::before {
-  background: transparent;
-}
-
-/* Forest - Atmospheric base (SVG handles trees)
-   Metaphor: Trends fade like leaves, but forests regrow */
-body[data-scene="forest"]::before {
   background:
-    /* Strong sun rays through trees - more prominent */
-    radial-gradient(ellipse 900px 700px at 30% 70%, rgba(255, 235, 160, 0.35) 0%, rgba(255, 225, 140, 0.18) 40%, transparent 70%),
-    radial-gradient(ellipse 600px 500px at 50% 68%, rgba(255, 240, 180, 0.22) 0%, rgba(255, 230, 160, 0.10) 45%, transparent 65%),
-    /* More dappled light patches throughout forest */
-    radial-gradient(circle 350px at 70% 75%, rgba(210, 255, 190, 0.22) 0%, transparent 65%),
-    radial-gradient(circle 280px at 15% 80%, rgba(190, 245, 170, 0.18) 0%, transparent 55%),
-    radial-gradient(circle 220px at 85% 78%, rgba(225, 255, 205, 0.14) 0%, transparent 50%),
-    radial-gradient(circle 200px at 40% 72%, rgba(200, 250, 180, 0.12) 0%, transparent 55%),
-    radial-gradient(circle 180px at 92% 85%, rgba(215, 255, 195, 0.10) 0%, transparent 50%),
-    /* Atmospheric depth */
+    /* Subtle purple nebula glow at center-top */
+    radial-gradient(ellipse 1200px 800px at 50% 25%,
+      rgba(60, 40, 100, 0.5) 0%,
+      rgba(40, 30, 80, 0.35) 40%,
+      transparent 70%),
+    /* Secondary cyan nebula accent */
+    radial-gradient(ellipse 900px 600px at 70% 60%,
+      rgba(45, 204, 211, 0.12) 0%,
+      rgba(45, 204, 211, 0.05) 50%,
+      transparent 70%),
+    /* Base deep navy gradient */
     linear-gradient(180deg,
-      rgba(25, 60, 35, 0.90) 0%,
-      rgba(18, 50, 28, 0.85) 20%,
-      rgba(25, 65, 38, 0.75) 50%,
-      rgba(32, 80, 48, 0.65) 100%);
+      #050510 0%,
+      #0a0a1a 30%,
+      #0f1525 70%,
+      #1a1a2e 100%);
 }
 
-/* Air (Emotion) - Vibrant multicolor emotional atmosphere */
+/* ════════════════════════════════════════════════════════════════════════════
+   BACKGROUND FAMILY 2: STUDIO DASHBOARD (Scenes 4-6)
+   Per background_redesign.md - professional teal-black studio atmosphere
+   Scenes: dawn (Stopwatch), forest (Ranking), air (Emotion)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* Shared Studio Dashboard gradient - used by dawn, forest, air
+   Teal-black gradient with faded stars and professional lighting */
+body[data-scene="dawn"]::before,
+body[data-scene="forest"]::before,
 body[data-scene="air"]::before {
   background:
-    /* Flowing wave patterns for visual interest */
-    radial-gradient(ellipse 1000px 200px at 0% 40%, rgba(255, 140, 180, 0.15) 0%, rgba(255, 120, 160, 0.08) 50%, transparent 70%),
-    radial-gradient(ellipse 900px 180px at 100% 60%, rgba(160, 200, 255, 0.12) 0%, rgba(140, 180, 235, 0.06) 50%, transparent 65%),
-    radial-gradient(ellipse 1100px 220px at 50% 80%, rgba(180, 255, 200, 0.10) 0%, rgba(160, 235, 180, 0.05) 50%, transparent 60%),
-    /* Concentric rings for depth */
-    radial-gradient(circle 600px at 30% 35%, transparent 30%, rgba(255, 160, 200, 0.08) 35%, transparent 40%),
-    radial-gradient(circle 450px at 70% 50%, transparent 35%, rgba(180, 210, 255, 0.07) 40%, transparent 45%),
-    /* Pink joy */
-    radial-gradient(circle 700px at 20% 30%, rgba(255, 120, 170, 0.32) 0%, rgba(255, 100, 150, 0.18) 50%, transparent 65%),
-    /* Blue calm */
-    radial-gradient(circle 900px at 75% 60%, rgba(120, 170, 255, 0.28) 0%, rgba(100, 150, 230, 0.15) 50%, transparent 65%),
-    /* Green energy */
-    radial-gradient(circle 600px at 50% 80%, rgba(170, 255, 220, 0.25) 0%, rgba(150, 230, 200, 0.12) 50%, transparent 60%),
-    /* Warm glow */
-    radial-gradient(ellipse 1400px 500px at 50% 40%, rgba(255, 200, 120, 0.20) 0%, rgba(255, 180, 100, 0.10) 40%, transparent 70%),
-    /* Base gradient */
-    linear-gradient(135deg,
-      rgba(40, 35, 50, 0.55) 0%,
-      rgba(35, 40, 55, 0.42) 50%,
-      rgba(30, 35, 45, 0.35) 100%);
+    /* Faded stars at top (much dimmer than Space/Orbit) */
+    radial-gradient(1px 1px at 15% 8%, rgba(255, 255, 255, 0.25) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 12%, rgba(255, 255, 255, 0.20) 0%, transparent 100%),
+    radial-gradient(1px 1px at 75% 6%, rgba(255, 255, 255, 0.22) 0%, transparent 100%),
+    radial-gradient(1px 1px at 88% 15%, rgba(255, 255, 255, 0.18) 0%, transparent 100%),
+    /* Subtle teal accent glow from equipment */
+    radial-gradient(ellipse 600px 400px at 20% 70%,
+      rgba(45, 204, 211, 0.12) 0%,
+      rgba(45, 204, 211, 0.04) 50%,
+      transparent 70%),
+    /* Secondary accent on right */
+    radial-gradient(ellipse 500px 350px at 85% 60%,
+      rgba(45, 204, 211, 0.08) 0%,
+      rgba(45, 204, 211, 0.02) 50%,
+      transparent 70%),
+    /* Overhead soft studio lighting */
+    radial-gradient(ellipse 1000px 300px at 50% 5%,
+      rgba(100, 150, 180, 0.15) 0%,
+      rgba(80, 120, 150, 0.08) 50%,
+      transparent 70%),
+    /* Base teal-black gradient */
+    linear-gradient(180deg,
+      #080c10 0%,
+      #0a1218 25%,
+      #0c161e 50%,
+      #0e1a24 75%,
+      #101e28 100%);
 }
 
-/* Lab - Atmospheric base (SVG handles equipment) */
-body[data-scene="lab"]::before {
+/* ════════════════════════════════════════════════════════════════════════════
+   BACKGROUND FAMILY 3: SHOW STAGE (Scenes 7-8)
+   Per background_redesign.md - warm performance stage atmosphere
+   Scenes: lab (Quiz), wrapup (Summary)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* Shared Show Stage gradient - used by lab, wrapup
+   Warmer teal with stage floor and spotlight effects */
+body[data-scene="lab"]::before,
+body[data-scene="wrapup"]::before {
   background:
-    /* Subtle molecular orbital rings - elegant and scientific */
-    radial-gradient(circle 500px at 75% 25%, transparent 35%, rgba(80, 180, 220, 0.04) 37%, transparent 39%),
-    radial-gradient(circle 400px at 75% 25%, transparent 40%, rgba(100, 200, 240, 0.05) 42%, transparent 44%),
-    radial-gradient(circle 300px at 75% 25%, transparent 45%, rgba(120, 220, 255, 0.06) 47%, transparent 49%),
-    /* Soft glowing light from lab equipment */
-    radial-gradient(circle 450px at 20% 45%, rgba(80, 200, 240, 0.15) 0%, rgba(60, 180, 220, 0.08) 50%, transparent 70%),
-    radial-gradient(circle 350px at 85% 70%, rgba(100, 220, 200, 0.12) 0%, rgba(80, 200, 180, 0.06) 50%, transparent 65%),
-    /* Overhead cool lab lighting */
-    radial-gradient(ellipse 800px 400px at 50% 0%, rgba(200, 230, 250, 0.20) 0%, rgba(180, 210, 230, 0.10) 50%, transparent 80%),
-    /* Clean scientific atmosphere */
+    /* Spotlight beam from above-left */
+    radial-gradient(ellipse 400px 800px at 25% 0%,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(200, 220, 240, 0.04) 30%,
+      transparent 60%),
+    /* Spotlight beam from above-right */
+    radial-gradient(ellipse 350px 700px at 75% 0%,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(200, 220, 240, 0.03) 30%,
+      transparent 60%),
+    /* Faint stars returning at very top */
+    radial-gradient(1px 1px at 20% 5%, rgba(255, 255, 255, 0.15) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 8%, rgba(255, 255, 255, 0.12) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 4%, rgba(255, 255, 255, 0.14) 0%, transparent 100%),
+    /* Stage floor gradient strip at bottom */
     linear-gradient(180deg,
-      rgba(15, 40, 55, 0.90) 0%,
-      rgba(18, 50, 65, 0.85) 30%,
-      rgba(20, 55, 70, 0.80) 60%,
-      rgba(22, 60, 75, 0.75) 100%);
+      transparent 0%,
+      transparent 85%,
+      rgba(45, 204, 211, 0.06) 92%,
+      rgba(45, 204, 211, 0.12) 100%),
+    /* Warm teal stage atmosphere */
+    radial-gradient(ellipse 1200px 600px at 50% 40%,
+      rgba(60, 180, 200, 0.12) 0%,
+      rgba(45, 150, 170, 0.06) 50%,
+      transparent 70%),
+    /* Base warmer teal gradient */
+    linear-gradient(180deg,
+      #0a1014 0%,
+      #0c1418 25%,
+      #0e181e 50%,
+      #101c24 75%,
+      #12202a 100%);
 }
 
 /* Scene layers - decorative overlays per scene */
@@ -558,8 +546,10 @@ body[data-scene="lab"]::before {
   will-change: opacity;
 }
 
-/* Stars - Animated twinkling field */
-body[data-scene="cosmos"] .scene--stars {
+/* Stars - Animated twinkling field for Space/Orbit family (Scenes 1-3) */
+body[data-scene="cosmos"] .scene--stars,
+body[data-scene="galaxy"] .scene--stars,
+body[data-scene="sounds"] .scene--stars {
   opacity: 0.4;
   background-image:
     radial-gradient(2px 2px at 15% 25%, rgba(255, 255, 255, 0.6) 0 2px, transparent 2px),
@@ -581,33 +571,21 @@ body[data-scene="cosmos"] .scene--stars {
   }
 }
 
-/* Forest Canopy - Layered organic shapes with light filtering */
+/* ────────────────────────────────────────────────────────────────────────────
+   Studio Dashboard Scene Overlays (Scenes 4-6)
+   Now using teal-black professional theme instead of nature themes
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Forest/Ranking scene - subtle triangular hints for pyramid visualization */
 body[data-scene="forest"] .scene--canopy {
-  opacity: 0.35;
-  background:
-    radial-gradient(ellipse 800px 250px at 30% 0%, rgba(100, 180, 100, 0.4) 0%, transparent 50%),
-    radial-gradient(ellipse 600px 200px at 70% 0%, rgba(80, 160, 90, 0.35) 0%, transparent 50%),
-    radial-gradient(ellipse 700px 220px at 50% 0%, rgba(90, 170, 95, 0.3) 0%, transparent 50%),
-    linear-gradient(180deg, transparent 0%, rgba(60, 120, 70, 0.15) 30%, transparent 70%);
+  opacity: 0;
+  /* Disabled - forest canopy doesn't match Studio Dashboard */
 }
 
-/* Emotion Orbs - Colorful floating spheres representing different emotions */
+/* Air/Emotion scene - subtle speech bubble hints in background */
 body[data-scene="air"] .scene--bubbles {
-  opacity: 0.35;
-  background-image:
-    /* Joy - warm yellow/orange */
-    radial-gradient(circle 80px at 25% 35%, rgba(255, 200, 100, 0.20) 20%, rgba(255, 150, 80, 0.08) 50%, transparent 80%),
-    /* Calm - cool blue */
-    radial-gradient(circle 100px at 70% 60%, rgba(100, 180, 255, 0.18) 20%, rgba(80, 150, 230, 0.06) 50%, transparent 80%),
-    /* Energy - cyan/green */
-    radial-gradient(circle 70px at 15% 75%, rgba(100, 255, 200, 0.16) 20%, rgba(80, 230, 180, 0.05) 50%, transparent 80%),
-    /* Excitement - pink/magenta */
-    radial-gradient(circle 90px at 80% 25%, rgba(255, 100, 180, 0.18) 20%, rgba(230, 80, 150, 0.06) 50%, transparent 80%),
-    /* Subtle background orbs */
-    radial-gradient(circle 60px at 50% 50%, rgba(200, 200, 255, 0.10) 30%, rgba(180, 180, 230, 0.03) 60%, transparent 90%),
-    radial-gradient(circle 50px at 35% 20%, rgba(255, 220, 180, 0.08) 30%, transparent 70%);
-  background-size: 350px 350px, 420px 420px, 300px 300px, 380px 380px, 250px 250px, 220px 220px;
-  animation: emotion-drift 40s ease-in-out infinite;
+  opacity: 0;
+  /* Disabled - colorful orbs don't match Studio Dashboard */
 }
 
 @keyframes emotion-drift {
@@ -631,11 +609,10 @@ body[data-scene="air"] .scene--bubbles {
     animation: none !important;
   }
 
-  body[data-scene="cosmos"] .scene--stars {
-    animation: none;
-  }
-
-  body[data-scene="air"] .scene--bubbles {
+  /* Space/Orbit family stars */
+  body[data-scene="cosmos"] .scene--stars,
+  body[data-scene="galaxy"] .scene--stars,
+  body[data-scene="sounds"] .scene--stars {
     animation: none;
   }
 
@@ -644,15 +621,23 @@ body[data-scene="air"] .scene--bubbles {
   }
 }
 
-/* Viz Containers */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Viz Containers - REFINED (Task C)
+   - Removed heavy opaque backgrounds that fight scene backgrounds
+   - Removed thick borders
+   - Removed scanning animation (was too busy)
+   - Containers are now transparent by default, letting scene backgrounds show
+   ═══════════════════════════════════════════════════════════════════════════ */
 .viz-container {
   width: 100%;
   min-height: 80vh;
   height: calc(100vh - 160px);
-  border: 1px solid var(--color-border-interactive);
+  /* Task C: Transparent background - let scene backgrounds show through */
+  background: transparent;
+  /* Task C: Remove border - rely on scene-specific subtle framing */
+  border: none;
   border-radius: 8px;
-  background: var(--color-background-secondary);
-  padding: var(--space-6);
+  padding: var(--space-4);
   position: relative;
   overflow: hidden;
   transition: all var(--duration-macro) var(--easing-standard);
@@ -661,7 +646,15 @@ body[data-scene="air"] .scene--bubbles {
   justify-content: center;
 }
 
+/* Task C: Scanning animation removed - was too busy and distracting
+   The ::before pseudo-element is now used for subtle scene-specific accents only */
 .viz-container::before {
+  content: none;
+  /* Disabled by default */
+}
+
+/* Task C: Opt-in scanning animation for scenes that want it */
+.viz-container--with-scan::before {
   content: '';
   position: absolute;
   top: 0;
@@ -670,7 +663,7 @@ body[data-scene="air"] .scene--bubbles {
   height: 2px;
   background: linear-gradient(90deg,
       transparent,
-      var(--color-glint),
+      var(--color-accent-cyan),
       transparent);
   transform: translateX(-100%);
   animation: scan 3s infinite;
@@ -682,31 +675,60 @@ body[data-scene="air"] .scene--bubbles {
   }
 }
 
-/* Year Selector */
-/* Year selector - Prominent filter pill styling */
-.year-selector {
-  display: inline-flex;
-  gap: var(--space-2);
-  padding: 4px;
-  background: rgba(10, 15, 20, 0.7);
-  border-radius: 16px;
-  border: 1.5px solid rgba(45, 204, 211, 0.25);
-  max-width: fit-content;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+/* ─────────────────────────────────────────────────────────────────────────
+   Viz Container Variants - Scene-specific subtle framing (Task C)
+   Light frames that enhance metaphor without creating opaque rectangles
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Subtle glass panel - for scenes that need minimal container definition */
+.viz-container--glass {
+  background: rgba(10, 12, 18, 0.2);
+  border: 1px solid rgba(45, 204, 211, 0.15);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
-/* Annotation Rail */
-.annotation-rail {
-  position: absolute;
-  bottom: var(--space-6);
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-2);
-  z-index: 10;
+/* Orbital frame - for planet/galaxy visualization */
+.viz-container--orbital {
+  background: transparent;
+  border: none;
+  position: relative;
 }
+
+.viz-container--orbital::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 1px dashed rgba(45, 204, 211, 0.2);
+  pointer-events: none;
+  animation: orbital-rotate 60s linear infinite;
+}
+
+@keyframes orbital-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Record frame - thin circular rim */
+.viz-container--record {
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+}
+
+/* Lab/quiz style - very subtle tech panel */
+.viz-container--lab {
+  background: rgba(10, 12, 18, 0.3);
+  border: 1px solid rgba(74, 77, 94, 0.2);
+  border-radius: 12px;
+}
+
+/* Year Selector - REMOVED (class not in HTML, Dec 2025 cleanup) */
+
+/* Annotation Rail - REMOVED (class not in HTML)
+   Deleted 2025-12-01 during cleanup session */
 
 .annotation {
   color: var(--color-text-secondary);
@@ -726,59 +748,16 @@ body[data-scene="air"] .scene--bubbles {
 
 /* Emotion sort toggle pressed state */
 .emotion-sort-toggle[aria-pressed="true"] {
-  background: linear-gradient(135deg, var(--color-blaze), var(--color-glint));
+  background: linear-gradient(135deg, var(--color-accent-magenta), var(--color-accent-cyan));
   color: #000;
-  border-color: var(--color-blaze);
+  border-color: var(--color-accent-magenta);
   box-shadow: 0 0 20px rgba(241, 32, 74, 0.6), 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
   font-weight: 700;
   transform: scale(1.05);
 }
 
-/* Footer - merged with lab bench appearance */
-.site-footer {
-  text-align: center;
-  padding: var(--space-5) 0;
-  padding-bottom: var(--space-5);
-  border-top: none;
-  /* No border - seamless merge with lab bench */
-  margin-top: -5px !important;
-  /* Eliminate gap completely */
-  color: var(--color-text-secondary);
-  /* Match lab bench color and fade to black */
-  position: relative;
-  z-index: 2;
-  background: linear-gradient(180deg,
-      #0b1116 0%,
-      /* Exact lab bench color match */
-      #0b1116 5%,
-      /* Hold bench color briefly */
-      rgba(8, 12, 15, 1) 20%,
-      rgba(5, 8, 10, 1) 40%,
-      #000000 65%,
-      #000000 100%);
-}
-
-.site-footer a {
-  color: var(--color-glint);
-  text-decoration: none;
-  transition: color var(--duration-micro) var(--easing-standard);
-}
-
-.site-footer a:hover {
-  color: var(--color-blaze);
-}
-
-.stat-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-2) 0;
-  border-bottom: 1px solid var(--color-border-disabled);
-}
-
-.stat-row:last-child {
-  border-bottom: none;
-}
+/* Footer (.site-footer) - REMOVED (class not in HTML, Dec 2025 cleanup) */
+/* Stat Row (.stat-row) - REMOVED (class not in HTML, Dec 2025 cleanup) */
 
 /* Micro-interactions */
 /* A) Planets - Comet effect */
@@ -810,26 +789,9 @@ circle[data-type="bubble"] {
   transform-origin: center;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .nav-links {
-    display: none;
-  }
-
-  .layout-left-viz,
-  .layout-center-network,
-  .layout-bubble-cloud {
-    grid-template-columns: 1fr;
-  }
-
-  .detail-drawer {
-    width: 100%;
-  }
-
-  .sticky-rail {
-    position: static;
-  }
-}
+/* Responsive - Legacy unused classes removed (nav-links, layout-left-viz,
+   layout-center-network, layout-bubble-cloud, detail-drawer, sticky-rail)
+   Deleted 2025-12-01 during cleanup session */
 
 /* Planet Visualization Specific Styles */
 .legend {
@@ -843,6 +805,29 @@ circle[data-type="bubble"] {
   max-width: 380px;
   z-index: 10;
   pointer-events: none;
+}
+
+/* Planet legend larger on external monitors */
+@media (min-width: 1600px) {
+  .legend {
+    max-width: 480px;
+    gap: 28px;
+  }
+
+  .legend h3 {
+    font-size: 1.4rem;
+  }
+
+  .legend p,
+  .legend-label {
+    font-size: 1.05rem;
+  }
+
+  .legend-tooltip {
+    width: 380px;
+    font-size: 0.95rem;
+    padding: 16px 20px;
+  }
 }
 
 /* Planet legend uses standard compact legend styling (same as other scenes)
@@ -864,7 +849,7 @@ circle[data-type="bubble"] {
   color: #fff;
   padding: 12px 16px;
   border-radius: 8px;
-  border: 1px solid var(--color-glint);
+  border: 1px solid var(--color-accent-cyan);
   font-size: 0.8rem;
   line-height: 1.5;
   width: 320px;
@@ -895,7 +880,7 @@ circle[data-type="bubble"] {
 }
 
 .legend-tooltip strong {
-  color: var(--color-glint);
+  color: var(--color-accent-cyan);
   display: inline;
   margin-bottom: 0;
 }
@@ -908,8 +893,8 @@ circle[data-type="bubble"] {
   width: 280px;
   background: rgba(10, 10, 15, 0.9);
   padding: 26px;
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(var(--glass-medium-blur));
   border: 1px solid var(--color-border-interactive);
   z-index: 10;
   pointer-events: none;
@@ -923,7 +908,7 @@ circle[data-type="bubble"] {
 
 .color-legend-title strong {
   display: block;
-  color: var(--color-blaze);
+  color: var(--color-accent-magenta);
   margin-bottom: 8px;
   font-size: 1.3rem;
 }
@@ -933,35 +918,8 @@ circle[data-type="bubble"] {
    NOTE: Planet/danceability gradient styles moved to planet.css (Dec 2025)
    ───────────────────────────────────────────────────────────────────────── */
 
-/* Responsive: medium screens */
-@media (max-width: 1400px) {
-  .annotation-rail {
-    bottom: var(--space-4);
-  }
-}
-
-/* Responsive: tablets */
-@media (max-width: 1024px) {
-  .annotation-rail {
-    bottom: var(--space-2);
-  }
-
-  .year-selector {
-    gap: 8px;
-  }
-}
-
-/* Responsive: mobile */
-@media (max-width: 768px) {
-  .annotation-rail {
-    bottom: 10px;
-  }
-
-  .year-selector {
-    gap: 6px;
-    margin-bottom: 0.5rem;
-  }
-}
+/* Responsive: .year-selector rules REMOVED - class not in HTML (Dec 2025 cleanup) */
+/* Note: .annotation-rail responsive rules also removed - class not in HTML (2025-12-01) */
 
 /* ========== Shared Tooltip Base ========== */
 /* Minimal base tooltip - viz-specific styles extend this */
@@ -1513,26 +1471,13 @@ circle[data-type="bubble"] {
   display: block;
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-glint);
+  color: var(--color-accent-cyan);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: var(--space-2);
 }
 
-.section-question {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  margin: 0;
-  line-height: 1.3;
-}
-
-.section-subquestion {
-  font-size: var(--font-size-h3);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-  margin: var(--space-4) 0;
-}
+/* REMOVED: .section-question, .section-subquestion (Dec 2025 - not in HTML) */
 
 .section-explanation {
   color: var(--color-text-secondary);
@@ -1550,7 +1495,7 @@ circle[data-type="bubble"] {
 .section-transition {
   padding: var(--space-4);
   background: var(--glass-subtle-background);
-  border-left: 3px solid var(--color-blaze);
+  border-left: 3px solid var(--color-accent-magenta);
   border-radius: 4px;
   margin-bottom: var(--space-5);
 }
@@ -1558,6 +1503,239 @@ circle[data-type="bubble"] {
 .section-intro {
   margin-bottom: var(--space-6);
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Chart Instructions Component (Static "How to read this chart" panels)
+   Per narrative-alien-redesign.md - Always visible, never changes with steps
+   ───────────────────────────────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────────────
+   Chart Instructions — Collapsible Info Panel
+   Minimalist info button that expands to show instructions
+   ───────────────────────────────────────────────────────────────────────── */
+.chart-instructions {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  font-size: var(--font-size-small);
+}
+
+/* Toggle button - TikTok-inspired glassmorphism */
+.chart-instructions__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  padding: var(--space-2) var(--space-3);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  /* cursor inherited from base.css */
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-instructions__toggle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(37, 244, 238, 0.1) 0%, transparent 50%, rgba(254, 44, 85, 0.1) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.chart-instructions__toggle:hover {
+  background: rgba(0, 0, 0, 0.5);
+  color: #25F4EE;
+  border-color: rgba(37, 244, 238, 0.3);
+  box-shadow: 0 0 15px rgba(37, 244, 238, 0.15);
+}
+
+.chart-instructions__toggle:hover::before {
+  opacity: 1;
+}
+
+.chart-instructions__toggle-icon {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  flex-shrink: 0;
+}
+
+/* Content panel - hidden by default, positioned absolutely to not move toggle */
+.chart-instructions__content {
+  display: none;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  width: clamp(100px, 25vw, 250px);
+  max-width: none;
+  animation: infoSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Position absolutely so opening doesn't move the toggle */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: var(--space-2);
+  z-index: 99999;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(37, 244, 238, 0.08),
+    0 0 60px rgba(254, 44, 85, 0.04);
+}
+
+.chart-instructions__content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #25F4EE 0%, #FE2C55 100%);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  opacity: 0.6;
+}
+
+.chart-instructions.is-open .chart-instructions__content {
+  display: block;
+}
+
+@keyframes infoSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chart-instructions__title {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.75rem;
+  font-weight: var(--font-semibold);
+  margin: 0 0 var(--space-3) 0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.chart-instructions__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.6;
+}
+
+.chart-instructions__list li {
+  position: relative;
+  padding-left: var(--space-4);
+  margin-bottom: var(--space-2);
+  font-size: 0.8rem;
+}
+
+.chart-instructions__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--glint);
+  opacity: 0.5;
+}
+
+.chart-instructions__list li:last-child {
+  margin-bottom: 0;
+}
+
+/* Close button inside panel */
+.chart-instructions__close {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  /* cursor inherited from base.css */
+  border-radius: var(--radius-full);
+  transition: all 0.15s ease;
+}
+
+.chart-instructions__close:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Step prompt styling (interaction hints) */
+.step-prompt {
+  color: var(--color-accent-cyan);
+  font-style: italic;
+  font-size: var(--font-size-small);
+  margin-top: var(--space-2);
+  opacity: 0.9;
+}
+
+/* Step transition text (scene-to-scene connector) */
+.step-transition {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+  border-top: 1px solid rgba(45, 204, 211, 0.2);
+  padding-top: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+/* Question heading variant */
+.step-heading--question {
+  color: var(--color-text-primary);
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
+/* Scene-specific chart instructions positioning */
+/* Pyramid instructions now integrated into viz via JS info button - see ranking.css */
+
+.chart-instructions--emotion {
+  position: absolute;
+  right: auto;
+  left: calc(100% - 250px);
+  top: calc(50% - 200px);
+  max-width: 180px;
+  z-index: 15;
+}
+
+.chart-instructions--quiz {
+  position: absolute;
+  bottom: 1px;
+  right: 10px;
+  left: auto;
+  margin: 0;
+  max-width: 200px;
+  z-index: 15;
+}
+
+/* Emotion narrative steps - LEGACY, kept for non-overlay contexts */
+.emotion-narrative-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Note: .step-content--emotion inside .emotion-text-overlay inherits from
+   .emotion-text-overlay .step-content rules defined below. */
 
 /* Guided Steps Component */
 .guided-steps {
@@ -1597,7 +1775,7 @@ circle[data-type="bubble"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
+  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-magenta));
   color: var(--color-background-primary);
   border-radius: 50%;
   font-weight: var(--font-weight-bold);
@@ -1626,19 +1804,19 @@ circle[data-type="bubble"] {
   color: var(--color-text-primary);
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-medium);
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all var(--duration-micro) var(--easing-standard);
 }
 
 .step-button:hover {
   background: var(--glass-standard-background);
-  border-color: var(--color-glint);
-  color: var(--color-glint);
+  border-color: var(--color-accent-cyan);
+  color: var(--color-accent-cyan);
   transform: translateX(4px);
 }
 
 .step-button:focus {
-  outline: 2px solid var(--color-glint);
+  outline: 2px solid var(--color-accent-cyan);
   outline-offset: 2px;
 }
 
@@ -1667,11 +1845,11 @@ circle[data-type="bubble"] {
 }
 
 .legend-marker--size {
-  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
+  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-magenta));
 }
 
 .legend-marker--distance {
-  background: var(--color-glow);
+  background: var(--color-accent-yellow);
 }
 
 .legend-marker--color {
@@ -1683,7 +1861,7 @@ circle[data-type="bubble"] {
 .legend-marker--radius,
 .legend-marker--rank,
 .legend-marker--tile {
-  background: var(--color-glint);
+  background: var(--color-accent-cyan);
 }
 
 .legend-title {
@@ -1708,7 +1886,7 @@ circle[data-type="bubble"] {
 
 .summary-block h3 {
   font-size: var(--font-size-h3);
-  color: var(--color-glint);
+  color: var(--color-accent-cyan);
   margin-bottom: var(--space-4);
 }
 
@@ -1737,18 +1915,18 @@ circle[data-type="bubble"] {
   content: "→";
   position: absolute;
   left: 0;
-  color: var(--color-glint);
+  color: var(--color-accent-cyan);
   font-weight: var(--font-weight-bold);
 }
 
 .summary-list a {
-  color: var(--color-glint);
+  color: var(--color-accent-cyan);
   text-decoration: none;
   transition: color var(--duration-micro) var(--easing-standard);
 }
 
 .summary-list a:hover {
-  color: var(--color-blaze);
+  color: var(--color-accent-magenta);
   text-decoration: underline;
 }
 
@@ -1756,7 +1934,7 @@ circle[data-type="bubble"] {
   font-size: var(--font-size-h1);
   text-align: center;
   margin-bottom: var(--space-8);
-  background: linear-gradient(90deg, var(--color-glint), var(--color-blaze));
+  background: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-magenta));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1784,10 +1962,7 @@ circle[data-type="bubble"] {
 }
 
 @media (max-width: 768px) {
-  .nav-links {
-    gap: var(--space-3);
-    font-size: var(--font-size-label);
-  }
+  /* .nav-links removed - class not in HTML (2025-12-01) */
 
   .nav-subtitle {
     display: none;
@@ -1823,9 +1998,7 @@ circle[data-type="bubble"] {
 }
 
 @media (max-width: 480px) {
-  .nav-links {
-    display: none;
-  }
+  /* .nav-links removed - class not in HTML (2025-12-01) */
 
   .nav-title {
     font-size: var(--font-size-body-lg);
@@ -2018,42 +2191,307 @@ circle[data-type="bubble"] {
   overflow: hidden;
 }
 
-/* Record centered with slight left offset (v2 spec: "slightly left of center") */
+/* Record positioned on left side with text overlay on right */
 .viral-sounds-record-area--central {
   position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start; /* Align to left */
   align-items: center;
   width: 100%;
   height: 100%;
-  /* Shift record slightly left of true center */
-  transform: translateX(-3%);
+  padding-left: clamp(2rem, 4vw, 4rem); /* Left padding */
 }
 
 .viral-sounds-record-area--central .record-player-layout {
   width: 100%;
   max-width: none;
-  /* Remove max-width constraint */
-  justify-content: center;
+  justify-content: flex-start; /* Align left */
 }
 
 .viral-sounds-record-area--central .record-player-wrapper {
   width: 100%;
-  max-width: min(55vw, 800px);
-  /* Smaller to leave room for text panel on right */
-  /* Record takes ~70% of available viewport height */
-  height: 70vh;
-  min-height: 450px;
-  max-height: 750px;
+  max-width: min(48vw, 700px); /* Reduced to leave room for text overlay */
+  height: 65vh;
+  min-height: 400px;
+  max-height: 650px;
   aspect-ratio: 1.5;
-  padding: clamp(1.5rem, 3vw, 2.5rem);
-  /* Shift left to make room for text panel */
-  margin: 0 auto;
-  margin-right: 280px;
-  /* Leave space for text panel (~250px + gap) */
+  padding: clamp(0.8rem, 1.6vw, 1.3rem);
+  margin: 0; /* No auto margin - stay on left */
 }
 
-/* Text panel as overlay on far right (not covering record player) */
+/* VIZ OVERLAY - Persists across horizontal slides */
+.viral-sounds-viz-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Center vertically for laptop screens */
+  padding: var(--space-4);
+  padding-top: calc(64px + var(--space-6));
+  /* Reserve space for nav + scene label */
+  padding-bottom: var(--space-6);
+  gap: var(--space-4);
+}
+
+/* Scene label badge positioning (matches music-galaxy) */
+.viral-sounds-viz-overlay .scene-label-badge {
+  position: absolute;
+  top: 75px;
+  left: 35px;
+  z-index: 15;
+}
+
+/* NOTE: .scene-title styling is now inside .scene-header block (lines 6300+) */
+/* Removed duplicate absolute positioning that was conflicting with header */
+
+/* TEXT OVERLAY - Shows one step at a time, right side (matches music-galaxy style) */
+.viral-sounds-text-overlay {
+  position: absolute !important;
+  top: 58%;
+  /* Move down from center */
+  /* Move much closer to sidebar - match music-galaxy spacing */
+  right: clamp(30px, calc(15px + 6vw), 60px);
+  width: 28%;
+  /* Narrower for more compact layout */
+  transform: translateY(-50%) scale(0.9);
+  /* Scale down entire overlay by 10% */
+  min-width: 240px;
+  max-width: 400px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  /* Reduced padding */
+  z-index: 70 !important;
+  pointer-events: auto;
+}
+
+/* Step content cards inside text overlay */
+.viral-sounds-text-overlay .step-content {
+  width: 100%;
+  max-width: 100%;
+  opacity: 1;
+  visibility: visible;
+  background: linear-gradient(135deg,
+      rgba(10, 10, 30, 0.92) 0%,
+      rgba(20, 20, 50, 0.88) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(45, 204, 211, 0.2);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 60px rgba(45, 204, 211, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: var(--color-text-primary);
+}
+
+/* Headings in text overlay */
+.viral-sounds-text-overlay .step-heading {
+  font-size: clamp(1.5rem, 3.5vw, 1.95rem);
+  /* Slightly reduced by ~12% */
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 var(--space-3);
+  /* Moderate spacing */
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.viral-sounds-text-overlay .step-subheading {
+  font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+  /* Slightly reduced by ~12% */
+  font-weight: 700;
+  margin: 0 0 var(--space-2);
+  /* Tighter spacing */
+  color: var(--color-glint);
+}
+
+.viral-sounds-text-overlay .step-content p {
+  font-size: 0.9375rem;
+  /* Slightly reduced from 1.0625rem (~12% smaller) */
+  line-height: 1.65;
+  /* Comfortable reading */
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: var(--space-2);
+  /* Tighter spacing */
+}
+
+.viral-sounds-text-overlay .step-content p:last-child {
+  margin-bottom: 0;
+}
+
+.viral-sounds-text-overlay .step-content p strong {
+  color: var(--color-glint);
+  font-weight: 600;
+}
+
+.viral-sounds-text-overlay .step-prompt {
+  font-size: 0.8125rem;
+  /* Reduced from 0.9375rem (~13% smaller) */
+  color: #25F4EE;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.viral-sounds-text-overlay .step-transition {
+  font-size: 0.8125rem;
+  /* Add explicit smaller size */
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+}
+
+@keyframes stepFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Horizontal Slide Navigation Dots (matches music-galaxy style)
+   fullPage.js generates .fp-slidesNav for each section with slides
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Navigation dots styling for all horizontal slide sections */
+.viral-sounds-text-overlay .fp-slidesNav,
+.timing-text-overlay .fp-slidesNav,
+.pyramid-text-overlay .fp-slidesNav,
+.emotion-text-overlay .fp-slidesNav {
+  position: relative !important;
+  bottom: auto !important;
+  top: auto !important;
+  left: 0 !important;
+  right: auto !important;
+  transform: none !important;
+  margin-top: var(--space-4) !important;
+  margin-left: 0 !important;
+  margin-right: auto !important;
+  display: block !important;
+  width: 88% !important;
+  max-width: 550px !important;
+}
+
+/* Hide default section nav for these sections (before JS moves it) */
+#scene-viral-sounds>.fp-slidesNav,
+#scene-duration>.fp-slidesNav,
+#scene-category>.fp-slidesNav,
+#scene-emotion>.fp-slidesNav {
+  display: none !important;
+}
+
+/* Nav dot list styling */
+.viral-sounds-text-overlay .fp-slidesNav ul,
+.timing-text-overlay .fp-slidesNav ul,
+.pyramid-text-overlay .fp-slidesNav ul,
+.emotion-text-overlay .fp-slidesNav ul,
+#scene-viral-sounds .fp-slidesNav ul,
+#scene-duration .fp-slidesNav ul,
+#scene-category .fp-slidesNav ul,
+#scene-emotion .fp-slidesNav ul {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+.viral-sounds-text-overlay .fp-slidesNav ul li,
+.timing-text-overlay .fp-slidesNav ul li,
+.pyramid-text-overlay .fp-slidesNav ul li,
+.emotion-text-overlay .fp-slidesNav ul li,
+#scene-viral-sounds .fp-slidesNav ul li,
+#scene-duration .fp-slidesNav ul li,
+#scene-category .fp-slidesNav ul li,
+#scene-emotion .fp-slidesNav ul li {
+  margin: 0 !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* Nav dot button styling */
+.viral-sounds-text-overlay .fp-slidesNav ul li a,
+.timing-text-overlay .fp-slidesNav ul li a,
+.pyramid-text-overlay .fp-slidesNav ul li a,
+.emotion-text-overlay .fp-slidesNav ul li a,
+#scene-viral-sounds .fp-slidesNav ul li a,
+#scene-duration .fp-slidesNav ul li a,
+#scene-category .fp-slidesNav ul li a,
+#scene-emotion .fp-slidesNav ul li a {
+  display: block !important;
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.25) !important;
+  border: 2px solid rgba(45, 204, 211, 0.4) !important;
+  transition: all 250ms ease !important;
+  /* cursor inherited from base.css */
+}
+
+/* Hover state */
+.viral-sounds-text-overlay .fp-slidesNav ul li a:hover,
+.timing-text-overlay .fp-slidesNav ul li a:hover,
+.pyramid-text-overlay .fp-slidesNav ul li a:hover,
+.emotion-text-overlay .fp-slidesNav ul li a:hover,
+#scene-viral-sounds .fp-slidesNav ul li a:hover,
+#scene-duration .fp-slidesNav ul li a:hover,
+#scene-category .fp-slidesNav ul li a:hover,
+#scene-emotion .fp-slidesNav ul li a:hover {
+  background: rgba(45, 204, 211, 0.4) !important;
+  border-color: rgba(45, 204, 211, 0.7) !important;
+  transform: scale(1.15) !important;
+}
+
+/* Active state */
+.viral-sounds-text-overlay .fp-slidesNav ul li a.active,
+.viral-sounds-text-overlay .fp-slidesNav ul li.active a,
+.timing-text-overlay .fp-slidesNav ul li a.active,
+.timing-text-overlay .fp-slidesNav ul li.active a,
+.pyramid-text-overlay .fp-slidesNav ul li a.active,
+.pyramid-text-overlay .fp-slidesNav ul li.active a,
+.emotion-text-overlay .fp-slidesNav ul li a.active,
+.emotion-text-overlay .fp-slidesNav ul li.active a,
+#scene-viral-sounds .fp-slidesNav ul li a.active,
+#scene-viral-sounds .fp-slidesNav ul li.active a,
+#scene-duration .fp-slidesNav ul li a.active,
+#scene-duration .fp-slidesNav ul li.active a,
+#scene-category .fp-slidesNav ul li a.active,
+#scene-category .fp-slidesNav ul li.active a,
+#scene-emotion .fp-slidesNav ul li a.active,
+#scene-emotion .fp-slidesNav ul li.active a {
+  background: var(--color-glint, #2DCCD3) !important;
+  border-color: var(--color-glint, #2DCCD3) !important;
+  box-shadow: 0 0 12px rgba(45, 204, 211, 0.6) !important;
+}
+
+/* Hide the inner span that fullPage adds */
+.viral-sounds-text-overlay .fp-slidesNav ul li a span,
+.timing-text-overlay .fp-slidesNav ul li a span,
+.pyramid-text-overlay .fp-slidesNav ul li a span,
+.emotion-text-overlay .fp-slidesNav ul li a span,
+#scene-viral-sounds .fp-slidesNav ul li a span,
+#scene-duration .fp-slidesNav ul li a span,
+#scene-category .fp-slidesNav ul li a span,
+#scene-emotion .fp-slidesNav ul li a span {
+  display: none !important;
+}
+
+/* Text panel as overlay on far right (not covering record player) - LEGACY */
 .viral-sounds-text-panel--overlay {
   position: absolute;
   top: 50%;
@@ -2061,13 +2499,14 @@ circle[data-type="bubble"] {
   /* Far right edge - leave space for fullPage navigation dots */
   transform: translateY(-50%);
   /* Vertically center the panel */
-  width: clamp(180px, 18vw, 250px);
-  max-width: 20%;
-  padding: var(--space-3);
+  width: clamp(280px, 28vw, 400px);
+  /* Wider panel for better readability */
+  max-width: 35%;
+  padding: var(--space-4);
   background: rgba(10, 10, 20, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(var(--glass-medium-blur));
   z-index: 10;
 }
 
@@ -2080,6 +2519,25 @@ circle[data-type="bubble"] {
 
 .viral-sounds-text-panel--overlay p:last-of-type {
   margin-bottom: var(--space-3);
+}
+
+/* Chart Instructions for Record Player Scene (per narrative-alien-redesign.md) */
+.chart-instructions--record-player {
+  position: absolute;
+  top: 215px;
+  left: auto;
+  right: 35%;
+  z-index: 15;
+  padding: var(--space-2) var(--space-3);
+  max-width: 100%;
+}
+
+.viral-sounds-steps .step-heading {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--space-1);
+  line-height: 1.3;
 }
 
 /* Step items for v3 narrative (Scene 3) */
@@ -2112,7 +2570,7 @@ circle[data-type="bubble"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
+  background: linear-gradient(135deg, var(--color-glint), var(--color-shimmer));
   color: #1a1a2e;
   font-size: 0.75rem;
   font-weight: 700;
@@ -2124,29 +2582,6 @@ circle[data-type="bubble"] {
   color: rgba(255, 255, 255, 0.85);
   line-height: 1.5;
   margin: 0;
-}
-
-/* Top 3 banner (shown during auto-sequence) */
-.viral-sounds-top3-banner {
-  margin-top: var(--space-4);
-  padding: var(--space-2) var(--space-3);
-  background: linear-gradient(90deg, rgba(241, 32, 74, 0.2), rgba(45, 204, 211, 0.2));
-  border-radius: 8px;
-  border: 1px solid rgba(241, 32, 74, 0.4);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #fbeb35;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 400ms ease, transform 400ms ease;
-}
-
-.viral-sounds-top3-banner[aria-hidden="false"] {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 /* Record player area - takes most of the width */
@@ -2166,16 +2601,51 @@ circle[data-type="bubble"] {
 /* Ensure record player layout fills the available space */
 .viral-sounds-record-area .record-player-layout {
   width: 100%;
-  max-width: min(85vw, 1100px);
-  /* Match record-player.css sizing */
+  max-width: none;
 }
 
 .viral-sounds-record-area .record-player-wrapper {
-  width: 100%;
-  max-width: min(80vw, 1000px);
-  /* Match record-player.css sizing - thinner */
-  aspect-ratio: 1.5;
-  margin: 0 auto;
+  width: clamp(700px, 70vw, 950px);
+  max-width: none;
+  height: clamp(650px, 75vh, 800px);
+  aspect-ratio: auto;
+  margin: 0;
+  margin-top: clamp(3rem, 5vh, 5rem);
+  margin-left: clamp(2rem, 4vw, 4rem);
+  position: relative;
+  left: 0;
+}
+
+/* On external monitors only: adjust record player and text overlay */
+@media (min-width: 1800px) {
+  .viral-sounds-record-area .record-player-wrapper {
+    margin-top: clamp(2rem, 4vh, 4rem);
+    margin-left: clamp(4rem, 8vw, 8rem);
+    width: clamp(850px, 75vw, 1100px);
+    height: auto;
+    aspect-ratio: 1.4;
+  }
+
+  .viral-sounds-text-overlay {
+    width: 36vw;
+    min-width: 420px;
+    max-width: 580px;
+    right: clamp(50px, 5vw, 90px);
+    transform: translateY(-50%) scale(1);
+  }
+
+  .viral-sounds-text-overlay .step-heading {
+    font-size: clamp(2.2rem, 5vw, 3rem);
+  }
+
+  .viral-sounds-text-overlay .step-subheading {
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  }
+
+  .viral-sounds-text-overlay .step-content p {
+    font-size: 1.2rem;
+    line-height: 1.7;
+  }
 }
 
 .viral-sounds-viz-wrapper {
@@ -2204,7 +2674,7 @@ circle[data-type="bubble"] {
   height: 16px;
   background: linear-gradient(90deg,
       var(--color-glint) 0%,
-      var(--color-blaze) 50%,
+      var(--color-shimmer) 50%,
       var(--color-glint) 100%);
   border-radius: 8px;
   position: absolute;
@@ -2237,8 +2707,8 @@ circle[data-type="bubble"] {
   padding: var(--space-5);
   background: rgba(10, 10, 20, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  backdrop-filter: blur(8px);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(var(--glass-subtle-blur));
 }
 
 .viral-sounds-narrative {
@@ -2258,8 +2728,6 @@ circle[data-type="bubble"] {
   line-height: 1.6;
   margin: 0;
 }
-
-/* Track Legend Strip removed per plan.md - auto-sequence handles track display */
 
 /* ─────────────────────────────────────────────────────────────────────────
    Scene 2 & 3 Responsive Styles
@@ -2350,6 +2818,16 @@ circle[data-type="bubble"] {
   .year-buttons {
     justify-content: center;
   }
+
+  /* Adjust viral-sounds overlay for mobile */
+  .viral-sounds-viz-overlay {
+    padding-top: 250px;
+  }
+
+  .chart-instructions--record-player {
+    top: 90px;
+    right: 16px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -2388,33 +2866,131 @@ circle[data-type="bubble"] {
   /* Allow fullPage.js scroll events */
 }
 
-/* Background layers - Dawn theme */
-.timing-bg {
+/* VIZ OVERLAY - Persists across horizontal slides for timing scene */
+.timing-viz-overlay {
   position: absolute;
   inset: 0;
-  pointer-events: none;
+  z-index: 5;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  /* Changed from center to prevent overlap */
+  padding: var(--space-4);
+  padding-top: 280px;
+  /* Space for header (90+150) + icons (~100) at top */
+  gap: var(--space-4);
 }
 
-.timing-bg--gradient {
-  /* Dawn gradient: deep blue top → warm yellow/orange bottom */
-  background: linear-gradient(180deg,
-      #0a1628 0%,
-      #1a2d4a 25%,
-      #3a4a6a 45%,
-      #7a6b5a 65%,
-      #c9a86c 80%,
-      #e8c88a 90%,
-      #f5dfa4 100%);
-  z-index: 0;
+/* Scene label badge positioning (matches music-galaxy) */
+.timing-viz-overlay .scene-label-badge {
+  position: absolute;
+  top: 80px;
+  left: 35px;
+  z-index: 15;
 }
 
-.timing-bg--glow {
-  /* Soft radial glow behind stopwatch */
-  background: radial-gradient(ellipse 60% 50% at 50% 70%,
-      rgba(251, 235, 53, 0.15) 0%,
-      rgba(251, 235, 53, 0.05) 40%,
-      transparent 70%);
-  z-index: 1;
+/* NOTE: .scene-title styling is now inside .scene-header block (lines 6330+) */
+/* Removed duplicate absolute positioning that was conflicting with header */
+
+/* TEXT OVERLAY - Shows one step at a time, left side */
+.timing-text-overlay {
+  position: absolute !important;
+  top: 55%;
+  /* Moved down from 50% */
+  /* Position on left side */
+  left: var(--space-4);
+  width: 36%;
+  transform: translateY(-50%);
+  min-width: 300px;
+  max-width: 500px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* Align content to left */
+  justify-content: center;
+  padding: calc(64px + var(--space-6)) var(--space-4) var(--space-6);
+  z-index: 70 !important;
+  pointer-events: auto;
+}
+
+/* Step content cards inside text overlay */
+.timing-text-overlay .step-content {
+  width: 88%;
+  max-width: 420px;
+  /* Reduced from 550px to proportionally match smaller fonts */
+  opacity: 1;
+  visibility: visible;
+  background: linear-gradient(135deg,
+      rgba(10, 10, 30, 0.92) 0%,
+      rgba(20, 20, 50, 0.88) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(45, 204, 211, 0.2);
+  border-radius: var(--radius-lg);
+  /* Reduced from var(--radius-xl) */
+  padding: var(--space-5);
+  /* Padding kept as requested */
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 60px rgba(45, 204, 211, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: var(--color-text-primary);
+}
+
+/* Headings in text overlay */
+.timing-text-overlay .step-heading {
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  /* Reduced from 1.75rem/4vw/2.25rem */
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 var(--space-4);
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.timing-text-overlay .step-subheading {
+  font-size: clamp(1rem, 2.3vw, 1.3rem);
+  /* Reduced from 1.25rem/3vw/1.75rem */
+  font-weight: 700;
+  margin: 0 0 var(--space-3);
+  color: var(--color-glint);
+}
+
+.timing-text-overlay .step-content p {
+  font-size: 0.9rem;
+  /* Reduced from 1.0625rem */
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: var(--space-3);
+}
+
+.timing-text-overlay .step-content p:last-child {
+  margin-bottom: 0;
+}
+
+.timing-text-overlay .step-content p strong {
+  color: var(--color-glint);
+  font-weight: 600;
+}
+
+.timing-text-overlay .step-prompt {
+  font-size: 0.8rem;
+  /* Reduced from 0.9375rem */
+  color: #25F4EE;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.timing-text-overlay .step-transition {
+  font-size: 0.85rem;
+  /* Added reduced font size */
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
 }
 
 /* Top half: Narrative header */
@@ -2446,12 +3022,19 @@ circle[data-type="bubble"] {
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Icon row - timing concepts */
+/* Icon row - timing concepts (compact layout - consolidated from Layout Fixes) */
 .timing-icons-row {
+  position: absolute;
+  top: 190px;
+  /* Below scene-header (header ~150px tall starting at 90px) */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: var(--space-6);
+  gap: var(--space-3);
+  /* Compacted for one-page fit */
   flex-wrap: wrap;
 }
 
@@ -2459,7 +3042,9 @@ circle[data-type="bubble"] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-2);
+  gap: 2px;
+  /* Compacted for one-page fit */
+  padding: var(--space-1);
   min-width: 100px;
   opacity: 0.7;
   transition: opacity 300ms ease, transform 300ms ease;
@@ -2482,8 +3067,9 @@ circle[data-type="bubble"] {
 }
 
 .timing-icon-circle {
-  width: 56px;
-  height: 56px;
+  width: 40px;
+  /* Compacted from 56px for one-page fit */
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -2511,18 +3097,20 @@ circle[data-type="bubble"] {
 .timing-icon-circle--long {
   background: linear-gradient(135deg, rgba(186, 246, 240, 0.2), rgba(186, 246, 240, 0.05));
   border: 2px solid rgba(186, 246, 240, 0.4);
-  color: var(--color-blaze);
+  color: #BAF6F0;
 }
 
 .timing-icon-label {
-  font-size: 0.9375rem;
+  font-size: 0.7rem;
+  /* Compacted from 0.9375rem for one-page fit */
   font-weight: 600;
   color: rgba(255, 255, 255, 0.95);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .timing-icon-desc {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
+  /* Compacted from 0.75rem for one-page fit */
   color: rgba(255, 255, 255, 0.7);
   text-align: center;
   max-width: 100px;
@@ -2543,11 +3131,13 @@ circle[data-type="bubble"] {
 .timing-viz-wrapper {
   position: relative;
   width: 100%;
-  max-width: 600px;
+  max-width: 450px; /* Reduced from 600px */
   aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 0;
+  /* Remove any bottom margin */
 }
 
 .timing-viz-wrapper .viz-container {
@@ -2555,54 +3145,19 @@ circle[data-type="bubble"] {
   height: 100%;
 }
 
-/* Callout annotation */
-.timing-callout {
-  position: absolute;
-  right: -20px;
-  top: 50%;
-  transform: translateY(-50%) translateX(100%);
-  opacity: 0;
-  transition: opacity 400ms ease, transform 400ms ease;
-  pointer-events: none;
-}
-
-.timing-callout[aria-hidden="false"] {
-  opacity: 1;
-  transform: translateY(-50%) translateX(calc(100% + 20px));
-}
-
-.timing-callout .callout-arrow {
-  position: absolute;
-  left: -8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-  border-right: 8px solid rgba(251, 235, 53, 0.9);
-}
-
-.timing-callout .callout-text {
-  background: rgba(251, 235, 53, 0.9);
-  color: #1a1a2e;
-  font-size: 0.875rem;
-  font-weight: 600;
-  padding: var(--space-2) var(--space-3);
-  border-radius: 8px;
-  white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
 /* Legend panel */
 .timing-legend {
   display: flex;
   gap: var(--space-4);
-  margin-top: var(--space-4);
+  position: relative;
+  /* Enable relative positioning */
+  top: -50px;
+  /* Force move upward, overlapping with viz */
+  margin-top: 0;
   padding: var(--space-3) var(--space-4);
   background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
+  backdrop-filter: blur(var(--glass-subtle-blur));
+  border-radius: var(--radius-lg);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -2626,35 +3181,58 @@ circle[data-type="bubble"] {
 }
 
 .legend-dot--radius {
-  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
+  background: linear-gradient(135deg, var(--color-glint), var(--color-shimmer));
 }
 
+/* Chart Instructions for Stopwatch Scene (per narrative-alien-redesign.md) */
+.chart-instructions--stopwatch {
+  position: absolute;
+  top: clamp(180px, 25vh, 280px);
+  left: 50%;
+  transform: translateX(-50%);
+  right: auto;
+  top: auto;
+  z-index: 15;
+}
+
+/* Timing Narrative Steps - LEGACY, kept for non-overlay contexts */
+.timing-narrative-steps {
+  margin-bottom: var(--space-4);
+}
+
+/* Note: .step-content--timing inside .timing-text-overlay inherits from
+   .timing-text-overlay .step-content rules defined above. These rules are
+   for any legacy non-overlay contexts only. */
+
 /* Alien narrator for timing scene */
+/* Positioned bottom-right */
 .alien-narrator--timing {
   position: absolute;
-  right: 15%;
-  top: 35%;
+  right: 32px;
+  bottom: 32px;
+  transform: none;
   z-index: 100;
   display: flex;
-  flex-direction: row;
-  /* Changed to row for side-by-side layout */
-  align-items: center;
-  gap: var(--space-2);
+  flex-direction: row-reverse;
+  /* Bubble to the left of alien */
+  align-items: flex-end;
+  gap: var(--space-3);
   opacity: 0;
-  transform: translateY(100px);
   transition: opacity 600ms ease, transform 600ms ease;
 }
 
 /* Show alien when scene is active */
-[data-scene="dawn"] .alien-narrator--timing {
-  opacity: 1;
-  transform: translateY(0);
+body[data-scene="dawn"] .alien-narrator--timing {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
   animation: alienFloat 3s ease-in-out 1.5s infinite;
 }
 
-[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble[data-speech-state="visible"] {
-  opacity: 1;
-  transform: translateX(0);
+body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateX(0) !important;
 }
 
 /* Make the alien avatar the positioning context */
@@ -2663,37 +3241,29 @@ circle[data-type="bubble"] {
   flex-shrink: 0;
 }
 
+/* Bubble above alien in column layout */
 .alien-narrator--timing .alien-speech-bubble {
   position: relative;
-  /* Changed from absolute for natural flow */
   width: max-content;
-  max-width: 200px;
+  max-width: 220px;
   padding: var(--space-3);
-  background: rgba(255, 255, 255, 0.95);
+  /* White/light per redesign spec section 0.2 */
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
+  border: 2px solid rgba(45, 204, 211, 0.4);
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
   opacity: 0;
   transition: opacity 400ms ease, transform 400ms ease;
-  margin-left: var(--space-2);
-  /* Small gap between alien and bubble */
-}
-
-.alien-narrator--timing .alien-speech-bubble::before {
-  content: '';
-  position: absolute;
-  left: -12px;
-  /* Pointer connects to left edge */
-  top: 50%;
-  transform: translateY(-50%);
-  border: 8px solid transparent;
-  border-right-color: rgba(255, 255, 255, 0.95);
-  border-right-width: 8px;
+  order: -1;
+  /* Bubble appears ABOVE alien in column flex */
+  margin-bottom: var(--space-2);
 }
 
 .alien-narrator--timing .alien-speech-text {
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   color: #1a1a2e;
-  line-height: 1.5;
+  /* Dark text for white background */
+  line-height: 1.6;
   margin: 0;
 }
 
@@ -2714,14 +3284,10 @@ circle[data-type="bubble"] {
   }
 
   .alien-narrator--timing {
-    right: 5%;
-    top: 25%;
+    right: 24px;
+    bottom: 24px;
   }
 
-  .timing-callout {
-    display: none;
-    /* Hide on mobile, info is in legend */
-  }
 }
 
 @media (max-width: 768px) {
@@ -2758,24 +3324,32 @@ circle[data-type="bubble"] {
   }
 
   .alien-narrator--timing {
-    position: relative;
-    right: auto;
-    top: auto;
-    margin-top: var(--space-4);
-    justify-content: center;
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
   }
 
   .alien-narrator--timing .alien-speech-bubble {
     position: relative;
-    left: auto;
+    right: auto;
     top: auto;
     transform: none;
-    margin-left: 0;
+    margin-right: 0;
     margin-top: var(--space-2);
   }
 
-  .alien-narrator--timing .alien-speech-bubble::before {
-    display: none;
+  /* Adjust timing overlay for mobile */
+  .timing-viz-overlay {
+    padding-top: 250px;
+  }
+
+  .timing-icons-row {
+    top: 240px;
+  }
+
+  .chart-instructions--stopwatch {
+    top: 90px;
+    right: 16px;
   }
 }
 
@@ -2794,41 +3368,154 @@ circle[data-type="bubble"] {
   overflow: hidden;
 }
 
-/* Background layers - Forest theme */
-.pyramid-bg {
+/* VIZ OVERLAY - Persists across horizontal slides for pyramid scene */
+.pyramid-viz-overlay {
   position: absolute;
   inset: 0;
-  pointer-events: none;
+  z-index: 5;
+  pointer-events: auto;
+  /* Viz wrapper now uses absolute positioning, no flex needed */
+  padding: var(--space-4);
+  padding-top: calc(64px + var(--space-4));
 }
 
-.pyramid-bg--sky {
-  /* Deep green/teal forest sky */
-  background: linear-gradient(180deg,
-      #0a1a12 0%,
-      #0d2a1c 30%,
-      #1a4a3a 60%,
-      #2a5a4a 80%,
-      #3a6a5a 100%);
-  z-index: 0;
+/* Scene label badge positioning (matches music-galaxy) */
+.pyramid-viz-overlay .scene-label-badge {
+  position: absolute;
+  top: 80px;
+  left: 35px;
+  z-index: 15;
 }
 
-.pyramid-bg--trees {
-  /* Tree silhouettes along bottom */
-  background:
-    linear-gradient(transparent 60%, rgba(10, 26, 18, 0.8) 100%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100'%3E%3Cpath d='M0 100 L10 40 L20 100 M15 100 L30 30 L45 100 M40 100 L55 25 L70 100 M65 100 L80 35 L95 100 M90 100 L105 20 L120 100 M115 100 L130 40 L145 100 M140 100 L155 30 L170 100 M165 100 L180 45 L195 100' fill='%230a1a12' stroke='none'/%3E%3C/svg%3E");
-  background-position: bottom;
-  background-repeat: repeat-x;
-  background-size: 400px auto;
-  z-index: 1;
+/* TEXT OVERLAY - Shows one step at a time, positioned to the left (matches music-galaxy style) */
+.pyramid-text-overlay {
+  position: absolute !important;
+  top: 50%;
+  left: -25px;
+  /* Moved left from 30px */
+  width: 38%;
+  transform: translateY(-50%);
+  min-width: 320px;
+  max-width: 550px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(64px + var(--space-6)) var(--space-4) var(--space-6);
+  z-index: 70 !important;
+  pointer-events: auto;
 }
 
-/* Main container - split layout */
+/* Step content cards inside text overlay */
+.pyramid-text-overlay .step-content {
+  width: 88%;
+  max-width: 420px;
+  /* Reduced from 550px to match scene 4 */
+  opacity: 1;
+  visibility: visible;
+  background: linear-gradient(135deg,
+      rgba(10, 10, 30, 0.92) 0%,
+      rgba(20, 20, 50, 0.88) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(45, 204, 211, 0.2);
+  border-radius: var(--radius-lg);
+  /* Reduced from var(--radius-xl) */
+  padding: var(--space-5);
+  /* Padding kept as requested */
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 60px rgba(45, 204, 211, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: var(--color-text-primary);
+}
+
+/* Headings in text overlay */
+.pyramid-text-overlay .step-heading {
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  /* Reduced from 1.75rem/4vw/2.25rem to match scene 4 */
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 var(--space-4);
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.pyramid-text-overlay .step-subheading {
+  font-size: clamp(1rem, 2.3vw, 1.3rem);
+  /* Reduced from 1.25rem/3vw/1.75rem to match scene 4 */
+  font-weight: 700;
+  margin: 0 0 var(--space-3);
+  color: var(--color-glint);
+}
+
+.pyramid-text-overlay .step-content p {
+  font-size: 0.9rem;
+  /* Reduced from 1.0625rem to match scene 4 */
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: var(--space-3);
+}
+
+.pyramid-text-overlay .step-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Pyramid text overlay larger on external monitors */
+@media (min-width: 1600px) {
+  .pyramid-text-overlay {
+    width: 42%;
+    min-width: 400px;
+    max-width: 620px;
+  }
+
+  .pyramid-text-overlay .step-content {
+    max-width: 560px;
+    padding: var(--space-6);
+  }
+
+  .pyramid-text-overlay .step-heading {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+  }
+
+  .pyramid-text-overlay .step-subheading {
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+  }
+
+  .pyramid-text-overlay .step-content p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
+}
+
+.pyramid-text-overlay .step-content p strong {
+  color: var(--color-glint);
+  font-weight: 600;
+}
+
+.pyramid-text-overlay .step-prompt {
+  font-size: 0.8rem;
+  /* Reduced from 0.9375rem to match scene 4 */
+  color: #25F4EE;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.pyramid-text-overlay .step-transition {
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+}
+
+/* Main container - split layout (LEGACY - kept for fallback) */
 .pyramid-container {
   position: relative;
   z-index: 10;
   display: grid;
-  grid-template-columns: 35% 65%;
+  grid-template-columns: 42% 58%;
+  /* Wider text column for better readability */
   gap: var(--space-6);
   width: 100%;
   max-width: 1200px;
@@ -2867,16 +3554,27 @@ circle[data-type="bubble"] {
   gap: var(--space-3);
   padding: var(--space-3);
   background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: background 300ms ease, border-color 300ms ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
 }
 
-.pyramid-step:hover {
-  background: rgba(0, 0, 0, 0.4);
-  border-color: rgba(186, 246, 240, 0.3);
+.pyramid-step::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, #25F4EE 0%, #FE2C55 100%);
+  border-radius: 3px 0 0 3px;
+  opacity: 0.6;
 }
+
+/* Removed hover - not interactive */
 
 .step-marker {
   flex-shrink: 0;
@@ -2885,7 +3583,7 @@ circle[data-type="bubble"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
+  background: linear-gradient(135deg, var(--color-glint), var(--color-shimmer));
   color: #1a1a2e;
   font-size: 0.875rem;
   font-weight: 700;
@@ -2899,14 +3597,24 @@ circle[data-type="bubble"] {
   line-height: 1.5;
 }
 
-/* Legend */
+/* Legend - positioned absolutely, right-aligned with viz container */
 .pyramid-legend {
-  margin-top: var(--space-2);
+  position: absolute;
+  bottom: 80px;
+  right: 120px;  /* Matches pyramid-viz-wrapper right value */
+  max-width: 320px;
   padding: var(--space-3);
   background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(8px);
-  border-radius: 8px;
+  backdrop-filter: blur(var(--glass-subtle-blur));
+  border-radius: var(--radius-md);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 10;
+}
+
+@media (max-width: 1200px) {
+  .pyramid-legend {
+    right: 80px;  /* Matches pyramid-viz-wrapper media query */
+  }
 }
 
 .pyramid-legend .legend-dot--position {
@@ -2921,15 +3629,28 @@ circle[data-type="bubble"] {
   justify-content: center;
 }
 
+/* Pyramid viz wrapper - uses absolute positioning like emotion scene for responsive layout */
 .pyramid-viz-wrapper {
-  position: relative;
-  width: 100%;
-  max-width: 2000px;
+  position: absolute;
+  left: 420px;   /* Start after text overlay */
+  right: 120px;  /* Gap from right edge */
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .pyramid-viz-wrapper .viz-container {
   width: 100%;
-  min-height: 400px;
+  min-height: 500px;
+  height: calc(100vh - 100px);
+  max-height: 650px;
+}
+
+/* Responsive adjustment for medium screens */
+@media (max-width: 1200px) {
+  .pyramid-viz-wrapper {
+    left: 38%;
+    right: 80px;
+  }
 }
 
 /* Callout annotation */
@@ -2970,72 +3691,59 @@ circle[data-type="bubble"] {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Alien narrator for pyramid scene */
+/* Alien narrator for pyramid scene - bottom-left to avoid covering visualization */
 .alien-narrator--pyramid {
   position: absolute;
-  left: 8%;
-  bottom: 15%;
+  left: var(--space-6);
+  bottom: var(--space-6);
   z-index: 100;
   display: flex;
+  flex-direction: row;
   align-items: flex-end;
-  gap: var(--space-2);
-}
-
-.alien-tree-hide {
-  position: absolute;
-  left: -30px;
-  bottom: 0;
-  z-index: 1;
+  gap: var(--space-3);
 }
 
 .alien-narrator--pyramid .alien-avatar {
   position: relative;
   z-index: 2;
   opacity: 0;
-  transform: translateX(-40px);
   transition: opacity 600ms ease, transform 600ms ease;
 }
 
 /* Show alien when scene is active */
-[data-scene="forest"] .alien-narrator--pyramid .alien-avatar {
-  opacity: 1;
-  transform: translateX(0);
+body[data-scene="forest"] .alien-narrator--pyramid .alien-avatar {
+  opacity: 1 !important;
+  visibility: visible !important;
   animation: alienFloat 3s ease-in-out 1s infinite;
 }
 
-[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble[data-speech-state="visible"] {
-  opacity: 1;
-  transform: translateY(0);
+body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateX(0) !important;
 }
 
+/* Speech bubble beside alien (row layout) */
 .alien-narrator--pyramid .alien-speech-bubble {
-  position: absolute;
-  left: 80px;
-  bottom: 40px;
+  position: relative;
   width: max-content;
-  max-width: 200px;
+  max-width: 240px;
   padding: var(--space-3);
-  background: rgba(255, 255, 255, 0.95);
+  /* White/light per redesign spec section 0.2 */
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
+  border: 2px solid rgba(45, 204, 211, 0.4);
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateX(-10px);
   transition: opacity 400ms ease, transform 400ms ease;
 }
 
-.alien-narrator--pyramid .alien-speech-bubble::before {
-  content: '';
-  position: absolute;
-  left: -8px;
-  bottom: 20px;
-  border: 8px solid transparent;
-  border-right-color: rgba(255, 255, 255, 0.95);
-}
-
 .alien-narrator--pyramid .alien-speech-text {
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   color: #1a1a2e;
-  line-height: 1.5;
+  /* Dark text for white background */
+  line-height: 1.6;
   margin: 0;
 }
 
@@ -3064,9 +3772,8 @@ circle[data-type="bubble"] {
   }
 
   .alien-narrator--pyramid {
-    left: 50%;
-    bottom: 5%;
-    transform: translateX(-50%);
+    left: var(--space-4);
+    bottom: var(--space-4);
   }
 
   .alien-tree-hide {
@@ -3099,16 +3806,17 @@ circle[data-type="bubble"] {
     bottom: auto;
     margin-top: var(--space-2);
   }
-
-  .alien-narrator--pyramid .alien-speech-bubble::before {
-    display: none;
-  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
    SCENE 6 - EMOTION (Captions) - v2 dark theme
    Layout: Text left (25%), Viz center (50%), Controls right (25%)
    Background: Dark gradient with subtle floating particles (v2 theme)
+
+   NOTE: Additional .scene-emotion overrides in Layout Fixes section:
+   - Line ~4260: padding/container width fixes
+   - Line ~4980+: fullPage.js integration and no-scroll enforcement
+   Core viz styles are in emotion.css (word bubbles, links, tooltips, animations)
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .scene-emotion {
@@ -3120,57 +3828,137 @@ circle[data-type="bubble"] {
   overflow: hidden;
 }
 
-/* Background layers - Dark theme (v2 spec) */
-.emotion-bg {
+/* VIZ OVERLAY - Persists across horizontal slides for emotion scene */
+.emotion-viz-overlay {
   position: absolute;
   inset: 0;
-  pointer-events: none;
+  z-index: 5;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  padding-top: calc(64px + var(--space-4));
 }
 
-.emotion-bg--dark {
-  /* Dark gradient matching v2 spec: deep navy to dark purple */
-  background: linear-gradient(180deg,
-      #0a0a1a 0%,
-      #0d1020 25%,
-      #12152d 50%,
-      #1a1a35 75%,
-      #0d0d1a 100%);
-  z-index: 0;
+/* Scene label badge positioning (matches music-galaxy) */
+.emotion-viz-overlay .scene-label-badge {
+  position: absolute;
+  top: 80px;
+  left: 35px;
+  z-index: 15;
 }
 
-.emotion-bg--particles {
-  /* Subtle floating particles - glint and shimmer colors */
-  background-image:
-    radial-gradient(circle 2px at 15% 20%, rgba(45, 204, 211, 0.4), transparent),
-    radial-gradient(circle 3px at 85% 15%, rgba(186, 246, 240, 0.3), transparent),
-    radial-gradient(circle 2px at 75% 70%, rgba(45, 204, 211, 0.35), transparent),
-    radial-gradient(circle 1px at 25% 80%, rgba(186, 246, 240, 0.25), transparent),
-    radial-gradient(circle 2px at 60% 40%, rgba(241, 32, 74, 0.2), transparent),
-    radial-gradient(circle 1px at 40% 60%, rgba(237, 187, 232, 0.2), transparent),
-    radial-gradient(circle 2px at 90% 50%, rgba(45, 204, 211, 0.3), transparent),
-    radial-gradient(circle 1px at 10% 55%, rgba(186, 246, 240, 0.25), transparent);
-  animation: floatParticles 25s ease-in-out infinite;
-  z-index: 1;
+/* Controls panel - positioned to the right of visualization */
+.emotion-controls-panel {
+  position: absolute;
+  top: 50%;
+  right: 90px;
+  /* Reduced from 130px to move panel right */
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  z-index: 10;
+  max-width: 180px;
 }
 
-@keyframes floatParticles {
+/* TEXT OVERLAY - Shows one step at a time, positioned to the left (matches music-galaxy style) */
+.emotion-text-overlay {
+  position: absolute !important;
+  top: 50%;
+  left: -40px;
+  /* Moved to match scene 5 position */
+  width: 38%;
+  transform: translateY(-50%);
+  min-width: 320px;
+  max-width: 500px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: calc(64px + var(--space-6)) var(--space-4) var(--space-6);
+  z-index: 70 !important;
+  pointer-events: auto;
+}
 
-  0%,
-  100% {
-    transform: translateY(0) translateX(0);
-  }
+/* Step content cards inside text overlay */
+.emotion-text-overlay .step-content {
+  width: 88%;
+  max-width: 420px;
+  /* Reduced from 550px to match scene 4 & 5 */
+  opacity: 1;
+  visibility: visible;
+  background: linear-gradient(135deg,
+      rgba(10, 10, 30, 0.92) 0%,
+      rgba(20, 20, 50, 0.88) 100%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(45, 204, 211, 0.2);
+  border-radius: var(--radius-lg);
+  /* Reduced from var(--radius-xl) */
+  padding: var(--space-5);
+  /* Padding kept as requested */
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 60px rgba(45, 204, 211, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: var(--color-text-primary);
+}
 
-  25% {
-    transform: translateY(-10px) translateX(5px);
-  }
+/* Headings in text overlay */
+.emotion-text-overlay .step-heading {
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  /* Reduced from 1.75rem/4vw/2.25rem to match scene 4 & 5 */
+  font-weight: 800;
+  line-height: 1.15;
+  margin: 0 0 var(--space-4);
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-  50% {
-    transform: translateY(-5px) translateX(-5px);
-  }
+.emotion-text-overlay .step-subheading {
+  font-size: clamp(1rem, 2.3vw, 1.3rem);
+  /* Reduced from 1.25rem/3vw/1.75rem to match scene 4 & 5 */
+  font-weight: 700;
+  margin: 0 0 var(--space-3);
+  color: var(--color-glint);
+}
 
-  75% {
-    transform: translateY(-15px) translateX(3px);
-  }
+.emotion-text-overlay .step-content p {
+  font-size: 0.9rem;
+  /* Reduced from 1.0625rem to match scene 4 & 5 */
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: var(--space-3);
+}
+
+.emotion-text-overlay .step-content p:last-child {
+  margin-bottom: 0;
+}
+
+.emotion-text-overlay .step-content p strong {
+  color: var(--color-glint);
+  font-weight: 600;
+}
+
+.emotion-text-overlay .step-prompt {
+  font-size: 0.8rem;
+  /* Reduced from 0.9375rem to match scene 4 & 5 */
+  color: #25F4EE;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.emotion-text-overlay .step-transition {
+  font-size: 0.85rem;
+  /* Added reduced font size to match scene 4 & 5 */
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -3216,7 +4004,7 @@ circle[data-type="bubble"] {
 /* Persistent year controls positioned at bottom of viz overlay */
 .music-galaxy-year-controls--persistent {
   position: absolute;
-  bottom: var(--space-4);
+  bottom: var(--space-6);
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -3224,8 +4012,8 @@ circle[data-type="bubble"] {
   gap: var(--space-3);
   padding: var(--space-2) var(--space-4);
   background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
-  border-radius: 24px;
+  backdrop-filter: blur(var(--glass-subtle-blur));
+  border-radius: var(--radius-2xl);
   border: 1px solid rgba(45, 204, 211, 0.3);
   z-index: 20;
 }
@@ -3266,7 +4054,7 @@ circle[data-type="bubble"] {
 
 .legend-icon--color {
   background: linear-gradient(135deg,
-      var(--color-blaze) 0%,
+      var(--color-shimmer) 0%,
       var(--color-glint) 50%,
       var(--color-blaze) 100%);
 }
@@ -3345,9 +4133,6 @@ circle[data-type="bubble"] {
   margin: 0 0 var(--space-3);
 }
 
-
-
-
 /* Alien narrator variants for scenes */
 .alien-narrator--music-galaxy {
   position: absolute;
@@ -3381,7 +4166,7 @@ circle[data-type="bubble"] {
   height: 10px;
   background: linear-gradient(90deg,
       var(--color-glint) 0%,
-      var(--color-blaze) 50%,
+      var(--color-shimmer) 50%,
       var(--color-glint) 100%);
   border-radius: 5px;
   box-shadow:
@@ -3471,14 +4256,16 @@ circle[data-type="bubble"] {
    Scene-specific Alien Positioning (v3 spec sections 5.2.5 and 5.3.5)
    ───────────────────────────────────────────────────────────────────────── */
 
-/* Scene 2: Bottom-left with mini-planet (default) */
+/* Scene 2: Bottom-right with mini-planet */
+/* Per spec: "bottom right of the scene, just outside the main viz area" */
 .alien-narrator--scene2 {
   position: absolute;
   /* Relative to viz overlay */
-  bottom: 80px;
-  /* Moved further down */
-  left: calc(var(--space-6) + 40px);
-  /* Moved further from viz center */
+  bottom: 30px;
+  /* Closer to bottom - reduced from 80px */
+  right: -150px;
+  /* Closer to right edge - reduced from calc(var(--space-6) + 40px) */
+  left: auto;
   flex-direction: column;
   /* Avatar first (top), planet second (bottom) */
   align-items: center;
@@ -3489,7 +4276,9 @@ circle[data-type="bubble"] {
   display: none;
   opacity: 0;
   transform: translateY(150px);
-  transition: left 600ms cubic-bezier(0.22, 1, 0.36, 1),
+  transition: top 100ms ease-out,
+    left 100ms ease-out,
+    right 600ms cubic-bezier(0.22, 1, 0.36, 1),
     bottom 600ms cubic-bezier(0.22, 1, 0.36, 1);
   /* Smooth tracking */
 }
@@ -3514,6 +4303,13 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   z-index: 2;
   margin-bottom: -30px;
   /* Overlap onto mini-planet so alien "stands" on it */
+  align-self: center;
+  /* Ensure centered on mini-planet */
+}
+
+.alien-narrator--scene2 .alien-mini-planet {
+  align-self: center;
+  /* Ensure centered under avatar */
 }
 
 /* Float animation only starts after enter animation completes (0.3s delay + 1.2s anim = 1.5s) */
@@ -3521,59 +4317,67 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   animation: alienFloat 3s ease-in-out 1.5s infinite;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   Scene 2 Speech Bubble - Default position (steps 0, 2, 3)
+   Alien is at bottom-right, speech bubble to the LEFT with triangle pointing right
+   ═══════════════════════════════════════════════════════════════════════════ */
 .alien-narrator--scene2 .alien-speech-bubble {
   position: absolute;
-  left: 130px;
-  bottom: 100px;
-  border-radius: 20px 20px 20px 6px;
+  right: 100%;
+  /* Position to the left of alien */
+  left: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 15px;
+  /* Gap between bubble and alien */
+  border-radius: 16px;
+  white-space: normal;
+  max-width: 280px;
+  width: max-content;
 }
 
-/* Secondary speech bubble for Scene 2 (step 2) - hidden by default */
-.alien-narrator--scene2 .alien-speech-bubble--secondary {
-  left: 130px;
-  bottom: 100px;
-  border-radius: 20px 20px 20px 6px;
-  display: none !important;
-  /* Hide secondary bubble to prevent overlap */
-}
-
-/* Only show primary bubble */
-.alien-narrator--scene2 .alien-speech-bubble--primary {
-  display: block;
-}
-
-/* Pointing animation for Scene 2 when slide 2 is active */
-.alien-narrator--scene2.alien-pointing .alien-avatar {
-  animation: alienPointUp 1.5s ease-in-out infinite !important;
-}
-
-/* @keyframes alienPointUp - MOVED TO alien-narrator.css */
-
-/* Slide 3: Move alien to top-left corner */
-.alien-narrator--scene2.alien-top-left {
-  bottom: auto;
-  top: 150px;
-  left: var(--space-7);
-  transition: all 800ms cubic-bezier(0.22, 1, 0.36, 1);
+/* Triangle pointing RIGHT toward alien (like Scene 3) */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Scene 2 Speech Bubble - Tracking position (step 1)
+   Alien tracks planet, speech bubble to the RIGHT with triangle pointing left
+   ═══════════════════════════════════════════════════════════════════════════ */
+.alien-narrator--scene2.alien-tracking .alien-speech-bubble {
+  right: auto;
+  left: 100%;
+  /* Position to the right of alien */
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 0;
+  margin-left: 15px;
+  /* Gap between bubble and alien */
 }
 
 /* @keyframes alienEnterFromBelow - MOVED TO alien-narrator.css */
 
 /* .alien-mini-planet and @keyframes miniPlanetGlow - MOVED TO alien-narrator.css */
 
-/* Scene 3: Bottom-right as DJ (v3 spec) */
+/* Scene 3: To the right of record player, speech bubble on left */
 .alien-narrator--scene3.alien-narrator--scene {
   position: absolute !important;
-  bottom: 8% !important;
-  /* Near bottom of screen */
-  right: 5% !important;
-  /* Bottom right corner */
-  left: auto !important;
+  /* Position lower and closer to record player */
+  top: auto !important;
+  bottom: 60px !important;
+  /* Fixed distance from bottom */
+  left: 70% !important;
+  /* Position from left edge */
+  right: auto !important;
   transform: translateY(150px);
-  flex-direction: column;
-  /* Avatar first (top), platform second (bottom) - matches HTML order */
-  align-items: center;
-  gap: 0;
+  /* Use grid to stack avatar+platform vertically while keeping speech bubble separate */
+  display: grid !important;
+  grid-template-columns: auto auto;
+  /* speech bubble column | alien column */
+  grid-template-rows: auto auto;
+  /* avatar row | platform row */
+  column-gap: var(--space-2);
+  row-gap: 0;
+  /* No gap - avatar overlaps platform */
+  align-items: end;
+  /* Align to bottom */
   /* Start hidden off-screen - will animate in when scene is active */
   opacity: 0;
   transition: transform 0.5s ease-out, opacity 0.3s ease-out;
@@ -3584,7 +4388,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   animation: alienEnterFromBelowCentered 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
 }
 
-/* Enter from below animation for Scene 3 - bottom-right version */
+/* Enter from below animation for Scene 3 - bottom position version */
 @keyframes alienEnterFromBelowCentered {
   0% {
     opacity: 0;
@@ -3607,10 +4411,24 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .alien-narrator--scene3 .alien-avatar {
-  position: relative;
+  /* Avatar in column 2, stacked with platform */
+  grid-column: 2;
+  grid-row: 1;
   z-index: 2;
-  margin-bottom: -15px;
-  /* Overlap onto floating platform so alien "stands" on it */
+  align-self: end;
+  justify-self: center;
+  margin-bottom: -20px;
+  /* Overlap onto platform so alien "stands" on it */
+}
+
+/* Platform positioning - row 2, below avatar */
+.alien-narrator--scene3 .alien-floating-platform {
+  grid-column: 2;
+  grid-row: 2;
+  /* Second row - below avatar */
+  z-index: 1;
+  align-self: start;
+  justify-self: center;
 }
 
 /* Float animation only starts after enter animation completes (0.3s delay + 1.2s anim = 1.5s) */
@@ -3632,27 +4450,17 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .alien-narrator--scene3 .alien-speech-bubble {
-  position: absolute;
-  right: 100%;
-  /* To the left of the alien */
-  top: 50%;
-  transform: translateY(-50%);
-  margin-right: 15px;
+  /* Position in grid column 1 (left side) */
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  position: relative;
+  /* Relative positioning in grid */
   border-radius: 16px;
   white-space: normal;
-  max-width: 280px;
+  max-width: 200px;
+  /* Compact width */
   width: max-content;
-}
-
-/* Speech bubble tail points right for Scene 3 (bottom-right position) */
-.alien-narrator--scene3 .alien-speech-bubble::before {
-  right: -10px;
-  left: auto;
-  top: 50%;
-  bottom: auto;
-  transform: translateY(-50%);
-  border-width: 10px 0 10px 12px;
-  border-color: transparent transparent transparent rgba(0, 242, 234, 0.45);
 }
 
 /* .alien-floating-platform, @keyframes platformFloat, platformNeonGlow - MOVED TO alien-narrator.css */
@@ -3667,7 +4475,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   position: absolute;
   top: 90px;
   right: 0;
-  z-index: 10;
+  z-index: 20;
+  /* Above viz panel, same level as scene-label-badge */
   max-width: 200px;
 
   /* Glassmorphism base matching viz panel */
@@ -3675,11 +4484,11 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
       rgba(12, 12, 24, 0.85) 0%,
       rgba(8, 8, 18, 0.92) 50%,
       rgba(15, 10, 25, 0.88) 100%);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(var(--glass-standard-blur));
+  -webkit-backdrop-filter: blur(var(--glass-standard-blur));
 
   /* Rounded corners */
-  border-radius: 16px;
+  border-radius: var(--radius-xl);
   padding: var(--space-4);
 
   /* Animated gradient border */
@@ -3695,7 +4504,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
     inset 0 0 12px rgba(45, 204, 211, 0.02);
 
   /* For pseudo-element border */
-  overflow: visible;
+  overflow: hidden;
 }
 
 /* Animated gradient border for legend */
@@ -3810,81 +4619,12 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   font-weight: 600;
   color: rgba(255, 255, 255, 0.95);
   letter-spacing: 0.02em;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
 }
 
 .music-galaxy-legend .legend-sublabel {
   font-size: 0.6875rem;
   color: rgba(255, 255, 255, 0.5);
   font-style: italic;
-}
-
-/* Info icon with tooltip */
-.music-galaxy-legend .info-icon {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  cursor: help;
-  color: rgba(255, 255, 255, 0.6);
-  transition: color 0.2s ease;
-}
-
-.music-galaxy-legend .info-icon:hover {
-  color: #00F2EA;
-}
-
-.music-galaxy-legend .info-icon svg {
-  display: block;
-  width: 16px;
-  height: 16px;
-}
-
-.music-galaxy-legend .info-tooltip {
-  position: absolute;
-  left: calc(100% + 8px);
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.95);
-  color: #fff;
-  padding: 10px 12px;
-  border-radius: 6px;
-  font-size: 0.7rem;
-  line-height: 1.4;
-  white-space: normal;
-  max-width: 280px;
-  width: max-content;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
-  pointer-events: none;
-  z-index: 10000;
-  border: 1px solid rgba(0, 242, 234, 0.3);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  font-weight: 400;
-  letter-spacing: 0.01em;
-}
-
-/* Tooltip arrow (pointing left) */
-.music-galaxy-legend .info-tooltip::after {
-  content: '';
-  position: absolute;
-  right: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 6px solid transparent;
-  border-right-color: rgba(0, 0, 0, 0.95);
-}
-
-.music-galaxy-legend .info-icon:hover .info-tooltip {
-  opacity: 1;
-  visibility: visible;
-}
-
-.music-galaxy-legend .legend-gradient-wrap {
-  position: relative;
-  padding-bottom: 4px;
 }
 
 .music-galaxy-legend .legend-gradient-labels {
@@ -3926,23 +4666,15 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   height: 14px;
 }
 
-/* Danceability indicator arrow (appears on hover) */
-.danceability-indicator {
-  transform: translateX(-50%);
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-  animation: pulse-arrow 1s ease-in-out infinite;
-}
-
-@keyframes pulse-arrow {
-
-  0%,
-  100% {
-    transform: translateX(-50%) translateY(0);
-  }
-
-  50% {
-    transform: translateX(-50%) translateY(-2px);
-  }
+/* Chart Instructions for Music Galaxy Scene (per narrative-alien-redesign.md) */
+/* Positioned below scene-label-badge on the left */
+.music-galaxy-viz-overlay .chart-instructions {
+  position: absolute;
+  top: 150px;
+  left: 35px;
+  z-index: 100;
+  max-width: 200px;
+  pointer-events: auto;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -3950,6 +4682,13 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
    v3 spec 5.7 - Conveyor quiz in the lab
    Layout: Question panel top, conveyor card middle, belt bottom
    Background: Lab illustration with beakers, pipes, bubbles
+
+   NOTE: Additional .scene-quiz overrides scattered in Layout Fixes section:
+   - Line ~4325: padding/width fixes
+   - Line ~4514+: fullPage.js integration fixes
+   - Line ~4812+: more fullPage.js overrides
+   - Line ~5023: no-scroll enforcement
+   These could be consolidated in a future cleanup session.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .scene-quiz {
@@ -3960,80 +4699,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   align-items: center;
   justify-content: flex-start;
   padding-top: calc(64px + var(--space-4));
-  overflow: visible;
-}
-
-/* Background layers - Lab theme */
-.quiz-bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.quiz-bg--lab {
-  background:
-    /* Lab counters at bottom - dark teal/slate */
-    linear-gradient(0deg,
-      rgba(15, 25, 35, 0.9) 0%,
-      rgba(15, 25, 35, 0.5) 5%,
-      transparent 15%),
-    /* Main gradient - deep lab purple to dark */
-    linear-gradient(180deg,
-      #1a0a2e 0%,
-      #2d1b4e 30%,
-      #1a1a2e 60%,
-      #0f0f1a 100%);
-}
-
-/* Lab equipment decorations */
-.quiz-bg--lab::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 120px;
-  background:
-    /* Beakers silhouette */
-    radial-gradient(ellipse 40px 60px at 10% 100%, rgba(45, 220, 211, 0.15) 0%, transparent 70%),
-    radial-gradient(ellipse 30px 50px at 15% 100%, rgba(45, 220, 211, 0.1) 0%, transparent 70%),
-    /* Test tubes */
-    radial-gradient(ellipse 20px 70px at 85% 100%, rgba(241, 32, 74, 0.12) 0%, transparent 70%),
-    radial-gradient(ellipse 20px 65px at 90% 100%, rgba(251, 235, 53, 0.1) 0%, transparent 70%),
-    /* Pipes */
-    linear-gradient(90deg,
-      transparent 0%,
-      rgba(45, 220, 211, 0.05) 20%,
-      transparent 40%,
-      rgba(241, 32, 74, 0.05) 60%,
-      transparent 80%);
-}
-
-/* Floating bubbles animation */
-.quiz-bg--bubbles {
-  background-image:
-    radial-gradient(circle 6px at 15% 30%, rgba(45, 220, 211, 0.3) 0%, transparent 100%),
-    radial-gradient(circle 4px at 25% 60%, rgba(251, 235, 53, 0.25) 0%, transparent 100%),
-    radial-gradient(circle 8px at 75% 25%, rgba(241, 32, 74, 0.2) 0%, transparent 100%),
-    radial-gradient(circle 5px at 85% 55%, rgba(45, 220, 211, 0.25) 0%, transparent 100%),
-    radial-gradient(circle 3px at 40% 80%, rgba(237, 187, 232, 0.3) 0%, transparent 100%),
-    radial-gradient(circle 7px at 60% 15%, rgba(186, 246, 240, 0.2) 0%, transparent 100%);
-  animation: bubbleFloat 8s ease-in-out infinite;
-}
-
-@keyframes bubbleFloat {
-
-  0%,
-  100% {
-    transform: translateY(0);
-    opacity: 0.8;
-  }
-
-  50% {
-    transform: translateY(-15px);
-    opacity: 1;
-  }
+  overflow: hidden;
 }
 
 /* Main quiz container */
@@ -4047,7 +4713,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 100000;
+  gap: var(--space-6);
   flex: 1;
   min-height: 100%;
   justify-content: flex-start;
@@ -4063,19 +4729,18 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   background: rgba(45, 220, 211, 0.15);
   border: 1px solid rgba(45, 220, 211, 0.3);
   z-index: 100;
-  margin-bottom: 2rem;
 }
 
 /* Question panel - glassmorphic card */
 .quiz-question-panel {
   width: 100%;
-  max-width: 700px;
+  max-width: 600px;
   text-align: center;
-  padding: var(--space-3) var(--space-6);
-  margin-bottom: -1rem;
+  padding: var(--space-4) var(--space-5);
+  /* Reduced from var(--space-5) var(--space-6) */
   background: rgba(26, 10, 46, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(var(--glass-medium-blur));
+  -webkit-backdrop-filter: blur(var(--glass-medium-blur));
   border-radius: var(--radius-lg);
   border: 1px solid rgba(45, 220, 211, 0.2);
   box-shadow:
@@ -4098,7 +4763,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .quiz-intro {
   font-size: var(--font-size-body-reg);
   color: rgba(255, 255, 255, 0.7);
-  max-width: 500px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -4106,25 +4771,25 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .scene-quiz #viz-conveyor {
   width: 100%;
   flex: 1;
-  min-height: 600px;
-  margin-top: 5rem;
+  min-height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: visible;
 }
 
-/* Alien narrator - Quiz/Lab scene */
+/* Alien narrator - Quiz/Lab scene
+   Positioned top-left underneath scene-label-badge */
 .alien-narrator--quiz {
   position: absolute;
   left: var(--space-6);
-  bottom: 120px;
+  top: 140px;
   display: flex;
-  align-items: flex-end;
+  flex-direction: row;
+  align-items: flex-start;
   gap: var(--space-3);
   z-index: 10;
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(-20px);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
@@ -4151,15 +4816,28 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .alien-narrator--quiz .alien-speech-bubble {
-  background: rgba(26, 10, 46, 0.9);
-  border-color: rgba(45, 220, 211, 0.4);
+  /* White/light per redesign spec section 0.2 */
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
+  border: 2px solid rgba(45, 204, 211, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.alien-narrator--quiz .alien-speech-text {
+  color: #1a1a2e;
+  /* Dark text for white background */
 }
 
 /* Activate alien on scene enter */
-[data-scene="lab"] .alien-narrator--quiz {
-  opacity: 1;
-  transform: translateY(0);
+body[data-scene="lab"] .alien-narrator--quiz {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
   animation: labAlienFloat 3s ease-in-out 1s infinite;
+}
+
+body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 @keyframes labAlienFloat {
@@ -4182,7 +4860,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   border: 2px solid transparent;
   border-radius: var(--radius-md);
   font-size: var(--font-size-body-reg);
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
@@ -4216,44 +4894,61 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .scene-wrapup {
   position: relative;
   min-height: 100vh;
-  height: auto;
-  /* Allow content to expand */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  /* Start from top for scrollable content */
+  justify-content: center; /* Center vertically to allow room at top and bottom */
+  padding: calc(64px + var(--space-4)) var(--space-6) var(--space-4);
+  overflow: hidden; /* Prevent content from blocking fullPage scroll detection */
+  /* Add fallback background matching wrapup theme */
+  background: linear-gradient(180deg,
+    #0a0b14 0%,
+    #12141f 40%,
+    #1a1c2e 70%,
+    #0f1018 100%
+  );
+}
+
+/* Ensure fullPage overflow container is properly sized */
+.scene-wrapup .fp-overflow {
+  overflow: hidden !important;
+  height: 100% !important;
+}
+
+/* Centered wrapper for recipe card */
+.wrapup-center {
+  display: flex;
+  align-items: center; /* Center vertically */
+  justify-content: center;
+  width: 100%;
+  height: 100%; /* Take full height to enable centering */
+}
+
+/* Scene for team credits (standalone page) */
+.scene-credits {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: calc(64px + var(--space-4)) var(--space-6) var(--space-6);
-  overflow: visible;
-  /* Allow scrolling */
-  overflow-y: auto;
-  /* Enable vertical scroll for long content */
+  /* Add fallback background in case body::before hasn't updated yet */
+  background: linear-gradient(180deg,
+    #0a0b14 0%,
+    #12141f 40%,
+    #1a1c2e 70%,
+    #0f1018 100%
+  );
+  overflow: hidden; /* Match wrapup scene */
 }
 
-/* Background - v2 dark neutral with glint/blaze gradients */
-.wrapup-bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.wrapup-bg--gradient {
-  /* v2 spec: very dark neutral close to black */
-  background:
-    linear-gradient(180deg,
-      #050508 0%,
-      #080a10 30%,
-      #0a0c12 60%,
-      #050508 100%);
-}
-
-.wrapup-bg--glow {
-  /* v2 spec: soft gradients with low opacity glint (TikTok blue) and blaze (TikTok pink) */
-  background:
-    radial-gradient(ellipse 70% 50% at 50% 40%, rgba(45, 204, 211, 0.08) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 40% at 25% 70%, rgba(241, 32, 74, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 40% at 75% 60%, rgba(186, 246, 240, 0.04) 0%, transparent 60%);
+/* Centered wrapper for team credits */
+.credits-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 /* Recipe card container - v2 dark theme with glint accent */
@@ -4261,17 +4956,22 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 900px;
+  max-width: 700px;
+  max-height: calc(100vh - 120px); /* Constrain to viewport to prevent blocking scroll */
+  overflow-y: auto; /* Allow internal scrolling on smaller screens */
+  /* Reduced from 900px */
   background: rgba(10, 12, 18, 0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: var(--radius-xl);
+  backdrop-filter: blur(var(--glass-frosted-blur));
+  -webkit-backdrop-filter: blur(var(--glass-frosted-blur));
+  border-radius: var(--radius-lg);
+  /* Reduced from var(--radius-xl) */
   border: 1px solid rgba(45, 204, 211, 0.3);
   box-shadow:
     0 24px 64px rgba(0, 0, 0, 0.5),
     0 0 0 1px rgba(255, 255, 255, 0.03) inset,
     0 0 80px rgba(45, 204, 211, 0.12);
-  padding: var(--space-8);
+  padding: var(--space-6);
+  /* Reduced from var(--space-8) */
   animation: cardFadeIn 0.8s ease-out;
 }
 
@@ -4287,15 +4987,22 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   }
 }
 
-/* Scene label */
-.scene-wrapup .scene-label-badge {
-  position: absolute;
-  top: 55px;
-  /* Below nav bar */
+/* Scene label badge for wrapup - outside fullPage container */
+.scene-label-badge--wrapup {
+  position: fixed;
+  top: calc(64px + var(--space-3));
+  /* Below nav bar (64px) + spacing */
   left: var(--space-4);
   background: rgba(45, 220, 211, 0.15);
   border: 1px solid rgba(45, 220, 211, 0.3);
-  z-index: 100;
+  z-index: 9999;
+  display: none;
+  /* Hidden by default */
+}
+
+/* Show badge only on wrapup scene */
+body[data-scene="wrapup"] .scene-label-badge--wrapup {
+  display: inline-flex !important;
 }
 
 /* Recipe card header */
@@ -4307,14 +5014,16 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .recipe-title {
-  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  font-size: clamp(1.2rem, 2.8vw, 1.6rem);
+  /* Reduced from 1.5rem/3.5vw/2rem */
   font-weight: 700;
   color: var(--color-text-primary);
   margin-bottom: var(--space-2);
 }
 
 .recipe-subtitle {
-  font-size: var(--font-size-body-sm);
+  font-size: 0.8rem;
+  /* Reduced from var(--font-size-body-sm) */
   color: rgba(255, 255, 255, 0.6);
   font-style: italic;
 }
@@ -4323,8 +5032,10 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .recipe-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-6);
-  margin-bottom: var(--space-6);
+  gap: var(--space-5);
+  /* Reduced from var(--space-6) */
+  margin-bottom: var(--space-5);
+  /* Reduced from var(--space-6) */
 }
 
 /* Column styling */
@@ -4335,7 +5046,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .recipe-column-title {
-  font-size: var(--font-size-body-lg);
+  font-size: 1rem;
+  /* Reduced from var(--font-size-body-lg) */
   font-weight: 600;
   color: var(--color-glint, #2DCCD3);
   padding-bottom: var(--space-2);
@@ -4368,19 +5080,23 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .ingredient-icon {
   flex-shrink: 0;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  /* Reduced from 32px */
+  height: 28px;
+  /* Reduced from 32px */
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(45, 220, 211, 0.15);
   border-radius: var(--radius-sm);
-  font-size: 1rem;
+  font-size: 0.85rem;
+  /* Reduced from 1rem */
 }
 
 .ingredient-text {
   flex: 1;
-  font-size: var(--font-size-body-sm);
+  font-size: 0.85rem;
+  /* Reduced from var(--font-size-body-sm) */
   color: rgba(255, 255, 255, 0.85);
   line-height: 1.5;
 }
@@ -4408,13 +5124,16 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .evidence-icon {
   flex-shrink: 0;
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  /* Reduced from 40px */
+  height: 34px;
+  /* Reduced from 40px */
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-sm);
-  font-size: 1.25rem;
+  font-size: 1.05rem;
+  /* Reduced from 1.25rem */
 }
 
 .evidence-icon--sound {
@@ -4438,7 +5157,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .evidence-label {
-  font-size: var(--font-size-body-sm);
+  font-size: 0.85rem;
+  /* Reduced from var(--font-size-body-sm) */
   color: rgba(255, 255, 255, 0.7);
 }
 
@@ -4450,7 +5170,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .recipe-closing p {
-  font-size: var(--font-size-body-reg);
+  font-size: 0.9rem;
+  /* Reduced from var(--font-size-body-reg) */
   color: rgba(255, 255, 255, 0.75);
   max-width: 600px;
   margin: 0 auto;
@@ -4461,32 +5182,49 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   margin-top: var(--space-2);
 }
 
-/* Alien narrator - Wrap-up scene */
+/* Alien narrator for wrapup scene - positioned relative to viewport */
 .alien-narrator--wrapup {
-  position: absolute;
-  right: var(--space-6);
-  bottom: var(--space-8);
+  position: fixed;
+  left: var(--space-6);
+  bottom: 40px;
+  z-index: 100;
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   align-items: flex-end;
   gap: var(--space-3);
-  z-index: 10;
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
-.alien-narrator--wrapup .alien-speech-bubble {
-  background: rgba(26, 10, 46, 0.9);
-  border-color: rgba(45, 220, 211, 0.4);
-}
-
-/* Activate alien on scene enter */
-[data-scene="wrapup"] .alien-narrator--wrapup,
-[data-scene="lab"] .alien-narrator--wrapup {
+/* Show alien only when wrapup scene is active */
+body[data-scene="wrapup"] .alien-narrator--wrapup {
   opacity: 1;
-  transform: translateY(0);
-  animation: alienFloat 3s ease-in-out 1.5s infinite;
+  visibility: visible;
+}
+
+.alien-narrator--wrapup .alien-avatar {
+  animation: alienFloat 3s ease-in-out infinite;
+}
+
+/* Speech bubble - White/light per redesign spec section 0.2 */
+.alien-narrator--wrapup .alien-speech-bubble {
+  max-width: 300px;
+  padding: var(--space-3) var(--space-4);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
+  border: 2px solid rgba(45, 204, 211, 0.4);
+  border-radius: 20px 20px 20px 6px;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.alien-narrator--wrapup .alien-speech-text {
+  font-size: 0.95rem;
+  color: #1a1a2e;
+  line-height: 1.6;
+  margin: 0;
+  font-weight: 500;
 }
 
 /* Responsive adjustments */
@@ -4501,7 +5239,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
   .alien-narrator--quiz {
     left: var(--space-4);
-    bottom: 80px;
+    top: 120px;
   }
 
   .recipe-card {
@@ -4519,8 +5257,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   }
 
   .alien-narrator--wrapup {
-    right: var(--space-4);
-    bottom: var(--space-4);
+    left: var(--space-4);
+    bottom: 30px;
   }
 }
 
@@ -4561,10 +5299,12 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
    Back to Top Button (v3 spec 5.8)
    ───────────────────────────────────────────────────────────────────────── */
 .back-to-top-btn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: var(--space-2);
   margin-top: var(--space-5);
+  margin-left: auto;
+  width: fit-content;
   padding: var(--space-3) var(--space-5);
   background: var(--color-blaze, #F1204A);
   color: white;
@@ -4572,7 +5312,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   border-radius: 9999px;
   font-size: var(--font-size-body-reg);
   font-weight: 600;
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all 0.3s ease;
   box-shadow: 0 4px 16px rgba(241, 32, 74, 0.3);
 }
@@ -4670,28 +5410,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   margin-bottom: var(--space-1) !important;
 }
 
-.timing-icons-row {
-  gap: var(--space-3) !important;
-  margin-bottom: var(--space-1) !important;
-}
-
-.timing-icon-item {
-  gap: 2px !important;
-  padding: var(--space-1) !important;
-}
-
-.timing-icon-circle {
-  width: 40px !important;
-  height: 40px !important;
-}
-
-.timing-icon-label {
-  font-size: 0.7rem !important;
-}
-
-.timing-icon-desc {
-  font-size: 0.65rem !important;
-}
+/* timing-icon-* overrides REMOVED - consolidated into Scene 4 base definitions (line ~2148) */
 
 .timing-viz-area {
   flex: 1 !important;
@@ -4701,13 +5420,50 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .timing-viz-wrapper {
   height: 100% !important;
-  max-height: calc(100vh - 220px) !important;
+  max-width: 450px !important; /* Reduced from 600px */
+  max-height: calc(100vh - 280px) !important; /* Reduced to make viz smaller */
 }
 
 #chart {
   min-height: auto !important;
   height: 100% !important;
-  max-height: calc(100vh - 250px) !important;
+  max-height: calc(100vh - 260px) !important; /* Reduced to make viz smaller */
+}
+
+/* Stopwatch viz and text overlay larger on external monitors */
+@media (min-width: 1600px) {
+  .timing-viz-wrapper {
+    max-width: 600px !important;
+    max-height: calc(100vh - 200px) !important;
+  }
+
+  #chart {
+    max-height: calc(100vh - 180px) !important;
+  }
+
+  .timing-text-overlay {
+    width: 40vw !important;
+    min-width: 420px !important;
+    max-width: 580px !important;
+  }
+
+  .timing-text-overlay .step-content {
+    max-width: 540px !important;
+    padding: var(--space-6) !important;
+  }
+
+  .timing-text-overlay .step-heading {
+    font-size: clamp(1.8rem, 4vw, 2.4rem) !important;
+  }
+
+  .timing-text-overlay .step-subheading {
+    font-size: clamp(1.4rem, 3vw, 1.8rem) !important;
+  }
+
+  .timing-text-overlay .step-content p {
+    font-size: 1.1rem !important;
+    line-height: 1.7 !important;
+  }
 }
 
 .timing-legend {
@@ -4725,9 +5481,9 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .emotion-container {
   display: grid !important;
-  grid-template-columns: 280px 1fr 180px !important;
-  /* Text | Viz | Controls */
-  gap: var(--space-3) !important;
+  grid-template-columns: 360px 1fr 180px !important;
+  /* Wider text column | Viz | Controls */
+  gap: var(--space-4) !important;
   width: 100% !important;
   max-width: none !important;
   /* Remove max-width - fill available space */
@@ -4738,8 +5494,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .emotion-text-column {
-  min-width: 250px !important;
-  max-width: 320px !important;
+  min-width: 320px !important;
+  max-width: 400px !important;
 }
 
 .emotion-viz-column {
@@ -4781,7 +5537,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .quiz-question-panel {
-  max-width: 900px !important;
+  max-width: 600px !important;
 }
 
 #viz-conveyor {
@@ -4831,23 +5587,11 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   SCENE 2 - Move alien lower in step 4
+   SCENE 2 - Alien positioning overrides (cleaned up)
+   Default position is bottom-right (step 0)
+   .alien-top-left moves near year controls (steps 2-3)
+   Step 1 uses inline JS positioning to track planets
    ───────────────────────────────────────────────────────────────────────── */
-.alien-narrator--scene2 {
-  bottom: 20px !important;
-  /* Even lower to avoid content cutoff */
-}
-
-.alien-narrator--scene2 .alien-speech-bubble {
-  bottom: 80px !important;
-  /* Lower speech bubble too */
-}
-
-/* When in top-left mode, keep normal positioning */
-.alien-narrator--scene2.alien-top-left {
-  bottom: auto !important;
-  top: 120px !important;
-}
 
 /* ─────────────────────────────────────────────────────────────────────────
    QUIZ CONTAINER - Make 90% wide
@@ -4859,7 +5603,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .quiz-question-panel {
   max-width: none !important;
-  width: 100% !important;
+  width: 45% !important;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -4895,8 +5639,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   }
 
   .member-avatar {
-    width: 150px;
-    height: 150px;
+    width: 48px;
+    height: 48px;
   }
 
   .avatar-initial {
@@ -4924,7 +5668,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .timing-icon-item {
   background: transparent !important;
   border: 2px solid transparent !important;
-  cursor: pointer !important;
+  /* cursor inherited from base.css */
   border-radius: var(--radius-lg) !important;
   padding: var(--space-2) !important;
   transition: all 0.3s ease !important;
@@ -5104,22 +5848,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   z-index: 50 !important;
 }
 
-/* 2. SCENE 2 - Move alien and speech bubble MUCH lower */
-.alien-narrator--scene2 {
-  bottom: 5px !important;
-  /* Very bottom */
-}
-
-.alien-narrator--scene2 .alien-speech-bubble {
-  bottom: 40px !important;
-  /* Much lower */
-  left: 100px !important;
-}
-
-.alien-narrator--scene2 .alien-speech-bubble--primary,
-.alien-narrator--scene2 .alien-speech-bubble--secondary {
-  bottom: 40px !important;
-}
+/* 2. SCENE 2 - Speech bubble positioning handled in main section (line ~3375) */
 
 /* 3. SCENE 3 - Fix song info panel (correct class names) */
 .song-info-screen,
@@ -5131,42 +5860,27 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .song-info-screen__title {
   font-size: 1.25rem !important;
-  white-space: normal !important;
-  word-wrap: break-word !important;
-  overflow-wrap: break-word !important;
+  /* Much larger for better readability */
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 .song-info-screen__description {
-  font-size: 0.95rem !important;
+  font-size: 0.9rem !important;
+  /* Larger for better readability */
   white-space: normal !important;
   word-wrap: break-word !important;
-  line-height: 1.6 !important;
+  line-height: 1.4 !important;
+  /* Tighter line height */
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  /* Remove overflow-y auto */
 }
 
-/* Scene 3 alien - bottom left */
-.alien-narrator--scene3.alien-narrator--scene {
-  right: auto !important;
-  left: 3% !important;
-  bottom: 5% !important;
-}
-
-/* Speech bubble ABOVE alien, shifted right to stay in view */
-.alien-narrator--scene3 .alien-speech-bubble {
-  position: absolute !important;
-  bottom: 100% !important;
-  /* Above the alien */
-  left: 0 !important;
-  /* Align to left edge of alien, not centered */
-  right: auto !important;
-  transform: none !important;
-  margin-bottom: 15px !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  max-width: 220px !important;
-  /* Narrower to fit */
-  min-width: 180px !important;
-  top: auto !important;
-}
+/* Scene 3 alien and speech bubble use main definition at lines 4068-4151 */
+/* No overrides needed here */
 
 /* Speech bubble text - wrap nicely */
 .alien-narrator--scene3 .alien-speech-bubble .alien-speech-text {
@@ -5174,28 +5888,9 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   line-height: 1.4 !important;
 }
 
-/* Speech bubble tail points DOWN, aligned left */
-.alien-narrator--scene3 .alien-speech-bubble::before {
-  top: auto !important;
-  bottom: -10px !important;
-  left: 20px !important;
-  /* Offset from left edge */
-  right: auto !important;
-  transform: rotate(180deg) !important;
-  border-left: 10px solid transparent !important;
-  border-right: 10px solid transparent !important;
-  border-top: 10px solid rgba(15, 23, 42, 0.95) !important;
-  border-bottom: none !important;
-}
-
-/* 4. SCENE 4 TIMING - Move alien/speech bubble to better position */
-.alien-narrator--timing {
-  right: 5% !important;
-  top: 25% !important;
-}
-
+/* 4. SCENE 4 TIMING - Alien at bottom center per spec */
 .alien-narrator--timing .alien-speech-bubble {
-  max-width: 180px !important;
+  max-width: 200px !important;
 }
 
 /* 5. RANKING VIZ - Compact to fit on one page without scrolling */
@@ -5222,8 +5917,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   padding: var(--space-2) var(--space-3) !important;
   max-height: calc(100vh - 90px) !important;
   overflow: hidden !important;
-  /* No scrolling – content must fit */
-  flex: 1 1 20% !important;
+  /* No scrolling - content must fit */
+  flex: 1 1 35% !important;
   min-width: 300px !important;
   font-size: 1rem !important;
 }
@@ -5241,52 +5936,17 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 
 .pyramid-viz-column {
   max-height: calc(100vh - 90px) !important;
-  flex: 0 0 90% !important;
-  /* was at 60% */
+  flex: 1 1 60% !important;
   min-width: 450px !important;
 }
 
-.pyramid-viz-wrapper {
-  max-width: 3000px !important;
-  /* was at 900 */
-  width: 100% !important;
-}
+/* pyramid-viz-wrapper now uses absolute positioning with left/right - no max-width needed */
 
 .pyramid-viz-wrapper .viz-container {
-  min-height: 350px !important;
-  height: calc(100vh - 120px) !important;
-  max-height: 700px !important;
-  /* was at 600 */
+  min-height: 500px !important; /* Increased from 450px */
+  height: calc(100vh - 100px) !important; /* Extended height */
+  max-height: 650px !important; /* Increased from 550px */
 }
-
-/* ── Pyramid sizing tweaks ───────────────────────────────── */
-.scene-pyramid .pyramid-container {
-  /* let the whole scene row be wider */
-  max-width: 2000px;
-  /* try 1300–1400; tweak as needed */
-  margin-inline: auto;
-  column-gap: 1.5rem;
-  /* slightly smaller gap between text + viz */
-}
-
-/* make the text column a bit narrower */
-.scene-pyramid .pyramid-text-column {
-  flex: 0 0 10%;
-  max-width: 2500px;
-  /* hard cap so it doesn't grow too wide */
-}
-
-/* give more width to the viz panel */
-.scene-pyramid .pyramid-viz-column {
-  flex: 0 0 90%;
-}
-
-/* remove the width cap on the dark panel itself */
-.scene-pyramid .pyramid-viz-wrapper {
-  max-width: none;
-  width: 100%;
-}
-
 
 /* 6. EMOTION VIZ - No sizing changes, use natural dimensions */
 /* (Reverted - no custom sizing needed) */
@@ -5295,7 +5955,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 .emotion-word,
 .word-bubble,
 .bubble-group {
-  cursor: pointer !important;
+  /* cursor inherited from base.css */
   pointer-events: auto !important;
   /* Remove any transition that causes flying */
   transition: none !important;
@@ -5396,14 +6056,9 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   padding-top: 0 !important;
 }
 
-.scene-hero .hero-container {
-  margin-top: 2rem !important;
-  /* Shift down */
-}
-
 .scene-hero .hero-bottom-band {
   position: absolute !important;
-  bottom: 20px !important;
+  bottom: 7px !important;
   /* At the bottom of the scene */
   left: 50% !important;
   transform: translateX(-50%) !important;
@@ -5550,18 +6205,6 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   max-height: 100vh !important;
 }
 
-.scene-wrapup .fp-overflow,
-.scene-wrapup .fp-tableCell {
-  overflow: hidden !important;
-  height: 100vh !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  padding-top: 50px !important;
-  /* Leave space for nav bar */
-  box-sizing: border-box !important;
-}
 
 /* Background layers */
 .scene-wrapup .wrapup-bg {
@@ -5613,10 +6256,12 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   flex: 0.8 !important;
 }
 
-/* Recipe card - fit within column */
+/* Recipe card - fit within column, allow scrolling for full content */
 .wrapup-column .recipe-card {
   max-height: 100% !important;
-  overflow: hidden !important;
+  overflow-y: auto !important;
+  /* Allow scroll to see all content including button */
+  overflow-x: hidden !important;
   width: 100% !important;
 }
 
@@ -5640,8 +6285,8 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 .wrapup-column .member-avatar {
-  width: 150px !important;
-  height: 150px !important;
+  width: 36px !important;
+  height: 36px !important;
 }
 
 .wrapup-column .member-name {
@@ -5719,66 +6364,668 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   GLOBAL CURSOR OVERRIDE - Must be at end to override all other cursor styles
-   ═══════════════════════════════════════════════════════════════ */
-* {
-  cursor: url('/assets/Alien_Cursor_32.png') 16 16, auto !important;
+/* ─────────────────────────────────────────────────────────────────────────
+   Stacked Narrative Steps Styling
+   (For non-slideshow scenes where all steps are visible at once)
+   ───────────────────────────────────────────────────────────────────────── */
+.pyramid-steps .pyramid-step+.pyramid-step,
+.viral-sounds-steps .step-item+.step-item,
+.timing-narrative-steps .step-content+.step-content,
+.emotion-narrative-steps .step-content+.step-content {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid rgba(45, 204, 211, 0.15);
 }
 
-a,
-a *,
-button,
-button *,
-[role="button"],
-[role="button"] *,
-.clickable,
-.clickable *,
-input[type="button"],
-input[type="submit"],
-input[type="reset"],
-.btn,
-.btn *,
-svg[cursor="pointer"],
-[onclick],
-[data-clickable],
-.record-ring,
-.planet-node,
-.nav-dot,
-.progress-segment,
-.emotion-bar,
-.stopwatch-control,
-.ranking-item,
-.conveyor-item {
-  cursor: url('/assets/Alien_Pointer_32.png') 16 16, pointer !important;
+/* Transition step styling */
+.step-content--transition,
+.step-item--transition {
+  background: rgba(45, 204, 211, 0.05);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-4);
 }
 
-/* Show pointer on hover for interactive elements */
-a:hover,
-a:hover *,
-button:hover,
-button:hover *,
-[role="button"]:hover,
-[role="button"]:hover *,
-.clickable:hover,
-.clickable:hover *,
-.btn:hover,
-.btn:hover *,
-svg:hover,
-circle:hover,
-rect:hover,
-path:hover,
-g:hover,
-.record-ring:hover,
-.planet-node:hover,
-.nav-dot:hover,
-.progress-segment:hover,
-.emotion-bar:hover,
-.stopwatch-control:hover,
-.ranking-item:hover,
-.conveyor-item:hover,
-[data-song]:hover,
-[data-planet]:hover,
-[data-clickable]:hover {
-  cursor: url('/assets/Alien_Pointer_32.png') 16 16, pointer !important;
+/* ─────────────────────────────────────────────────────────────────────────
+   Bridge Pages — TikTok-Inspired Creative Design
+   Vibrant neon glows, glassmorphism, chromatic aberration effects
+   ───────────────────────────────────────────────────────────────────────── */
+.section--bridge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated gradient orbs - TikTok signature look */
+.section--bridge::before,
+.section--bridge::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  animation: orbFloat 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.section--bridge::before {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #25F4EE 0%, transparent 70%);
+  top: -100px;
+  left: -100px;
+  animation-delay: 0s;
+}
+
+.section--bridge::after {
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, #FE2C55 0%, transparent 70%);
+  bottom: -80px;
+  right: -80px;
+  animation-delay: -4s;
+}
+
+@keyframes orbFloat {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  25% {
+    transform: translate(30px, -20px) scale(1.05);
+  }
+
+  50% {
+    transform: translate(-20px, 30px) scale(0.95);
+  }
+
+  75% {
+    transform: translate(-30px, -10px) scale(1.02);
+  }
+}
+
+.bridge-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: var(--space-8);
+  position: relative;
+  z-index: 1;
+}
+
+/* Glassmorphism card with glowing border */
+.bridge-message {
+  max-width: 600px;
+  text-align: center;
+  padding: var(--space-8);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 0 40px rgba(37, 244, 238, 0.1),
+    0 0 80px rgba(254, 44, 85, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  animation: bridgeCardIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+/* Animated border glow effect */
+.bridge-message::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg,
+      rgba(37, 244, 238, 0.5) 0%,
+      transparent 40%,
+      transparent 60%,
+      rgba(254, 44, 85, 0.5) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: borderGlow 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes borderGlow {
+  0% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.bridge-message--minimal {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--space-8);
+}
+
+@keyframes bridgeCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    filter: blur(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Eyebrow label with neon accent */
+.bridge-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #25F4EE;
+  margin-bottom: var(--space-4);
+  text-shadow: 0 0 20px rgba(37, 244, 238, 0.5);
+}
+
+/* Title with chromatic aberration effect */
+.bridge-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: var(--font-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  position: relative;
+}
+
+/* Removed glitch hover - bridge is not interactive */
+
+@keyframes glitchText {
+
+  0%,
+  100% {
+    text-shadow: none;
+  }
+
+  20% {
+    text-shadow: -2px 0 #FE2C55, 2px 0 #25F4EE;
+  }
+
+  40% {
+    text-shadow: 2px 0 #FE2C55, -2px 0 #25F4EE;
+  }
+
+  60% {
+    text-shadow: -1px 0 #FE2C55, 1px 0 #25F4EE;
+  }
+}
+
+/* Body text - enhanced readability */
+.bridge-text {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Topic icons grid - neon hover effects */
+.bridge-topics {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-8);
+  margin-top: var(--space-8);
+}
+
+.bridge-topic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
+}
+
+/* Removed hover - bridge topics are not interactive */
+
+.bridge-topic-icon {
+  width: 36px;
+  height: 36px;
+  stroke: rgba(255, 255, 255, 0.6);
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 0 0 transparent);
+}
+
+/* Static TikTok colors for topic icons - no hover since not interactive */
+.bridge-topic:nth-child(1) .bridge-topic-icon {
+  stroke: #25F4EE;
+}
+
+.bridge-topic:nth-child(2) .bridge-topic-icon {
+  stroke: #FE2C55;
+}
+
+.bridge-topic:nth-child(3) .bridge-topic-icon {
+  stroke: #25F4EE;
+}
+
+.bridge-topic:nth-child(4) .bridge-topic-icon {
+  stroke: #FE2C55;
+}
+
+.bridge-topic-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: var(--font-medium);
+  transition: color 0.3s ease;
+}
+
+/* Removed hover - not interactive */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ENHANCED BRIDGE STYLES - Professional data story patterns
+   ───────────────────────────────────────────────────────────────────────── */
+
+.bridge-message--enhanced {
+  max-width: 700px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: var(--space-10) var(--space-8);
+}
+
+/* Data hook - striking statistic */
+.bridge-data-hook {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: var(--space-6);
+}
+
+.bridge-stat {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-weight: var(--font-bold);
+  background: linear-gradient(135deg, #25F4EE 0%, #FE2C55 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.bridge-stat-label {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: var(--space-2);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* Enhanced title */
+.bridge-message--enhanced .bridge-title {
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  margin-bottom: var(--space-4);
+  line-height: 1.2;
+}
+
+/* Journey map - visual factor preview */
+.bridge-journey {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0;
+  margin: var(--space-8) 0;
+  flex-wrap: wrap;
+}
+
+.bridge-journey-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-3);
+  min-width: 90px;
+  transition: transform 0.3s ease;
+}
+
+.bridge-journey-item:hover {
+  transform: translateY(-4px);
+}
+
+.bridge-journey-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.bridge-journey-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: rgba(255, 255, 255, 0.6);
+  transition: stroke 0.3s ease;
+}
+
+/* Alternating TikTok colors */
+.bridge-journey-item[data-factor="music"] .bridge-journey-icon,
+.bridge-journey-item[data-factor="topics"] .bridge-journey-icon {
+  border-color: rgba(37, 244, 238, 0.3);
+}
+
+.bridge-journey-item[data-factor="music"] .bridge-journey-icon svg,
+.bridge-journey-item[data-factor="topics"] .bridge-journey-icon svg {
+  stroke: #25F4EE;
+}
+
+.bridge-journey-item[data-factor="duration"] .bridge-journey-icon,
+.bridge-journey-item[data-factor="captions"] .bridge-journey-icon {
+  border-color: rgba(254, 44, 85, 0.3);
+}
+
+.bridge-journey-item[data-factor="duration"] .bridge-journey-icon svg,
+.bridge-journey-item[data-factor="captions"] .bridge-journey-icon svg {
+  stroke: #FE2C55;
+}
+
+.bridge-journey-item:hover .bridge-journey-icon {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+.bridge-journey-label {
+  font-size: 0.85rem;
+  font-weight: var(--font-semibold);
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.bridge-journey-hint {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  max-width: 100px;
+  line-height: 1.4;
+}
+
+.bridge-journey-connector {
+  width: 24px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+  margin-top: 24px;
+  flex-shrink: 0;
+}
+
+/* Scroll hint */
+.bridge-scroll-hint {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-top: var(--space-8);
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+@keyframes pulse-subtle {
+
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Quiz bridge specific styles */
+.bridge-message--quiz {
+  max-width: 550px;
+}
+
+.bridge-challenge-intro {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: var(--space-2);
+  font-weight: var(--font-medium);
+}
+
+.bridge-message--quiz .bridge-title {
+  font-size: clamp(2rem, 6vw, 3rem);
+  background: linear-gradient(135deg, #25F4EE 0%, #fff 50%, #FE2C55 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-6);
+}
+
+/* Recap checklist */
+.bridge-recap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: var(--space-6) 0;
+  padding: var(--space-5);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-lg);
+  border-left: 3px solid rgba(37, 244, 238, 0.5);
+}
+
+.bridge-recap-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.bridge-recap-check {
+  color: #25F4EE;
+  font-weight: var(--font-bold);
+  font-size: 0.85rem;
+}
+
+/* Responsive - Enhanced bridges */
+@media (max-width: 640px) {
+  .bridge-message--enhanced {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .bridge-stat {
+    font-size: 2.5rem;
+  }
+
+  .bridge-journey {
+    gap: var(--space-2);
+  }
+
+  .bridge-journey-item {
+    padding: var(--space-2);
+    min-width: 70px;
+  }
+
+  .bridge-journey-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .bridge-journey-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .bridge-journey-connector {
+    width: 12px;
+    margin-top: 20px;
+  }
+
+  .bridge-journey-hint {
+    display: none;
+  }
+
+  .bridge-recap {
+    padding: var(--space-4);
+  }
+
+  .bridge-recap-item {
+    font-size: 0.8rem;
+  }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+
+  .section--bridge::before,
+  .section--bridge::after {
+    width: 250px;
+    height: 250px;
+    filter: blur(60px);
+  }
+
+  .bridge-container {
+    padding: var(--space-4);
+  }
+
+  .bridge-message {
+    padding: var(--space-6);
+  }
+
+  .bridge-topics {
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .bridge-topic {
+    padding: var(--space-3);
+  }
+
+  .bridge-topic-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .bridge-topic-label {
+    font-size: 0.7rem;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   SCENE HEADER STYLES (title + subtitle + description)
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Scene header container for viral-sounds */
+.viral-sounds-viz-overlay .scene-header {
+  position: absolute;
+  top: 75px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  text-align: center;
+  /* Center aligned for description */
+  max-width: 100%;
+  /* Full width to prevent title wrapping */
+  width: 55%;
+  /* Use most of available space */
+  padding: 0 var(--space-4);
+}
+
+.viral-sounds-viz-overlay .scene-header .scene-title {
+  font-size: clamp(1.5rem, 3.8vw, 2.2rem);
+  /* Medium size - between original and previous */
+  font-weight: 800;
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 var(--space-2);
+  /* Removed max-width to fill parent container */
+}
+
+.viral-sounds-viz-overlay .scene-subtitle {
+  font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+  /* Slightly larger */
+  font-weight: 600;
+  color: var(--color-glint);
+  margin: 0 0 var(--space-3);
+}
+
+.viral-sounds-viz-overlay .scene-description {
+  font-size: 1rem;
+  /* Back to original size */
+  font-weight: 500;
+  /* Add some weight */
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin: 0;
+  /* Removed max-width to fill parent container */
+}
+
+/* Scene header container for timing */
+.timing-viz-overlay .scene-header {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  text-align: center;
+  /* Center aligned for description */
+  max-width: 100%;
+  /* Full width to prevent title wrapping */
+  width: 60%;
+  /* Use most of available space */
+  padding: 0 var(--space-4);
+}
+
+.timing-viz-overlay .scene-header .scene-title {
+  font-size: clamp(1.5rem, 3.8vw, 2.2rem);
+  /* Medium size - between original and previous */
+  font-weight: 800;
+  background: linear-gradient(135deg, #00F2EA 0%, #FF0050 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 var(--space-2);
+  /* Removed max-width to fill parent container */
+}
+
+.timing-viz-overlay .scene-subtitle {
+  font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+  /* Match viral-sounds sizing */
+  font-weight: 600;
+  color: var(--color-glint);
+  margin: 0 0 var(--space-3);
+}
+
+.timing-viz-overlay .scene-description {
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin: 0;
 }

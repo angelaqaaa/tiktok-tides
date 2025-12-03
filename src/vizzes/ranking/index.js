@@ -137,10 +137,10 @@ export class RankingViz extends EventEmitter {
 
     const width = 1000, height = 800;
 
-    const rectWidth = 200;
-    const rectHeight = 150;
-    const paddingX = 40;
-    const cornerRadius = 20;
+    const rectWidth = 240; /* Increased from 200 for larger boxes */
+    const rectHeight = 180; /* Increased from 150 for larger boxes */
+    const paddingX = 48; /* Increased proportionally from 40 */
+    const cornerRadius = 24; /* Increased proportionally from 20 */
 
     this.svg = d3.select(this.container)
       .append('svg')
@@ -148,16 +148,17 @@ export class RankingViz extends EventEmitter {
       .attr('role', 'img')
       .attr('aria-label', 'Category visualization showing ranking and interaction');
 
-    // --- info button ---
+    // --- info button with label ---
     const infoBtn = d3.select(this.container)
       .append('div')
-      .attr('class', 'viz-btn viz-btn--info')
+      .attr('class', 'viz-btn viz-btn--info viz-btn--with-label')
       .html(`
-            <svg viewBox="0 0 24 24" fill="white">
+        <svg viewBox="0 0 24 24" fill="white">
           <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="none"/>
           <line x1="12" y1="10" x2="12" y2="16" stroke="white" stroke-width="2" />
           <circle cx="12" cy="7" r="1.5" fill="white"/>
         </svg>
+        <span>How to read</span>
   `);
 
     let infoTooltipOpen = false;
@@ -166,12 +167,17 @@ export class RankingViz extends EventEmitter {
       .append("div")
       .attr("class", "viz-info-tooltip")
       .html(`
-    <div class="title">About this visualization</div>
+    <div class="title">How to read</div>
 
-    <div class="body">
-      This layout is inspired by the viral 
-      <b>Pyramid Ranking Trend</b> on TikTok.
-      Each card falls in ranked sequence and can be explored interactively!
+    <ul class="viz-info-tooltip__list">
+      <li>Notes reveal content categories</li>
+      <li>Top = most viral category</li>
+      <li>Click any category for top creators</li>
+      <li>Use play/pause controls</li>
+    </ul>
+
+    <div class="body" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">
+      Inspired by the viral <b>Pyramid Ranking Trend</b> on TikTok.
     </div>
 
     <a href="https://www.tiktok.com/discover/pyramid-ranking-trend"
@@ -397,11 +403,11 @@ export class RankingViz extends EventEmitter {
 
         g.append("text")
           .attr("x", rectWidth / 2)
-          .attr("y", rectHeight / 2 - 12)
+          .attr("y", rectHeight / 2 - 14)
           .attr("text-anchor", "middle")
           .attr("dominant-baseline", "middle")
           .attr("fill", "white")
-          .style("font-size", "30px")
+          .style("font-size", "36px") /* Increased from 30px */
           .style("font-weight", "bold")
           .text(d.category);
 
@@ -410,30 +416,32 @@ export class RankingViz extends EventEmitter {
         g.append("text")
           .attr("class", "category-views-shadow")
           .attr("x", rectWidth / 2)
-          .attr("y", rectHeight / 2 + 20)
+          .attr("y", rectHeight / 2 + 24)
           .attr("text-anchor", "middle")
           .attr("dominant-baseline", "middle")
           .attr("fill", "none")
-          .style("font-size", "16px")
+          .attr("stroke", "rgba(0, 0, 0, 0.8)")
+          .attr("stroke-width", 4)
+          .style("font-size", "19px") /* Increased from 16px */
           .style("font-weight", "600")
           .text(formatViews(d.views) + ' views');
 
         const viewsText = g.append("text")
           .attr("class", "category-views")
           .attr("x", rectWidth / 2)
-          .attr("y", rectHeight / 2 + 20)
+          .attr("y", rectHeight / 2 + 24)
           .attr("text-anchor", "middle")
           .attr("dominant-baseline", "middle")
           .attr("fill", "#fff")
-          .style("font-size", "16px")
+          .style("font-size", "19px") /* Increased from 16px */
           .style("font-weight", "600")
           .style("text-shadow", "0 2px 4px rgba(0,0,0,0.8)")
           .text(formatViews(d.views) + ' views');
 
         // Add comparison bar showing relative scale
-        const barWidth = 120;
-        const barHeight = 6;
-        const barY = rectHeight / 2 + 42;
+        const barWidth = 144; /* Increased from 120 */
+        const barHeight = 7; /* Increased from 6 */
+        const barY = rectHeight / 2 + 50; /* Adjusted position */
         const fillRatio = d.views / maxCategoryViews;
 
         // Background bar
@@ -462,10 +470,10 @@ export class RankingViz extends EventEmitter {
           g.append("text")
             .attr("class", "comparison-pct")
             .attr("x", rectWidth / 2)
-            .attr("y", barY + barHeight + 14)
+            .attr("y", barY + barHeight + 17)
             .attr("text-anchor", "middle")
             .attr("fill", "rgba(255, 255, 255, 0.7)")
-            .style("font-size", "11px")
+            .style("font-size", "13px") /* Increased from 11px */
             .text(`${pct}% of top`);
         }
       });
@@ -508,7 +516,7 @@ export class RankingViz extends EventEmitter {
     coverGroup.append('rect')
       .attr('width', rectWidth)
       .attr('height', rectHeight)
-      .attr('rx', 20)
+      .attr('rx', 24) /* Updated to match cornerRadius */
       .attr('fill', 'white')
       .attr('filter', 'url(#paperShadow)')
       .style('pointer-events', 'none');
@@ -516,7 +524,7 @@ export class RankingViz extends EventEmitter {
     coverGroup.append('rect')
       .attr('width', rectWidth)
       .attr('height', rectHeight)
-      .attr('rx', 20)
+      .attr('rx', 24) /* Updated to match cornerRadius */
       .attr('fill', 'url(#paperGradient)')
       .style('pointer-events', 'none');
 
@@ -526,17 +534,17 @@ export class RankingViz extends EventEmitter {
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
       .attr('fill', 'black')
-      .style('font-size', '60px')
+      .style('font-size', '72px') /* Increased from 60px */
       .style('font-weight', 'bold')
       .style('pointer-events', 'none')
       .text(d => d.rank);
 
     coverGroup.append('rect')
       .attr('class', 'tape')
-      .attr('x', rectWidth / 2 - 40)
-      .attr('y', -10)
-      .attr('width', 80)
-      .attr('height', 25)
+      .attr('x', rectWidth / 2 - 48) /* Adjusted for larger width */
+      .attr('y', -12) /* Adjusted position */
+      .attr('width', 96) /* Increased from 80 */
+      .attr('height', 30) /* Increased from 25 */
       .attr('fill', '#edebb9ff')
       .attr('opacity', 0.8)
       .attr('transform', d => {
@@ -767,8 +775,8 @@ export class RankingViz extends EventEmitter {
     remainingPages.forEach((pageNode, i) => {
       const d = d3.select(pageNode).datum();
       const cover = d3.select(pageNode).select('.cover-group');
-      const rectHeight = 150;
-      const rectWidth = 200;
+      const rectHeight = 180; /* Updated to match new size */
+      const rectWidth = 240; /* Updated to match new size */
       const baseOfPyramid = 100 + 2 * 200 + rectHeight;
       const groundY = baseOfPyramid + 50;
 

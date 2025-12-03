@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="TikTok Tides - Decoding viral short videos through data">
-    <title>TikTok Tides</title>
+    <title>TikTok Tides | Decoding viral short videos</title>
     <link rel="icon" type="image/png" href="/assets/Alien_Icon.png">
 
     <!-- Fonts -->
@@ -13,10 +13,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap"
-      rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap"
       rel="stylesheet">
 
     <!-- Styles -->
@@ -85,108 +81,19 @@
     <nav class="top-nav-bar" role="navigation" aria-label="Main navigation">
       <!-- Scroll Progress Bar (v3 spec 4.2) -->
       <div class="scroll-progress-bar" aria-hidden="true"></div>
-      <!-- Left: Site Logo Cluster (25%) -->
-      <a href="#scene-landing" class="nav-logo-cluster" aria-label="Go to start">
-        <!-- TikTok-inspired logo mark with alien -->
+      <!-- Left: Logo Cluster - click to return to hero -->
+      <a href="#scene-hero" class="nav-logo-cluster" aria-label="Go to start" data-nav-home>
+        <!-- Alien logo using drawn asset -->
         <div class="logo-mark">
-          <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true">
-            <!-- Rounded square with TikTok-like gradient border -->
-            <defs>
-              <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#2DCCD3" />
-                <stop offset="100%" stop-color="#F1204A" />
-              </linearGradient>
-            </defs>
-            <rect x="2" y="2" width="32" height="32" rx="8" fill="none" stroke="url(#logo-gradient)" stroke-width="2" />
-            <image href="/assets/Alien_Icon.png" x="7" y="7" width="22" height="22"
-              preserveAspectRatio="xMidYMid meet" />
-          </svg>
+          <img src="/assets/Alien_Icon.png" alt="" width="25" height="25" />
         </div>
         <span class="logo-text">TikTok Tides</span>
       </a>
 
-      
-      <!-- Center: Journey Map Mini-Strip (50%) -->
-      <div class="journey-mini-strip" role="navigation" aria-label="Scene navigation">
-        <div class="mini-strip-line" aria-hidden="true"></div>
-        <div class="mini-strip-nodes">
-          <!-- Scene 1: Arrival (Spaceship) - targets scene-hero -->
-          <button class="mini-node" data-scene-target="scene-hero" aria-label="Scene 1: Arrival" data-tooltip="Arrival">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <ellipse cx="12" cy="10" rx="8" ry="4" />
-              <path d="M8 10 L6 16 M16 10 L18 16" />
-              <circle cx="12" cy="9" r="2" fill="currentColor" />
-              <path d="M4 14 L12 18 L20 14" stroke-linecap="round" />
-            </svg>
-          </button>
-          <!-- Scene 2: Music Galaxy (Planet) - targets scene-music-galaxy -->
-          <button class="mini-node" data-scene-target="scene-music-galaxy" aria-label="Scene 2: Music Galaxy"
-            data-tooltip="Music Galaxy">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="12" cy="12" r="5" />
-              <ellipse cx="12" cy="12" rx="10" ry="3" transform="rotate(-20 12 12)" />
-              <circle cx="12" cy="12" r="2" fill="currentColor" />
-            </svg>
-          </button>
-          <!-- Scene 3: Viral Sounds (Vinyl Disc) - targets scene-viral-sounds -->
-          <button class="mini-node" data-scene-target="scene-viral-sounds" aria-label="Scene 3: Viral Sounds"
-            data-tooltip="Viral Sounds">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="12" cy="12" r="9" />
-              <circle cx="12" cy="12" r="3" />
-              <circle cx="12" cy="12" r="1" fill="currentColor" />
-              <path d="M12 6 L12 3" />
-            </svg>
-          </button>
-          <!-- Scene 4: Timing (Clock) - targets scene-duration -->
-          <button class="mini-node" data-scene-target="scene-duration" aria-label="Scene 4: Timing"
-            data-tooltip="Timing">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="12" cy="13" r="8" />
-              <path d="M12 5 L12 3" />
-              <path d="M12 9 L12 13 L15 15" stroke-linecap="round" />
-              <circle cx="12" cy="3" r="1" fill="currentColor" />
-            </svg>
-          </button>
-          <!-- Scene 5: Trend Pyramid (Layered) - targets scene-category -->
-          <button class="mini-node" data-scene-target="scene-category" aria-label="Scene 5: Trend Pyramid"
-            data-tooltip="Trend Pyramid">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M12 3 L3 21 L21 21 Z" />
-              <path d="M7 15 L17 15" />
-              <path d="M9 11 L15 11" />
-            </svg>
-          </button>
-          <!-- Scene 6: Captions (Chat Bubble) - targets scene-emotion -->
-          <button class="mini-node" data-scene-target="scene-emotion" aria-label="Scene 6: Captions & Emotion"
-            data-tooltip="Captions">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-              <circle cx="8" cy="10" r="1" fill="currentColor" />
-              <circle cx="12" cy="10" r="1" fill="currentColor" />
-              <circle cx="16" cy="10" r="1" fill="currentColor" />
-            </svg>
-          </button>
-          <!-- Scene 7: Quiz (Check Circle) - targets scene-quiz -->
-          <button class="mini-node" data-scene-target="scene-quiz" aria-label="Scene 7: Quiz" data-tooltip="Quiz">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M9 12 L11 14 L15 10" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-          <!-- Scene 8: Wrap-up (Flag/Home) - targets scene-summary -->
-          <button class="mini-node" data-scene-target="scene-summary" aria-label="Scene 8: Wrap-up"
-            data-tooltip="Wrap-up">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M4 21 L4 4" />
-              <path d="M4 4 L14 4 L14 12 L4 12" fill="currentColor" opacity="0.3" />
-              <path d="M4 4 L14 4 L12 8 L14 12 L4 12" />
-            </svg>
-          </button>
-        </div>
-      </div>
+      <!-- Center spacer (mini-strip navigation removed per Task A) -->
+      <div class="nav-center-spacer" aria-hidden="true"></div>
 
-      <!-- Right: Map Toggle Button (25%) -->
+      <!-- Right: Map Toggle Button -->
       <button class="map-toggle-btn" aria-label="Open Mission Map" data-journey-toggle>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
@@ -339,7 +246,8 @@
 
           <!-- Alien avatar marker (shows current position) -->
           <div class="map-alien-marker" data-current-node="1" aria-label="You are here">
-            <img src="/assets/alien.PNG" alt="Alien guide" width="40" height="40" onerror="this.style.display='none'" />
+            <img src="/assets/Alien_Wave.png" alt="Alien guide" width="40" height="40"
+              onerror="this.style.display='none'" />
           </div>
         </div>
 
@@ -389,6 +297,135 @@
       </div>
     </aside>
 
+    <!-- Mini Mission Map Sidebar - Collapsible -->
+    <nav class="mission-sidebar" role="navigation" aria-label="Scene navigation">
+      <!-- Collapse/Expand toggle button (arrow right=open, left=collapsed) -->
+      <button class="sidebar-toggle" aria-label="Toggle navigation map" aria-expanded="true">
+        <svg class="sidebar-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 6l6 6-6 6" />
+        </svg>
+      </button>
+      <!-- Background layers (same as overlay) -->
+      <div class="sidebar-bg sidebar-bg-stars" aria-hidden="true"></div>
+      <div class="sidebar-bg sidebar-bg-terrain" aria-hidden="true"></div>
+
+      <!-- Path SVG - Organic flowing path using cubic Bézier curves -->
+      <svg class="sidebar-path-svg" viewBox="0 0 100 500" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="sidebar-path-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#2DCCD3" />
+            <stop offset="50%" stop-color="#BAF6F0" />
+            <stop offset="100%" stop-color="#2DCCD3" />
+          </linearGradient>
+          <filter id="sidebar-glow">
+            <feGaussianBlur stdDeviation="2.5" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <!-- Path goes through each node position (equal 12% spacing) -->
+        <path class="sidebar-path-line" d="M35 25
+               C 55 40, 70 60, 70 85
+               C 70 110, 35 125, 30 145
+               C 25 165, 60 190, 65 205
+               C 70 225, 40 250, 35 265
+               C 28 285, 52 310, 55 325
+               C 60 345, 48 370, 45 385
+               C 42 410, 48 430, 50 445" fill="none" stroke="url(#sidebar-path-gradient)" stroke-width="3"
+          stroke-linecap="round" filter="url(#sidebar-glow)" stroke-dasharray="8 4" />
+      </svg>
+
+      <!-- Nodes positioned exactly on the path (equal 12% spacing) -->
+      <div class="sidebar-nodes">
+        <button class="sidebar-node" data-node="1" data-target="scene-hero" style="--node-x: 35%; --node-y: 5%;">
+          <span class="sidebar-node-num">1</span>
+          <div class="sidebar-node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <ellipse cx="12" cy="10" rx="8" ry="4" />
+              <circle cx="12" cy="9" r="2" fill="currentColor" />
+            </svg>
+          </div>
+        </button>
+
+        <button class="sidebar-node" data-node="2" data-target="scene-music-galaxy"
+          style="--node-x: 70%; --node-y: 17%;">
+          <span class="sidebar-node-num">2</span>
+          <div class="sidebar-node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="5" />
+              <ellipse cx="12" cy="12" rx="10" ry="3" transform="rotate(-20 12 12)" />
+            </svg>
+          </div>
+        </button>
+
+        <button class="sidebar-node" data-node="3" data-target="scene-viral-sounds"
+          style="--node-x: 30%; --node-y: 29%;">
+          <span class="sidebar-node-num">3</span>
+          <div class="sidebar-node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="9" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </div>
+        </button>
+
+        <button class="sidebar-node" data-node="4" data-target="scene-duration" style="--node-x: 65%; --node-y: 41%;">
+          <span class="sidebar-node-num">4</span>
+          <div class="sidebar-node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="13" r="8" />
+              <path d="M12 9 L12 13 L15 15" />
+            </svg>
+          </div>
+        </button>
+
+        <button class="sidebar-node" data-node="5" data-target="scene-category" style="--node-x: 35%; --node-y: 53%;">
+          <span class="sidebar-node-num">5</span>
+          <div class="sidebar-node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 3 L3 21 L21 21 Z" />
+            </svg>
+          </div>
+        </button>
+
+        <button class="sidebar-node" data-node="6" data-target="scene-emotion" style="--node-x: 55%; --node-y: 65%;">
+          <span class="sidebar-node-num">6</span>
+          <div class="sidebar-node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+          </div>
+        </button>
+
+        <button class="sidebar-node" data-node="7" data-target="scene-quiz" style="--node-x: 45%; --node-y: 77%;">
+          <span class="sidebar-node-num">7</span>
+          <div class="sidebar-node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M9 12 L11 14 L15 10" />
+            </svg>
+          </div>
+        </button>
+
+        <button class="sidebar-node" data-node="8" data-target="scene-summary" style="--node-x: 50%; --node-y: 89%;">
+          <span class="sidebar-node-num">8</span>
+          <div class="sidebar-node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 21 L4 4" />
+              <path d="M4 4 L14 4 L12 8 L14 12 L4 12" />
+            </svg>
+          </div>
+        </button>
+      </div>
+
+      <!-- Alien marker - same as overlay -->
+      <div class="sidebar-alien-marker" aria-label="You are here">
+        <img src="/assets/Alien_Wave.png" alt="" width="32" height="32" />
+      </div>
+    </nav>
+
     <!-- Skip Link -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
@@ -405,26 +442,23 @@
           aria-labelledby="hero-title">
 
           <!-- Background layers per v3 spec 3.2.1 -->
-          <div class="hero-bg-layer hero-bg-stars" aria-hidden="true"></div>
           <div class="hero-bg-layer hero-bg-horizon" aria-hidden="true"></div>
 
           <!-- Top band: Navigation (handled by TopNavBar) - padding only -->
           <div class="hero-nav-spacer" aria-hidden="true"></div>
-          <!-- Scene label (top-left) -->
-          <span class="scene-label-badge">Scene 1 — Hero: "Arrival"</span>
 
           <!-- Middle band: Main hero content (70% vh) -->
           <div class="hero-content-band">
             <div class="hero-container">
               <!-- Left column (55%): Text content -->
               <div class="hero-text-column">
-                <h1 id="hero-title" class="hero-main-title">TikTok Tides</h1>
-                <p class="hero-subtitle">An alien's guide to viral short videos</p>
+                <h1 id="hero-title" class="hero-main-title">TikTok Tides:<br>decoding viral short videos</h1>
+                <p class="hero-subtitle">Our alien scientist just tuned into Earth's favorite time sink: TikTok. Its
+                  mission is simple: figure out what makes short videos go viral so it can blend in with humans.</p>
 
                 <div class="hero-description">
-                  <p>We use real datasets from TikTok-like platforms.</p>
-                  <p>Together we will explore sound, timing, category, and captions.</p>
-                  <p>Along the way, our alien guide connects each piece into a recipe for virality.</p>
+                  <p>In this lab, "viral" means a short video that reaches unusually high play counts compared to
+                    others. To understand why that happens, we will look at sounds, timing, topics, and captions.</p>
                 </div>
 
                 <!-- CTA Button -->
@@ -432,7 +466,7 @@
                   <span>Start the journey</span>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
+                    <path d="M12 5v14M5 12l7 7 7-7" />
                   </svg>
                 </button>
               </div>
@@ -505,15 +539,16 @@
                             <div class="video-glow"></div>
                           </div>
                           <!-- Large Alien Figure -->
-                          <img src="/assets/alien.PNG" alt="" class="tiktok-alien-figure" />
-                          <!-- Speech Bubble (TikTok comment style) -->
+                          <img src="/assets/Alien_Wave.png" alt="" class="tiktok-alien-figure" />
+                          <!-- Speech Bubble (TikTok comment style) - Per narrative-alien-redesign.md -->
                           <div class="tiktok-speech-bubble">
                             <div class="speech-avatar">
-                              <img src="/assets/alien.PNG" alt="" />
+                              <img src="/assets/Alien_Wave.png" alt="" />
                             </div>
                             <div class="speech-content">
                               <span class="speech-name">@alienguide</span>
-                              <p class="speech-text">Ready to decode virality? Let's explore the data together!</p>
+                              <p class="speech-text">Greetings, human. I study your planet's strange rituals. This
+                                "TikTok" spreads like a virus. Let me show you what I found.</p>
                             </div>
                           </div>
                         </div>
@@ -523,7 +558,7 @@
                           <!-- Profile with follow button -->
                           <div class="tiktok-action tiktok-action--profile">
                             <div class="profile-avatar">
-                              <img src="/assets/alien.PNG" alt="" />
+                              <img src="/assets/Alien_Wave.png" alt="" />
                             </div>
                             <div class="profile-follow-badge">+</div>
                           </div>
@@ -660,40 +695,12 @@
             <!-- Legend panel (top-right) -->
             <div class="music-galaxy-legend" role="complementary" aria-label="Visualization legend">
               <div class="legend-section legend-section--text-only">
-                <span class="legend-label legend-label--primary">
-                  Distance from sun = Energy level
-                  <span class="info-icon" data-tooltip="energy">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="7" cy="7" r="6.5" stroke="currentColor" stroke-width="1" />
-                      <text x="7" y="10.5" text-anchor="middle" font-size="10" font-weight="600"
-                        fill="currentColor">?</text>
-                    </svg>
-                    <span class="info-tooltip">
-                      Energy measures the perceptual intensity and activity of a track. High-energy songs typically
-                      feature loudness, speed, fast tempo, and noisy characteristics. Death metal scores high (≈1.0),
-                      while soft ballads score low (≈0.0). Based on dynamic range, perceived loudness, timbre, onset
-                      rate, and general entropy.
-                    </span>
-                  </span>
-                </span>
+                <span class="legend-label legend-label--primary">Distance from sun = Energy level</span>
                 <span class="legend-sublabel">(Low energy near sun)</span>
               </div>
 
               <div class="legend-section">
-                <span class="legend-label legend-label--primary">
-                  Color = Danceability
-                  <span class="info-icon" data-tooltip="danceability">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="7" cy="7" r="6.5" stroke="currentColor" stroke-width="1" />
-                      <text x="7" y="10.5" text-anchor="middle" font-size="10" font-weight="600"
-                        fill="currentColor">?</text>
-                    </svg>
-                    <span class="info-tooltip">
-                      Measures how suitable a track is for dancing based on tempo, rhythm stability, beat strength, and
-                      overall regularity.
-                    </span>
-                  </span>
-                </span>
+                <span class="legend-label legend-label--primary">Color = Danceability</span>
                 <div class="legend-gradient-wrap">
                   <div class="legend-dance-bar"></div>
                   <div class="legend-gradient-labels">
@@ -713,6 +720,28 @@
                   </div>
                   <span class="legend-label">Size = Track count</span>
                 </div>
+              </div>
+            </div>
+
+            <!-- Collapsible chart instructions -->
+            <div class="chart-instructions" role="complementary" aria-label="How to read this chart" data-info-panel>
+              <button class="chart-instructions__toggle" aria-expanded="false" data-info-toggle>
+                <svg class="chart-instructions__toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.5">
+                  <path
+                    d="M11.25 11.25L11.2915 11.2293C11.8646 10.9427 12.5099 11.4603 12.3545 12.082L11.6455 14.918C11.4901 15.5397 12.1354 16.0573 12.7085 15.7707L12.75 15.75M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12ZM12 8.25H12.0075V8.2575H12V8.25Z" />
+                </svg>
+                <span>How to read</span>
+              </button>
+              <div class="chart-instructions__content">
+                <h4 class="chart-instructions__title">Reading the galaxy</h4>
+                <ul class="chart-instructions__list">
+                  <li>Each planet is an artist with viral TikTok songs</li>
+                  <li>Size = number of viral tracks</li>
+                  <li>Orbit distance = average energy</li>
+                  <li>Color = danceability (white to pink)</li>
+                  <li>Hover any planet for details</li>
+                </ul>
               </div>
             </div>
 
@@ -740,62 +769,64 @@
               </div>
             </div>
 
-            <!-- Alien narrator (persists across slides) -->
+            <!-- Alien narrator (persists across slides, speech updated by JS per step) -->
             <div class="alien-narrator alien-narrator--scene alien-narrator--scene2" data-scene="galaxy">
               <div class="alien-avatar">
-                <img src="/assets/alien.PNG" alt="" width="64" height="64" loading="lazy"
+                <img src="/assets/Alien_Point.png" alt="" width="64" height="64" loading="lazy"
                   onerror="this.parentElement.classList.add('alien-avatar--fallback')" />
               </div>
               <div class="alien-mini-planet"></div>
 
-              <!-- First speech bubble -->
-              <div class="alien-speech-bubble alien-speech-bubble--primary" data-speech-state="hidden">
-                <p class="alien-speech-text">Each planet you see is a creator or artist. I am visiting the busiest ones.
-                </p>
-              </div>
-
-              <!-- Second speech bubble (slide 2) -->
-              <div class="alien-speech-bubble alien-speech-bubble--secondary" data-speech-state="hidden"
-                data-speech-step="2">
-                <p class="alien-speech-text">Look how this artist keeps shining year after year.</p>
+              <!-- Single speech bubble - text updated dynamically by JS for each step -->
+              <div class="alien-speech-bubble" data-speech-state="hidden">
+                <p class="alien-speech-text">So many planets! Each one is an artist whose sounds went viral. Let me scan
+                  the biggest ones...</p>
               </div>
             </div>
           </div><!-- End viz-overlay -->
 
           <!-- TEXT OVERLAY (right 35%) - Positioned OUTSIDE fullPage slides, like viz-overlay -->
           <div class="music-galaxy-text-overlay">
-            <!-- Step 1: Free exploration - no preset filter, allow year toggling -->
+            <!-- Step 1: Landing in the galaxy (per narrative-alien-redesign.md Step 2.1) -->
             <div class="step-content" data-slide-step="0">
-              <h2 id="music-galaxy-title" class="step-heading">Artists that orbit virality</h2>
-              <p>Each planet is an artist whose songs went viral on TikTok.</p>
-              <p>Planets further from the sun have more energetic, intense sounds.</p>
-              <p>More saturated colors represent more danceable tracks.</p>
-              <p>Larger planets have multiple viral tracks in that year.</p>
-              <p>Use the year buttons on the left to explore different time periods.</p>
+              <h2 id="music-galaxy-title" class="step-heading step-heading--question">Are viral sounds spread across
+                many artists?</h2>
+              <p>Each glowing planet is an artist whose sounds went viral at least once in a given year. Larger planets
+                mean an artist repeats that success with multiple viral tracks. The sun in the center is our reference
+                point.</p>
+              <p>Look at the galaxy for the latest year and notice whether there are many small planets or a few giants.
+              </p>
+              <p class="step-prompt">Hover a large planet to read its name and how many viral sounds it has.</p>
             </div>
 
-            <!-- Step 2: The biggest names - highlight top artists in 2022 -->
+            <!-- Step 2: Spotlight on dominant artists (per narrative-alien-redesign.md Step 2.2) -->
             <div class="step-content" data-slide-step="1" style="display: none;">
-              <h3 class="step-subheading">The biggest names</h3>
-              <p>When we look at the most recent year (2022), a few artists clearly dominate the viral landscape.</p>
-              <p>The largest planets represent creators with multiple hit songs that caught fire on TikTok.</p>
-              <p><strong>Watch as the visualization highlights the top artists from 2022.</strong></p>
+              <h3 class="step-subheading">A small group of artists dominates viral sounds</h3>
+              <p>Highlight the biggest planets. These are the artists whose sounds go viral again and again. Most
+                smaller planets fade into the background once you focus on the leaders.</p>
+              <p>This suggests viral sounds are not evenly shared. A small group of artists contributes a large share of
+                the audio tide.</p>
+              <p class="step-prompt">Use the step button or scroll to activate the "Top artists" highlight. Then hover
+                each bright planet to read its viral song count.</p>
             </div>
 
-            <!-- Step 3: High-energy sweet spot - highlight medium-energy band -->
+            <!-- Step 3: Comparing across years (per narrative-alien-redesign.md Step 2.3) -->
             <div class="step-content" data-slide-step="2" style="display: none;">
-              <h3 class="step-subheading">The sweet spot</h3>
-              <p>Notice the middle orbits? Many viral tracks cluster in the medium-energy range.</p>
-              <p>Not too calm, not too intense—this "sweet spot" keeps viewers engaged without overwhelming them.</p>
-              <p><strong>The highlighted band shows where most viral sounds live.</strong></p>
+              <h3 class="step-subheading">Do the same artists stay viral across years?</h3>
+              <p>Switch between different years. Watch how the galaxy changes shape. Some planets appear in several
+                years, some flash in and out.</p>
+              <p>Returning planets show artists that keep adapting to trends. One-hit wonders appear only once.</p>
+              <p class="step-prompt">Click through the 2019 to 2022 buttons yourself and try to spot artists that never
+                disappear.</p>
             </div>
 
-            <!-- Step 4: Sustained influence - repeated artists across years -->
+            <!-- Transition text to Scene 3 (per narrative-alien-redesign.md) -->
             <div class="step-content" data-slide-step="3" style="display: none;">
-              <h3 class="step-subheading">Sustained influence</h3>
-              <p>Some artists don't just have one viral moment—they consistently produce tracks that resonate.</p>
-              <p>These repeat viral artists build lasting influence in the TikTok music ecosystem.</p>
-              <p>Next, we'll zoom into the top sounds on a record player.</p>
+              <h3 class="step-subheading">Zooming in to specific sounds</h3>
+              <p>We have seen that viral sounds orbit a small group of energetic, danceable artists. Next, let us drop
+                down from the galaxy view to the turntable and look at individual sounds themselves.</p>
+              <p class="step-transition">Scroll to continue to the record player, where we'll see which specific tracks
+                dominate.</p>
             </div>
           </div><!-- End text-overlay -->
 
@@ -813,140 +844,174 @@
          Layout: Central focus with record left-of-center, narrative top-right
          Background: Dark studio wall, light beams, neon rails
          ════════════════════════════════════════════════════════════════════════ -->
-    <section id="scene-viral-sounds" class="section scene-viral-sounds" data-scene-id="viral-sounds"
-    role="region" aria-labelledby="viral-sounds-title">
+        <section id="scene-viral-sounds" class="section scene-viral-sounds" data-scene-id="viral-sounds" role="region"
+          aria-labelledby="viral-sounds-title">
 
-    <!-- Background layers per v3 spec 3.2.3 -->
-    <div class="viral-sounds-bg viral-sounds-bg--studio" aria-hidden="true"></div>
-    <div class="viral-sounds-bg viral-sounds-bg--beams" aria-hidden="true"></div>
+          <!-- Background layers per v3 spec 3.2.3 -->
+          <div class="viral-sounds-bg viral-sounds-bg--studio" aria-hidden="true"></div>
+          <div class="viral-sounds-bg viral-sounds-bg--beams" aria-hidden="true"></div>
 
-    <div class="viral-sounds-container viral-sounds-container--central">
-      <!-- Top area: Scene label and heading (v3 spec text) -->
-      <div class="viral-sounds-header">
-        <span class="scene-label-badge">Scene 3 — Viral Sounds</span>
-        <h2 id="viral-sounds-title" class="viral-sounds-heading">A handful of sounds spin through every feed</h2>
-      </div>
+          <!-- Fixed viz overlay (persists across horizontal slides) -->
+          <div class="viral-sounds-viz-overlay">
+            <!-- Scene label (top-left) -->
+            <span class="scene-label-badge">Scene 3 — Viral Sounds</span>
 
-      <!-- Main content: Central focus layout per v2 spec 5.3.2 -->
-      <!-- Record centered but slightly left, text panel overlays top-right -->
-      <div class="viral-sounds-main viral-sounds-main--central">
-        <!-- Record visualization (centered, slightly left of center) -->
-        <div class="viral-sounds-record-area viral-sounds-record-area--central record-player-section">
-          <div class="record-player-layout" data-player-layout>
-            <div class="record-player-wrapper">
-              <!-- Mute Toggle Button - Top Left -->
-              <button class="mute-toggle-button" type="button" aria-label="Toggle mute" data-mute-toggle>
-                <svg class="mute-toggle-button__icon" viewBox="0 0 24 24" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
+            <!-- Centered scene title and intro -->
+            <div class="scene-header">
+              <h1 class="scene-title">A handful of sounds spin through every feed</h1>
+              <p class="scene-description">For any chosen year range, the top seven sounds are stacked as rings. The
+                outermost ring is the most played sound. Inner rings are still strong, but a little weaker.</p>
+            </div>
+
+            <!-- Collapsible chart instructions -->
+            <div class="chart-instructions chart-instructions--record-player" role="complementary"
+              aria-label="How to read this chart" data-info-panel>
+              <button class="chart-instructions__toggle" aria-expanded="false" data-info-toggle>
+                <svg class="chart-instructions__toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.5">
                   <path
-                    d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                    d="M11.25 11.25L11.2915 11.2293C11.8646 10.9427 12.5099 11.4603 12.3545 12.082L11.6455 14.918C11.4901 15.5397 12.1354 16.0573 12.7085 15.7707L12.75 15.75M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12ZM12 8.25H12.0075V8.2575H12V8.25Z" />
                 </svg>
+                <span>How to use</span>
               </button>
-              <span class="mute-toggle-helper" data-mute-helper>Unmute the sound tracks!</span>
-              <div class="record-player-base">
-                <div class="record-disc-area">
-                  <div class="record-indicator-line record-indicator-line--max" aria-hidden="true">higher popularity</div>
-                  <svg class="record-disc" viewBox="0 0 700 700" role="img">
-                    <g class="record-rings" data-record-rings></g>
-                  </svg>
-                  <div class="record-center-cap" aria-hidden="true">
-                    <span class="record-center-year" data-year-range-display>2020–2025</span>
-                  </div>
-                </div>
-                <div class="tonearm" data-tonearm>
-                  <div class="tonearm-hinge">
-                    <div class="tonearm-arm" data-tonearm-arm>
-                      <div class="tonearm-back">
-                        <div class="tonearm-head"></div>
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-                <!-- Song Info Screen - Bottom Right -->
-                <div class="song-info-screen" data-song-info-screen>
-                  <div class="song-info-screen__left">
-                    <img class="song-info-screen__album-cover" src="" alt="Album cover" data-album-cover>
-                  </div>
-                  <div class="song-info-screen__right">
-                    <h3 class="song-info-screen__title" data-song-title>No song selected</h3>
-                    <p class="song-info-screen__description" data-song-description>🎧 Play Count: —<br>✨ Author: —</p>
-                  </div>
-                </div>
-                <!-- Year Range Control (dual-handle slider from main) -->
-                <div class="year-range-control" data-year-range>
-                  <div class="year-range-control__header">
-                    <span class="year-range-control__label">Year Range</span>
-                    <span class="year-range-control__value" data-year-range-label>2020 – 2025</span>
-                  </div>
-                  <div class="year-range-slider" data-year-slider>
-                    <div class="year-range-slider__glow"></div>
-                    <div class="year-range-slider__track"></div>
-                    <div class="year-range-slider__selection" data-year-range-selection></div>
-                    <button class="year-range-slider__handle year-range-slider__handle--start" type="button"
-                      aria-label="Select start year" data-year-handle-start></button>
-                    <button class="year-range-slider__handle year-range-slider__handle--end" type="button"
-                      aria-label="Select end year" data-year-handle-end></button>
-                  </div>
-                  <div class="year-range-slider__ticks" data-year-slider-ticks></div>
-                </div>
-              </div>
-              <!-- Floating musical notes (from main) -->
-              <div class="record-player-notes" aria-hidden="true">
-                <span class="note note--cyan">♪</span>
-                <span class="note note--magenta">♫</span>
-                <span class="note note--black">♬</span>
-                <span class="note note--black">♬</span>
-                <span class="note note--black">♬</span>
-                <span class="note note--black">♬</span>
+              <div class="chart-instructions__content">
+                <h4 class="chart-instructions__title">Using the record player</h4>
+                <ul class="chart-instructions__list">
+                  <li>Outer rings = more plays</li>
+                  <li>Hover to spin and preview</li>
+                  <li>Click to lock a sound</li>
+                  <li>Drag the year slider to filter</li>
+                </ul>
               </div>
             </div>
-          </div>
-        </div>
 
-      </div>
+            <!-- Record player visualization (centered) -->
+            <div class="viral-sounds-record-area record-player-section">
+              <div class="record-player-layout" data-player-layout>
+                <div class="record-player-wrapper">
+                  <!-- Mute Toggle Button - Top Left -->
+                  <button class="mute-toggle-button" type="button" aria-label="Toggle mute" data-mute-toggle>
+                    <svg class="mute-toggle-button__icon" viewBox="0 0 24 24" fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                    </svg>
+                  </button>
+                  <span class="mute-toggle-helper" data-mute-helper>Unmute the sound track!</span>
+                  <div class="record-player-base">
+                    <div class="record-disc-area">
+                      <div class="record-indicator-line record-indicator-line--max" aria-hidden="true">higher popularity
+                      </div>
+                      <svg class="record-disc" viewBox="0 0 700 700" role="img">
+                        <g class="record-rings" data-record-rings></g>
+                      </svg>
+                      <div class="record-center-cap" aria-hidden="true">
+                        <span class="record-center-year" data-year-range-display>2020–2025</span>
+                      </div>
+                    </div>
+                    <div class="tonearm" data-tonearm>
+                      <div class="tonearm-hinge">
+                        <div class="tonearm-arm" data-tonearm-arm>
+                          <div class="tonearm-back">
+                            <div class="tonearm-head"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Song Info Screen - Bottom Right -->
+                    <div class="song-info-screen" data-song-info-screen>
+                      <div class="song-info-screen__left">
+                        <img class="song-info-screen__album-cover" src="" alt="Album cover" data-album-cover>
+                      </div>
+                      <div class="song-info-screen__right">
+                        <h3 class="song-info-screen__title" data-song-title>No song selected</h3>
+                        <p class="song-info-screen__description" data-song-description>🎧 Play Count: —<br>✨ Author: —
+                        </p>
+                      </div>
+                    </div>
+                    <!-- Year Range Control (dual-handle slider from main) -->
+                    <div class="year-range-control" data-year-range>
+                      <div class="year-range-control__header">
+                        <span class="year-range-control__label">Year Range</span>
+                        <span class="year-range-control__value" data-year-range-label>2020 – 2025</span>
+                      </div>
+                      <div class="year-range-slider" data-year-slider>
+                        <div class="year-range-slider__glow"></div>
+                        <div class="year-range-slider__track"></div>
+                        <div class="year-range-slider__selection" data-year-range-selection></div>
+                        <button class="year-range-slider__handle year-range-slider__handle--start" type="button"
+                          aria-label="Select start year" data-year-handle-start></button>
+                        <button class="year-range-slider__handle year-range-slider__handle--end" type="button"
+                          aria-label="Select end year" data-year-handle-end></button>
+                      </div>
+                      <div class="year-range-slider__ticks" data-year-slider-ticks></div>
+                    </div>
+                  </div>
+                  <!-- Floating musical notes (from main) -->
+                  <div class="record-player-notes" aria-hidden="true">
+                    <span class="note note--cyan">♪</span>
+                    <span class="note note--magenta">♫</span>
+                    <span class="note note--black">♬</span>
+                    <span class="note note--black">♬</span>
+                    <span class="note note--black">♬</span>
+                    <span class="note note--black">♬</span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-      <!-- Text panel overlay (top-right, ~30% width per v3 spec) -->
-      <div class="viral-sounds-text-panel viral-sounds-text-panel--overlay">
-        <!-- Step markers with v3 spec content -->
-        <div class="viral-sounds-steps">
-          <div class="step-item" data-step="1">
-            <span class="step-marker">1</span>
-            <p class="step-text">This turntable stacks the biggest viral sounds. Each ring is a track; the center holds the current hit.</p>
-          </div>
-          <div class="step-item" data-step="2">
-            <span class="step-marker">2</span>
-            <p class="step-text">Watch which songs appear again and again across years by sliding the year range. Some artists stay on the deck.</p>
-          </div>
-          <div class="step-item" data-step="3">
-            <span class="step-marker">3</span>
-            <p class="step-text">Durations and energy levels of these tracks line up with the sweet spot you saw in the stopwatch.</p>
-          </div>
-        </div>
+            <!-- Alien narrator (persists across slides) -->
+            <div class="alien-narrator alien-narrator--scene alien-narrator--scene3" data-scene="sounds">
+              <div class="alien-avatar alien-avatar--dj">
+                <img src="/assets/Alien_Listen.png" alt="" width="64" height="64" loading="lazy"
+                  onerror="this.parentElement.classList.add('alien-avatar--fallback')" />
+              </div>
+              <div class="alien-floating-platform alien-floating-platform--dj"></div>
+              <div class="alien-speech-bubble" data-speech-state="visible">
+                <p class="alien-speech-text">These are the sounds that spread everywhere. Hover any ring to hear a
+                  preview.</p>
+              </div>
+            </div>
 
-        <!-- Top 3 auto-sequence banner (hidden initially, shown during auto-sequence) -->
-        <div class="viral-sounds-top3-banner" data-top3-banner aria-hidden="true">
-          Top 3 viral sounds in this range
-        </div>
-      </div>
-    </div>
+          </div><!-- End viz-overlay -->
 
-    <!-- Alien narrator for Scene 3 (v3 spec: DJ at bottom-right with head bob) -->
-    <div class="alien-narrator alien-narrator--scene alien-narrator--scene3" data-scene="sounds">
-      <!-- Avatar FIRST so it renders on TOP in column layout -->
-      <div class="alien-avatar alien-avatar--dj">
-        <img src="/assets/alien.PNG"
-             alt="" width="64" height="64" loading="lazy"
-             onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
-      </div>
-      <!-- Floating platform SECOND so it renders BELOW -->
-      <div class="alien-floating-platform alien-floating-platform--dj"></div>
-      <div class="alien-speech-bubble" data-speech-state="visible">
-        <p class="alien-speech-text">These are the sounds that everyone reuses. They match the energy and duration sweet spots you saw earlier.</p>
-      </div>
-    </div>
-  </section>
+          <!-- TEXT OVERLAY (right side) - Shows one step at a time based on horizontal slide -->
+          <div class="viral-sounds-text-overlay">
+            <!-- Step 1: Comparing songs within a year -->
+            <div class="step-content step-content--sounds" data-slide-step="0">
+              <h3 class="step-subheading">A few sounds tower over the rest</h3>
+              <p>Hover across the rings from outermost to innermost. Notice how the play counts drop. A couple of sounds
+                usually dominate, while the rest have much smaller but still impressive numbers.</p>
+              <p class="step-prompt">Try hovering the second or third ring yourself. Look at how quickly the play count
+                shrinks compared to the top sound.</p>
+            </div>
 
+            <!-- Step 2: Watching the stack change over time -->
+            <div class="step-content step-content--sounds" data-slide-step="1" style="display: none;">
+              <h3 class="step-subheading">Viral sounds churn over time</h3>
+              <p>Drag the year slider to slide across different years. The entire stack of rings reshuffles. Titles and
+                artists change, and sometimes the same artist reappears with a new sound. This tells us that virality is
+                not only about one eternal hit. The sound landscape keeps refreshing.</p>
+              <p class="step-prompt">Pick two different year ranges manually and compare the top sound for each. Are
+                they from the same artists you saw in the music galaxy?</p>
+            </div>
+
+            <!-- Step 3: Transition to Scene 4 -->
+            <div class="step-content step-content--sounds" data-slide-step="2" style="display: none;">
+              <h3 class="step-subheading">Zooming in to timing</h3>
+              <p>So far, we know that viral videos ride on a small set of artists and sounds, and those favorites change
+                over time. Next, we test whether timing also matters: how long should a short video be.</p>
+              <p class="step-transition">Scroll to continue to the stopwatch, where we'll explore the ideal video
+                duration.</p>
+            </div>
+          </div><!-- End text-overlay -->
+
+          <!-- HORIZONTAL SLIDES - 3 slides for fullPage navigation tracking -->
+          <div class="slide viral-sounds-slide" data-slide-index="0"></div>
+          <div class="slide viral-sounds-slide" data-slide-index="1"></div>
+          <div class="slide viral-sounds-slide" data-slide-index="2"></div>
+
+        </section>
 
         <!-- ════════════════════════════════════════════════════════════════════════
          SCENE 4 - TIMING: "Timing is the tide of attention"
@@ -957,18 +1022,39 @@
         <section id="scene-duration" class="section scene-timing" data-scene-id="duration" role="region"
           aria-labelledby="duration-title">
 
-          <!-- Background layers per v3 spec - dawn theme -->
-          <div class="timing-bg timing-bg--gradient" aria-hidden="true"></div>
-          <div class="timing-bg timing-bg--glow" aria-hidden="true"></div>
-
-          <!-- Top half: Narrative text -->
-          <div class="timing-header">
+          <!-- Fixed viz overlay (persists across horizontal slides) -->
+          <div class="timing-viz-overlay">
+            <!-- Scene label (top-left) -->
             <span class="scene-label-badge">Scene 4 — Timing</span>
-            <h2 id="duration-title" class="timing-title">Timing is the tide of attention</h2>
-            <p class="timing-subtitle">
-              Short videos cannot be infinitely long. Viewers swipe away fast.
-              The stopwatch below shows where viral songs cluster inside that time limit.
-            </p>
+
+            <!-- Centered scene title and intro -->
+            <div class="scene-header">
+              <h1 class="scene-title">Do the shortest TikToks always go the most viral?</h1>
+              <p class="scene-description">Each slice shows a group of videos inside a duration range. The further a
+                slice reaches from the center, the more views videos in that bucket get on average.</p>
+            </div>
+
+            <!-- Collapsible chart instructions -->
+            <div class="chart-instructions chart-instructions--stopwatch" role="complementary"
+              aria-label="How to read this chart" data-info-panel>
+              <button class="chart-instructions__toggle" aria-expanded="false" data-info-toggle>
+                <svg class="chart-instructions__toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.5">
+                  <path
+                    d="M11.25 11.25L11.2915 11.2293C11.8646 10.9427 12.5099 11.4603 12.3545 12.082L11.6455 14.918C11.4901 15.5397 12.1354 16.0573 12.7085 15.7707L12.75 15.75M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12ZM12 8.25H12.0075V8.2575H12V8.25Z" />
+                </svg>
+                <span>How to read</span>
+              </button>
+              <div class="chart-instructions__content">
+                <h4 class="chart-instructions__title">Reading the stopwatch</h4>
+                <ul class="chart-instructions__list">
+                  <li>Slices = duration ranges</li>
+                  <li>Distance from center = avg views</li>
+                  <li>Hover any slice for details</li>
+                  <li>Use toggles to highlight ranges</li>
+                </ul>
+              </div>
+            </div>
 
             <!-- Icon row with timing concepts (v3 spec 5.2.4) - CLICKABLE FILTERS -->
             <div class="timing-icons-row" role="list" aria-label="Duration concepts - click to filter">
@@ -996,7 +1082,7 @@
               <button class="timing-icon-item" role="listitem" data-timing-filter="long"
                 aria-label="Filter to long clips over 30 seconds">
                 <div class="timing-icon-circle timing-icon-circle--long">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
                   </svg>
                 </div>
@@ -1005,45 +1091,76 @@
               </button>
             </div>
 
-            <!-- Bottom half: Stopwatch visualization -->
-            <div class="timing-viz-area">
-              <div class="timing-viz-wrapper">
-                <!-- D3 stopwatch visualization mounts here -->
-                <div id="chart" class="viz-container"
-                  aria-label="Stopwatch-style radial visualization showing duration sweet spots"></div>
+            <!-- Stopwatch visualization (centered) -->
+            <div class="timing-viz-wrapper">
+              <div id="chart" class="viz-container"
+                aria-label="Stopwatch-style radial visualization showing duration sweet spots"></div>
+            </div>
 
-                <!-- Callout annotation (appears during highlight) -->
-                <div class="timing-callout" data-timing-callout aria-hidden="true">
-                  <div class="callout-arrow"></div>
-                  <p class="callout-text">Most viral songs live here.</p>
-                </div>
+            <!-- Legend panel -->
+            <div class="timing-legend" role="complementary" aria-label="Visualization legend">
+              <div class="legend-item-inline">
+                <span class="legend-dot legend-dot--arc"></span>
+                <span>Arc length = Duration (seconds)</span>
               </div>
-
-              <!-- Legend panel (positioned to side of viz) -->
-              <div class="timing-legend" role="complementary" aria-label="Visualization legend">
-                <div class="legend-item-inline">
-                  <span class="legend-dot legend-dot--arc"></span>
-                  <span>Arc length = Duration (seconds)</span>
-                </div>
-                <div class="legend-item-inline">
-                  <span class="legend-dot legend-dot--radius"></span>
-                  <span>Arc position = Average play count</span>
-                </div>
+              <div class="legend-item-inline">
+                <span class="legend-dot legend-dot--radius"></span>
+                <span>Arc position = Average play count</span>
               </div>
             </div>
 
-            <!-- Alien narrator (upper right of clock per v3 spec 5.2.5) -->
+            <!-- Alien narrator (persists across slides) -->
             <div class="alien-narrator alien-narrator--timing" data-scene="dawn" aria-hidden="true">
               <div class="alien-avatar">
-                <img src="/assets/alien.PNG" alt="" width="64" height="64" loading="lazy"
+                <img src="/assets/Alien_Read.png" alt="" width="64" height="64" loading="lazy"
                   onerror="this.parentElement.classList.add('alien-avatar--fallback')" />
               </div>
               <div class="alien-speech-bubble" data-speech-state="visible">
-                <p class="alien-speech-text">See how dots pack into some bands more than others. Virality loves
-                  certain
+                <p class="alien-speech-text">See how dots cluster in certain time bands? Virality loves certain
                   durations.</p>
               </div>
             </div>
+          </div><!-- End viz-overlay -->
+
+          <!-- TEXT OVERLAY (right side) - Shows one step at a time based on horizontal slide -->
+          <div class="timing-text-overlay">
+            <!-- Step 1: Sweet spot highlight -->
+            <div class="step-content step-content--timing" data-slide-step="0">
+              <h3 class="step-subheading">A sweet spot around 15 to 30 seconds</h3>
+              <p>Highlight the slices between roughly 15 and 30 seconds. These slices usually form the outer band of the
+                stopwatch. Very short clips under 10 seconds stay closer to the center.</p>
+              <p>That suggests viral videos in this dataset tend to be short, but not extremely short. There is enough
+                time to set up a moment before the swipe.</p>
+              <p class="step-prompt">Toggle between the short, sweet spot, and long buttons and compare how far each
+                group reaches.</p>
+            </div>
+
+            <!-- Step 2: Long clips fall behind -->
+            <div class="step-content step-content--timing" data-slide-step="1" style="display: none;">
+              <h3 class="step-subheading">Very long clips lose steam</h3>
+              <p>Now highlight clips longer than about 30 seconds. In many buckets, these slices sit closer to the
+                center than the sweet spot ones.</p>
+              <p>Longer videos are not impossible to make viral, but on average they attract fewer views here.</p>
+              <p class="step-prompt">Move your mouse along the long range arcs and compare their average views to the
+                sweet spot arcs you saw earlier.</p>
+            </div>
+
+            <!-- Step 3: Transition to Scene 5 -->
+            <div class="step-content step-content--timing" data-slide-step="2" style="display: none;">
+              <h3 class="step-subheading">Moving beyond timing</h3>
+              <p>So far, we know that viral videos often use dominant sounds from key artists and stay within a sweet
+                duration range. Next, we look at what humans actually do in these clips: which topics rise to the top.
+              </p>
+              <p class="step-transition">Scroll to continue to the trend pyramid, where we'll explore topic categories.
+              </p>
+            </div>
+          </div><!-- End text-overlay -->
+
+          <!-- HORIZONTAL SLIDES - 3 slides for fullPage navigation tracking -->
+          <div class="slide timing-slide" data-slide-index="0"></div>
+          <div class="slide timing-slide" data-slide-index="1"></div>
+          <div class="slide timing-slide" data-slide-index="2"></div>
+
         </section>
 
         <!-- ════════════════════════════════════════════════════════════════════════
@@ -1055,74 +1172,94 @@
         <section id="scene-category" class="section scene-pyramid" data-scene-id="category" role="region"
           aria-labelledby="category-title">
 
-          <!-- Background layers - Forest theme -->
-          <div class="pyramid-bg pyramid-bg--sky" aria-hidden="true"></div>
-          <div class="pyramid-bg pyramid-bg--trees" aria-hidden="true"></div>
+          <!-- Fixed viz overlay (persists across horizontal slides) -->
+          <div class="pyramid-viz-overlay">
+            <!-- Scene label (top-left) -->
+            <span class="scene-label-badge">Scene 5 — Trend Pyramid</span>
 
-          <div class="pyramid-container">
-            <!-- Left column: Text content (35%) -->
-            <div class="pyramid-text-column">
-              <span class="scene-label-badge">Scene 5 — Trend Pyramid</span>
-              <h2 id="category-title" class="pyramid-title">Some topics tower above the rest</h2>
+            <!-- Chart instructions now integrated into viz via JS (info button) -->
 
-              <!-- Step paragraphs (v3 spec 5.5.3) -->
-              <div class="pyramid-steps">
-                <div class="pyramid-step" data-step="1">
-                  <span class="step-marker">1</span>
-                  <p>Each sticky note here represents a content category. The top row holds the most viewed categories.
-                  </p>
-                </div>
-                <div class="pyramid-step" data-step="2">
-                  <span class="step-marker">2</span>
-                  <p>Lift a note to reveal its name and see how much higher it stands than the rest.</p>
-                </div>
-                <div class="pyramid-step" data-step="3">
-                  <span class="step-marker">3</span>
-                  <p>Inside each category lives a crowd of creators. Sometimes a single giant dominates the view count.
-                  </p>
-                </div>
-              </div>
+            <!-- Pyramid visualization (centered) -->
+            <div class="pyramid-viz-wrapper">
+              <div id="viz-ranking" class="viz-container" data-viz="ranking"
+                aria-label="Pyramid visualization of content categories"></div>
 
-              <!-- Compact legend -->
-              <div class="pyramid-legend">
-                <div class="legend-item-inline">
-                  <span class="legend-dot legend-dot--position"></span>
-                  <span>Higher position = More total views</span>
-                </div>
+              <!-- Auto-emphasize callout (v3 spec - appears on entry) -->
+              <div class="pyramid-callout" data-pyramid-callout aria-hidden="true">
+                <div class="callout-arrow callout-arrow--left"></div>
+                <p class="callout-text">Most viewed category</p>
               </div>
             </div>
 
-            <!-- Right column: Pyramid visualization (65%) -->
-            <div class="pyramid-viz-column">
-              <div class="pyramid-viz-wrapper">
-                <div id="viz-ranking" class="viz-container" data-viz="ranking"
-                  aria-label="Pyramid visualization of content categories"></div>
-
-                <!-- Auto-emphasize callout (v3 spec - appears on entry) -->
-                <div class="pyramid-callout" data-pyramid-callout aria-hidden="true">
-                  <div class="callout-arrow callout-arrow--left"></div>
-                  <p class="callout-text">Most viewed category</p>
-                </div>
+            <!-- Compact legend -->
+            <div class="pyramid-legend">
+              <div class="legend-item-inline">
+                <span class="legend-dot legend-dot--position"></span>
+                <span>Higher position = More total views</span>
               </div>
             </div>
-          </div>
 
-          <!-- Alien narrator (hidden behind tree, slides out on first reveal) -->
-          <div class="alien-narrator alien-narrator--pyramid" data-scene="forest" aria-hidden="true">
-            <div class="alien-tree-hide" aria-hidden="true">
-              <!-- Tree silhouette for alien to hide behind -->
-              <svg viewBox="0 0 60 100" width="60" height="100">
-                <path d="M30 0 L5 60 L15 60 L0 100 L60 100 L45 60 L55 60 Z" fill="#0a2a1a" />
-              </svg>
+            <!-- Alien narrator (persists across slides) -->
+            <div class="alien-narrator alien-narrator--pyramid" data-scene="forest" aria-hidden="true">
+              <div class="alien-avatar">
+                <img src="/assets/Alien_Sit.png" alt="" width="64" height="64" loading="lazy"
+                  onerror="this.parentElement.classList.add('alien-avatar--fallback')" />
+              </div>
+              <div class="alien-speech-bubble" data-speech-state="hidden">
+                <p class="alien-speech-text">Humans pile their trends into this pyramid. I see one category shining at
+                  the peak.</p>
+              </div>
             </div>
-            <div class="alien-avatar">
-              <img src="/assets/alien.PNG" alt="" width="64" height="64" loading="lazy"
-                onerror="this.parentElement.classList.add('alien-avatar--fallback')" />
+          </div><!-- End viz-overlay -->
+
+          <!-- TEXT OVERLAY (left side) - Shows one step at a time based on horizontal slide -->
+          <div class="pyramid-text-overlay">
+            <!-- Step 1: The pyramid reveals top categories -->
+            <div class="step-content step-content--pyramid" data-slide-step="0">
+              <h2 id="category-title" class="step-heading step-heading--question">Which topics rise to the top?</h2>
+              <p>Press play or scroll into the scene to let the notes fall. As covers drop, categories appear in a
+                pyramid. The top row shows the most viral category in this dataset. Lower rows show categories with
+                fewer viral views.</p>
+              <p class="step-prompt">Watch the full sequence once without clicking anything. Simply notice which
+                category lands at the top.</p>
             </div>
-            <div class="alien-speech-bubble" data-speech-state="hidden">
-              <p class="alien-speech-text">Peeling these layers shows which topics really dominate the tide.</p>
+
+            <!-- Step 2: Inspecting the top of the pyramid -->
+            <div class="step-content step-content--pyramid" data-slide-step="1" style="display: none;">
+              <h3 class="step-subheading">The peak category attracts the lion's share of views</h3>
+              <p>When the covers finish falling, focus on the top sticky note. This category tends to gather the highest
+                total views among the viral shorts in this dataset. It tells us that some topics are structurally more
+                viral than others.</p>
+              <p class="step-prompt">Click the top category card to open the creator popup. See who dominates this
+                space.</p>
             </div>
-          </div>
+
+            <!-- Step 3: Inside one category's community -->
+            <div class="step-content step-content--pyramid" data-slide-step="2" style="display: none;">
+              <h3 class="step-subheading">Each category has its own mini universe of creators</h3>
+              <p>Inside the popup, each bubble is a creator. Larger bubbles mean more views from that creator's viral
+                shorts. The top three creators wear badges. This shows that even within a category, a few creators gain
+                most of the attention.</p>
+              <p class="step-prompt">Hover a large bubble to read the creator handle and see the tags and sounds they
+                use. Then close the popup and briefly scan the rest of the pyramid.</p>
+            </div>
+
+            <!-- Step 4: Transition to Scene 6 -->
+            <div class="step-content step-content--pyramid" data-slide-step="3" style="display: none;">
+              <h3 class="step-subheading">The language of virality</h3>
+              <p>Now we know which topics sit at the top and which creators dominate those topics. But even with sounds,
+                timing, and topics chosen, we still need a caption. What feelings do viral captions express?</p>
+              <p class="step-transition">Scroll to continue to the emotion bubbles, where we'll explore caption
+                sentiment.</p>
+            </div>
+          </div><!-- End text-overlay -->
+
+          <!-- HORIZONTAL SLIDES - 4 slides for fullPage navigation tracking -->
+          <div class="slide pyramid-slide" data-slide-index="0"></div>
+          <div class="slide pyramid-slide" data-slide-index="1"></div>
+          <div class="slide pyramid-slide" data-slide-index="2"></div>
+          <div class="slide pyramid-slide" data-slide-index="3"></div>
+
         </section>
 
         <!-- ════════════════════════════════════════════════════════════════════════
@@ -1134,48 +1271,41 @@
         <section id="scene-emotion" class="section scene-emotion" data-scene-id="emotion" role="region"
           aria-labelledby="emotion-title">
 
-          <!-- Background layers - Dark theme (v2 spec) -->
-          <div class="emotion-bg emotion-bg--dark" aria-hidden="true"></div>
-          <div class="emotion-bg emotion-bg--particles" aria-hidden="true"></div>
+          <!-- Fixed viz overlay (persists across horizontal slides) -->
+          <div class="emotion-viz-overlay">
+            <!-- Scene label (top-left) -->
+            <span class="scene-label-badge">Scene 6 — Captions</span>
 
-          <div class="emotion-container">
-            <!-- Left column: Text content (25%) -->
-            <div class="emotion-text-column">
-              <span class="scene-label-badge">Scene 6 — Captions</span>
-              <h2 id="emotion-title" class="emotion-title">What words appear in viral captions?</h2>
-
-              <div class="emotion-paragraphs">
-                <p>We analyzed captions from viral TikTok videos and extracted the most frequent words. Each word is
-                  classified by its emotional tone using sentiment analysis.</p>
-                <p>Bigger bubbles mean the word appears more often. Words that are semantically similar cluster near
-                  each other. Hover on any word to see its connections.</p>
-              </div>
-
-              <!-- Guided interaction prompt -->
-              <div class="emotion-guided-step">
-                <p class="guided-prompt">Try clicking on the legend to filter by emotion, hover on bubbles to explore
-                  word connections.</p>
-                <p class="guided-prompt">Left click and drag to pan, and scroll wheel to zoom.</p>
-              </div>
-
-              <!-- Insight callout (shown after interaction) -->
-              <div class="emotion-insight-callout" data-insight-state="hidden">
-                <p class="insight-text">Words like "viral", "trend", "fyp", and "dance" appear frequently, suggesting
-                  viral captions often include calls-to-action and trend references. Positive emotions like joy and
-                  excitement dominate over negative tones.</p>
+            <!-- Collapsible chart instructions -->
+            <div class="chart-instructions chart-instructions--emotion" role="complementary"
+              aria-label="How to read this chart" data-info-panel>
+              <button class="chart-instructions__toggle" aria-expanded="false" data-info-toggle>
+                <svg class="chart-instructions__toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="1.5">
+                  <path
+                    d="M11.25 11.25L11.2915 11.2293C11.8646 10.9427 12.5099 11.4603 12.3545 12.082L11.6455 14.918C11.4901 15.5397 12.1354 16.0573 12.7085 15.7707L12.75 15.75M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12ZM12 8.25H12.0075V8.2575H12V8.25Z" />
+                </svg>
+                <span>How to explore</span>
+              </button>
+              <div class="chart-instructions__content">
+                <h4 class="chart-instructions__title">Exploring the bubbles</h4>
+                <ul class="chart-instructions__list">
+                  <li>Each bubble = a caption word</li>
+                  <li>Size = frequency</li>
+                  <li>Color = emotion category</li>
+                  <li>Click legend to filter</li>
+                </ul>
               </div>
             </div>
 
-            <!-- Center: Visualization (50%) -->
-            <div class="emotion-viz-column">
-              <div class="emotion-viz-wrapper">
-                <div id="viz-emotion" class="viz-container" data-viz="emotion"
-                  aria-label="Word cloud showing emotional tone of viral caption words"></div>
-              </div>
+            <!-- Emotion visualization (centered) -->
+            <div class="emotion-viz-wrapper">
+              <div id="viz-emotion" class="viz-container" data-viz="emotion"
+                aria-label="Word cloud showing emotional tone of viral caption words"></div>
             </div>
 
-            <!-- Right column: Legend panel (25%) -->
-            <div class="emotion-controls-column">
+            <!-- Controls panel (legend + sort) -->
+            <div class="emotion-controls-panel">
               <!-- Dynamic legend populated by visualization -->
               <div class="emotion-legend-panel">
                 <h3 class="filter-panel-title">Filter by emotion</h3>
@@ -1184,27 +1314,73 @@
                   <!-- Legend items populated dynamically by EmotionViz.setupLegend() -->
                 </ul>
               </div>
+              <!-- Sort toggle - standalone below legend panel, no border -->
+              <button class="emotion-sort-toggle" aria-pressed="false" aria-label="Toggle sorted view">
+                Sort into columns
+              </button>
+            </div>
 
-              <!-- Sort toggle control -->
-              <div class="emotion-sort-panel">
-                <button class="emotion-sort-toggle" aria-pressed="false" aria-label="Toggle sorted view">
-                  Sort into columns
-                </button>
+            <!-- Alien narrator (persists across slides) -->
+            <div class="alien-narrator alien-narrator--emotion" data-scene="air" aria-hidden="true">
+              <div class="alien-avatar">
+                <img src="/assets/Alien_Wave.png" alt="" width="64" height="64" loading="lazy"
+                  onerror="this.parentElement.classList.add('alien-avatar--fallback')" />
+              </div>
+              <div class="alien-speech-bubble" data-speech-state="visible">
+                <p class="alien-speech-text">Bigger bubbles = more common words. Notice the trend references and
+                  positive energy? That's the language of virality.</p>
               </div>
             </div>
-          </div>
+          </div><!-- End viz-overlay -->
 
-          <!-- Alien narrator -->
-          <div class="alien-narrator alien-narrator--emotion" data-scene="air" aria-hidden="true">
-            <div class="alien-avatar">
-              <img src="/assets/alien.PNG" alt="" width="64" height="64" loading="lazy"
-                onerror="this.parentElement.classList.add('alien-avatar--fallback')" />
+          <!-- TEXT OVERLAY (left side) - Shows one step at a time based on horizontal slide -->
+          <div class="emotion-text-overlay">
+            <!-- Step 1: The emotional landscape -->
+            <div class="step-content step-content--emotion" data-slide-step="0">
+              <h2 id="emotion-title" class="step-heading step-heading--question">Does viral text use any particular
+                emotions?</h2>
+              <p>The bubble cloud below shows words extracted from viral captions. Each word is tagged with an emotional
+                category. Look at the colors: are there many red bubbles (negative), many green bubbles (positive), or
+                something else?</p>
+              <p class="step-prompt">Hover a few large bubbles. Read the word and notice its color category.</p>
             </div>
-            <div class="alien-speech-bubble" data-speech-state="visible">
-              <p class="alien-speech-text">Bigger bubbles mean more frequent words. Notice how many are about trends and
-                positive energy? That is the language of virality.</p>
+
+            <!-- Step 2: Filtering by emotion -->
+            <div class="step-content step-content--emotion" data-slide-step="1" style="display: none;">
+              <h3 class="step-subheading">Positive emotions dominate the viral caption mood</h3>
+              <p>Click one of the emotion categories in the legend to show only that emotion. You will likely see that
+                Joy and Surprise bubbles take up more space than Sadness or Anger. Viral captions tend to push upbeat or
+                exciting vibes.</p>
+              <p class="step-prompt">Filter down to "Joy" first, then try "Sadness". Compare how many words appear for
+                each.</p>
             </div>
-          </div>
+
+            <!-- Step 3: Sorting columns to confirm -->
+            <div class="step-content step-content--emotion" data-slide-step="2" style="display: none;">
+              <h3 class="step-subheading">When sorted, the pattern becomes clearer</h3>
+              <p>Toggle "Sort into columns". The bubbles line up by emotion. Now each row is one category. You can
+                compare the rows' bubble sizes. The row with the largest bubbles likely reflects TikTok's dominant
+                caption tone.</p>
+              <p class="step-prompt">Compare the size of the largest bubble in the Joy row to the largest in the Sadness
+                row.</p>
+            </div>
+
+            <!-- Step 4: Transition to Scene 7 -->
+            <div class="step-content step-content--emotion" data-slide-step="3" style="display: none;">
+              <h3 class="step-subheading">Time to test your intuition</h3>
+              <p>We have seen that viral videos pick dominant sounds, stay near a sweet duration, cluster in certain
+                categories, and often use emotionally charged captions. Time to see if you can use these ingredients.
+              </p>
+              <p class="step-transition">Scroll to continue to the quiz lab, where you'll apply what you've learned.</p>
+            </div>
+          </div><!-- End text-overlay -->
+
+          <!-- HORIZONTAL SLIDES - 4 slides for fullPage navigation tracking -->
+          <div class="slide emotion-slide" data-slide-index="0"></div>
+          <div class="slide emotion-slide" data-slide-index="1"></div>
+          <div class="slide emotion-slide" data-slide-index="2"></div>
+          <div class="slide emotion-slide" data-slide-index="3"></div>
+
         </section>
 
         <!-- ════════════════════════════════════════════════════════════════════════
@@ -1216,18 +1392,38 @@
         <section id="scene-quiz" class="section scene-quiz" data-scene-id="quiz" role="region"
           aria-labelledby="quiz-title">
 
-          <!-- Background layers - Lab theme -->
-          <div class="quiz-bg quiz-bg--lab" aria-hidden="true"></div>
-          <div class="quiz-bg quiz-bg--bubbles" aria-hidden="true"></div>
-
           <div class="quiz-container">
             <!-- Scene label -->
-            <span class="scene-label-badge">Scene 7 — Viral Recipe</span>
+            <span class="scene-label-badge">Scene 7 — Quiz Lab</span>
 
             <!-- Question panel (top) -->
             <div class="quiz-question-panel">
-              <h2 id="quiz-title" class="quiz-main-title">Can you spot a viral recipe?</h2>
-              <p class="quiz-intro">Test what you have learned about viral video ingredients.</p>
+              <h2 id="quiz-title" class="quiz-main-title step-heading step-heading--question">Can you spot a viral
+                recipe?</h2>
+              <p class="quiz-intro">You have seen which sounds, durations, topics, and caption emotions dominate
+                virality. Now it is time to test your intuition. Below, you will see four video cards. Each one shows a
+                mix of these traits. Only one scored highest in average views. Can you guess which?</p>
+
+              <!-- Collapsible quiz instructions -->
+              <div class="chart-instructions chart-instructions--quiz" role="complementary"
+                aria-label="How the quiz works" data-info-panel>
+                <button class="chart-instructions__toggle" aria-expanded="false" data-info-toggle>
+                  <svg class="chart-instructions__toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.5">
+                    <path
+                      d="M11.25 11.25L11.2915 11.2293C11.8646 10.9427 12.5099 11.4603 12.3545 12.082L11.6455 14.918C11.4901 15.5397 12.1354 16.0573 12.7085 15.7707L12.75 15.75M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12ZM12 8.25H12.0075V8.2575H12V8.25Z" />
+                  </svg>
+                  <span>How it works</span>
+                </button>
+                <div class="chart-instructions__content">
+                  <h4 class="chart-instructions__title">Quiz rules</h4>
+                  <ul class="chart-instructions__list">
+                    <li>Four video cards appear</li>
+                    <li>Pick the one with most views</li>
+                    <li>Complete 3 rounds</li>
+                  </ul>
+                </div>
+              </div>
             </div>
 
             <!-- Conveyor Visualization Container (mounts itself) -->
@@ -1237,11 +1433,11 @@
           <!-- Alien narrator (on conveyor belt per v3 spec) -->
           <div class="alien-narrator alien-narrator--quiz" data-scene="lab" aria-hidden="true">
             <div class="alien-avatar">
-              <img src="/assets/alien.PNG" alt="" width="64" height="64" loading="lazy"
+              <img src="/assets/Alien_Performative.png" alt="" width="64" height="64" loading="lazy"
                 onerror="this.parentElement.classList.add('alien-avatar--fallback')" />
             </div>
             <div class="alien-speech-bubble" data-speech-state="hidden">
-              <p class="alien-speech-text">Ready for a lab test? Try guessing which recipe goes viral.</p>
+              <p class="alien-speech-text">Time for a lab test! Can you guess which recipe goes viral?</p>
             </div>
           </div>
         </section>
@@ -1255,194 +1451,196 @@
         <section id="scene-summary" class="section scene-wrapup" data-scene-id="summary" role="region"
           aria-labelledby="summary-title">
 
-          <!-- Background layers - Blurred lab continuation (persists across slides) -->
-          <div class="wrapup-bg wrapup-bg--gradient" aria-hidden="true"></div>
-          <div class="wrapup-bg wrapup-bg--glow" aria-hidden="true"></div>
+          <!-- Centered recipe card -->
+          <div class="wrapup-center">
+            <div class="recipe-card">
+              <!-- Header -->
+              <div class="recipe-header">
+                <h2 id="summary-title" class="recipe-title">Recipe for a Viral Short Video</h2>
+                <p class="recipe-subtitle">According to our TikTok Tides data</p>
+              </div>
 
-          <!-- Scene label -->
-          <span class="scene-label-badge">Scene 8 — Wrap-up</span>
-
-          <!-- Two-column layout: Recipe Card + Team Credits side by side -->
-          <div class="wrapup-columns">
-            <!-- Left column: Recipe Card -->
-            <div class="wrapup-column wrapup-column--recipe">
-              <div class="recipe-card">
-                <!-- Header -->
-                <div class="recipe-header">
-                  <h2 id="summary-title" class="recipe-title">Recipe for a Viral Short Video</h2>
-                  <p class="recipe-subtitle">According to our TikTok Tides data</p>
+              <!-- Two-column grid -->
+              <div class="recipe-grid">
+                <!-- Left column: Ingredients -->
+                <div class="recipe-column">
+                  <h3 class="recipe-column-title">Ingredients</h3>
+                  <ul class="recipe-ingredients" role="list">
+                    <li class="recipe-ingredient">
+                      <span class="ingredient-icon" aria-hidden="true">🎵</span>
+                      <span class="ingredient-text">A sound from a small group of dominant artists or popular
+                        tracks.</span>
+                    </li>
+                    <li class="recipe-ingredient">
+                      <span class="ingredient-icon" aria-hidden="true">⏱️</span>
+                      <span class="ingredient-text">Clip length near the duration band where our stopwatch shows the
+                        densest cluster.</span>
+                    </li>
+                    <li class="recipe-ingredient">
+                      <span class="ingredient-icon" aria-hidden="true">📊</span>
+                      <span class="ingredient-text">A category near the top of our trend pyramid.</span>
+                    </li>
+                    <li class="recipe-ingredient">
+                      <span class="ingredient-icon" aria-hidden="true">💬</span>
+                      <span class="ingredient-text">A caption tone leaning toward hype or curiosity rather than flat
+                        description.</span>
+                    </li>
+                    <li class="recipe-ingredient">
+                      <span class="ingredient-icon" aria-hidden="true">🔗</span>
+                      <span class="ingredient-text">Connection to communities that use that sound repeatedly.</span>
+                    </li>
+                  </ul>
                 </div>
 
-                <!-- Two-column grid -->
-                <div class="recipe-grid">
-                  <!-- Left column: Ingredients -->
-                  <div class="recipe-column">
-                    <h3 class="recipe-column-title">Ingredients</h3>
-                    <ul class="recipe-ingredients" role="list">
-                      <li class="recipe-ingredient">
-                        <span class="ingredient-icon" aria-hidden="true">🎵</span>
-                        <span class="ingredient-text">A sound from a small group of dominant artists or popular
-                          tracks.</span>
-                      </li>
-                      <li class="recipe-ingredient">
-                        <span class="ingredient-icon" aria-hidden="true">⏱️</span>
-                        <span class="ingredient-text">Clip length near the duration band where our stopwatch shows the
-                          densest cluster.</span>
-                      </li>
-                      <li class="recipe-ingredient">
-                        <span class="ingredient-icon" aria-hidden="true">📊</span>
-                        <span class="ingredient-text">A category near the top of our trend pyramid.</span>
-                      </li>
-                      <li class="recipe-ingredient">
-                        <span class="ingredient-icon" aria-hidden="true">💬</span>
-                        <span class="ingredient-text">A caption tone leaning toward hype or curiosity rather than flat
-                          description.</span>
-                      </li>
-                      <li class="recipe-ingredient">
-                        <span class="ingredient-icon" aria-hidden="true">🔗</span>
-                        <span class="ingredient-text">Connection to communities that use that sound repeatedly.</span>
-                      </li>
-                    </ul>
-                  </div>
-
-                  <!-- Right column: What the charts showed -->
-                  <div class="recipe-column">
-                    <h3 class="recipe-column-title">What the Charts Showed</h3>
-                    <div class="recipe-evidence">
-                      <div class="evidence-item">
-                        <div class="evidence-icon evidence-icon--sound" aria-hidden="true">🪐</div>
-                        <span class="evidence-label">Music Galaxy — Artists orbiting virality</span>
-                      </div>
-                      <div class="evidence-item">
-                        <div class="evidence-icon evidence-icon--timing" aria-hidden="true">⏰</div>
-                        <span class="evidence-label">Stopwatch — Timing is the tide of attention</span>
-                      </div>
-                      <div class="evidence-item">
-                        <div class="evidence-icon evidence-icon--category" aria-hidden="true">🔺</div>
-                        <span class="evidence-label">Trend Pyramid — Categories that climb</span>
-                      </div>
-                      <div class="evidence-item">
-                        <div class="evidence-icon evidence-icon--emotion" aria-hidden="true">💭</div>
-                        <span class="evidence-label">Emotion Bubbles — Words that resonate</span>
-                      </div>
-                      <div class="evidence-item">
-                        <div class="evidence-icon evidence-icon--quiz" aria-hidden="true">🧪</div>
-                        <span class="evidence-label">Quiz Lab — Testing your viral intuition</span>
-                      </div>
+                <!-- Right column: What the charts showed -->
+                <div class="recipe-column">
+                  <h3 class="recipe-column-title">What the Charts Showed</h3>
+                  <div class="recipe-evidence">
+                    <div class="evidence-item">
+                      <div class="evidence-icon evidence-icon--sound" aria-hidden="true">🪐</div>
+                      <span class="evidence-label">Music Galaxy — Artists orbiting virality</span>
+                    </div>
+                    <div class="evidence-item">
+                      <div class="evidence-icon evidence-icon--timing" aria-hidden="true">⏰</div>
+                      <span class="evidence-label">Stopwatch — Timing is the tide of attention</span>
+                    </div>
+                    <div class="evidence-item">
+                      <div class="evidence-icon evidence-icon--category" aria-hidden="true">🔺</div>
+                      <span class="evidence-label">Trend Pyramid — Categories that climb</span>
+                    </div>
+                    <div class="evidence-item">
+                      <div class="evidence-icon evidence-icon--emotion" aria-hidden="true">💭</div>
+                      <span class="evidence-label">Emotion Bubbles — Words that resonate</span>
+                    </div>
+                    <div class="evidence-item">
+                      <div class="evidence-icon evidence-icon--quiz" aria-hidden="true">🧪</div>
+                      <span class="evidence-label">Quiz Lab — Testing your viral intuition</span>
                     </div>
                   </div>
                 </div>
-
-                <!-- Closing text -->
-                <div class="recipe-closing">
-                  <p>Not every video that uses these ingredients will go viral.</p>
-                  <p>However, our data shows that viral clips tend to live in this region of the TikTok Tides.</p>
-                </div>
-
-                <!-- Back to Top button -->
-                <button class="back-to-top-btn" data-scroll-to="#scene-hero" aria-label="Back to top">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 19V5M5 12l7-7 7 7" />
-                  </svg>
-                  <span>Back to top</span>
-                </button>
               </div>
+
+            <!-- Closing text -->
+            <div class="recipe-closing">
+              <p>Not every video that uses these ingredients will go viral.</p>
+              <p>However, our data shows that viral clips tend to live in this region of the TikTok Tides.</p>
             </div>
+          </div>
+        </div>
 
-            <!-- Right column: Team Credits -->
-            <div class="wrapup-column wrapup-column--team">
-              <div class="team-credits">
-                <div class="credits-header">
-                  <img src="/assets/UFO_Animated.gif" alt="" class="credits-ufo" aria-hidden="true" />
-                  <h3 class="credits-title">Made by Team TrendTokers</h3>
-                </div>
-                <div class="credits-team">
-                  <div class="team-member">
-                    <a href="https://www.linkedin.com/in/hellokathylee/" target="_blank" rel="noopener noreferrer">
-                      <div class="member-avatar">
-                        <img src="/assets/Alien_Kathy.png" width="125" height="125" alt="Alien Kathy">
-                      </div>
-                      <span class="member-name">Kathy Lee</span>
-                      <span class="member-role">Developer</span>
-                    </a>
-                  </div>
-                  <div class="team-member">
-                    <a href="https://www.linkedin.com/in/xinyuan-gu-034016219/" target="_blank"
-                      rel="noopener noreferrer">
-                      <div class="member-avatar">
-                        <img src="/assets/Alien_Kerry.png" width="125" height="125" alt="Alien Kerry">
-                      </div>
-                      <span class="member-name">Kerry Gu</span>
-                      <span class="member-role">Developer</span>
-                    </a>
-                  </div>
-                  <div class="team-member">
-                    <a href="https://www.linkedin.com/in/bradleylin/" target="_blank" rel="noopener noreferrer">
-                      <div class="member-avatar">
-                        <img src="/assets/Alien_Bradley.png" width="125" height="125" alt="Alien Bradley">
-                      </div>
-                      <span class="member-name">Bradley Lin</span>
-                      <span class="member-role">Developer</span>
-                    </a>
-                  </div>
-                  <div class="team-member">
-                    <a href="https://www.linkedin.com/in/anushka-sharma-28ba2525b/" target="_blank"
-                      rel="noopener noreferrer">
-                      <div class="member-avatar">
-                        <img src="/assets/Alien_Anushka.png" width="125" height="125" alt="Alien Anushka">
-                      </div>
-                      <span class="member-name">Anushka Sharma</span>
-                      <span class="member-role">Developer</span>
-                    </a>
-                  </div>
-                  <div class="team-member">
-                    <a href="https://www.linkedin.com/in/qiansu-ca/" target="_blank" rel="noopener noreferrer">
-                      <div class="member-avatar">
-                        <img src="/assets/Alien_Angela.png" width="125" height="125" alt="Alien Angela">
-                      </div>
-                      <span class="member-name">Angela Su</span>
-                      <span class="member-role">Developer</span>
-                    </a>
-                  </div>
-                  <div class="team-member">
-                    <a href="https://www.linkedin.com/in/jvincentius/" target="_blank" rel="noopener noreferrer">
-                      <div class="member-avatar">
-                        <img src="/assets/Alien_Jon.png" width="125" height="125" alt="Alien Jon">
-                      </div>
-                      <span class="member-name">Jon Vincentius</span>
-                      <span class="member-role">Developer</span>
-                    </a>
-                  </div>
-                </div>
-                <p class="credits-course">CSC316 - Interactive Data Visualization</p>
-                <a href="https://github.com/hellokathylee/tiktok-tides" target="_blank" rel="noopener noreferrer"
-                  class="credits-github">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                      d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                  </svg>
-                  View on GitHub
-                </a>
+    </section>
+
+        <!-- ════════════════════════════════════════════════════════════════════════
+         SCENE 9: TEAM CREDITS (Standalone page)
+         Background: Continues wrapup theme
+         ════════════════════════════════════════════════════════════════════════ -->
+        <section id="scene-credits" class="section scene-wrapup scene-credits" data-scene-id="credits" role="region"
+          aria-labelledby="credits-title">
+
+          <!-- Centered team credits -->
+          <div class="credits-center">
+            <div class="team-credits">
+              <div class="credits-header">
+                <img src="/assets/UFO_Animated.gif" alt="" class="credits-ufo" aria-hidden="true" />
+                <h3 class="credits-title">Made by Team TrendTokers</h3>
               </div>
+              <div class="credits-team">
+                <div class="team-member">
+                  <a href="https://www.linkedin.com/in/hellokathylee/" target="_blank" rel="noopener noreferrer">
+                    <div class="member-avatar">
+                      <img src="/assets/Alien_Kathy.png" loading="lazy" alt="Alien Kathy">
+                    </div>
+                    <span class="member-name">Kathy Lee</span>
+                    <span class="member-role">Developer</span>
+                  </a>
+                </div>
+                <div class="team-member">
+                  <a href="https://www.linkedin.com/in/xinyuan-gu-034016219/" target="_blank" rel="noopener noreferrer">
+                    <div class="member-avatar">
+                      <img src="/assets/Alien_Kerry.png" loading="lazy" alt="Alien Kerry">
+                    </div>
+                    <span class="member-name">Kerry Gu</span>
+                    <span class="member-role">Developer</span>
+                  </a>
+                </div>
+                <div class="team-member">
+                  <a href="https://www.linkedin.com/in/bradleylin/" target="_blank" rel="noopener noreferrer">
+                    <div class="member-avatar">
+                      <img src="/assets/Alien_Bradley.png" loading="lazy" alt="Alien Bradley">
+                    </div>
+                    <span class="member-name">Bradley Lin</span>
+                    <span class="member-role">Developer</span>
+                  </a>
+                </div>
+                <div class="team-member">
+                  <a href="https://www.linkedin.com/in/anushka-sharma-28ba2525b/" target="_blank"
+                    rel="noopener noreferrer">
+                    <div class="member-avatar">
+                      <img src="/assets/Alien_Anushka.png" loading="lazy" alt="Alien Anushka">
+                    </div>
+                    <span class="member-name">Anushka Sharma</span>
+                    <span class="member-role">Developer</span>
+                  </a>
+                </div>
+                <div class="team-member">
+                  <a href="https://www.linkedin.com/in/qiansu-ca/" target="_blank" rel="noopener noreferrer">
+                    <div class="member-avatar">
+                      <img src="/assets/Alien_Angela.png" loading="lazy" alt="Alien Angela">
+                    </div>
+                    <span class="member-name">Angela Su</span>
+                    <span class="member-role">Developer</span>
+                  </a>
+                </div>
+                <div class="team-member">
+                  <a href="https://www.linkedin.com/in/jvincentius/" target="_blank" rel="noopener noreferrer">
+                    <div class="member-avatar">
+                      <img src="/assets/Alien_Jon.png" loading="lazy" alt="Alien Jon">
+                    </div>
+                    <span class="member-name">Jon Vincentius</span>
+                    <span class="member-role">Developer</span>
+                  </a>
+                </div>
+              </div>
+
+              <p class="credits-course">CSC316 - Interactive Data Visualization</p>
+              <a href="https://github.com/hellokathylee/tiktok-tides" target="_blank" rel="noopener noreferrer"
+                class="credits-github">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                </svg>
+                View on GitHub
+              </a>
+
+              <!-- Back to Top button -->
+              <button class="back-to-top-btn" data-scroll-to="#scene-hero" aria-label="Back to top">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 19V5M5 12l7-7 7 7"/>
+                </svg>
+                <span>Back to top</span>
+              </button>
             </div>
           </div>
 
-          <!-- Alien narrator -->
-          <div class="alien-narrator alien-narrator--wrapup" data-scene="wrapup" aria-hidden="true">
-            <div class="alien-avatar">
-              <img src="/assets/alien.PNG" alt="" width="64" height="64" loading="lazy"
-                onerror="this.parentElement.classList.add('alien-avatar--fallback')" />
-            </div>
-            <div class="alien-speech-bubble" data-speech-state="hidden">
-              <p class="alien-speech-text">Here is the short version of what we found.</p>
-            </div>
-          </div>
-        </section>
+      </section>
 
       </div><!-- End #fullpage -->
     </main>
 
+    <!-- Wrapup Scene Badge - Outside fullPage container for proper fixed positioning -->
+    <span class="scene-label-badge scene-label-badge--wrapup">Scene 8 — Wrap-up</span>
+
+    <!-- Alien narrator with scroll hint - Outside fullPage for proper fixed positioning -->
+    <div class="alien-narrator alien-narrator--wrapup" data-scene="wrapup" aria-hidden="true">
+      <div class="alien-avatar">
+        <img src="/assets/Alien_Point.png"
+             alt="" width="64" height="64" loading="lazy"
+             onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
+      </div>
+      <div class="alien-speech-bubble" data-speech-state="visible">
+        <p class="alien-speech-text">Curious who built this experience? Keep scrolling to meet the crew behind TikTok Tides!</p>
+      </div>
+    </div>
 
     <!-- Live Region for Screen Readers -->
     <div role="status" aria-live="polite" aria-atomic="true" class="sr-only"></div>
@@ -1464,21 +1662,45 @@
         'category': 'forest',
         'emotion': 'air',
         'quiz': 'lab',
-        'summary': 'cosmos'
+        'summary': 'wrapup'
       };
 
       // Initialize fullPage.js for slide-snap behavior across entire site
       // Pattern from STEAMulating Trends and Smoking & Lung Cancer examples
       var fullPageInstance = new fullpage('#fullpage', {
-        // License key (using open-source GPL-compatible option)
-        licenseKey: 'gplv3-license',
-
         // Mark fullPage as ready once initialized
         afterRender: function () {
           console.log('[fullPage] afterRender - marking ready');
           if (window.markFullPageReady) {
             window.markFullPageReady();
           }
+
+          // Initialize collapsible info panels
+          document.querySelectorAll('[data-info-toggle]').forEach(toggle => {
+            toggle.addEventListener('click', function () {
+              const panel = this.closest('[data-info-panel]');
+              const isOpen = panel.classList.contains('is-open');
+
+              // Close all other panels
+              document.querySelectorAll('[data-info-panel].is-open').forEach(p => {
+                if (p !== panel) p.classList.remove('is-open');
+              });
+
+              // Toggle current panel
+              panel.classList.toggle('is-open');
+              this.setAttribute('aria-expanded', !isOpen);
+            });
+          });
+
+          // Close panels when clicking outside
+          document.addEventListener('click', function (e) {
+            if (!e.target.closest('[data-info-panel]')) {
+              document.querySelectorAll('[data-info-panel].is-open').forEach(p => {
+                p.classList.remove('is-open');
+                p.querySelector('[data-info-toggle]')?.setAttribute('aria-expanded', 'false');
+              });
+            }
+          });
         },
         // Core behavior
         autoScrolling: true,          // Enable slide-snap (no traditional scroll)
@@ -1492,7 +1714,7 @@
         // Navigation
         navigation: true,              // Show right-side navigation dots
         navigationPosition: 'right',
-        navigationTooltips: ['Arrival', 'Music Galaxy', 'Viral Sounds', 'Timing', 'Trend Pyramid', 'Captions & Emotion', 'Quiz', 'Wrap-up'],
+        navigationTooltips: ['Arrival', 'Music Galaxy', 'Viral Sounds', 'Timing', 'Trend Pyramid', 'Captions & Emotion', 'Quiz', 'Wrap-up', 'Credits'],
         showActiveTooltip: false,
 
         // Accessibility
@@ -1509,37 +1731,14 @@
           document.body.dataset.scene = sceneName;
           console.log('[fullPage] Scene transition:', previousScene, '→', sceneName);
 
-          // CRITICAL: Reset wheel state when entering Scene 2 to prevent skip
-          if (sceneId === 'music-galaxy') {
-            window._scene2TransitionTime = Date.now();
-            console.log('[fullPage] Entering Scene 2 - resetting wheel state');
+          // CRITICAL: Reset wheel state when entering any horizontal slide section
+          const horizontalSlideSections = ['music-galaxy', 'viral-sounds', 'duration', 'category', 'emotion'];
+          if (horizontalSlideSections.includes(sceneId)) {
+            window._sceneTransitionTime = Date.now();
+            console.log('[fullPage] Entering', sceneId, '- resetting wheel state');
           }
 
-          // Explicitly hide Scene 1 alien when leaving
-          if (previousScene === 'cosmos' && sceneName !== 'cosmos') {
-            const heroAlien = document.querySelector('.alien-narrator--hero');
-            if (heroAlien) {
-              console.log('[fullPage] Hiding Scene 1 alien');
-              heroAlien.style.display = 'none';
-              heroAlien.style.opacity = '0';
-            }
-          }
-
-          // Show Scene 1 alien when RETURNING (not on initial load)
-          // previousScene will be set if we're actually navigating, not on initial load
-          if (sceneName === 'cosmos' && previousScene && previousScene !== 'cosmos') {
-            const heroAlien = document.querySelector('.alien-narrator--hero');
-            if (heroAlien) {
-              console.log('[fullPage] Showing Scene 1 alien (returning)');
-              heroAlien.style.display = 'flex';
-              heroAlien.style.opacity = '1';
-              // Also ensure speech bubble is visible when returning
-              const speechBubble = heroAlien.querySelector('.alien-speech-bubble');
-              if (speechBubble) {
-                speechBubble.setAttribute('data-speech-state', 'visible');
-              }
-            }
-          }
+          // NOTE: .alien-narrator--hero transition code REMOVED - HTML element was removed (Dec 2025 cleanup)
         },
 
         afterLoad: function (origin, destination, direction) {
@@ -1565,16 +1764,20 @@
                 // Determine target slide based on direction
                 // direction: 'down' = coming from Scene 1, 'up' = coming from Scene 3
                 // null = initial load or direct navigation
+                // EXCEPTION: If navigated via node click, always start at Step 1
                 let targetSlide = 0; // Default: Step 1
 
-                if (direction === 'up') {
-                  // Coming BACK from Scene 3 → go to Step 4 (slide index 3)
+                if (direction === 'up' && !window._navigatedViaNodeClick) {
+                  // Coming BACK from Scene 3 via scroll → go to Step 4 (slide index 3)
                   targetSlide = 3;
-                  console.log('[fullPage] Entering Scene 2 from Scene 3 → starting at Step 4');
+                  console.log('[fullPage] Entering Scene 2 from Scene 3 via scroll → starting at Step 4');
                 } else {
-                  // Coming from Scene 1 or initial load → go to Step 1 (slide index 0)
-                  console.log('[fullPage] Entering Scene 2 from Scene 1/initial → starting at Step 1');
+                  // Coming from Scene 1, initial load, or node click → go to Step 1 (slide index 0)
+                  console.log('[fullPage] Entering Scene 2 → starting at Step 1');
                 }
+
+                // Clear the node click flag after using it
+                window._navigatedViaNodeClick = false;
 
                 // Move to the correct slide
                 const currentSlide = window.fullpage_api.getActiveSlide();
@@ -1590,35 +1793,65 @@
           }
         },
 
-        // Handle horizontal slide transitions (Scene 2 sub-slides)
+        // Handle horizontal slide transitions for all scenes with slides
         onSlideLeave: function (section, origin, destination, direction) {
-          // Trigger viz changes when navigating Scene 2 horizontal slides
           const sectionId = section.item.id;
-          if (sectionId === 'scene-music-galaxy' && window.app) {
-            const slideIndex = destination.index;
-            console.log('[fullPage] Scene 2 horizontal slide:', slideIndex + 1, 'of 4');
+          const slideIndex = destination.index;
 
-            // Call the Music Galaxy slide handler
+          // Scene 2: Music Galaxy
+          if (sectionId === 'scene-music-galaxy' && window.app) {
             if (window.app.handleMusicGalaxySlide) {
               window.app.handleMusicGalaxySlide(slideIndex);
             }
           }
+
+          // Update narrative steps for any scene with horizontal slides
+          updateNarrativeSteps(sectionId, slideIndex);
         },
 
         afterSlideLoad: function (section, origin, destination, direction) {
-          // After horizontal slide loads
           const sectionId = section.item.id;
+          const slideIndex = destination.index;
+
           if (sectionId === 'scene-music-galaxy' && window.app && window.app.handleMusicGalaxySlide) {
-            window.app.handleMusicGalaxySlide(destination.index);
+            window.app.handleMusicGalaxySlide(slideIndex);
           }
+
+          // Update narrative steps on initial load for all scenes
+          updateNarrativeSteps(sectionId, slideIndex);
         }
       });
 
-      // Custom wheel handler for Scene 2 horizontal slide navigation
+      // Helper function to update narrative step visibility based on slide/step index
+      // Works for any scene that uses data-slide-step attributes
+      function updateNarrativeSteps(sectionId, stepIndex) {
+        const section = document.getElementById(sectionId);
+        if (!section) return;
+
+        // Find all step-content elements with data-slide-step attribute
+        const steps = section.querySelectorAll('.step-content[data-slide-step]');
+        if (steps.length === 0) return;
+
+        steps.forEach((step) => {
+          const stepNum = parseInt(step.getAttribute('data-slide-step'), 10);
+          step.style.display = stepNum === stepIndex ? 'block' : 'none';
+        });
+      }
+
+      // Custom wheel handler for horizontal slide navigation in all multi-step scenes
       // fullPage.js does NOT auto-navigate horizontal slides on scroll by default
       // CRITICAL: Use capture: true to intercept BEFORE fullPage's event handlers
       let wheelCooldown = false;
       let debugMode = true; // Enable console logging
+
+      // Sections that have horizontal slides (4 slides each)
+      const HORIZONTAL_SLIDE_SECTIONS = [
+        'scene-music-galaxy',
+        'scene-viral-sounds',
+        'scene-duration',
+        'scene-category',
+        'scene-emotion'
+      ];
 
       // SCROLL SENSITIVITY: Accumulate small deltas, only trigger on threshold
       let accumulatedDelta = 0;
@@ -1628,12 +1861,13 @@
 
       // Wait for fullPage to fully initialize
       setTimeout(() => {
-        // Debug: Check if fullPage recognized the slides
-        const section = document.querySelector('#scene-music-galaxy');
-        const slides = section ? section.querySelectorAll('.slide') : [];
-        const fpSlides = section ? section.querySelectorAll('.fp-slide') : [];
-        console.log('[fullPage Debug] Scene 2 slides found:', slides.length);
-        console.log('[fullPage Debug] Scene 2 fp-slide wrappers:', fpSlides.length);
+        // Debug: Check if fullPage recognized the slides in all sections
+        HORIZONTAL_SLIDE_SECTIONS.forEach(sectionId => {
+          const section = document.querySelector('#' + sectionId);
+          const slides = section ? section.querySelectorAll('.slide') : [];
+          const fpSlides = section ? section.querySelectorAll('.fp-slide') : [];
+          console.log('[fullPage Debug]', sectionId, 'slides found:', slides.length, 'fp-slides:', fpSlides.length);
+        });
         console.log('[fullPage Debug] fullpage_api available:', !!window.fullpage_api);
 
         if (window.fullpage_api) {
@@ -1641,17 +1875,28 @@
           console.log('[fullPage Debug] getActiveSlide():', activeSlide);
         }
 
-        // Move slide navigation dots into text overlay (so they stay below text panel)
-        const slidesNav = section?.querySelector('.fp-slidesNav');
-        const textOverlay = document.querySelector('.music-galaxy-text-overlay');
-        if (slidesNav && textOverlay) {
-          textOverlay.appendChild(slidesNav);
-          slidesNav.style.display = 'block';
-          console.log('[fullPage] Moved slide nav into text overlay');
-        }
+        // Move slide navigation dots into text overlays for all horizontal slide sections
+        const slideNavMappings = [
+          { sectionId: 'scene-music-galaxy', overlayClass: '.music-galaxy-text-overlay' },
+          { sectionId: 'scene-viral-sounds', overlayClass: '.viral-sounds-text-overlay' },
+          { sectionId: 'scene-duration', overlayClass: '.timing-text-overlay' },
+          { sectionId: 'scene-category', overlayClass: '.pyramid-text-overlay' },
+          { sectionId: 'scene-emotion', overlayClass: '.emotion-text-overlay' }
+        ];
+
+        slideNavMappings.forEach(({ sectionId, overlayClass }) => {
+          const section = document.querySelector('#' + sectionId);
+          const slidesNav = section?.querySelector('.fp-slidesNav');
+          const textOverlay = document.querySelector(overlayClass);
+          if (slidesNav && textOverlay) {
+            textOverlay.appendChild(slidesNav);
+            slidesNav.style.display = 'block';
+            console.log('[fullPage] Moved slide nav into', overlayClass);
+          }
+        });
       }, 1500);
 
-      // Scene transition cooldown - ignore wheel events briefly after entering Scene 2
+      // Scene transition cooldown - ignore wheel events briefly after entering a horizontal slide section
       const SCENE_TRANSITION_COOLDOWN = 1200; // ms to wait after scene transition
 
       document.addEventListener('wheel', function (e) {
@@ -1669,12 +1914,12 @@
 
         const sectionId = activeSection.item.id;
 
-        // Only handle wheel in Scene 2 (Music Galaxy)
-        if (sectionId !== 'scene-music-galaxy') {
+        // Only handle wheel in sections with horizontal slides
+        if (!HORIZONTAL_SLIDE_SECTIONS.includes(sectionId)) {
           return; // Let fullPage handle other sections normally
         }
 
-        // CRITICAL: For Scene 2, we ALWAYS intercept wheel events first
+        // CRITICAL: For horizontal slide sections, we ALWAYS intercept wheel events first
         // This prevents fullPage from navigating to next section unexpectedly
         e.preventDefault();
         e.stopPropagation();
@@ -1687,24 +1932,25 @@
         }
 
         const currentSlideIndex = activeSlideData.index;
-        const totalSlides = 4;  // 4 slides in Scene 2
+        // Get actual slide count for this section (not all sections have 4 slides)
+        const sectionElement = activeSection.item;
+        const totalSlides = sectionElement.querySelectorAll('.fp-slide').length || sectionElement.querySelectorAll('.slide').length || 4;
         const scrollingDown = e.deltaY > 0;
         const scrollingUp = e.deltaY < 0;
 
         // Debug: Log current state
         if (debugMode) {
-          console.log('[Wheel] currentSlideIndex:', currentSlideIndex, 'totalSlides:', totalSlides, 'scrollingDown:', scrollingDown, 'scrollingUp:', scrollingUp);
+          console.log('[Wheel]', sectionId, '| slideIndex:', currentSlideIndex, '/', totalSlides, 'scrollingDown:', scrollingDown);
         }
 
         // BOUNDARY HANDLING: At edge slides, navigate to adjacent sections
-        // Slide indices: 0=Step1, 1=Step2, 2=Step3, 3=Step4
-        // At Step 4 (index 3, the LAST slide), scrolling down → go to Scene 3
+        // At the LAST slide, scrolling down → go to next section
         if (currentSlideIndex === totalSlides - 1 && scrollingDown) {
           if (!wheelCooldown) {
             // Check accumulated delta threshold first
             accumulatedDelta += e.deltaY;
             if (Math.abs(accumulatedDelta) >= DELTA_THRESHOLD) {
-              console.log('[Wheel] At Step 4 (index 3), scrolling down → moving to Scene 3');
+              console.log('[Wheel]', sectionId, '| At last slide, scrolling down → next section');
               wheelCooldown = true;
               accumulatedDelta = 0;
               window.fullpage_api.moveSectionDown();
@@ -1714,13 +1960,13 @@
           return;
         }
 
-        // At Step 1 (index 0, the FIRST slide), scrolling up → go to Scene 1
+        // At the FIRST slide, scrolling up → go to previous section
         if (currentSlideIndex === 0 && scrollingUp) {
           if (!wheelCooldown) {
             // Check accumulated delta threshold first
             accumulatedDelta += e.deltaY;
             if (Math.abs(accumulatedDelta) >= DELTA_THRESHOLD) {
-              console.log('[Wheel] At Step 1 (index 0), scrolling up → moving to Scene 1');
+              console.log('[Wheel]', sectionId, '| At first slide, scrolling up → previous section');
               wheelCooldown = true;
               accumulatedDelta = 0;
               window.fullpage_api.moveSectionUp();
@@ -1730,10 +1976,10 @@
           return;
         }
 
-        // CRITICAL: Check if we just entered Scene 2 - ignore wheel events during transition
-        if (window._scene2TransitionTime && (now - window._scene2TransitionTime) < SCENE_TRANSITION_COOLDOWN) {
+        // CRITICAL: Check if we just entered this section - ignore wheel events during transition
+        if (window._sceneTransitionTime && (now - window._sceneTransitionTime) < SCENE_TRANSITION_COOLDOWN) {
           accumulatedDelta = 0;
-          if (debugMode) console.log('[Wheel] Scene 2 transition cooldown - ignoring');
+          if (debugMode) console.log('[Wheel] Scene transition cooldown - ignoring');
           return;
         }
 
@@ -1752,7 +1998,7 @@
 
         // Debug: Log accumulated delta
         if (debugMode && Math.abs(accumulatedDelta) > 30) {
-          console.log('[Wheel] Slide', currentSlideIndex + 1, '| accumulated:', accumulatedDelta.toFixed(0), '| threshold:', DELTA_THRESHOLD);
+          console.log('[Wheel]', sectionId, '| Slide', currentSlideIndex + 1, '| accumulated:', accumulatedDelta.toFixed(0));
         }
 
         // Not enough scroll yet - wait for more
@@ -1766,10 +2012,10 @@
         wheelCooldown = true;
 
         if (direction === 'down') {
-          console.log('[Wheel] Moving DOWN to Slide', currentSlideIndex + 2);
+          console.log('[Wheel]', sectionId, '| Moving to Slide', currentSlideIndex + 2);
           window.fullpage_api.moveSlideRight();
         } else {
-          console.log('[Wheel] Moving UP to Slide', currentSlideIndex);
+          console.log('[Wheel]', sectionId, '| Moving to Slide', currentSlideIndex);
           window.fullpage_api.moveSlideLeft();
         }
 

@@ -74,7 +74,7 @@
    Planet SVG Elements
    ───────────────────────────────────────────────────────────────────────── */
 .planet {
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all 0.3s ease;
   pointer-events: all;
 }
@@ -144,7 +144,7 @@
   width: 50px;
   height: 400px;
   left: 0;
-  top: 0;
+  top:120px;
 }
 
 .indicator-arrow {

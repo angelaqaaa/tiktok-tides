@@ -159,7 +159,7 @@ svg{
 }
 
 .stopwatch-button.clickable{
-  cursor:pointer;
+  /* cursor inherited from base.css */
   transition: filter .08s ease;
 }
 .stopwatch-button.clickable:hover{

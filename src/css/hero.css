@@ -27,15 +27,18 @@
 
 .scene-hero {
   position: relative;
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: linear-gradient(180deg,
-      #050510 0%,
-      #0a0a1a 30%,
-      #0f1525 70%,
-      #1a1a2e 100%);
+  background: transparent; /* Let body::before show through - per background_redesign.md */
+}
+
+/* Remove fullpage.js default padding to let background fill entire page */
+.scene-hero .fp-overflow {
+  padding: 0 !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -43,105 +46,13 @@
    ───────────────────────────────────────────────────────────────────────── */
 .hero-bg-layer {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 100vh;
   pointer-events: none;
   z-index: 0;
-}
-
-/* Starfield with many twinkling stars */
-.hero-bg-stars {
-  background:
-    /* Row 1 - top area */
-    radial-gradient(circle 1.5px at 3% 5%, rgba(255, 255, 255, 0.9) 0%, transparent 100%),
-    radial-gradient(circle 1px at 8% 12%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
-    radial-gradient(circle 2px at 12% 3%, rgba(186, 246, 240, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 1px at 18% 8%, rgba(255, 255, 255, 0.6) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 25% 15%, rgba(255, 255, 255, 0.85) 0%, transparent 100%),
-    radial-gradient(circle 1px at 32% 6%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
-    radial-gradient(circle 2px at 38% 18%, rgba(45, 204, 211, 0.5) 0%, transparent 100%),
-    radial-gradient(circle 1px at 45% 4%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 52% 12%, rgba(255, 255, 255, 0.75) 0%, transparent 100%),
-    radial-gradient(circle 1px at 58% 7%, rgba(186, 246, 240, 0.6) 0%, transparent 100%),
-    radial-gradient(circle 2px at 65% 16%, rgba(255, 255, 255, 0.9) 0%, transparent 100%),
-    radial-gradient(circle 1px at 72% 3%, rgba(255, 255, 255, 0.65) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 78% 11%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 1px at 85% 8%, rgba(241, 32, 74, 0.35) 0%, transparent 100%),
-    radial-gradient(circle 2px at 92% 14%, rgba(255, 255, 255, 0.85) 0%, transparent 100%),
-    radial-gradient(circle 1px at 97% 5%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
-    /* Row 2 - upper middle */
-    radial-gradient(circle 1px at 5% 22%, rgba(255, 255, 255, 0.75) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 10% 28%, rgba(255, 255, 255, 0.9) 0%, transparent 100%),
-    radial-gradient(circle 1px at 16% 35%, rgba(186, 246, 240, 0.7) 0%, transparent 100%),
-    radial-gradient(circle 2px at 22% 25%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 1px at 28% 32%, rgba(255, 255, 255, 0.6) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 35% 22%, rgba(45, 204, 211, 0.55) 0%, transparent 100%),
-    radial-gradient(circle 1px at 42% 30%, rgba(255, 255, 255, 0.85) 0%, transparent 100%),
-    radial-gradient(circle 2px at 48% 26%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
-    radial-gradient(circle 1px at 55% 35%, rgba(255, 255, 255, 0.65) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 62% 23%, rgba(255, 255, 255, 0.9) 0%, transparent 100%),
-    radial-gradient(circle 1px at 68% 28%, rgba(186, 246, 240, 0.6) 0%, transparent 100%),
-    radial-gradient(circle 2px at 75% 33%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 1px at 82% 24%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 88% 30%, rgba(241, 32, 74, 0.3) 0%, transparent 100%),
-    radial-gradient(circle 1px at 95% 27%, rgba(255, 255, 255, 0.75) 0%, transparent 100%),
-    /* Row 3 - middle */
-    radial-gradient(circle 1.5px at 2% 42%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 1px at 9% 48%, rgba(255, 255, 255, 0.6) 0%, transparent 100%),
-    radial-gradient(circle 2px at 15% 40%, rgba(255, 255, 255, 0.9) 0%, transparent 100%),
-    radial-gradient(circle 1px at 21% 52%, rgba(186, 246, 240, 0.7) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 28% 45%, rgba(255, 255, 255, 0.75) 0%, transparent 100%),
-    radial-gradient(circle 1px at 34% 38%, rgba(255, 255, 255, 0.65) 0%, transparent 100%),
-    radial-gradient(circle 2px at 40% 50%, rgba(45, 204, 211, 0.5) 0%, transparent 100%),
-    radial-gradient(circle 1px at 47% 42%, rgba(255, 255, 255, 0.85) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 53% 55%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
-    radial-gradient(circle 1px at 60% 46%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 2px at 66% 38%, rgba(255, 255, 255, 0.9) 0%, transparent 100%),
-    radial-gradient(circle 1px at 73% 52%, rgba(186, 246, 240, 0.6) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 80% 44%, rgba(255, 255, 255, 0.75) 0%, transparent 100%),
-    radial-gradient(circle 1px at 86% 50%, rgba(255, 255, 255, 0.65) 0%, transparent 100%),
-    radial-gradient(circle 2px at 93% 40%, rgba(255, 255, 255, 0.85) 0%, transparent 100%),
-    /* Row 4 - lower middle */
-    radial-gradient(circle 1px at 4% 62%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 11% 68%, rgba(255, 255, 255, 0.85) 0%, transparent 100%),
-    radial-gradient(circle 1px at 18% 58%, rgba(255, 255, 255, 0.6) 0%, transparent 100%),
-    radial-gradient(circle 2px at 24% 65%, rgba(186, 246, 240, 0.75) 0%, transparent 100%),
-    radial-gradient(circle 1px at 31% 72%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 37% 60%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
-    radial-gradient(circle 1px at 44% 68%, rgba(45, 204, 211, 0.45) 0%, transparent 100%),
-    radial-gradient(circle 2px at 50% 58%, rgba(255, 255, 255, 0.9) 0%, transparent 100%),
-    radial-gradient(circle 1px at 57% 66%, rgba(255, 255, 255, 0.65) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 63% 74%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
-    radial-gradient(circle 1px at 70% 62%, rgba(255, 255, 255, 0.75) 0%, transparent 100%),
-    radial-gradient(circle 2px at 77% 70%, rgba(241, 32, 74, 0.25) 0%, transparent 100%),
-    radial-gradient(circle 1px at 83% 58%, rgba(255, 255, 255, 0.85) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 90% 66%, rgba(186, 246, 240, 0.65) 0%, transparent 100%),
-    radial-gradient(circle 1px at 96% 72%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
-    /* Row 5 - bottom area */
-    radial-gradient(circle 1.5px at 6% 82%, rgba(255, 255, 255, 0.6) 0%, transparent 100%),
-    radial-gradient(circle 1px at 13% 88%, rgba(255, 255, 255, 0.5) 0%, transparent 100%),
-    radial-gradient(circle 2px at 20% 78%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
-    radial-gradient(circle 1px at 27% 85%, rgba(186, 246, 240, 0.55) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 33% 92%, rgba(255, 255, 255, 0.65) 0%, transparent 100%),
-    radial-gradient(circle 1px at 40% 80%, rgba(255, 255, 255, 0.55) 0%, transparent 100%),
-    radial-gradient(circle 2px at 46% 88%, rgba(255, 255, 255, 0.6) 0%, transparent 100%),
-    radial-gradient(circle 1px at 54% 82%, rgba(45, 204, 211, 0.4) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 61% 90%, rgba(255, 255, 255, 0.5) 0%, transparent 100%),
-    radial-gradient(circle 1px at 67% 78%, rgba(255, 255, 255, 0.65) 0%, transparent 100%),
-    radial-gradient(circle 2px at 74% 86%, rgba(255, 255, 255, 0.55) 0%, transparent 100%),
-    radial-gradient(circle 1px at 81% 92%, rgba(255, 255, 255, 0.6) 0%, transparent 100%),
-    radial-gradient(circle 1.5px at 87% 80%, rgba(186, 246, 240, 0.5) 0%, transparent 100%),
-    radial-gradient(circle 1px at 94% 88%, rgba(255, 255, 255, 0.55) 0%, transparent 100%);
-  animation: starsTwinkle 8s ease-in-out infinite alternate;
-}
-
-@keyframes starsTwinkle {
-  0% {
-    opacity: 0.7;
-  }
-
-  100% {
-    opacity: 1;
-  }
 }
 
 /* Planet horizon curve at bottom - realistic layered glow effect
@@ -223,8 +134,7 @@
 
 /* Top band: Space for fixed navbar */
 .hero-nav-spacer {
-  height: 80px;
-  /* 64px nav + 16px breathing room */
+  height: 60px; /* 64px nav + 16px breathing room */
   flex-shrink: 0;
 }
 
@@ -234,18 +144,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 var(--space-6);
+  padding-left: var(--space-6);
+  /* Reserve space for narrower sidebar on the right */
+  padding-right: clamp(65px, calc(var(--space-6) + 6vw), 95px);
+  margin-top: 50px; /* Reserve space where scene-label-badge was */
   position: relative;
   z-index: 1;
 }
 
 .hero-container {
-  display: grid;
-  grid-template-columns: 55% 45%;
-  gap: var(--space-7);
-  align-items: center;
-  max-width: 1200px;
-  width: 100%;
+    display: grid;
+    grid-template-columns: 60% 40%;
+    gap: var(--space-8);
+    align-items: center;
+    max-width: 1200px;
+    width: 100%;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -258,7 +171,7 @@
 }
 
 .hero-main-title {
-  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-size: clamp(2rem, 5vw, 3.25rem);
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -0.03em;
@@ -288,9 +201,9 @@
 }
 
 .scene-hero .hero-subtitle {
-  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  font-size: clamp(1rem, 1.75vw, 1.1rem);
   color: var(--color-text-secondary);
-  font-weight: 400;
+  font-weight: 600;
   margin: 0;
 }
 
@@ -329,7 +242,7 @@
   color: #033624;
   font-size: var(--font-size-body-reg);
   font-weight: var(--font-weight-semibold);
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all 250ms ease;
   width: fit-content;
   margin-top: var(--space-3);
@@ -407,7 +320,8 @@
 .hero-phone-frame {
   position: relative;
   width: min(40vw, 320px);
-  height: min(80vh, 640px);
+  height: min(70vh, 640px); /* Reduced from 80vh to prevent overflow */
+  max-height: calc(100vh - 200px); /* Reserve space for nav and text */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -999,7 +913,7 @@
   border: none;
   color: #fff;
   padding: 4px;
-  cursor: pointer;
+  /* cursor inherited from base.css */
 }
 
 .tiktok-nav-tabs {
@@ -1131,7 +1045,7 @@
   height: auto;
   object-fit: contain;
   position: absolute;
-  bottom: 20%;
+  bottom: 15%;
   left: 50%;
   transform: translateX(-50%);
   z-index: 5;
@@ -1158,7 +1072,7 @@
   top: 22%;
   /* Lower together with content */
   left: 10px;
-  right: 50px;
+  right: 20px;
   background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
   padding: 10px 12px;
@@ -1536,54 +1450,32 @@
 
 /* ─────────────────────────────────────────────────────────────────────────
    Alien Narrator System - v3 spec 4.1
+
+   NOTE: Base .alien-narrator styles moved to alien-narrator.css
+   Each scene's alien has its own positioning in its respective CSS file.
+   This section only contains shared base styles that don't conflict.
    ───────────────────────────────────────────────────────────────────────── */
+
+/* Base styles that are safe to apply to all aliens */
 .alien-narrator {
-  position: fixed;
-  bottom: 24px;
-  left: 24px;
   display: flex;
   align-items: flex-end;
   gap: var(--space-3);
   z-index: 100;
   pointer-events: none;
-  opacity: 0;
-  transform: translateY(20px);
   transition: opacity 400ms ease, transform 400ms ease;
 }
 
-/* Show narrator when hero scene is active */
-[data-scene="cosmos"] .alien-narrator--hero {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
+/* Scene-specific positioning is handled by each scene's CSS:
+   - .alien-narrator--timing: base.css (Scene 4)
+   - .alien-narrator--pyramid: base.css (Scene 5)
+   - .alien-narrator--emotion: emotion.css (Scene 6)
+   - .alien-narrator--quiz: base.css (Scene 7)
+   - .alien-narrator--scene2: music-galaxy.css (Scene 2)
+   - .alien-narrator--scene3: base.css (Scene 3)
+*/
 
-/* Hide narrator when leaving hero scene (exit downward) */
-body:not([data-scene="cosmos"]) .alien-narrator--hero {
-  opacity: 0 !important;
-  transform: translateY(150px) !important;
-  pointer-events: none !important;
-  transition: opacity 600ms ease, transform 600ms cubic-bezier(0.22, 1, 0.36, 1) !important;
-}
-
-/* CRITICAL: Force hide for ALL non-cosmos scenes - HIGHEST SPECIFICITY */
-body[data-scene="galaxy"] .alien-narrator--hero,
-body[data-scene="sounds"] .alien-narrator--hero,
-body[data-scene="duration"] .alien-narrator--hero,
-body[data-scene="category"] .alien-narrator--hero,
-body[data-scene="emotion"] .alien-narrator--hero,
-body[data-scene="quiz"] .alien-narrator--hero,
-body[data-scene="summary"] .alien-narrator--hero,
-body:not([data-scene="cosmos"]) .alien-narrator--hero {
-  display: none !important;
-  /* Force hide completely */
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  transform: translateY(200px) !important;
-  z-index: -1 !important;
-  /* Behind everything */
-}
+/* .alien-narrator--hero styles REMOVED - HTML element was removed (Dec 2025 cleanup) */
 
 .alien-avatar {
   width: 72px;
@@ -1640,19 +1532,6 @@ body:not([data-scene="cosmos"]) .alien-narrator--hero {
 .alien-speech-bubble[data-speech-state="visible"] {
   opacity: 1;
   transform: scale(1) translateX(0);
-}
-
-/* Speech bubble tail */
-.alien-speech-bubble::before {
-  content: '';
-  position: absolute;
-  bottom: 8px;
-  left: -8px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 8px 10px 8px 0;
-  border-color: transparent rgba(45, 204, 211, 0.4) transparent transparent;
 }
 
 .alien-speech-text {
@@ -1729,11 +1608,7 @@ body:not([data-scene="cosmos"]) .alien-narrator--hero {
     height: 18px;
   }
 
-  .alien-narrator {
-    bottom: 16px;
-    left: 16px;
-  }
-
+  /* Responsive alien styles - each scene has its own responsive rules */
   .alien-avatar {
     width: 56px;
     height: 56px;
