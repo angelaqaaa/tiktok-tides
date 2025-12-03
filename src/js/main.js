@@ -33,7 +33,7 @@ const SCENE_MAP = {
   '#scene-emotion': 'air',
   '#scene-quiz': 'lab',
   '#scene-summary': 'wrapup',
-  '#scene-credits': 'wrapup'          // Team credits page
+  '#scene-credits': 'credits'          // Team credits page (separate from wrapup so alien doesn't show)
 };
 
 // Node positions for alien marker on map canvas

@@ -538,6 +538,24 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   transform: scale(1) translateY(0) !important;
 }
 
+/* Scene 8: Wrapup - show container AND speech bubble */
+body[data-scene="wrapup"] .alien-narrator--wrapup {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+body[data-scene="wrapup"] .alien-narrator--wrapup .alien-avatar {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: scale(1) !important;
+}
+
 /* ─────────────────────────────────────────────────────────────────────────────
    MINI-PLANET (Scene 2 - Music Galaxy)
    ───────────────────────────────────────────────────────────────────────────── */
