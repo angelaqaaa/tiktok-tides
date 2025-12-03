@@ -449,6 +449,8 @@ class TikTokTidesApp {
           if (window.fullpage_api) {
             const sectionIndex = Array.from(document.querySelectorAll('.section')).indexOf(target);
             if (sectionIndex >= 0) {
+              // Set flag so Scene 2 knows to start at Step 1
+              window._navigatedViaNodeClick = true;
               window.fullpage_api.moveTo(sectionIndex + 1);
             }
           } else {
@@ -479,6 +481,8 @@ class TikTokTidesApp {
               }
             });
             console.log('[CTA Button] Navigating to section', sectionIndex, 'via fullPage API');
+            // Set flag so Scene 2 knows to start at Step 1
+            window._navigatedViaNodeClick = true;
             window.fullpage_api.moveTo(sectionIndex);
           } else {
             // Fallback to native scroll
@@ -543,6 +547,8 @@ class TikTokTidesApp {
 
         // Use fullPage API if available
         if (window.fullpage_api) {
+          // Set flag so Scene 2 knows to start at Step 1
+          window._navigatedViaNodeClick = true;
           window.fullpage_api.moveTo(1); // Section 1 is hero
         } else {
           const target = document.getElementById(targetId);
@@ -574,6 +580,8 @@ class TikTokTidesApp {
                 sectionIndex = idx + 1;
               }
             });
+            // Set flag so Scene 2 knows to start at Step 1
+            window._navigatedViaNodeClick = true;
             window.fullpage_api.moveTo(sectionIndex);
           } else {
             target.scrollIntoView({
@@ -616,6 +624,8 @@ class TikTokTidesApp {
               }
             });
             console.log('[Mission Sidebar] Navigating to section', sectionIndex, targetId);
+            // Set flag so Scene 2 knows to start at Step 1
+            window._navigatedViaNodeClick = true;
             window.fullpage_api.moveTo(sectionIndex);
           } else {
             target.scrollIntoView({
@@ -647,6 +657,8 @@ class TikTokTidesApp {
                 sectionIndex = idx + 1;
               }
             });
+            // Set flag so Scene 2 knows to start at Step 1
+            window._navigatedViaNodeClick = true;
             window.fullpage_api.moveTo(sectionIndex);
           } else {
             target.scrollIntoView({
@@ -706,6 +718,8 @@ class TikTokTidesApp {
               }
             });
             console.log('[Mini-strip] Navigating to section', sectionIndex, targetId);
+            // Set flag so Scene 2 knows to start at Step 1
+            window._navigatedViaNodeClick = true;
             window.fullpage_api.moveTo(sectionIndex);
           } else {
             target.scrollIntoView({
@@ -1193,6 +1207,10 @@ class TikTokTidesApp {
 
     // Track active speech bubble timeout to prevent overlaps
     let speechBubbleTimeout = null;
+    // Track annotation timeout to cancel if user switches slides quickly
+    let annotationTimeout = null;
+    // Track current slide index to stop annotation tracking when leaving step 4
+    let currentSlideIndex = 0;
 
     // Helper to safely set speech bubble state with debug logging
     // IMPORTANT: Temporarily disable CSS transitions AND animations to prevent flicker
@@ -1229,6 +1247,9 @@ class TikTokTidesApp {
     const handleSlideChange = (index) => {
       if (!planetViz.mounted || !planetViz.svg) return;
 
+      // Update current slide index - used to stop annotation tracking when leaving step 4
+      currentSlideIndex = index;
+
       console.log('[Music Galaxy] Slide', index + 1, 'active');
       this.announce(`Music Galaxy: Slide ${index + 1} of 4`);
 
@@ -1246,6 +1267,11 @@ class TikTokTidesApp {
       if (speechBubbleTimeout) {
         clearTimeout(speechBubbleTimeout);
         speechBubbleTimeout = null;
+      }
+      // Clear any pending annotation timeout to prevent annotation appearing on wrong slide
+      if (annotationTimeout) {
+        clearTimeout(annotationTimeout);
+        annotationTimeout = null;
       }
 
       // NOTE: Each case handles its own speech bubbles to avoid hide-then-show flicker
@@ -1372,12 +1398,28 @@ class TikTokTidesApp {
           }
           updateAlienSpeech(3, true);
 
-          setTimeout(() => {
+          // Use annotationTimeout so it can be cancelled if user switches slides quickly
+          annotationTimeout = setTimeout(() => {
+            // Double-check we're still on step 4 (user might have switched quickly)
+            if (currentSlideIndex !== 3) return;
+
             if (annotation) {
-              annotation.setAttribute('aria-hidden', 'false');
+              // Ensure topArtistName is set (might not be if user jumped directly to this slide)
+              if (!planetViz.topArtistName) {
+                planetViz.highlightTopArtists?.();
+              }
 
               // Track annotation to top planet position
+              // Only show annotation once we have a valid position
               const updateAnnotationPosition = () => {
+                // Stop tracking if we're no longer on step 4
+                if (currentSlideIndex !== 3) {
+                  annotation.setAttribute('aria-hidden', 'true');
+                  annotation.style.left = '';
+                  annotation.style.top = '';
+                  return;
+                }
+
                 const pos = planetViz.getTopArtistPosition?.();
                 if (pos && annotation) {
                   const vizOverlay = document.querySelector('.music-galaxy-viz-overlay');
@@ -1390,10 +1432,15 @@ class TikTokTidesApp {
                   // Position annotation near the planet (offset to bottom-left)
                   annotation.style.left = `${relativeX - 140}px`;
                   annotation.style.top = `${relativeY + 65}px`;
+
+                  // Only make visible once we have a valid position AND still on step 4
+                  if (annotation.getAttribute('aria-hidden') !== 'false' && currentSlideIndex === 3) {
+                    annotation.setAttribute('aria-hidden', 'false');
+                  }
                 }
 
-                // Continue tracking while annotation is visible
-                if (annotation.getAttribute('aria-hidden') === 'false') {
+                // Continue tracking while annotation is visible AND still on step 4
+                if (annotation.getAttribute('aria-hidden') === 'false' && currentSlideIndex === 3) {
                   requestAnimationFrame(updateAnnotationPosition);
                 }
               };

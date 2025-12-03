@@ -1660,16 +1660,20 @@
               // Determine target slide based on direction
               // direction: 'down' = coming from Scene 1, 'up' = coming from Scene 3
               // null = initial load or direct navigation
+              // EXCEPTION: If navigated via node click, always start at Step 1
               let targetSlide = 0; // Default: Step 1
 
-              if (direction === 'up') {
-                // Coming BACK from Scene 3 → go to Step 4 (slide index 3)
+              if (direction === 'up' && !window._navigatedViaNodeClick) {
+                // Coming BACK from Scene 3 via scroll → go to Step 4 (slide index 3)
                 targetSlide = 3;
-                console.log('[fullPage] Entering Scene 2 from Scene 3 → starting at Step 4');
+                console.log('[fullPage] Entering Scene 2 from Scene 3 via scroll → starting at Step 4');
               } else {
-                // Coming from Scene 1 or initial load → go to Step 1 (slide index 0)
-                console.log('[fullPage] Entering Scene 2 from Scene 1/initial → starting at Step 1');
+                // Coming from Scene 1, initial load, or node click → go to Step 1 (slide index 0)
+                console.log('[fullPage] Entering Scene 2 → starting at Step 1');
               }
+
+              // Clear the node click flag after using it
+              window._navigatedViaNodeClick = false;
 
               // Move to the correct slide
               const currentSlide = window.fullpage_api.getActiveSlide();

@@ -87,7 +87,7 @@ button,
 .clickable,
 input[type="button"],
 input[type="submit"] {
-  cursor: url('/assets/Alien_Pointer_32.png') 16 16, pointer;
+  cursor: url('/assets/Alien_Pointer_32.png') 16 0, pointer;
 }
 
 /* Fallback: ensure cursor works on all elements */
@@ -4582,7 +4582,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 /* Positioned below scene-label-badge on the left */
 .music-galaxy-viz-overlay .chart-instructions {
   position: absolute;
-  top: 160px;
+  top: 150px;
   left: 35px;
   z-index: 100;
   max-width: 200px;
