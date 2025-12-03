@@ -15,6 +15,8 @@
 
   /* Semantic color roles (used throughout base.css) */
   --color-glint: #2DCCD3;
+  --color-glint-light: #3DDDE4;
+  --color-glint-dark: #1BA8AE;
   --color-blaze: #F1204A;
   --color-thrive: #033624;
   --color-shimmer: #BAF6F0;
