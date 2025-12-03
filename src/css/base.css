@@ -1683,15 +1683,7 @@ circle[data-type="bubble"] {
 }
 
 /* Scene-specific chart instructions positioning */
-.pyramid-viz-overlay .chart-instructions--pyramid {
-  position: absolute;
-  top: 125px;
-  left: 620px;
-  margin: 0;
-  max-width: 100%;
-  z-index: 100;
-  pointer-events: auto;
-}
+/* Pyramid instructions now integrated into viz via JS info button - see ranking.css */
 
 .chart-instructions--emotion {
   position: absolute;
@@ -5153,10 +5145,12 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
    Back to Top Button (v3 spec 5.8)
    ───────────────────────────────────────────────────────────────────────── */
 .back-to-top-btn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: var(--space-2);
   margin-top: var(--space-5);
+  margin-left: auto;
+  width: fit-content;
   padding: var(--space-3) var(--space-5);
   background: var(--color-blaze, #F1204A);
   color: white;

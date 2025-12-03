@@ -148,16 +148,17 @@ export class RankingViz extends EventEmitter {
       .attr('role', 'img')
       .attr('aria-label', 'Category visualization showing ranking and interaction');
 
-    // --- info button ---
+    // --- info button with label ---
     const infoBtn = d3.select(this.container)
       .append('div')
-      .attr('class', 'viz-btn viz-btn--info')
+      .attr('class', 'viz-btn viz-btn--info viz-btn--with-label')
       .html(`
-            <svg viewBox="0 0 24 24" fill="white">
+        <svg viewBox="0 0 24 24" fill="white">
           <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="none"/>
           <line x1="12" y1="10" x2="12" y2="16" stroke="white" stroke-width="2" />
           <circle cx="12" cy="7" r="1.5" fill="white"/>
         </svg>
+        <span>How to read</span>
   `);
 
     let infoTooltipOpen = false;
@@ -166,12 +167,17 @@ export class RankingViz extends EventEmitter {
       .append("div")
       .attr("class", "viz-info-tooltip")
       .html(`
-    <div class="title">About this visualization</div>
+    <div class="title">How to read</div>
 
-    <div class="body">
-      This layout is inspired by the viral 
-      <b>Pyramid Ranking Trend</b> on TikTok.
-      Each card falls in ranked sequence and can be explored interactively!
+    <ul class="viz-info-tooltip__list">
+      <li>Notes reveal content categories</li>
+      <li>Top = most viral category</li>
+      <li>Click any category for top creators</li>
+      <li>Use play/pause controls</li>
+    </ul>
+
+    <div class="body" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">
+      Inspired by the viral <b>Pyramid Ranking Trend</b> on TikTok.
     </div>
 
     <a href="https://www.tiktok.com/discover/pyramid-ranking-trend"
