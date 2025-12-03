@@ -15,15 +15,15 @@ function formatPlayCount(count) {
 }
 
 // Default album cover when no song is selected
-const DEFAULT_ALBUM_COVER = "/assets/images/sound-covers/Sound_Default.png";
+const DEFAULT_ALBUM_COVER = getDataPath("assets/images/sound-covers/Sound_Default.png");
 
 // Album cover paths - randomly shuffled
 const albumCoverPaths = [
-    "/assets/images/sound-covers/Sound_1.png",
-    "/assets/images/sound-covers/Sound_2.png",
-    "/assets/images/sound-covers/Sound_3.png",
-    "/assets/images/sound-covers/Sound_4.png",
-    "/assets/images/sound-covers/Sound_5.png"
+    getDataPath("assets/images/sound-covers/Sound_1.png"),
+    getDataPath("assets/images/sound-covers/Sound_2.png"),
+    getDataPath("assets/images/sound-covers/Sound_3.png"),
+    getDataPath("assets/images/sound-covers/Sound_4.png"),
+    getDataPath("assets/images/sound-covers/Sound_5.png")
 ];
 
 // Shuffle array function
