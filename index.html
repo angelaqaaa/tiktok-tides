@@ -1431,15 +1431,19 @@
               <p>Not every video that uses these ingredients will go viral.</p>
               <p>However, our data shows that viral clips tend to live in this region of the TikTok Tides.</p>
             </div>
-
-            <!-- Back to Top button -->
-            <button class="back-to-top-btn" data-scroll-to="#scene-hero" aria-label="Back to top">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 19V5M5 12l7-7 7 7"/>
-              </svg>
-              <span>Back to top</span>
-            </button>
           </div>
+      </div>
+
+      <!-- Alien narrator with scroll hint -->
+      <div class="alien-narrator alien-narrator--wrapup" data-scene="wrapup" aria-hidden="true">
+        <div class="alien-avatar">
+          <img src="/assets/Alien_Point.png"
+               alt="" width="64" height="64" loading="lazy"
+               onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
+        </div>
+        <div class="alien-speech-bubble" data-speech-state="visible">
+          <p class="alien-speech-text">Curious who built this experience? Keep scrolling to meet the crew behind TikTok Tides!</p>
+        </div>
       </div>
 
     </section>
@@ -1509,6 +1513,14 @@
               </svg>
               View on GitHub
             </a>
+
+            <!-- Back to Top button -->
+            <button class="back-to-top-btn" data-scroll-to="#scene-hero" aria-label="Back to top">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 19V5M5 12l7-7 7 7"/>
+              </svg>
+              <span>Back to top</span>
+            </button>
           </div>
         </div>
       </div>

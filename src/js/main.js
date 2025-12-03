@@ -171,6 +171,11 @@ class TikTokTidesApp {
 
     // Announce ready
     this.announce('TikTok Tides loaded and ready');
+
+    // Mark app as ready for splash screen
+    if (window.markAppReady) {
+      window.markAppReady();
+    }
   }
 
   installSceneObserver() {
@@ -1505,7 +1510,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /**
  * Hide splash screen once app is ready
- * Called when planet viz is mounted AND fullPage is initialized
+ * Called when: TikTokTidesApp initialized, fullPage initialized, and window loaded
  */
 function hideSplashScreen() {
   const splash = document.getElementById('tiktok-splash');
@@ -1528,12 +1533,14 @@ function hideSplashScreen() {
   }
 }
 
-// Listen for both planet viz ready AND fullPage ready
-let planetReady = false;
-let fullPageReady = false;
+// Track all initialization states
+let appReady = false;      // TikTokTidesApp.init() complete
+let fullPageReady = false; // fullPage.js initialized
+let windowReady = false;   // window.onload fired (all assets loaded)
 
-function checkAppReady() {
-  if (planetReady && fullPageReady) {
+function checkAllReady() {
+  console.log('[Splash] Checking ready state:', { appReady, fullPageReady, windowReady });
+  if (appReady && fullPageReady && windowReady) {
     hideSplashScreen();
   }
 }
@@ -1542,21 +1549,34 @@ function checkAppReady() {
 window.markFullPageReady = function() {
   fullPageReady = true;
   console.log('[Splash] fullPage.js ready');
-  checkAppReady();
+  checkAllReady();
 };
 
-// Expose for planet viz callback
-window.markPlanetVizReady = function() {
-  planetReady = true;
-  console.log('[Splash] Planet viz ready');
-  checkAppReady();
+// Expose for TikTokTidesApp.init() completion
+window.markAppReady = function() {
+  appReady = true;
+  console.log('[Splash] TikTokTidesApp ready');
+  checkAllReady();
 };
+
+// Legacy: keep for planet viz but don't block on it (it's lazy-loaded)
+window.markPlanetVizReady = function() {
+  console.log('[Splash] Planet viz ready (non-blocking)');
+};
+
+// Wait for all assets to load
+window.addEventListener('load', function() {
+  windowReady = true;
+  console.log('[Splash] Window loaded (all assets)');
+  checkAllReady();
+});
 
 // Fallback: hide splash after max timeout (in case something fails)
 setTimeout(() => {
   const splash = document.getElementById('tiktok-splash');
   if (splash && !splash.classList.contains('hidden')) {
     console.log('[Splash] Fallback timeout - hiding anyway');
+    console.log('[Splash] States at timeout:', { appReady, fullPageReady, windowReady });
     hideSplashScreen();
   }
-}, 5000); // 5 second max wait
+}, 8000); // 8 second max wait (increased for slower connections)

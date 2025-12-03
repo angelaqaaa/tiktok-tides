@@ -807,6 +807,29 @@ circle[data-type="bubble"] {
   pointer-events: none;
 }
 
+/* Planet legend larger on external monitors */
+@media (min-width: 1600px) {
+  .legend {
+    max-width: 480px;
+    gap: 28px;
+  }
+
+  .legend h3 {
+    font-size: 1.4rem;
+  }
+
+  .legend p,
+  .legend-label {
+    font-size: 1.05rem;
+  }
+
+  .legend-tooltip {
+    width: 380px;
+    font-size: 0.95rem;
+    padding: 16px 20px;
+  }
+}
+
 /* Planet legend uses standard compact legend styling (same as other scenes)
    Teammate's content enhancements (gradient, tooltips) preserved below */
 
@@ -1696,8 +1719,8 @@ circle[data-type="bubble"] {
 
 .chart-instructions--quiz {
   position: absolute;
-  top: clamp(1rem, 2vh, 2rem);
-  right: clamp(2rem, 4vw, 4rem);
+  bottom: 1px;
+  right: 10px;
   left: auto;
   margin: 0;
   max-width: 200px;
@@ -2584,14 +2607,45 @@ circle[data-type="bubble"] {
 .viral-sounds-record-area .record-player-wrapper {
   width: clamp(700px, 70vw, 950px);
   max-width: none;
-  height: auto; /* Let aspect-ratio control height */
-  aspect-ratio: 1.4; /* Match the record-player-base aspect ratio */
-  max-height: calc(100vh - 180px); /* Prevent overflow on smaller screens */
+  height: clamp(650px, 75vh, 800px);
+  aspect-ratio: auto;
   margin: 0;
   margin-top: clamp(3rem, 5vh, 5rem);
   margin-left: clamp(2rem, 4vw, 4rem);
   position: relative;
   left: 0;
+}
+
+/* On external monitors only: adjust record player and text overlay */
+@media (min-width: 1800px) {
+  .viral-sounds-record-area .record-player-wrapper {
+    margin-top: clamp(2rem, 4vh, 4rem);
+    margin-left: clamp(4rem, 8vw, 8rem);
+    width: clamp(850px, 75vw, 1100px);
+    height: auto;
+    aspect-ratio: 1.4;
+  }
+
+  .viral-sounds-text-overlay {
+    width: 36vw;
+    min-width: 420px;
+    max-width: 580px;
+    right: clamp(50px, 5vw, 90px);
+    transform: translateY(-50%) scale(1);
+  }
+
+  .viral-sounds-text-overlay .step-heading {
+    font-size: clamp(2.2rem, 5vw, 3rem);
+  }
+
+  .viral-sounds-text-overlay .step-subheading {
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  }
+
+  .viral-sounds-text-overlay .step-content p {
+    font-size: 1.2rem;
+    line-height: 1.7;
+  }
 }
 
 .viral-sounds-viz-wrapper {
@@ -3043,7 +3097,7 @@ circle[data-type="bubble"] {
 .timing-icon-circle--long {
   background: linear-gradient(135deg, rgba(186, 246, 240, 0.2), rgba(186, 246, 240, 0.05));
   border: 2px solid rgba(186, 246, 240, 0.4);
-  color: var(--color-shimmer);
+  color: #BAF6F0;
 }
 
 .timing-icon-label {
@@ -3151,16 +3205,16 @@ circle[data-type="bubble"] {
    for any legacy non-overlay contexts only. */
 
 /* Alien narrator for timing scene */
-/* Positioned bottom-left to avoid covering the stopwatch viz */
+/* Positioned bottom-right */
 .alien-narrator--timing {
   position: absolute;
-  left: 32px;
+  right: 32px;
   bottom: 32px;
   transform: none;
   z-index: 100;
   display: flex;
-  flex-direction: row;
-  /* Bubble to the right of alien */
+  flex-direction: row-reverse;
+  /* Bubble to the left of alien */
   align-items: flex-end;
   gap: var(--space-3);
   opacity: 0;
@@ -3172,7 +3226,6 @@ body[data-scene="dawn"] .alien-narrator--timing {
   opacity: 1 !important;
   visibility: visible !important;
   transform: none !important;
-  /* Bottom-left positioning */
   animation: alienFloat 3s ease-in-out 1.5s infinite;
 }
 
@@ -3231,7 +3284,7 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   }
 
   .alien-narrator--timing {
-    left: 24px;
+    right: 24px;
     bottom: 24px;
   }
 
@@ -3272,16 +3325,16 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 
   .alien-narrator--timing {
     position: absolute;
-    left: 16px;
+    right: 16px;
     bottom: 16px;
   }
 
   .alien-narrator--timing .alien-speech-bubble {
     position: relative;
-    left: auto;
+    right: auto;
     top: auto;
     transform: none;
-    margin-left: 0;
+    margin-right: 0;
     margin-top: var(--space-2);
   }
 
@@ -3409,6 +3462,33 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 
 .pyramid-text-overlay .step-content p:last-child {
   margin-bottom: 0;
+}
+
+/* Pyramid text overlay larger on external monitors */
+@media (min-width: 1600px) {
+  .pyramid-text-overlay {
+    width: 42%;
+    min-width: 400px;
+    max-width: 620px;
+  }
+
+  .pyramid-text-overlay .step-content {
+    max-width: 560px;
+    padding: var(--space-6);
+  }
+
+  .pyramid-text-overlay .step-heading {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+  }
+
+  .pyramid-text-overlay .step-subheading {
+    font-size: clamp(1.3rem, 3vw, 1.8rem);
+  }
+
+  .pyramid-text-overlay .step-content p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+  }
 }
 
 .pyramid-text-overlay .step-content p strong {
@@ -4698,18 +4778,18 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 /* Alien narrator - Quiz/Lab scene
-   Per spec: "right side of the quiz panel, like a TV game show host" */
+   Positioned top-left underneath scene-label-badge */
 .alien-narrator--quiz {
   position: absolute;
-  left: var(--space-6); /* Moved to left from right */
-  bottom: 120px;
+  left: var(--space-6);
+  top: 140px;
   display: flex;
-  flex-direction: row; /* Bubble right, avatar left (normal order) */
-  align-items: flex-end;
+  flex-direction: row;
+  align-items: flex-start;
   gap: var(--space-3);
   z-index: 10;
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(-20px);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
@@ -5102,6 +5182,31 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
   margin-top: var(--space-2);
 }
 
+/* Alien narrator for wrapup scene - positioned relative to viewport */
+.alien-narrator--wrapup {
+  position: fixed;
+  left: var(--space-6);
+  bottom: 40px;
+  z-index: 100;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: var(--space-3);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+/* Show alien only when wrapup scene is active */
+body[data-scene="wrapup"] .alien-narrator--wrapup {
+  opacity: 1;
+  visibility: visible;
+}
+
+.alien-narrator--wrapup .alien-avatar {
+  animation: alienFloat 3s ease-in-out infinite;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .quiz-container {
@@ -5113,8 +5218,8 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
   }
 
   .alien-narrator--quiz {
-    right: var(--space-4);
-    bottom: 80px;
+    left: var(--space-4);
+    top: 120px;
   }
 
   .recipe-card {
@@ -5131,6 +5236,10 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
     font-size: 1.5rem;
   }
 
+  .alien-narrator--wrapup {
+    left: var(--space-4);
+    bottom: 30px;
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -5301,6 +5410,42 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
   max-height: calc(100vh - 260px) !important; /* Reduced to make viz smaller */
 }
 
+/* Stopwatch viz and text overlay larger on external monitors */
+@media (min-width: 1600px) {
+  .timing-viz-wrapper {
+    max-width: 600px !important;
+    max-height: calc(100vh - 200px) !important;
+  }
+
+  #chart {
+    max-height: calc(100vh - 180px) !important;
+  }
+
+  .timing-text-overlay {
+    width: 40vw !important;
+    min-width: 420px !important;
+    max-width: 580px !important;
+  }
+
+  .timing-text-overlay .step-content {
+    max-width: 540px !important;
+    padding: var(--space-6) !important;
+  }
+
+  .timing-text-overlay .step-heading {
+    font-size: clamp(1.8rem, 4vw, 2.4rem) !important;
+  }
+
+  .timing-text-overlay .step-subheading {
+    font-size: clamp(1.4rem, 3vw, 1.8rem) !important;
+  }
+
+  .timing-text-overlay .step-content p {
+    font-size: 1.1rem !important;
+    line-height: 1.7 !important;
+  }
+}
+
 .timing-legend {
   padding: var(--space-1) var(--space-2) !important;
   margin-top: var(--space-1) !important;
@@ -5438,7 +5583,7 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
 
 .quiz-question-panel {
   max-width: none !important;
-  width: 60% !important;
+  width: 45% !important;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
