@@ -52,7 +52,7 @@
   border-color: rgba(45, 204, 211, 0.65);
 }
 
-.tooltip-planet strong {
+.tooltip-planet-title {
   display: block;
   margin-bottom: 8px;
   font-size: 1.1rem;
@@ -92,7 +92,7 @@
 }
 
 .sun {
-  filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+  filter: drop-shadow(0 0 20px rgba(251, 235, 53, 0.8));
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -111,9 +111,9 @@
   height: 12px;
   border-radius: 6px;
   background: linear-gradient(to bottom,
-      #F1204A 0%,
+      var(--color-blaze) 0%,
       /* TikTok pink - 1.0 (high danceability) */
-      #2DCCD3 65%,
+      var(--color-glint) 65%,
       /* TikTok blue - 0.35 (lower-middle) */
       #FFFFFF 100%
       /* White - 0.0 (low danceability) */
@@ -144,14 +144,14 @@
   width: 50px;
   height: 400px;
   left: 0;
-  top:120px;
+  top: 120px;
 }
 
 .indicator-arrow {
   position: absolute;
   left: 15px;
   font-size: 20px;
-  color: #FBEB35;
+  color: var(--color-glow);
   width: 20px;
   text-align: center;
   transition: top 0.2s ease;
@@ -164,7 +164,7 @@
   left: 62px;
   width: 51px;
   height: 3px;
-  background-color: #FBEB35;
+  background-color: var(--color-glow);
   transition: top 0.2s ease;
   z-index: 10;
   transform: translateY(-50%);
@@ -220,9 +220,9 @@
     background: linear-gradient(to right,
         #FFFFFF 0%,
         /* White - 0.0 (low danceability) */
-        #2DCCD3 35%,
+        var(--color-glint) 35%,
         /* TikTok blue - 0.35 (lower-middle) */
-        #F1204A 100%
+        var(--color-blaze) 100%
         /* TikTok pink - 1.0 (high danceability) */
       );
   }
@@ -270,9 +270,9 @@
     background: linear-gradient(to right,
         #FFFFFF 0%,
         /* White - 0.0 (low danceability) */
-        #2DCCD3 35%,
+        var(--color-glint) 35%,
         /* TikTok blue - 0.35 (lower-middle) */
-        #F1204A 100%
+        var(--color-blaze) 100%
         /* TikTok pink - 1.0 (high danceability) */
       );
   }

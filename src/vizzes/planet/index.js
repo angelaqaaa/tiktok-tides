@@ -390,11 +390,11 @@ export class PlanetViz extends EventEmitter {
       .on('mousemove', function (event, d) {
         tooltip
           .html(`
-            <strong>${d.name}</strong>
-            <div>Songs: ${d.songCount}</div>
-            <div>Avg Danceability: ${d.avgDanceability.toFixed(2)}</div>
-            <div>Avg Energy: ${d.avgEnergy.toFixed(2)}</div>
-            <div style="margin-top: 5px; font-size: 0.8rem; color: #aaa;">
+            <strong class="tooltip-title">${d.name}</strong>
+            <div><strong>Songs:</strong> ${d.songCount}</div>
+            <div><strong>Average Danceability:</strong> ${d.avgDanceability.toFixed(2)}</div>
+            <div><strong>Average Energy:</strong> ${d.avgEnergy.toFixed(2)}</div>
+            <div style="margin-top: 5px; font-size: 0.8rem; color: var(--color-shimmer);">
               ${d.songs.slice(0, 3).join(', ')}${d.songs.length > 3 ? '...' : ''}
             </div>
           `)
