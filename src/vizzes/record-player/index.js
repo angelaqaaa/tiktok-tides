@@ -485,7 +485,6 @@ export class RecordPlayerViz {
                     .attr('href', `#${pathId}`)
                     .attr('text-anchor', 'start')
                     .attr('dominant-baseline', 'middle')
-                    .attr('method', 'spacingAndGlyphs') /* Use spacingAndGlyphs to show all text naturally */
                     .attr('dy', -4) /* Move text up more */
                     .classed('inner-label', isInner)
                     .attr('textLength', null) /* Remove text length limit to allow full text display */
