@@ -108,7 +108,7 @@
 .year-range-control {
     position: absolute;
     right: clamp(1rem, 2vw, 2rem); /* Moved further left */
-    top: clamp(1rem, 2vw, 2rem); /* SWITCHED: Now at top-right */
+    top: clamp(1.5rem, 3vw, 3rem); /* Moved down a bit */
     width: clamp(180px, 20vw, 260px);
     display: flex;
     flex-direction: column;
@@ -476,7 +476,7 @@
    .record-player-wrapper { width: min(100vw, 620px); padding: 0rem; height: 100%; }
    .tonearm { --hinge-size: clamp(38px, 7vw, 54px); --arm-width: clamp(8px, 2vw, 10px); --arm-length: clamp(180px, 48vw, 260px); top: clamp(2%, 3vw, 4%); right: clamp(20px, 20vw, 30%); } 
    .mute-toggle-button {
-       top: clamp(5rem, 15vw, 9rem);
+       top: clamp(4rem, 13vw, 8rem);
        left: clamp(3.2rem, 9vw, 5rem);
        width: clamp(46px, 14vw, 60px);
        height: clamp(46px, 14vw, 60px);
@@ -484,6 +484,11 @@
    .mute-toggle-button__icon {
        width: clamp(18px, 5vw, 24px);
        height: clamp(18px, 5vw, 24px);
+   }
+   .mute-toggle-helper {
+       top: clamp(4rem, 13.5vw, 7.5rem); /* Moved higher to avoid conflict with popularity line */
+       left: calc(clamp(3.2rem, 9vw, 5rem) + clamp(46px, 14vw, 60px) + 0px);
+       font-size: clamp(0.65rem, 0.9vw, 0.8rem);
    }
    .year-range-control {
         position: relative;
@@ -664,7 +669,7 @@
 /* Mute Toggle Button - Top Left */
 .mute-toggle-button {
     position: absolute;
-    top: clamp(2.5rem, 5vw, 4rem);
+    top: clamp(2rem, 4.5vw, 3.5rem);
     left: clamp(2.5rem, 5vw, 4rem);
     width: clamp(44px, 5vw, 58px);
     height: clamp(44px, 5vw, 58px);
@@ -743,8 +748,8 @@
 /* Mute button helper text - line and text with no spacing */
 .mute-toggle-helper {
     position: absolute;
-    top: clamp(2.5rem, 5vw, 4rem);
-    left: calc(clamp(2.5rem, 5vw, 4rem) + clamp(44px, 5vw, 58px));
+    top: clamp(2.3rem, 4.5vw, 3.3rem); /* Positioned to avoid conflict with popularity line */
+    left: calc(clamp(2.5rem, 5vw, 4rem) + clamp(44px, 5vw, 58px) + 0px); /* No gap after button */
     color: rgba(255, 255, 255, 0.9);
     font-size: clamp(0.7rem, 1vw, 0.85rem);
     font-family: var(--font-family-sans);
@@ -752,11 +757,12 @@
     z-index: 7;
     pointer-events: none;
     opacity: 0.85;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 0;
     margin: 0;
     padding: 0;
+    line-height: 1;
 }
 
 .mute-toggle-helper::before {
@@ -765,8 +771,11 @@
     height: 1px;
     background: rgba(255, 255, 255, 0.9);
     margin: 0;
+    margin-right: 0;
     padding: 0;
     flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 .mute-toggle-helper.is-hidden {
