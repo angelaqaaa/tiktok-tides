@@ -420,8 +420,6 @@ export class RankingViz extends EventEmitter {
           .attr("text-anchor", "middle")
           .attr("dominant-baseline", "middle")
           .attr("fill", "none")
-          .attr("stroke", "rgba(0, 0, 0, 0.8)")
-          .attr("stroke-width", 4)
           .style("font-size", "19px") /* Increased from 16px */
           .style("font-weight", "600")
           .text(formatViews(d.views) + ' views');
@@ -435,7 +433,6 @@ export class RankingViz extends EventEmitter {
           .attr("fill", "#fff")
           .style("font-size", "19px") /* Increased from 16px */
           .style("font-weight", "600")
-          .style("text-shadow", "0 2px 4px rgba(0,0,0,0.8)")
           .text(formatViews(d.views) + ' views');
 
         // Add comparison bar showing relative scale
@@ -462,7 +459,7 @@ export class RankingViz extends EventEmitter {
           .attr("width", barWidth * fillRatio)
           .attr("height", barHeight)
           .attr("rx", barHeight / 2)
-          .attr("fill", d.rank === 1 ? "#2DCCD3" : "rgba(255, 255, 255, 0.7)");
+          .attr("fill", d.rank === 1 ? 'var(--color-glint)' : "rgba(255, 255, 255, 0.7)");
 
         // Percentage label for non-top categories
         if (d.rank > 1) {
@@ -488,7 +485,7 @@ export class RankingViz extends EventEmitter {
     paperGrad.selectAll('stop')
       .data([
         { offset: '0%', color: '#ffffff' },
-        { offset: '100%', color: '#d5cfbd' }
+        { offset: '100%', color: '#EDD4B2' }
       ])
       .enter()
       .append('stop')

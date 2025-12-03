@@ -274,30 +274,155 @@
     pointer-events: none;
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   Ranking Bubble Chart
+   ───────────────────────────────────────────────────────────────────────────── */
+
 /* Ranking Bubble Chart Tooltip - extends base .tooltip from base.css */
 /* Stopwatch tooltip styles excluded via :not(.ranking-bubble-tooltip) selector */
 .tooltip.ranking-bubble-tooltip {
     position: absolute;
     pointer-events: none;
     z-index: 99999;
-    /* Higher than fullPage.js watermark */
-    background: transparent;
-    border: none;
-    padding: 0;
-    border-radius: 0;
-    box-shadow: none;
-    transform: none;
-    white-space: normal;
-    font-size: inherit;
-    color: inherit;
-    /* Start hidden */
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    border-radius: 16px;
+    border: 1.5px solid rgba(45, 204, 211, 0.35);
+    box-shadow:
+        inset 0 0 14px rgba(45, 204, 211, 0.18),
+        0 0 22px rgba(45, 204, 211, 0.25),
+        0 8px 30px rgba(0, 0, 0, 0.35);
+    color: #ffffff;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.15s ease-in-out, visibility 0.15s ease-in-out;
+    transition:
+        opacity 0.25s ease,
+        transform 0.28s cubic-bezier(.18, .89, .32, 1.28),
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
 }
 
 /* Visible state */
 .tooltip.ranking-bubble-tooltip.is-visible {
     opacity: 1;
     visibility: visible;
+    transform: translateY(0px) scale(1);
+    box-shadow:
+        inset 0 0 18px rgba(45, 204, 211, 0.28),
+        0 0 28px rgba(45, 204, 211, 0.45),
+        0 10px 32px rgba(0, 0, 0, 0.45);
+    border-color: rgba(45, 204, 211, 0.65);
+}
+
+.tooltip-contentt {
+    padding: 12px 16px;
+    max-width: 340px;
+    min-width: 260px;
+    color: white;
+}
+
+.tooltip-header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.4rem;
+}
+
+.tooltip-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: white;
+    background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
+}
+
+.tooltip-author-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.tooltip-author {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.tooltip-category {
+    font-size: 0.8rem;
+    color: white;
+}
+
+.tooltip-category-name {
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    background: rgba(45, 204, 211, 0.2);
+    color: var(--color-glint);
+}
+
+/* Metrics section */
+.tooltip-metrics {
+    margin-top: 0.2rem;
+}
+
+.tooltip-metric {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin-top: 0.1rem;
+}
+
+.tooltip-metric-label {
+    display: flex;
+    align-items: center;
+}
+
+.tooltip-emoji {
+    margin-right: 0.4rem;
+}
+
+.tooltip-metric-value {
+    font-weight: 600;
+}
+
+/* Hashtags and Sounds sections */
+.tooltip-section {
+    margin-top: 0.8rem;
+}
+
+.tooltip-section-title {
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: white;
+    margin-bottom: 0.2rem;
+}
+
+.tooltip-section-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+.tooltip-chip {
+    font-size: 0.8rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.95);
+    margin-right: 0.2rem;
+    margin-bottom: 0.2rem;
+}
+
+.tooltip-chip.hashtag {
+    background: rgba(45, 204, 211, 0.4);
+    border: 1px solid rgba(45, 204, 211, 0.8);
+}
+
+.tooltip-chip.sound {
+    background: rgba(241, 32, 74, 0.4);
+    border: 1px solid rgba(241, 32, 74, 0.8);
 }

@@ -98,11 +98,11 @@ export class RankingBubbleChart {
 
     hoverGradient.append('stop')
       .attr('offset', '0%')
-      .attr('stop-color', '#2DCCD3'); // glint
+      .attr('stop-color', 'var(--color-glint)');
 
     hoverGradient.append('stop')
       .attr('offset', '100%')
-      .attr('stop-color', '#F1204A'); // blaze
+      .attr('stop-color', 'var(--color-blaze)');
 
     // Background + border for the whole drawing area
     this.svg
@@ -113,7 +113,7 @@ export class RankingBubbleChart {
       .attr('width', this.width)
       .attr('height', this.height)
       .attr('fill', '#ffffff')
-      .attr('stroke', '#F1204A') // TikTok pink border
+      .attr('stroke', 'var(--color-blaze)')
       .attr('stroke-width', 0)
       .attr('rx', rx)   // horizontal corner radius
       .attr('ry', ry);
@@ -443,12 +443,10 @@ export class RankingBubbleChart {
       .attr('cy', d => -d.r * 0.7)
       .attr('r', 14)
       .attr('fill', d => {
-        if (d.rankInCategory === 1) return '#FFD700'; // Gold
+        if (d.rankInCategory === 1) return 'var(--color-glow)'; // Gold
         if (d.rankInCategory === 2) return '#C0C0C0'; // Silver
         return '#CD7F32'; // Bronze
-      })
-      .attr('stroke', '#fff')
-      .attr('stroke-width', 2);
+      });
 
     nodesEnter
       .filter(d => d.isTop3)
@@ -492,7 +490,7 @@ export class RankingBubbleChart {
       .duration(400)
       .attr('r', (d) => d.r)
       .attr('fill', this.categoryColor);
-    
+
     // Ensure top 3 creators (with badges) are drawn above other circles
     nodesMerged
       .filter(d => d.isTop3)
@@ -607,198 +605,52 @@ export class RankingBubbleChart {
 
   getTooltipHtml(d) {
     const fmt = d3.format(',d');
-
-    const firstLetter =
-      d.author && d.author.length ? d.author[0].toUpperCase() : '?';
+    const firstLetter = d.author && d.author.length ? d.author[0].toUpperCase() : '?';
 
     const metrics = [
       { label: 'Views', key: 'totalViews', emoji: '👀' },
       { label: 'Likes', key: 'totalLikes', emoji: '❤️' },
       { label: 'Comments', key: 'totalComments', emoji: '💬' },
-      { label: 'Shares', key: 'totalShares', emoji: '🚀' },
-      { label: 'Saves', key: 'totalSaves', emoji: '🔒' }
+      { label: 'Shares', key: 'totalShares', emoji: '🔄' },
+      { label: 'Saves', key: 'totalSaves', emoji: '🔖' }
     ];
 
     // Build hashtag "chips"
-    const hashtags =
-      d.hashtags && d.hashtags.length
-        ? d.hashtags.slice(0, 8)
-          .map((h) => {
-            const label = String(h).replace(/^#/, '');
-            return `
-                <span style="
-                  font-size: 0.8rem;
-                  padding: 0.1rem 0.45rem;
-                  border-radius: 999px;
-                  background: rgba(15, 23, 42, 0.85);
-                  border: 1px solid rgba(45, 204, 211, 0.5);
-                  color: rgba(255, 255, 255, 0.95);
-                  white-space: nowrap;
-                  margin-right: 0.25rem;
-                  margin-bottom: 0.25rem;
-                  display: inline-flex;
-                  align-items: center;
-                ">#${label}</span>
-              `;
-          })
-          .join('')
-        : '';
+    const hashtags = d.hashtags && d.hashtags.length
+      ? d.hashtags.slice(0, 8).map((h) => `<span class="tooltip-chip hashtag">${h}</span>`).join('')
+      : '';
 
     // Build sound "chips"
-    const sounds =
-      d.sounds && d.sounds.length
-        ? d.sounds.slice(0, 4)
-          .map((s) => {
-            const label = String(s);
-            return `
-                <span style="
-                  font-size: 0.8rem;
-                  padding: 0.1rem 0.45rem;
-                  border-radius: 999px;
-                  background: rgba(15, 23, 42, 0.85);
-                  border: 1px solid rgba(241, 32, 74, 0.5);
-                  color: rgba(255, 255, 255, 0.95);
-                  white-space: nowrap;
-                  margin-right: 0.25rem;
-                  margin-bottom: 0.25rem;
-                  display: inline-flex;
-                  align-items: center;
-                ">${label}</span>
-              `;
-          })
-          .join('')
-        : '';
+    const sounds = d.sounds && d.sounds.length
+      ? d.sounds.slice(0, 4).map((s) => `<span class="tooltip-chip sound">${s}</span>`).join('')
+      : '';
 
     return `
-      <div style="
-        min-width: 260px;
-        max-width: 340px;
-        padding: 12px 16px;
-        border-radius: 14px;
-        background: rgba(10, 13, 24, 0.96);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.6);
-        color: #ffffffff;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      ">
-        <!-- Header -->
-        <div style="
-          display: flex;
-          align-items: center;
-          gap: 0.7rem;
-          margin-bottom: 0.4rem;
-        ">
-          <div style="
-            width: 32px;
-            height: 32px;
-            border-radius: 999px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.9rem;
-            color: #050609;
-            background: linear-gradient(135deg, #2DCCD3, #F1204A);
-          ">
-            ${firstLetter}
-          </div>
-          <div style="display: flex; flex-direction: column;">
-            <div style="font-size: 1rem; font-weight: 600;">
-              @${d.author}
-            </div>
-            <div style="
-              font-size: 0.8rem;
-              color: rgba(148, 163, 184, 0.9);
-            ">
-              Top creator in
-              <span style="
-                padding: 0.1rem 0.45rem;
-                border-radius: 999px;
-                background: rgba(45, 204, 211, 0.12);
-                color: #2DCCD3;
-                margin-left: 0.2rem;
-              ">${this.category}Tok</span>
-            </div>
-          </div>
+    <div class="tooltip-contentt">
+      <div class="tooltip-header">
+        <div class="tooltip-avatar">${firstLetter}</div>
+        <div class="tooltip-author-info">
+          <div class="tooltip-author">@${d.author}</div>
+          <div class="tooltip-category">Top creator in <span class="tooltip-category-name">${this.category}Tok</span></div>
         </div>
-
-          <!-- Performance section -->
-        <div style="margin-top: 0.2rem;">
-          <div style="
-            font-size: 0.75rem;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            color: rgba(148, 163, 184, 0.9);
-            margin-bottom: 0.2rem;
-          ">
-          </div>
-
-          ${metrics
-        .map(({ label, key, emoji }) => {
-          const value = fmt(d[key] || 0);
-          return `
-              <div style="
-                display: flex;
-                justify-content: space-between;
-                font-size: 0.85rem;
-                margin-top: 0.1rem;
-              ">
-                <span style="color: rgba(148, 163, 184, 0.95); display: flex; align-items: center;">
-                  <span style="margin-right: 0.4rem;">${emoji}</span>
-                  ${label}
-                </span>
-                <strong style="font-weight: 600;">${value}</strong>
-              </div>
-            `;
-        })
-        .join('')}
-
-        </div>
-
-        <!-- Hashtags -->
-        ${hashtags
-        ? `
-        <div style="margin-top: 0.8rem;">
-          <div style="
-            font-size: 0.8rem;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            color: rgba(148, 163, 184, 0.9);
-            margin-bottom: 0.2rem;
-          ">
-            Signature hashtags
-          </div>
-          <div style="display: flex; flex-wrap: wrap;">
-            ${hashtags}
-          </div>
-        </div>
-        `
-        : ''
-      }
-
-        <!-- Sounds -->
-        ${sounds
-        ? `
-        <div style="margin-top: 0.5rem;">
-          <div style="
-            font-size: 0.8rem;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            color: rgba(148, 163, 184, 0.9);
-            margin-bottom: 0.2rem;
-          ">
-            Sounds
-          </div>
-          <div style="display: flex; flex-wrap: wrap;">
-            ${sounds}
-          </div>
-        </div>
-        `
-        : ''
-      }
       </div>
-    `;
+      <div class="tooltip-metrics">
+        ${metrics.map(({ label, key, emoji }) => {
+      const value = fmt(d[key] || 0);
+      return `
+            <div class="tooltip-metric">
+              <span class="tooltip-metric-label"><span class="tooltip-emoji">${emoji}</span> ${label}</span>
+              <strong class="tooltip-metric-value">${value}</strong>
+            </div>
+          `;
+    }).join('')}
+      </div>
+      ${hashtags ? `<div class="tooltip-section"><div class="tooltip-section-title">Signature Hashtags</div><div class="tooltip-section-content">${hashtags}</div></div>` : ''}
+      ${sounds ? `<div class="tooltip-section"><div class="tooltip-section-title">Sounds</div><div class="tooltip-section-content">${sounds}</div></div>` : ''}
+    </div>
+  `;
   }
+
 
   // ---------- LIFECYCLE HELPERS ----------
 
