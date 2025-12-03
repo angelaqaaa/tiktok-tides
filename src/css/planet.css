@@ -74,7 +74,7 @@
    Planet SVG Elements
    ───────────────────────────────────────────────────────────────────────── */
 .planet {
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all 0.3s ease;
   pointer-events: all;
 }

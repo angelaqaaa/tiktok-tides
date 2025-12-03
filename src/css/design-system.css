@@ -158,7 +158,7 @@
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.2);
   border: 2px solid transparent;
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all 200ms ease;
 }
 
@@ -310,7 +310,7 @@
   font-family: inherit;
   font-size: var(--font-size-body-reg, 1rem);
   font-weight: var(--font-weight-semibold, 600);
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all var(--duration-micro, 200ms) var(--easing-standard);
   text-decoration: none;
   position: relative;

@@ -16,7 +16,7 @@
 
 /* Group: whole bubble */
 .word-bubble {
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: transform 150ms ease-out;
 }
 
@@ -79,7 +79,7 @@
 .emotion-legend-label-wrapper {
   display: inline-flex;
   align-items: center;
-  cursor: pointer;
+  /* cursor inherited from base.css */
 }
 
 /* Hide the native checkbox but keep it accessible */
@@ -181,13 +181,14 @@
    Sort Toggle Button
    ───────────────────────────────────────────────────────────────────────────── */
 .emotion-sort-toggle {
-  margin-top: 1rem;
+  margin-top: 0; /* Removed - gap from parent controls-panel handles spacing */
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  align-self: flex-start; /* Align to left of controls panel */
 
-  padding: 0.55rem 1.3rem; /* more padding */
-  min-width: 150px; /* ensure it's wide enough */
+  padding: 0.55rem 1.3rem;
+  min-width: 150px;
   white-space: nowrap; /* keep "Sort into columns" on one line */
 
   border-radius: 999px;
@@ -197,7 +198,7 @@
   font-size: 0.95rem;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: background-color 140ms ease-out, border-color 140ms ease-out,
     transform 120ms ease-out, box-shadow 140ms ease-out;
 }
@@ -360,14 +361,7 @@
   margin: 0 0 var(--space-2);
 }
 
-/* Sort panel styling for dark theme */
-.emotion-sort-panel {
-  padding: var(--space-3);
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(var(--glass-subtle-blur));
-  border-radius: var(--radius-lg);
-  border: 1px solid rgba(45, 204, 211, 0.3);
-}
+/* Sort panel removed from HTML - toggle now lives inside legend panel */
 
 /* ─────────────────────────────────────────────────────────────────────────
    Alien narrator for emotion scene
@@ -375,7 +369,7 @@
    ───────────────────────────────────────────────────────────────────────── */
 .alien-narrator--emotion {
   position: absolute;
-  bottom: 4%; /* Moved down from 8% */
+  bottom: 20px; /* Fixed position near bottom */
   left: 40px;
   top: auto;
   right: auto;

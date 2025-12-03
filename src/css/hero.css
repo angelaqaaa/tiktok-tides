@@ -242,7 +242,7 @@
   color: #033624;
   font-size: var(--font-size-body-reg);
   font-weight: var(--font-weight-semibold);
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all 250ms ease;
   width: fit-content;
   margin-top: var(--space-3);
@@ -913,7 +913,7 @@
   border: none;
   color: #fff;
   padding: 4px;
-  cursor: pointer;
+  /* cursor inherited from base.css */
 }
 
 .tiktok-nav-tabs {

@@ -760,7 +760,7 @@
   font-size: 1.05rem;
   font-weight: 600;
   font-family: inherit;
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all 160ms ease;
   text-align: left;
 }
@@ -1075,7 +1075,7 @@
   color: #FBEB35;
   font-weight: 600;
   font-size: 1rem;
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all 180ms ease;
   margin: 0;
   /* reset margins */
@@ -1120,7 +1120,7 @@
   font-weight: 700;
   font-size: 1rem;
   font-family: inherit;
-  cursor: pointer;
+  /* cursor inherited from base.css */
   box-shadow:
     0 6px 20px rgba(45, 204, 211, 0.4),
     0 3px 8px rgba(0, 0, 0, 0.3),

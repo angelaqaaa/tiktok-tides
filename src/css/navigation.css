@@ -121,7 +121,7 @@
   border-radius: 50%;
   background: rgba(20, 21, 28, 0.8);
   border: 2px solid rgba(160, 163, 175, 0.3);
-  cursor: pointer;
+  /* cursor inherited from base.css */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -223,7 +223,7 @@
   border: 1px solid rgba(45, 204, 211, 0.3);
   border-radius: 8px;
   color: var(--color-text-primary);
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all 200ms ease;
   flex-shrink: 0;
 }
@@ -325,7 +325,7 @@
   background: rgba(241, 32, 74, 0.1);
   border: 1px solid rgba(241, 32, 74, 0.3);
   color: var(--color-blaze);
-  cursor: pointer;
+  /* cursor inherited from base.css */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -415,7 +415,7 @@
   gap: 6px;
   background: none;
   border: none;
-  cursor: pointer;
+  /* cursor inherited from base.css */
   padding: 8px;
   transition: transform 200ms ease;
 }
@@ -631,7 +631,7 @@
     background: rgba(20, 21, 28, 0.6);
     border: 1px solid rgba(74, 77, 94, 0.3);
     border-radius: 8px;
-    cursor: pointer;
+    /* cursor inherited from base.css */
     text-align: left;
     transition: all 200ms ease;
   }
@@ -780,7 +780,7 @@
   background: rgb(25, 30, 40);
   border: 1px solid rgba(45, 204, 211, 0.5);
   border-radius: 50%;
-  cursor: pointer;
+  /* cursor inherited from base.css */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -874,7 +874,7 @@
   gap: 4px;
   background: none;
   border: none;
-  cursor: pointer;
+  /* cursor inherited from base.css */
   padding: 6px;
   transition: transform 200ms ease;
 }

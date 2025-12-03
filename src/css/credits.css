@@ -7,9 +7,9 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 480px; /* Further reduced to match recipe-card */
+  max-width: 720px; /* Enlarged from 480px for 3 columns */
   margin-top: var(--space-6);
-  padding: var(--space-5); /* Reduced from var(--space-6) */
+  padding: var(--space-6); /* Restored padding */
   background: rgba(20, 20, 35, 0.7);
   backdrop-filter: blur(var(--glass-medium-blur));
   -webkit-backdrop-filter: blur(var(--glass-medium-blur));
@@ -23,13 +23,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-3); /* Reduced from var(--space-4) */
-  margin-bottom: var(--space-4); /* Reduced from var(--space-5) */
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
 }
 
 .credits-ufo {
-  width: 48px; /* Reduced from 60px */
-  height: 48px; /* Reduced from 60px */
+  width: 60px;
+  height: 60px;
   object-fit: contain;
   filter: drop-shadow(0 0 15px rgba(45, 220, 211, 0.5));
   animation: ufoHover 3s ease-in-out infinite;
@@ -48,7 +48,7 @@
 }
 
 .credits-title {
-  font-size: clamp(0.9rem, 1.7vw, 1.1rem); /* Reduced from 1rem/2vw/1.25rem */
+  font-size: clamp(1rem, 2vw, 1.25rem);
   font-weight: 600;
   color: var(--color-text-primary);
   letter-spacing: 0.02em;
@@ -57,17 +57,17 @@
 
 .credits-team {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Reduced from 180px */
-  gap: var(--space-3); /* Reduced from var(--space-4) */
-  margin-bottom: var(--space-4); /* Reduced from var(--space-5) */
+  grid-template-columns: repeat(3, 1fr); /* Fixed 3 columns */
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
 }
 
 .team-member {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-1); /* Reduced from var(--space-2) */
-  padding: var(--space-3); /* Reduced from var(--space-4) */
+  gap: var(--space-2);
+  padding: var(--space-4);
   background: rgba(255, 255, 255, 0.03);
   border-radius: var(--radius-md);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -82,8 +82,8 @@
 }
 
 .member-avatar {
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   /* background: linear-gradient(135deg, var(--color-glint), var(--color-blaze)); */
   display: flex;
@@ -92,6 +92,13 @@
   /* box-shadow: 0 4px 16px rgba(45, 220, 211, 0.3); */
   transition: transform 0.3s ease;
   overflow: hidden;
+}
+
+.member-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .team-member:hover .member-avatar {

@@ -74,18 +74,18 @@ body {
   /* Dark base - merged from line 201 */
   overflow-x: hidden;
   position: relative;
-  /* UFO custom cursor - using smaller size for better usability */
-  cursor: url('/assets/UFO.png'), auto;
+  /* Alien custom cursor - 32x32 version for browser compatibility */
+  cursor: url('/assets/Alien_Cursor_32.png'), auto;
 }
 
-/* UFO cursor for clickable elements */
+/* Alien pointer cursor for clickable elements */
 a,
 button,
 [role="button"],
 .clickable,
 input[type="button"],
 input[type="submit"] {
-  cursor: url('/assets/UFO.png'), pointer;
+  cursor: url('/assets/Alien_Pointer_32.png'), pointer;
 }
 
 /* Fallback: ensure cursor works on all elements */
@@ -1507,7 +1507,7 @@ circle[data-type="bubble"] {
   padding: var(--space-2) var(--space-3);
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.75rem;
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -1644,7 +1644,7 @@ circle[data-type="bubble"] {
   background: transparent;
   border: none;
   color: rgba(255, 255, 255, 0.4);
-  cursor: pointer;
+  /* cursor inherited from base.css */
   border-radius: var(--radius-full);
   transition: all 0.15s ease;
 }
@@ -1779,7 +1779,7 @@ circle[data-type="bubble"] {
   color: var(--color-text-primary);
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-medium);
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all var(--duration-micro) var(--easing-standard);
 }
 
@@ -2166,40 +2166,32 @@ circle[data-type="bubble"] {
   overflow: hidden;
 }
 
-/* Record centered with slight left offset (v2 spec: "slightly left of center") */
+/* Record positioned on left side with text overlay on right */
 .viral-sounds-record-area--central {
   position: relative;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start; /* Align to left */
   align-items: center;
   width: 100%;
   height: 100%;
-  /* Shift record slightly left of true center */
-  transform: translateX(-3%);
+  padding-left: clamp(2rem, 4vw, 4rem); /* Left padding */
 }
 
 .viral-sounds-record-area--central .record-player-layout {
   width: 100%;
   max-width: none;
-  /* Remove max-width constraint */
-  justify-content: center;
+  justify-content: flex-start; /* Align left */
 }
 
 .viral-sounds-record-area--central .record-player-wrapper {
   width: 100%;
-  max-width: min(52vw, 760px);
-  /* Slightly smaller than original 55vw/800px */
-  /* Record takes ~70% of available viewport height */
-  height: 70vh;
-  min-height: 450px;
-  max-height: 750px;
+  max-width: min(48vw, 700px); /* Reduced to leave room for text overlay */
+  height: 65vh;
+  min-height: 400px;
+  max-height: 650px;
   aspect-ratio: 1.5;
   padding: clamp(0.8rem, 1.6vw, 1.3rem);
-  /* Reduced padding to make record bigger */
-  /* Shift left to make room for text panel */
-  margin: 0 auto;
-  margin-right: 280px;
-  /* Leave space for text panel (~250px + gap) */
+  margin: 0; /* No auto margin - stay on left */
 }
 
 /* VIZ OVERLAY - Persists across horizontal slides */
@@ -2423,7 +2415,7 @@ circle[data-type="bubble"] {
   background: rgba(255, 255, 255, 0.25) !important;
   border: 2px solid rgba(45, 204, 211, 0.4) !important;
   transition: all 250ms ease !important;
-  cursor: pointer !important;
+  /* cursor inherited from base.css */
 }
 
 /* Hover state */
@@ -2590,13 +2582,12 @@ circle[data-type="bubble"] {
 
 .viral-sounds-record-area .record-player-wrapper {
   width: 100%;
-  max-width: min(75vw, 920px);
-  /* Keep original size */
+  max-width: min(65vw, 800px); /* Reduced from 75vw/920px */
   aspect-ratio: 1.5;
-  margin: 0 auto;
-  /* Shift right significantly to get closer to sidebar */
+  margin: 0;
+  margin-left: clamp(2rem, 4vw, 4rem); /* Left margin to position on left side */
   position: relative;
-  left: 22%;
+  left: 0; /* Reset - no shift */
 }
 
 .viral-sounds-viz-wrapper {
@@ -3082,7 +3073,7 @@ circle[data-type="bubble"] {
 .timing-viz-wrapper {
   position: relative;
   width: 100%;
-  max-width: 600px;
+  max-width: 450px; /* Reduced from 600px */
   aspect-ratio: 1;
   display: flex;
   align-items: center;
@@ -3527,7 +3518,7 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 
 /* Legend */
 .pyramid-legend {
-  margin-top: var(--space-2);
+  margin-top: var(--space-4); /* Increased from space-2 to move legend lower */
   padding: var(--space-3);
   background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(var(--glass-subtle-blur));
@@ -3555,9 +3546,9 @@ body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
 
 .pyramid-viz-wrapper .viz-container {
   width: 100%;
-  min-height: 450px; /* Moderate increase from 400px */
-  height: calc(100vh - 120px); /* Back to original ratio */
-  max-height: 550px; /* Limit max to prevent oversized blocks */
+  min-height: 500px; /* Increased from 450px */
+  height: calc(100vh - 100px); /* Extended height */
+  max-height: 650px; /* Increased from 550px */
 }
 
 /* Callout annotation */
@@ -4770,7 +4761,7 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   border: 2px solid transparent;
   border-radius: var(--radius-md);
   font-size: var(--font-size-body-reg);
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
@@ -5162,7 +5153,7 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
   border-radius: 9999px;
   font-size: var(--font-size-body-reg);
   font-weight: 600;
-  cursor: pointer;
+  /* cursor inherited from base.css */
   transition: all 0.3s ease;
   box-shadow: 0 4px 16px rgba(241, 32, 74, 0.3);
 }
@@ -5270,13 +5261,14 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
 
 .timing-viz-wrapper {
   height: 100% !important;
-  max-height: calc(100vh - 220px) !important;
+  max-width: 450px !important; /* Reduced from 600px */
+  max-height: calc(100vh - 280px) !important; /* Reduced to make viz smaller */
 }
 
 #chart {
   min-height: auto !important;
   height: 100% !important;
-  max-height: calc(100vh - 200px) !important;
+  max-height: calc(100vh - 260px) !important; /* Reduced to make viz smaller */
 }
 
 .timing-legend {
@@ -5481,7 +5473,7 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
 .timing-icon-item {
   background: transparent !important;
   border: 2px solid transparent !important;
-  cursor: pointer !important;
+  /* cursor inherited from base.css */
   border-radius: var(--radius-lg) !important;
   padding: var(--space-2) !important;
   transition: all 0.3s ease !important;
@@ -5759,9 +5751,9 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
 }
 
 .pyramid-viz-wrapper .viz-container {
-  min-height: 450px !important; /* Moderate increase from 350px */
-  height: calc(100vh - 120px) !important; /* Back to original ratio */
-  max-height: 550px !important; /* Reduced to prevent oversized blocks */
+  min-height: 500px !important; /* Increased from 450px */
+  height: calc(100vh - 100px) !important; /* Extended height */
+  max-height: 650px !important; /* Increased from 550px */
 }
 
 /* 6. EMOTION VIZ - No sizing changes, use natural dimensions */
@@ -5771,7 +5763,7 @@ body[data-scene="wrapup"] .scene-label-badge--wrapup {
 .emotion-word,
 .word-bubble,
 .bubble-group {
-  cursor: pointer !important;
+  /* cursor inherited from base.css */
   pointer-events: auto !important;
   /* Remove any transition that causes flying */
   transition: none !important;

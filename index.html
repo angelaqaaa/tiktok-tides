@@ -77,25 +77,9 @@
     <div class="scroll-progress-bar" aria-hidden="true"></div>
     <!-- Left: Logo Cluster - click to return to hero -->
     <a href="#scene-hero" class="nav-logo-cluster" aria-label="Go to start" data-nav-home>
-      <!-- TikTok-inspired logo mark with alien -->
+      <!-- Alien logo using drawn asset -->
       <div class="logo-mark">
-        <svg viewBox="0 0 36 36" aria-hidden="true">
-          <!-- Rounded square with TikTok-like gradient border -->
-          <defs>
-            <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#2DCCD3"/>
-              <stop offset="100%" stop-color="#F1204A"/>
-            </linearGradient>
-          </defs>
-          <rect x="2" y="2" width="32" height="32" rx="8" fill="none" stroke="url(#logo-gradient)" stroke-width="2"/>
-          <!-- Simple alien head silhouette -->
-          <ellipse cx="18" cy="16" rx="8" ry="9" fill="#BAF6F0" opacity="0.9"/>
-          <ellipse cx="14" cy="14" rx="2.5" ry="3" fill="#033624"/>
-          <ellipse cx="22" cy="14" rx="2.5" ry="3" fill="#033624"/>
-          <path d="M16 20 Q18 22 20 20" stroke="#033624" fill="none" stroke-width="1.5" stroke-linecap="round"/>
-          <!-- Lab coat collar hint -->
-          <path d="M12 25 L18 28 L24 25" stroke="#F0F2F5" fill="none" stroke-width="1.5"/>
-        </svg>
+        <img src="/assets/Alien_Icon.png" alt="" width="25" height="25" />
       </div>
       <span class="logo-text">TikTok Tides</span>
     </a>
@@ -258,7 +242,7 @@
 
         <!-- Alien avatar marker (shows current position) -->
         <div class="map-alien-marker" data-current-node="1" aria-label="You are here">
-          <img src="/assets/alien.PNG"
+          <img src="/assets/Alien_Wave.png"
                alt="Alien guide"
                width="40"
                height="40"
@@ -435,7 +419,7 @@
 
     <!-- Alien marker - same as overlay -->
     <div class="sidebar-alien-marker" aria-label="You are here">
-      <img src="/assets/alien.PNG" alt="" width="32" height="32"/>
+      <img src="/assets/Alien_Wave.png" alt="" width="32" height="32"/>
     </div>
   </nav>
 
@@ -546,11 +530,11 @@
                         <div class="video-glow"></div>
                       </div>
                       <!-- Large Alien Figure -->
-                      <img src="/assets/alien.PNG" alt="" class="tiktok-alien-figure" />
+                      <img src="/assets/Alien_Wave.png" alt="" class="tiktok-alien-figure" />
                       <!-- Speech Bubble (TikTok comment style) - Per narrative-alien-redesign.md -->
                       <div class="tiktok-speech-bubble">
                         <div class="speech-avatar">
-                          <img src="/assets/alien.PNG" alt="" />
+                          <img src="/assets/Alien_Wave.png" alt="" />
                         </div>
                         <div class="speech-content">
                           <span class="speech-name">@alienguide</span>
@@ -564,7 +548,7 @@
                       <!-- Profile with follow button -->
                       <div class="tiktok-action tiktok-action--profile">
                         <div class="profile-avatar">
-                          <img src="/assets/alien.PNG" alt="" />
+                          <img src="/assets/Alien_Wave.png" alt="" />
                         </div>
                         <div class="profile-follow-badge">+</div>
                       </div>
@@ -768,7 +752,7 @@
         <!-- Alien narrator (persists across slides, speech updated by JS per step) -->
         <div class="alien-narrator alien-narrator--scene alien-narrator--scene2" data-scene="galaxy">
           <div class="alien-avatar">
-            <img src="/assets/alien.PNG"
+            <img src="/assets/Alien_Point.png"
                  alt="" width="64" height="64" loading="lazy"
                  onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
           </div>
@@ -941,7 +925,7 @@
         <!-- Alien narrator (persists across slides) -->
         <div class="alien-narrator alien-narrator--scene alien-narrator--scene3" data-scene="sounds">
           <div class="alien-avatar alien-avatar--dj">
-            <img src="/assets/alien.PNG"
+            <img src="/assets/Alien_Listen.png"
                  alt="" width="64" height="64" loading="lazy"
                  onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
           </div>
@@ -1075,7 +1059,7 @@
         <!-- Alien narrator (persists across slides) -->
         <div class="alien-narrator alien-narrator--timing" data-scene="dawn" aria-hidden="true">
           <div class="alien-avatar">
-            <img src="/assets/alien.PNG"
+            <img src="/assets/Alien_Read.png"
                  alt="" width="64" height="64" loading="lazy"
                  onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
           </div>
@@ -1174,7 +1158,7 @@
         <!-- Alien narrator (persists across slides) -->
         <div class="alien-narrator alien-narrator--pyramid" data-scene="forest" aria-hidden="true">
           <div class="alien-avatar">
-            <img src="/assets/alien.PNG"
+            <img src="/assets/Alien_Sit.png"
                  alt="" width="64" height="64" loading="lazy"
                  onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
           </div>
@@ -1272,19 +1256,16 @@
               <!-- Legend items populated dynamically by EmotionViz.setupLegend() -->
             </ul>
           </div>
-
-          <!-- Sort toggle control -->
-          <div class="emotion-sort-panel">
-            <button class="emotion-sort-toggle" aria-pressed="false" aria-label="Toggle sorted view">
-              Sort into columns
-            </button>
-          </div>
+          <!-- Sort toggle - standalone below legend panel, no border -->
+          <button class="emotion-sort-toggle" aria-pressed="false" aria-label="Toggle sorted view">
+            Sort into columns
+          </button>
         </div>
 
         <!-- Alien narrator (persists across slides) -->
         <div class="alien-narrator alien-narrator--emotion" data-scene="air" aria-hidden="true">
           <div class="alien-avatar">
-            <img src="/assets/alien.PNG"
+            <img src="/assets/Alien_Wave.png"
                  alt="" width="64" height="64" loading="lazy"
                  onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
           </div>
@@ -1377,7 +1358,7 @@
       <!-- Alien narrator (on conveyor belt per v3 spec) -->
       <div class="alien-narrator alien-narrator--quiz" data-scene="lab" aria-hidden="true">
         <div class="alien-avatar">
-          <img src="/assets/alien.PNG"
+          <img src="/assets/Alien_Performative.png"
                alt="" width="64" height="64" loading="lazy"
                onerror="this.parentElement.classList.add('alien-avatar--fallback')"/>
         </div>
@@ -1497,42 +1478,42 @@
             <div class="credits-team">
               <div class="team-member">
                 <div class="member-avatar">
-                  <span class="avatar-initial">K</span>
+                  <img src="/assets/Alien_Kathy.png" alt="Kathy" loading="lazy" />
                 </div>
                 <span class="member-name">Kathy Lee</span>
                 <span class="member-role">Team TrendTokers</span>
               </div>
               <div class="team-member">
                 <div class="member-avatar">
-                  <span class="avatar-initial">K</span>
+                  <img src="/assets/Alien_Kerry.png" alt="Kerry" loading="lazy" />
                 </div>
                 <span class="member-name">Kerry Gu</span>
                 <span class="member-role">Team TrendTokers</span>
               </div>
               <div class="team-member">
                 <div class="member-avatar">
-                  <span class="avatar-initial">A</span>
+                  <img src="/assets/Alien_Anushka.png" alt="Anushka" loading="lazy" />
                 </div>
                 <span class="member-name">Anushka Sharma</span>
                 <span class="member-role">Team TrendTokers</span>
               </div>
               <div class="team-member">
                 <div class="member-avatar">
-                  <span class="avatar-initial">B</span>
+                  <img src="/assets/Alien_Bradley.png" alt="Bradley" loading="lazy" />
                 </div>
                 <span class="member-name">Bradley Lin</span>
                 <span class="member-role">Team TrendTokers</span>
               </div>
               <div class="team-member">
                 <div class="member-avatar">
-                  <span class="avatar-initial">A</span>
+                  <img src="/assets/Alien_Angela.png" alt="Angela" loading="lazy" />
                 </div>
                 <span class="member-name">Angela Su</span>
                 <span class="member-role">Team TrendTokers</span>
               </div>
               <div class="team-member">
                 <div class="member-avatar">
-                  <span class="avatar-initial">J</span>
+                  <img src="/assets/Alien_Jon.png" alt="Jon" loading="lazy" />
                 </div>
                 <span class="member-name">Jon Vincentius</span>
                 <span class="member-role">Team TrendTokers</span>

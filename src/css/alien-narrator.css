@@ -336,7 +336,7 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   justify-content: center;
   overflow: visible;
   animation: alienFloat 3s ease-in-out infinite;
-  cursor: pointer;
+  /* cursor inherited from base.css */
 }
 
 /* TikTok-style gradient border on avatar */
