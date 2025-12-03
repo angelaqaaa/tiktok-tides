@@ -75,17 +75,19 @@ body {
   overflow-x: hidden;
   position: relative;
   /* Alien custom cursor - 32x32 version for browser compatibility */
-  cursor: url('/assets/Alien_Cursor_32.png'), auto;
+  /* Hotspot set to palm position (center of hand) instead of fingertip */
+  cursor: url('/assets/Alien_Cursor_32.png') 16 16, auto;
 }
 
 /* Alien pointer cursor for clickable elements */
+/* Hotspot set to palm position (center of hand) instead of fingertip */
 a,
 button,
 [role="button"],
 .clickable,
 input[type="button"],
 input[type="submit"] {
-  cursor: url('/assets/Alien_Pointer_32.png'), pointer;
+  cursor: url('/assets/Alien_Pointer_32.png') 16 16, pointer;
 }
 
 /* Fallback: ensure cursor works on all elements */
@@ -1549,14 +1551,15 @@ circle[data-type="bubble"] {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
-  max-width: 300px;
+  width: clamp(100px, 25vw, 250px);
+  max-width: none;
   animation: infoSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   /* Position absolutely so opening doesn't move the toggle */
   position: absolute;
   top: 100%;
   left: 0;
   margin-top: var(--space-2);
-  z-index: 100;
+  z-index: 99999;
   box-shadow:
     0 4px 20px rgba(0, 0, 0, 0.5),
     0 0 30px rgba(37, 244, 238, 0.08),
@@ -1680,9 +1683,14 @@ circle[data-type="bubble"] {
 }
 
 /* Scene-specific chart instructions positioning */
-.chart-instructions--pyramid {
-  margin-bottom: var(--space-4);
+.pyramid-viz-overlay .chart-instructions--pyramid {
+  position: absolute;
+  top: 125px;
+  left: 620px;
+  margin: 0;
   max-width: 100%;
+  z-index: 100;
+  pointer-events: auto;
 }
 
 .chart-instructions--emotion {
@@ -1695,11 +1703,13 @@ circle[data-type="bubble"] {
 }
 
 .chart-instructions--quiz {
-  margin-top: var(--space-3);
-  margin-bottom: var(--space-4);
-  max-width: 350px;
-  margin-left: auto;
-  margin-right: auto;
+  position: absolute;
+  top: clamp(1rem, 2vh, 2rem);
+  right: clamp(2rem, 4vw, 4rem);
+  left: auto;
+  margin: 0;
+  max-width: 200px;
+  z-index: 15;
 }
 
 /* Emotion narrative steps - LEGACY, kept for non-overlay contexts */
@@ -2499,9 +2509,9 @@ circle[data-type="bubble"] {
 /* Chart Instructions for Record Player Scene (per narrative-alien-redesign.md) */
 .chart-instructions--record-player {
   position: absolute;
-  top: 100px;
-  /* Top-right corner */
-  right: 32px;
+  top: 215px;
+  left: clamp(3rem, 5vw, 5rem);
+  right: auto;
   z-index: 15;
   padding: var(--space-2) var(--space-3);
   max-width: 100%;
@@ -3130,8 +3140,11 @@ circle[data-type="bubble"] {
 /* Chart Instructions for Stopwatch Scene (per narrative-alien-redesign.md) */
 .chart-instructions--stopwatch {
   position: absolute;
-  top: 80px; /* Top-right corner, near scene-label-badge */
-  right: 32px;
+  top: clamp(180px, 25vh, 280px);
+  left: 50%;
+  transform: translateX(-50%);
+  right: auto;
+  top: auto;
   z-index: 15;
 }
 
@@ -4566,17 +4579,14 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 }
 
 /* Chart Instructions for Music Galaxy Scene (per narrative-alien-redesign.md) */
-/* Positioned below the legend panel in top-right area */
+/* Positioned below scene-label-badge on the left */
 .music-galaxy-viz-overlay .chart-instructions {
   position: absolute;
-  top: 320px;
-  /* Below legend panel */
-  right: 0;
-  left: auto;
-  bottom: auto;
-  z-index: 12;
+  top: 160px;
+  left: 35px;
+  z-index: 100;
   max-width: 200px;
-  /* Match legend width */
+  pointer-events: auto;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -4638,7 +4648,7 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
   width: 100%;
   max-width: 600px;
   text-align: center;
-  padding: var(--space-3) var(--space-5);
+  padding: var(--space-4) var(--space-5);
   /* Reduced from var(--space-5) var(--space-6) */
   background: rgba(26, 10, 46, 0.7);
   backdrop-filter: blur(var(--glass-medium-blur));

@@ -570,7 +570,7 @@ export class RankingViz extends EventEmitter {
   }
 
   startAnimation(pages, pyramidData, rectWidth, rectHeight) {
-    this.mainAudio = new Audio('/assets/audio/abbylee.mp3');
+    this.mainAudio = new Audio(getDataPath('assets/audio/abbylee.mp3'));
     this.mainAudio.volume = 1;
     this.currentAudio = this.mainAudio;
     this.stopSequence = false;
