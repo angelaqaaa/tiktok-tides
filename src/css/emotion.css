@@ -405,24 +405,7 @@ body[data-scene="air"] .alien-narrator--emotion .alien-speech-bubble {
   transform: translateX(-50%);
   width: max-content;
   max-width: 280px;
-  padding: var(--space-3) var(--space-4);
-  /* White/light per redesign spec section 0.2 */
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
-  border: 2px solid rgba(45, 204, 211, 0.4);
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  transition: opacity 400ms ease, transform 400ms ease;
   margin-bottom: var(--space-2);
-}
-
-.alien-narrator--emotion .alien-speech-text {
-  font-size: 0.875rem;
-  color: #1a1a2e;
-  /* Dark text for white background */
-  line-height: 1.6;
-  margin: 0;
-  text-align: center;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -477,9 +460,10 @@ body[data-scene="air"] .alien-narrator--emotion .alien-speech-bubble {
     right: 100px;
   }
 
+  /* 
   .alien-narrator--emotion .alien-speech-bubble {
     max-width: 200px;
-  }
+  } */
 
   .emotion-viz-wrapper {
     position: relative;

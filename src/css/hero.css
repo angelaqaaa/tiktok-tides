@@ -1518,34 +1518,6 @@
   position: relative;
 }
 
-.alien-speech-bubble {
-  max-width: 300px;
-  padding: var(--space-4);
-  background: rgba(10, 10, 20, 0.95);
-  border: 1px solid rgba(45, 204, 211, 0.4);
-  border-radius: 16px 16px 16px 4px;
-  box-shadow:
-    0 0 16px rgba(45, 204, 211, 0.15),
-    0 8px 24px rgba(0, 0, 0, 0.4);
-  position: relative;
-  opacity: 0;
-  transform: scale(0.9) translateX(-10px);
-  transition: opacity 300ms ease, transform 300ms ease;
-}
-
-/* Show speech bubble */
-.alien-speech-bubble[data-speech-state="visible"] {
-  opacity: 1;
-  transform: scale(1) translateX(0);
-}
-
-.alien-speech-text {
-  font-size: 0.9375rem;
-  color: var(--color-text-primary);
-  line-height: 1.5;
-  margin: 0;
-}
-
 /* ─────────────────────────────────────────────────────────────────────────
    Hero Scene Responsive Styles
    ───────────────────────────────────────────────────────────────────────── */
@@ -1623,15 +1595,6 @@
     width: 48px;
     height: 48px;
   }
-
-  .alien-speech-bubble {
-    max-width: 220px;
-    padding: var(--space-3);
-  }
-
-  .alien-speech-text {
-    font-size: 0.875rem;
-  }
 }
 
 @media (max-width: 480px) {
@@ -1652,9 +1615,5 @@
 
   .hero-bottom-band {
     padding: var(--space-4);
-  }
-
-  .alien-speech-bubble {
-    max-width: 180px;
   }
 }
