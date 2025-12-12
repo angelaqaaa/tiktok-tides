@@ -3964,12 +3964,9 @@ body:not([data-scene="galaxy"]) .alien-narrator--scene2,
 /* Scene label badge */
 .scene-quiz .scene-label-badge {
   position: absolute;
-  top: 70px;
-  /* Below nav bar */
-  left: var(--space-4);
-  background: rgba(45, 204, 211, 0.15);
-  border: 1px solid rgba(45, 204, 211, 0.3);
-  z-index: 100;
+  top: 80px;
+  left: 35px;
+  z-index: 15;
 }
 
 /* Question panel - glassmorphic card */
@@ -4191,13 +4188,10 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
 
 /* Scene label badge for wrapup - outside fullPage container */
 .scene-label-badge--wrapup {
-  position: fixed;
-  top: calc(64px + var(--space-3));
-  /* Below nav bar (64px) + spacing */
-  left: var(--space-4);
-  background: rgba(45, 204, 211, 0.15);
-  border: 1px solid rgba(45, 204, 211, 0.3);
-  z-index: 9999;
+  position: absolute;
+  top: 80px;
+  left: 35px;
+  z-index: 15;
   display: none;
   /* Hidden by default */
 }
@@ -5695,4 +5689,8 @@ body[data-scene="wrapup"] .alien-narrator--wrapup {
   color: rgba(255, 255, 255, 0.8);
   line-height: 1.6;
   margin: 0;
+}
+
+.fp-watermark {
+  display: none;
 }
