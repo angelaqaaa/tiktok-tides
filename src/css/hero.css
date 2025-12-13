@@ -31,7 +31,8 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  background: transparent; /* Let body::before show through - per background_redesign.md */
+  background: transparent;
+  /* Let body::before show through - per background_redesign.md */
 }
 
 /* Remove fullpage.js default padding to let background fill entire page */
@@ -134,7 +135,8 @@
 
 /* Top band: Space for fixed navbar */
 .hero-nav-spacer {
-  height: 60px; /* 64px nav + 16px breathing room */
+  height: 60px;
+  /* 64px nav + 16px breathing room */
   flex-shrink: 0;
 }
 
@@ -147,18 +149,19 @@
   padding-left: var(--space-6);
   /* Reserve space for narrower sidebar on the right */
   padding-right: clamp(65px, calc(var(--space-6) + 6vw), 95px);
-  margin-top: 50px; /* Reserve space where scene-label-badge was */
+  margin-top: 50px;
+  /* Reserve space where scene-label-badge was */
   position: relative;
   z-index: 1;
 }
 
 .hero-container {
-    display: grid;
-    grid-template-columns: 60% 40%;
-    gap: var(--space-8);
-    align-items: center;
-    max-width: 1200px;
-    width: 100%;
+  display: grid;
+  grid-template-columns: 60% 40%;
+  gap: var(--space-8);
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -178,7 +181,7 @@
   /* Gradient uses glint → light-mint → blaze → yellow for shimmer effect */
   background: linear-gradient(135deg,
       var(--color-glint) 0%,
-      #BAF6F0 30%,
+      var(--color-shimmer) 30%,
       var(--color-blaze) 70%,
       var(--color-glow) 100%);
   background-size: 200% 200%;
@@ -229,19 +232,19 @@
    - Custom padding for hero context (14px 28px)
    - No shimmer effect (cleaner for hero scene)
 
-   Partially tokenized. Remaining hardcoded: #1BA8AE (darker teal), #033624 (text)
    ========================================================================== */
 .hero-cta-button {
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);
   padding: 14px 28px;
-  background: linear-gradient(135deg, var(--color-glint), #1BA8AE);
+  background: linear-gradient(135deg, var(--color-glint), var(--color-glint-dark));
   border: none;
-  border-radius: 12px;
-  color: #033624;
+  border-radius: 15px;
+  color: var(--color-thrive);
   font-size: var(--font-size-body-reg);
   font-weight: var(--font-weight-semibold);
+  font-family: 'TikTok Sans';
   /* cursor inherited from base.css */
   transition: all 250ms ease;
   width: fit-content;
@@ -251,7 +254,7 @@
 .hero-cta-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(45, 204, 211, 0.4);
-  background: linear-gradient(135deg, #3DDDE4, var(--color-glint));
+  background: linear-gradient(135deg, var(--color-shimmer), var(--color-glint));
 }
 
 .hero-cta-button:focus {
@@ -264,7 +267,7 @@
 }
 
 .hero-cta-button:hover svg {
-  transform: translateX(4px);
+  transform: translateY(4px);
 }
 
 /* Call to scroll instruction (v3 spec 5.1) */
@@ -286,7 +289,7 @@
 .hero-scroll-arrow svg {
   width: 24px;
   height: 24px;
-  color: var(--color-glint, #2DCCD3);
+  color: var(--color-glint);
   filter: drop-shadow(0 0 8px rgba(45, 204, 211, 0.4));
 }
 
@@ -320,8 +323,10 @@
 .hero-phone-frame {
   position: relative;
   width: min(40vw, 320px);
-  height: min(70vh, 640px); /* Reduced from 80vh to prevent overflow */
-  max-height: calc(100vh - 200px); /* Reserve space for nav and text */
+  height: min(70vh, 640px);
+  /* Reduced from 80vh to prevent overflow */
+  max-height: calc(100vh - 200px);
+  /* Reserve space for nav and text */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -538,10 +543,10 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 2px solid #00F2EA;
+  border: 2px solid var(--color-glint);
   object-fit: cover;
   background: #1a0a2e;
-  box-shadow: 0 0 8px rgba(0, 242, 234, 0.4);
+  box-shadow: 0 0 8px rgba(45, 204, 211, 0.4);
 }
 
 /* Action counts (like, comment, share counts) */
@@ -603,7 +608,7 @@
     radial-gradient(1px 1px at 50% 15%, rgba(255, 255, 255, 0.8), transparent),
     radial-gradient(2px 2px at 70% 35%, rgba(45, 204, 211, 0.6), transparent),
     radial-gradient(1px 1px at 85% 60%, rgba(255, 255, 255, 0.6), transparent),
-    radial-gradient(1.5px 1.5px at 20% 70%, rgba(255, 92, 231, 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 20% 70%, rgba(241, 32, 74, 0.5), transparent),
     radial-gradient(1px 1px at 60% 80%, rgba(255, 255, 255, 0.7), transparent),
     radial-gradient(2px 2px at 40% 90%, rgba(45, 204, 211, 0.4), transparent);
   animation: twinkleStars 4s ease-in-out infinite alternate;
@@ -623,7 +628,7 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 30% 70%, rgba(255, 92, 231, 0.15), transparent),
+    radial-gradient(ellipse 80% 60% at 30% 70%, rgba(241, 32, 74, 0.15), transparent),
     radial-gradient(ellipse 60% 50% at 70% 30%, rgba(45, 204, 211, 0.12), transparent);
 }
 
@@ -632,7 +637,7 @@
   height: auto;
   max-height: 55%;
   object-fit: contain;
-  filter: drop-shadow(0 0 20px rgba(0, 242, 234, 0.4));
+  filter: drop-shadow(0 0 20px rgba(45, 204, 211, 0.4));
   animation: alienBob 3s ease-in-out infinite;
   position: relative;
   z-index: 2;
@@ -1000,7 +1005,7 @@
     radial-gradient(1.5px 1.5px at 35% 45%, rgba(255, 255, 255, 0.6), transparent),
     radial-gradient(1px 1px at 55% 15%, rgba(255, 255, 255, 0.7), transparent),
     radial-gradient(2px 2px at 75% 40%, rgba(45, 204, 211, 0.5), transparent),
-    radial-gradient(1px 1px at 25% 70%, rgba(255, 92, 231, 0.4), transparent),
+    radial-gradient(1px 1px at 25% 70%, rgba(241, 32, 74, 0.4), transparent),
     radial-gradient(1.5px 1.5px at 65% 80%, rgba(255, 255, 255, 0.5), transparent),
     radial-gradient(1px 1px at 85% 25%, rgba(45, 204, 211, 0.3), transparent),
     radial-gradient(2px 2px at 45% 55%, rgba(255, 255, 255, 0.4), transparent);
@@ -1021,7 +1026,7 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 100% 80% at 30% 80%, rgba(255, 92, 231, 0.2), transparent),
+    radial-gradient(ellipse 100% 80% at 30% 80%, rgba(241, 32, 74, 0.2), transparent),
     radial-gradient(ellipse 80% 60% at 70% 20%, rgba(45, 204, 211, 0.15), transparent);
 }
 
@@ -1102,7 +1107,7 @@
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #00F2EA, #FF0050);
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
   padding: 2px;
 }
 
@@ -1199,7 +1204,7 @@
   transform: translateX(-50%);
   width: 20px;
   height: 20px;
-  background: #FE2C55;
+  background: var(--color-blaze);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1365,7 +1370,7 @@
 .create-button {
   width: 44px;
   height: 28px;
-  background: linear-gradient(90deg, #00F2EA 0%, #00F2EA 45%, #FF0050 55%, #FF0050 100%);
+  background: linear-gradient(90deg, var(--color-glint) 0%, var(--color-glint) 45%, var(--color-blaze) 55%, var(--color-blaze) 100%);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -1508,37 +1513,9 @@
   content: '';
   width: 40px;
   height: 40px;
-  background: #BAF6F0;
+  background: var(--color-shimmer);
   border-radius: 50% 50% 45% 45%;
   position: relative;
-}
-
-.alien-speech-bubble {
-  max-width: 300px;
-  padding: var(--space-4);
-  background: rgba(10, 10, 20, 0.95);
-  border: 1px solid rgba(45, 204, 211, 0.4);
-  border-radius: 16px 16px 16px 4px;
-  box-shadow:
-    0 0 16px rgba(45, 204, 211, 0.15),
-    0 8px 24px rgba(0, 0, 0, 0.4);
-  position: relative;
-  opacity: 0;
-  transform: scale(0.9) translateX(-10px);
-  transition: opacity 300ms ease, transform 300ms ease;
-}
-
-/* Show speech bubble */
-.alien-speech-bubble[data-speech-state="visible"] {
-  opacity: 1;
-  transform: scale(1) translateX(0);
-}
-
-.alien-speech-text {
-  font-size: 0.9375rem;
-  color: var(--color-text-primary);
-  line-height: 1.5;
-  margin: 0;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -1618,15 +1595,6 @@
     width: 48px;
     height: 48px;
   }
-
-  .alien-speech-bubble {
-    max-width: 220px;
-    padding: var(--space-3);
-  }
-
-  .alien-speech-text {
-    font-size: 0.875rem;
-  }
 }
 
 @media (max-width: 480px) {
@@ -1647,9 +1615,5 @@
 
   .hero-bottom-band {
     padding: var(--space-4);
-  }
-
-  .alien-speech-bubble {
-    max-width: 180px;
   }
 }

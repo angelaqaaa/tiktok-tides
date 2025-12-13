@@ -243,11 +243,11 @@ export class StopwatchViz extends EventEmitter {
 
     arcGradient.append('stop')
       .attr('offset', '0%')
-      .attr('stop-color', '#2dccd3');
+      .attr('stop-color', 'var(--color-glint)');
 
     arcGradient.append('stop')
       .attr('offset', '100%')
-      .attr('stop-color', '#f1204a');
+      .attr('stop-color', 'var(--color-blaze)');
 
     // Centering group
     this.g = this.svg.append('g')
@@ -472,12 +472,15 @@ export class StopwatchViz extends EventEmitter {
         this.tooltip
           .style('opacity', 1)
           .html(
-            `<strong>Duration bin:</strong> ${binStart}s–${binEnd}s<br>` +
-            `<strong>Avg duration in bin:</strong> ${d3.format('.1f')(meanDuration)}s<br>` +
-            `<strong>Avg playCount:</strong> ${d3.format(',.2f')(avgPC)}`
+            `<div class="tooltip-content">
+              <strong class="tooltip-title">${binStart}s–${binEnd}s</strong><br>
+              <strong>Average Duration:</strong> ${d3.format('.1f')(meanDuration)}s<br>
+              <strong>Average Plays:</strong> ${d3.format(',.2f')(avgPC)}
+            </div>`
           )
           .style('left', `${event.clientX}px`)
           .style('top', `${event.clientY - 18}px`);
+
         // opacity already 1, but keep transition for consistency
         d3.select(event.currentTarget).transition().duration(120).style('opacity', 1);
       })

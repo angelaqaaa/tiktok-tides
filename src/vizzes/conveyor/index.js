@@ -176,7 +176,7 @@ export class ConveyorViz extends EventEmitter {
     // Create conveyor belt wrapper (now below controls and panel)
     const beltWrapper = document.createElement('div');
     beltWrapper.className = 'conveyor-belt-wrapper';
-    
+
     // Create conveyor belt track
     const belt = document.createElement('div');
     belt.className = 'conveyor-belt';
@@ -216,7 +216,7 @@ export class ConveyorViz extends EventEmitter {
     back.className = 'box-face box-back';
     back.innerHTML = `
       <div class="box-question-on-back">${item.label}</div>
-      <div class="box-answer-label">Answer:</div>
+      <div class="box-answer-label">Answer</div>
       <div class="box-answer">${item.answer}</div>
       <div class="box-checkmark">✓</div>
       <div class="box-xmark">✗</div>
@@ -242,8 +242,8 @@ export class ConveyorViz extends EventEmitter {
 
       <div class="options-grid" role="group" aria-label="Answer choices"></div>
 
-      <div class="hint-navigation" style="display:none;">
-        <p class="hint-prompt">Need a hint? Explore the scene where this was covered:</p>
+      <div class="hint-navigation" hidden>
+        <p class="hint-prompt">Need a hint? Explore the scene where this was covered!</p>
         <button class="btn btn--secondary go-to-scene-btn" aria-label="Go to scene for hints">
           <span class="go-to-icon">&#x21AA;</span>
           <span class="go-to-label">Visit Scene</span>
@@ -294,7 +294,7 @@ export class ConveyorViz extends EventEmitter {
 
     boxes.forEach((box, index) => {
       const dataIndex = parseInt(box.getAttribute('data-index'));
-      
+
       // Position based on state relative to current index
       if (dataIndex < this.state.currentIndex) {
         // Completed cards - move to the left
@@ -353,7 +353,7 @@ export class ConveyorViz extends EventEmitter {
     const title = this.container.querySelector('.ingredient-title');
     const hint = this.container.querySelector('.ingredient-hint');
     const attemptsEl = this.container.querySelector('.attempts-remaining');
-    
+
     if (title) title.textContent = current.label;
     if (hint) hint.textContent = `Hint: ${current.hint}`;
 
@@ -392,7 +392,7 @@ export class ConveyorViz extends EventEmitter {
 
     // Reset hint navigation
     const hintNav = this.container.querySelector('.hint-navigation');
-    if (hintNav) hintNav.style.display = 'none';
+    if (hintNav) hintNav.hidden = true;
 
     // Update the go-to-scene button label for current question
     this.updateHintNavigationLabel();
@@ -411,8 +411,8 @@ export class ConveyorViz extends EventEmitter {
   submitGuess(guess, btnEl) {
     if (!guess) return;
 
-  this.state.hasGuessed = true;
-  this.state.currentGuess = guess;
+    this.state.hasGuessed = true;
+    this.state.currentGuess = guess;
 
     // Disable clicked option to prevent repeat
     if (btnEl) btnEl.disabled = true;
@@ -434,7 +434,7 @@ export class ConveyorViz extends EventEmitter {
 
       // Hide hint navigation if it was shown (user got it wrong first, then right)
       const hintNav = this.container.querySelector('.hint-navigation');
-      if (hintNav) hintNav.style.display = 'none';
+      if (hintNav) hintNav.hidden = true;
 
       // Show feedback area and next button immediately
       const feedbackArea = this.container.querySelector('.feedback-area');
@@ -537,9 +537,9 @@ export class ConveyorViz extends EventEmitter {
     const normalizedAnswer = normalizeText(answer);
 
     // Check if answer contains guess or vice versa
-    return normalizedAnswer.includes(normalizedGuess) || 
-           normalizedGuess.includes(normalizedAnswer) ||
-           normalizedGuess === normalizedAnswer;
+    return normalizedAnswer.includes(normalizedGuess) ||
+      normalizedGuess.includes(normalizedAnswer) ||
+      normalizedGuess === normalizedAnswer;
   }
 
   showFeedback(message, type) {
@@ -633,7 +633,7 @@ export class ConveyorViz extends EventEmitter {
 
     // Move to next ingredient
     this.state.currentIndex++;
-    
+
     // Animate belt
     this.state.isMoving = true;
     this.updateBeltPosition();
@@ -659,7 +659,7 @@ export class ConveyorViz extends EventEmitter {
     const gap = 32; // from CSS
     const totalWidth = (totalCards * cardWidth) + ((totalCards - 1) * gap);
     const startOffset = -(totalWidth / 2) + (cardWidth / 2);
-    
+
     boxes.forEach((box, index) => {
       const offset = startOffset + (index * (cardWidth + gap));
       box.style.transform = `translateX(${offset}px)`;
@@ -670,8 +670,8 @@ export class ConveyorViz extends EventEmitter {
     const panel = this.container.querySelector('.interaction-panel');
     panel.innerHTML = `
       <div class="completion-message">
-        <h3>🎊 Complete!</h3>
-        <p class="final-score">Your Score: ${this.state.score}/${this.data ? this.data.length : 0}</p>
+        <h3>Your Score</h3>
+        <p class="final-score">${this.state.score}/${this.data ? this.data.length : 0}</p>
         <p class="score-message">${this.getScoreMessage()}</p>
         <button class="btn btn--secondary restart-btn" aria-label="Restart from beginning">Restart</button>
       </div>
@@ -693,7 +693,7 @@ export class ConveyorViz extends EventEmitter {
   getScoreMessage() {
     const total = this.data ? this.data.length : 1;
     const percentage = (this.state.score / total) * 100;
-    
+
     if (percentage === 100) return '🌟 Perfect! You know your TikTok ingredients!';
     if (percentage >= 80) return '🔥 Excellent! You\'re ready to go viral!';
     if (percentage >= 60) return '👍 Good job! Keep learning!';
@@ -764,7 +764,7 @@ export class ConveyorViz extends EventEmitter {
   showHintNavigation() {
     const hintNav = this.container.querySelector('.hint-navigation');
     if (hintNav) {
-      hintNav.style.display = 'block';
+      hintNav.hidden = false;
     }
   }
 
@@ -831,7 +831,7 @@ export class ConveyorViz extends EventEmitter {
 
     // Add click handler - bind to this instance
     const self = this;
-    returnBtn.addEventListener('click', function(e) {
+    returnBtn.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
       self.returnToQuiz();

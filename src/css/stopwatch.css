@@ -11,93 +11,93 @@
    Uses dark radial gradient and chip layout for stopwatch theme.
    NOT a duplicate - this is a custom "control panel" aesthetic.
    ═══════════════════════════════════════════════════════════════════════════ */
-#scene-duration .legend-panel{
+#scene-duration .legend-panel {
   width: 100%;
   margin: 0;
-  border-radius:16px;
+  border-radius: 16px;
   background: radial-gradient(100% 140% at 50% 0%, #1b2030 0%, #151a24 60%, #121620 100%);
-  padding:16px 16px 18px;
+  padding: 16px 16px 18px;
   box-shadow: 0 10px 30px #00000060 inset, 0 6px 20px #00000055;
-  border:1px solid #232b3a;
+  border: 1px solid #232b3a;
 
   /* ensure it only hugs its content height */
   align-self: center;
 }
 
-.legend-subtitle{
-  margin:0 0 10px;
-  text-align:center;
-  color:#c9d1e6;
-  font-size:14px;
-  letter-spacing:.25px;
+.legend-subtitle {
+  margin: 0 0 10px;
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
+  letter-spacing: .25px;
 }
 
-.legend-chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  justify-content:flex-start;
-  margin-bottom:14px;
+.legend-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-start;
+  margin-bottom: 14px;
 }
 
-.chip{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 12px;
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
   background: linear-gradient(180deg, #222738, #1a1f2b);
-  border:1px solid #2a3346;
-  color: #e9ecf4;
-  border-radius:999px;
+  border: 1px solid #2a3346;
+  color: #fff;
+  border-radius: 999px;
   box-shadow: 0 2px 10px #00000050;
-  font-size:13px;
+  font-size: 13px;
 }
 
-.chip .chip-icon{
-  display:inline-grid;
-  place-items:center;
-  width:22px; height:22px;
-  border-radius:50%;
-  background:#2a3346;
-  font-size:12px;
+.chip .chip-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #2a3346;
+  font-size: 12px;
 }
 
-.legend-gradient{
+.legend-gradient {
   background: #171a22;
-  border:1px solid #232b3a;
-  border-radius:12px;
-  padding:12px 14px 10px;
+  border: 1px solid #232b3a;
+  border-radius: 12px;
+  padding: 12px 14px 10px;
 }
 
-.legend-gradient-title{
-  text-align:center;
-  font-size:13px;
-  color:#cdd4e5;
-  margin-bottom:8px;
+.legend-gradient-title {
+  text-align: center;
+  font-size: 13px;
+  color: #cdd4e5;
+  margin-bottom: 8px;
 }
 
-.legend-gradient .bar{
-  height:16px;
-  border-radius:10px;
+.legend-gradient .bar {
+  height: 16px;
+  border-radius: 10px;
   outline: 1px solid #2b3240;
   box-shadow: inset 0 2px 8px #00000060, 0 1px 0 #ffffff10;
   /* Updated to match sector gradient */
   background: linear-gradient(90deg,
-    #2dccd3 0%,
-    #f1204a 100%
-  );
+      var(--color-glint) 0%,
+      var(--color-blaze) 100%);
 }
 
-.legend-gradient .ticks{
-  display:flex;
-  justify-content:space-between;
-  color:#cfd6ea;
-  font-size:12px;
-  margin-top:6px;
+.legend-gradient .ticks {
+  display: flex;
+  justify-content: space-between;
+  color: #cfd6ea;
+  font-size: 12px;
+  margin-top: 6px;
 }
 
 /* Layout wrapper: legend left, chart right */
-.stopwatch-layout{
+.stopwatch-layout {
   width: min(1100px, 95vw);
   margin: 16px auto 32px;
   display: grid;
@@ -109,102 +109,158 @@
 }
 
 /* Chart container (right side) */
-#chart{
+#chart {
   width: 100%;
   margin: 0;
   aspect-ratio: 1 / 1;
   position: relative;
-  padding: 6px; /* safety buffer */
+  padding: 6px;
+  /* safety buffer */
   border-radius: 24px;
 
 }
 
-.note{
-  text-align:center;
+.note {
+  text-align: center;
   color: #aeb3bd;
   margin: 0 12px 32px;
 }
 
-svg{
-  width:100%;
-  height:100%;
-  display:block;
+svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 /* Responsive: stack legend above chart on small screens */
-@media (max-width: 800px){
-  .stopwatch-layout{
+@media (max-width: 800px) {
+  .stopwatch-layout {
     grid-template-columns: 1fr;
   }
 }
 
 /* Stopwatch look */
-.stopwatch-ring{
-  fill:none;
-  stroke:#f4f5f7;
-  stroke-width:6px;
+.stopwatch-ring {
+  fill: none;
+  stroke: #f4f5f7;
+  stroke-width: 6px;
 }
 
-.stopwatch-inner{
-  fill:none;
-  stroke:#cfd3dc;
-  stroke-width:2px;
-  opacity:.8;
+.stopwatch-inner {
+  fill: none;
+  stroke: #cfd3dc;
+  stroke-width: 2px;
+  opacity: .8;
 }
 
-.stopwatch-button{
-  fill:#f4f5f7;
-  stroke:#0b0c10;
-  stroke-width:2px;
+.stopwatch-button {
+  fill: #f4f5f7;
+  stroke: #0b0c10;
+  stroke-width: 2px;
 }
 
-.stopwatch-button.clickable{
+.stopwatch-button.clickable {
   /* cursor inherited from base.css */
   transition: filter .08s ease;
 }
-.stopwatch-button.clickable:hover{
+
+.stopwatch-button.clickable:hover {
   filter: drop-shadow(0 2px 4px #00000060);
 }
 
-.tick-minor{
-  stroke:#bbc2cf;
-  stroke-width:2px;
-  opacity:.8;
+.tick-minor {
+  stroke: #bbc2cf;
+  stroke-width: 2px;
+  opacity: .8;
 }
 
-.tick-major{
-  stroke:#e6e7ea;
-  stroke-width:3px;
+.tick-major {
+  stroke: #e6e7ea;
+  stroke-width: 3px;
 }
 
-.time-label{
-  fill:#e6e7ea;
-  font-size:20px;
-  text-anchor:middle;
-  dominant-baseline:middle;
+.time-label {
+  fill: #e6e7ea;
+  font-size: 20px;
+  text-anchor: middle;
+  dominant-baseline: middle;
 }
 
 /* Sectors */
-.sector{
-  stroke:#00000020;
-  stroke-width:1px;
-  opacity:.55;              /* JS overrides to 1 via inline style */
+.sector {
+  stroke: #00000020;
+  stroke-width: 1px;
+  opacity: .55;
+  /* JS overrides to 1 via inline style */
   mix-blend-mode: lighten;
 }
 
-.center-dot{ fill:#e6e7ea; }
+.center-dot {
+  fill: #e6e7ea;
+}
 
 /* Stopwatch tooltip - extends base .tooltip from base.css */
 /* Scoped to avoid affecting other tooltips (e.g., ranking-bubble-tooltip) */
 .tooltip:not(.ranking-bubble-tooltip) {
-  background:#161a22;
-  color:#e6e7ea;
-  border:1px solid #2b3240;
-  padding:6px 8px;
-  border-radius:8px;
-  font-size:12px;
-  box-shadow:0 4px 16px #00000040;
-  transition:opacity .12s ease-in-out, transform .12s ease-in-out;
-  transform: translate(-50%, -120%);
-  white-space:nowrap;
+  position: absolute;
+  padding: 14px 16px;
+  max-width: 240px;
+
+  /* Frosted glass background */
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px) saturate(170%);
+  -webkit-backdrop-filter: blur(16px) saturate(170%);
+
+  /* Borders + rounded corners */
+  border-radius: 14px;
+  border: 1.5px solid rgba(45, 204, 211, 0.35);
+
+  /* Glow + depth */
+  box-shadow:
+    inset 0 0 14px rgba(45, 204, 211, 0.18),
+    0 0 22px rgba(45, 204, 211, 0.25),
+    0 6px 26px rgba(0, 0, 0, 0.35);
+
+  color: #ffffff;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+
+  opacity: 0;
+  transform: translate(-50%, -120%) scale(0.96);
+  transition:
+    opacity 0.25s ease,
+    transform 0.28s cubic-bezier(.18, .89, .32, 1.28),
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+
+  z-index: 1200;
+}
+
+/* When tooltip is shown */
+.tooltip:not(.ranking-bubble-tooltip).open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -100%) scale(1);
+
+  box-shadow:
+    inset 0 0 18px rgba(45, 204, 211, 0.28),
+    0 0 28px rgba(45, 204, 211, 0.45),
+    0 10px 32px rgba(0, 0, 0, 0.45);
+
+  border-color: rgba(45, 204, 211, 0.65);
+}
+
+.tooltip-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-shadow:
+    0 0 4px rgba(45, 204, 211, 0.55),
+    0 1px 2px rgba(0, 0, 0, 0.45);
+}
+
+.tooltip-content {
+  margin: 0;
+  font-size: 0.9rem;
 }

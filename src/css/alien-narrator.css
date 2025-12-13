@@ -42,10 +42,12 @@ body[data-scene="dawn"] .alien-narrator--timing {
   transform: translateY(0) !important;
   pointer-events: auto !important;
 }
+
 body[data-scene="dawn"] .alien-narrator--timing .alien-avatar {
   opacity: 1 !important;
   visibility: visible !important;
 }
+
 body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   display: block !important;
   opacity: 1 !important;
@@ -59,11 +61,13 @@ body[data-scene="forest"] .alien-narrator--pyramid {
   visibility: visible !important;
   pointer-events: auto !important;
 }
+
 body[data-scene="forest"] .alien-narrator--pyramid .alien-avatar {
   opacity: 1 !important;
   visibility: visible !important;
   transform: translateX(0) !important;
 }
+
 body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
   display: block !important;
   opacity: 1 !important;
@@ -77,11 +81,13 @@ body[data-scene="air"] .alien-narrator--emotion {
   visibility: visible !important;
   pointer-events: auto !important;
 }
+
 body[data-scene="air"] .alien-narrator--emotion .alien-avatar {
   opacity: 1 !important;
   visibility: visible !important;
   transform: translateY(0) !important;
 }
+
 body[data-scene="air"] .alien-narrator--emotion .alien-speech-bubble {
   display: block !important;
   opacity: 1 !important;
@@ -96,10 +102,12 @@ body[data-scene="lab"] .alien-narrator--quiz {
   transform: translateY(0) !important;
   pointer-events: auto !important;
 }
+
 body[data-scene="lab"] .alien-narrator--quiz .alien-avatar {
   opacity: 1 !important;
   visibility: visible !important;
 }
+
 body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   display: block !important;
   opacity: 1 !important;
@@ -326,8 +334,8 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   height: 80px;
   border-radius: 50%;
   background: linear-gradient(135deg,
-      rgba(0, 242, 234, 0.25) 0%,
-      rgba(255, 0, 80, 0.15) 100%);
+      rgba(45, 204, 211, 0.25) 0%,
+      rgba(241, 32, 74, 0.15) 100%);
   border: 3px solid transparent;
   background-clip: padding-box;
   position: relative;
@@ -345,7 +353,7 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   position: absolute;
   inset: -3px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #00F2EA, #FF0050);
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
   z-index: -1;
   animation: borderRotate 4s linear infinite;
 }
@@ -357,8 +365,8 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   inset: -12px;
   border-radius: 50%;
   background: radial-gradient(circle,
-      rgba(0, 242, 234, 0.3) 0%,
-      rgba(255, 0, 80, 0.15) 50%,
+      rgba(45, 204, 211, 0.3) 0%,
+      rgba(241, 32, 74, 0.15) 50%,
       transparent 70%);
   z-index: -2;
   animation: glowPulse 2s ease-in-out infinite alternate;
@@ -383,9 +391,8 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   height: 80px;
   border-radius: 50%;
   background: linear-gradient(135deg,
-    rgba(0, 242, 234, 0.25) 0%,
-    rgba(255, 0, 80, 0.15) 100%
-  );
+      rgba(45, 204, 211, 0.25) 0%,
+      rgba(241, 32, 74, 0.15) 100%);
   border: 3px solid transparent;
   background-clip: padding-box;
   position: relative;
@@ -402,7 +409,7 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   position: absolute;
   inset: -3px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #00F2EA, #FF0050);
+  background: linear-gradient(135deg, var(--color-glint), var(--color-blaze));
   z-index: -1;
   animation: borderRotate 4s linear infinite;
 }
@@ -414,34 +421,48 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   inset: -12px;
   border-radius: 50%;
   background: radial-gradient(circle,
-    rgba(0, 242, 234, 0.3) 0%,
-    rgba(255, 0, 80, 0.15) 50%,
-    transparent 70%
-  );
+      rgba(45, 204, 211, 0.3) 0%,
+      rgba(241, 32, 74, 0.15) 50%,
+      transparent 70%);
   z-index: -2;
   animation: glowPulse 2s ease-in-out infinite alternate;
 }
 
-/* Speech bubble base - White/light per redesign spec section 0.2 */
 .alien-narrator--scene .alien-speech-bubble,
 .alien-speech-bubble {
   max-width: 380px;
   min-width: 280px;
   padding: var(--space-4) var(--space-5);
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.95));
-  border: 2px solid rgba(45, 204, 211, 0.4);
+
+  background: rgba(186, 246, 240, 0.15);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+
+  border: 1.5px solid rgba(45, 204, 211, 0.35);
   border-radius: 20px 20px 20px 6px;
+
   box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.15),
-    0 2px 8px rgba(0, 0, 0, 0.1);
+    inset 0 0 14px rgba(45, 204, 211, 0.18),
+    0 0 22px rgba(45, 204, 211, 0.25),
+    0 8px 30px rgba(0, 0, 0, 0.35);
+
+  color: #ffffff;
   position: relative;
+
+  opacity: 0;
+  transform: scale(0.9) translateY(10px);
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.28s cubic-bezier(.18, .89, .32, 1.28),
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
 }
 
-/* Speech text - Dark text for white/light background */
 .alien-narrator--scene .alien-speech-text,
 .alien-speech-text {
   font-size: 1rem;
-  color: #1a1a2e;
+  color: #fff;
   line-height: 1.7;
   margin: 0;
   font-weight: 500;
@@ -452,12 +473,6 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
    SPEECH BUBBLE VISIBILITY STATES
    Controlled by data-speech-state attribute via JS
    ───────────────────────────────────────────────────────────────────────────── */
-
-.alien-speech-bubble {
-  opacity: 0;
-  transform: scale(0.9) translateY(10px);
-  transition: opacity 0.4s ease 0.8s, transform 0.4s ease 0.8s;
-}
 
 .alien-speech-bubble[data-speech-state="hidden"] {
   opacity: 0;
@@ -494,10 +509,11 @@ body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
 }
 
 /* Scene 4: Dawn/Timing - show container AND speech bubble */
-body[data-scene="dawn"] .alien-narrator--timing {
+/* body[data-scene="dawn"] .alien-narrator--timing {
   opacity: 1 !important;
   transform: translateY(0) !important;
-}
+} */
+
 body[data-scene="dawn"] .alien-narrator--timing .alien-speech-bubble {
   opacity: 1 !important;
   transform: scale(1) translateY(0) !important;
@@ -509,10 +525,12 @@ body[data-scene="forest"] .alien-narrator--pyramid {
   opacity: 1 !important;
   visibility: visible !important;
 }
+
 body[data-scene="forest"] .alien-narrator--pyramid .alien-avatar {
   opacity: 1 !important;
   transform: translateX(0) !important;
 }
+
 body[data-scene="forest"] .alien-narrator--pyramid .alien-speech-bubble {
   opacity: 1 !important;
   transform: scale(1) translateY(0) !important;
@@ -523,6 +541,7 @@ body[data-scene="air"] .alien-narrator--emotion .alien-avatar {
   opacity: 1 !important;
   transform: translateY(0) !important;
 }
+
 body[data-scene="air"] .alien-narrator--emotion .alien-speech-bubble {
   opacity: 1 !important;
   transform: scale(1) translateY(0) !important;
@@ -533,6 +552,7 @@ body[data-scene="lab"] .alien-narrator--quiz {
   opacity: 1 !important;
   transform: translateY(0) !important;
 }
+
 body[data-scene="lab"] .alien-narrator--quiz .alien-speech-bubble {
   opacity: 1 !important;
   transform: scale(1) translateY(0) !important;
@@ -545,10 +565,12 @@ body[data-scene="wrapup"] .alien-narrator--wrapup {
   visibility: visible !important;
   pointer-events: auto !important;
 }
+
 body[data-scene="wrapup"] .alien-narrator--wrapup .alien-avatar {
   opacity: 1 !important;
   visibility: visible !important;
 }
+
 body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
   display: block !important;
   opacity: 1 !important;
@@ -615,15 +637,15 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
   width: 110px;
   height: 20px;
   background: linear-gradient(180deg,
-      rgba(255, 0, 80, 0.8) 0%,
-      rgba(0, 242, 234, 0.6) 50%,
-      rgba(255, 0, 80, 0.4) 100%);
+      rgba(241, 32, 74, 0.8) 0%,
+      rgba(45, 204, 211, 0.6) 50%,
+      rgba(241, 32, 74, 0.4) 100%);
   border-radius: 10px;
   position: relative;
   z-index: 1;
   box-shadow:
-    0 6px 20px rgba(255, 0, 80, 0.5),
-    0 0 40px rgba(0, 242, 234, 0.35),
+    0 6px 20px rgba(241, 32, 74, 0.5),
+    0 0 40px rgba(45, 204, 211, 0.35),
     inset 0 3px 6px rgba(255, 255, 255, 0.4),
     inset 0 -3px 6px rgba(0, 0, 0, 0.3);
   animation: platformFloat 2s ease-in-out infinite;
@@ -635,7 +657,7 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
   position: absolute;
   inset: -2px;
   border-radius: 12px;
-  background: linear-gradient(90deg, #00F2EA, #FF0050, #00F2EA);
+  background: linear-gradient(90deg, var(--color-glint), var(--color-blaze), var(--color-glint));
   background-size: 200% 100%;
   z-index: -1;
   animation: platformNeonGlow 2s linear infinite;
@@ -652,8 +674,8 @@ body[data-scene="wrapup"] .alien-narrator--wrapup .alien-speech-bubble {
   width: 70%;
   height: 25px;
   background: radial-gradient(ellipse at center,
-      rgba(0, 242, 234, 0.35) 0%,
-      rgba(255, 0, 80, 0.15) 50%,
+      rgba(45, 204, 211, 0.35) 0%,
+      rgba(241, 32, 74, 0.15) 50%,
       transparent 70%);
   filter: blur(6px);
 }
